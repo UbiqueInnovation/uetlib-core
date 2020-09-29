@@ -5,18 +5,20 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 import javax.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 /** Helper class for request header. */
-@SuppressWarnings("unused")
 public class HeaderUtility {
 
     public static final String CACHE_CONTROL = "Cache-Control";
     public static final String NEXT_REFRESH = "X-Next-Refresh";
     public static final String MAX_AGE = "max-age";
-    private static final ThreadLocal<SimpleDateFormat> headerDateFormatter = new ThreadLocal<>();
+    static final ThreadLocal<SimpleDateFormat> headerDateFormatter = new ThreadLocal<>();
+    private static final Logger logger = LoggerFactory.getLogger(HeaderUtility.class);
 
     /**
      * Create a {@link ResponseEntity<T>} with HTTP-Status 404, not found. Does not contain any body
@@ -96,7 +98,7 @@ public class HeaderUtility {
      * @param maxAgeSeconds max-age value in seconds
      * @return max-age string
      */
-    public static String createMaxAgeHeaderValue(int maxAgeSeconds) {
+    static String createMaxAgeHeaderValue(int maxAgeSeconds) {
         return MAX_AGE + "=" + maxAgeSeconds;
     }
 
@@ -106,7 +108,7 @@ public class HeaderUtility {
      * @param nextRefreshSeconds X-Next-Refresh value in seconds
      * @return X-Next-Refresh string
      */
-    public static String createNextRefreshHeaderValue(int nextRefreshSeconds) {
+    static String createNextRefreshHeaderValue(int nextRefreshSeconds) {
         return formatHeaderDate(getDate(nextRefreshSeconds * 1000L));
     }
 
@@ -116,7 +118,7 @@ public class HeaderUtility {
      * @param date to format
      * @return formatted date string
      */
-    private static String formatHeaderDate(Date date) {
+    static String formatHeaderDate(Date date) {
         SimpleDateFormat sdf = headerDateFormatter.get();
         if (sdf == null) {
             sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
@@ -132,7 +134,7 @@ public class HeaderUtility {
      * @param millis Millisecond offset from now
      * @return {@link Date} with offset millis from now
      */
-    private static Date getDate(long millis) {
+    static Date getDate(long millis) {
         return new Date(System.currentTimeMillis() + millis);
     }
 }
