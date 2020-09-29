@@ -10,13 +10,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 /** Helper class for request header. */
+@SuppressWarnings("unused")
 public class HeaderUtility {
 
     public static final String CACHE_CONTROL = "Cache-Control";
     public static final String NEXT_REFRESH = "X-Next-Refresh";
     public static final String MAX_AGE = "max-age";
-    private static final ThreadLocal<SimpleDateFormat> headerDateFormatter =
-            new ThreadLocal<SimpleDateFormat>();
+    private static final ThreadLocal<SimpleDateFormat> headerDateFormatter = new ThreadLocal<>();
 
     /**
      * Create a {@link ResponseEntity<T>} with HTTP-Status 404, not found. Does not contain any body
@@ -25,7 +25,7 @@ public class HeaderUtility {
      * @return {@link ResponseEntity<T>}
      */
     public static <T> ResponseEntity<T> createNotFoundResponseEntity() {
-        return new ResponseEntity<T>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     /**
@@ -39,8 +39,18 @@ public class HeaderUtility {
      */
     public static <T> ResponseEntity<T> createOKResponseEntity(
             T body, int nextRefreshSeconds, int maxAgeSeconds) {
-        return new ResponseEntity<T>(
+        return new ResponseEntity<>(
                 body, createHeaders(maxAgeSeconds, nextRefreshSeconds), HttpStatus.OK);
+    }
+
+    /**
+     * Creates a {@link ResponseEntity<T>} with the given body and HTTP-Status 200.
+     *
+     * @param body {@link T} The body of the response
+     * @return {@link ResponseEntity<T>} with the given body, headers and status OK
+     */
+    public static <T> ResponseEntity<T> createOKResponseEntity(T body) {
+        return new ResponseEntity<>(body, HttpStatus.OK);
     }
 
     /**
