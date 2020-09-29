@@ -1,17 +1,26 @@
 package ch.ubique.backend.core.reactadmin;
 
+import java.util.Arrays;
+import java.util.List;
+import javax.validation.constraints.NotNull;
+
+@SuppressWarnings("unused")
 public class DeletedResponse {
-    private Integer id;
+    private final List<Integer> ids;
 
-    public DeletedResponse(Integer id) {
-        this.id = id;
+    public static DeletedResponse from(@NotNull Integer... ids) {
+        return new DeletedResponse(Arrays.asList(ids));
     }
 
-    public Integer getId() {
-        return id;
+    public static DeletedResponse from(List<Integer> ids) {
+        return new DeletedResponse(ids);
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    private DeletedResponse(List<Integer> ids) {
+        this.ids = ids;
+    }
+
+    public List<Integer> getIds() {
+        return ids;
     }
 }
