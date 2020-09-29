@@ -56,6 +56,16 @@ public class HeaderUtility {
     }
 
     /**
+     * Creates a {@link ResponseEntity<T>} with the given body and HTTP-Status 500.
+     *
+     * @param body {@link T} The body of the response
+     * @return {@link ResponseEntity<T>} with the given body, headers and status OK
+     */
+    public static <T> ResponseEntity<T> createInternalServerErrorResponseEntity(T body) {
+        return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    /**
      * Sets the following two headers:
      *
      * <ul>

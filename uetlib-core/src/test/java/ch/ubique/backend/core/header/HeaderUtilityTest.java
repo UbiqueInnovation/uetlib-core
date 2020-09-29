@@ -27,7 +27,7 @@ class HeaderUtilityTest {
         return HeaderUtility.headerDateFormatter.get().parse(date);
     }
 
-    private static String formatDate(Date date) throws ParseException {
+    private static String formatDate(Date date) {
         return HeaderUtility.headerDateFormatter.get().format(date);
     }
 
@@ -45,6 +45,16 @@ class HeaderUtilityTest {
         ResponseEntity<String> responseEntity = HeaderUtility.createOKResponseEntity(body);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCodeValue());
+        assertEquals(body, responseEntity.getBody());
+    }
+
+    @Test
+    void testCreateInternalServerErrorResponseEntity() {
+        var body = "BODY";
+        ResponseEntity<String> responseEntity =
+                HeaderUtility.createInternalServerErrorResponseEntity(body);
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), responseEntity.getStatusCodeValue());
         assertEquals(body, responseEntity.getBody());
     }
 
