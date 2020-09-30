@@ -11,14 +11,18 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-/** Helper class for request header. */
+/** Helper class to generate {@link ResponseEntity} responses and/or request header. */
 public class HeaderUtility {
 
     public static final String CACHE_CONTROL = "Cache-Control";
     public static final String NEXT_REFRESH = "X-Next-Refresh";
     public static final String MAX_AGE = "max-age";
+    /** format Date as String or parse to Date (package-private to enable tests) */
     static final ThreadLocal<SimpleDateFormat> headerDateFormatter = new ThreadLocal<>();
     private static final Logger logger = LoggerFactory.getLogger(HeaderUtility.class);
+
+    // only static
+    private HeaderUtility() {}
 
     /**
      * Create a {@link ResponseEntity<T>} with HTTP-Status 404, not found. Does not contain any body
@@ -35,12 +39,12 @@ public class HeaderUtility {
      * next refresh headers.
      *
      * @param body {@link T} The body of the response
-     * @param nextRefreshSeconds X-Next-Refresh value in seconds
      * @param maxAgeSeconds max-age value in seconds
+     * @param nextRefreshSeconds X-Next-Refresh value in seconds
      * @return {@link ResponseEntity<T>} with the given body, headers and status OK
      */
     public static <T> ResponseEntity<T> createOKResponseEntity(
-            T body, int nextRefreshSeconds, int maxAgeSeconds) {
+            T body, int maxAgeSeconds, int nextRefreshSeconds) {
         return new ResponseEntity<>(
                 body, createHeaders(maxAgeSeconds, nextRefreshSeconds), HttpStatus.OK);
     }
@@ -96,14 +100,15 @@ public class HeaderUtility {
      * @return {@link HttpHeaders} with the headers set
      */
     public static HttpHeaders createHeaders(int maxAgeSeconds, int nextRefreshSeconds) {
-        HttpHeaders headers = new HttpHeaders();
+        var headers = new HttpHeaders();
         headers.add(CACHE_CONTROL, createMaxAgeHeaderValue(maxAgeSeconds));
         headers.add(NEXT_REFRESH, createNextRefreshHeaderValue(nextRefreshSeconds));
         return headers;
     }
 
     /**
-     * Creates the max-age header value with the given max-age in seconds
+     * Creates the max-age header value with the given max-age in seconds (package-private to enable
+     * tests)
      *
      * @param maxAgeSeconds max-age value in seconds
      * @return max-age string
@@ -113,7 +118,7 @@ public class HeaderUtility {
     }
 
     /**
-     * return the header value for X-Next-Refresh
+     * return the header value for X-Next-Refresh (package-private to enable tests)
      *
      * @param nextRefreshSeconds X-Next-Refresh value in seconds
      * @return X-Next-Refresh string
@@ -123,13 +128,13 @@ public class HeaderUtility {
     }
 
     /**
-     * Formats the date to a http timestamp.
+     * Formats the date to a http timestamp. (package-private to enable tests)
      *
      * @param date to format
      * @return formatted date string
      */
     static String formatHeaderDate(Date date) {
-        SimpleDateFormat sdf = headerDateFormatter.get();
+        var sdf = headerDateFormatter.get();
         if (sdf == null) {
             sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
             sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -139,7 +144,8 @@ public class HeaderUtility {
     }
 
     /**
-     * Returns the date from now plus the given number of milliseconds.
+     * Returns the date from now plus the given number of milliseconds. (package-private to enable
+     * tests)
      *
      * @param millis Millisecond offset from now
      * @return {@link Date} with offset millis from now
