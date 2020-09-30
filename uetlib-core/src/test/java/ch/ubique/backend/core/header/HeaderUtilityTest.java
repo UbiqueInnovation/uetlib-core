@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
-import javax.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -42,7 +41,16 @@ class HeaderUtilityTest {
     @Test
     void testCreateOKResponseEntity() {
         var body = "BODY";
-        ResponseEntity<String> responseEntity = HeaderUtility.createOKResponseEntity(body);
+        var responseEntity = HeaderUtility.createOKResponseEntity(body);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCodeValue());
+        assertEquals(body, responseEntity.getBody());
+
+        body = "BODY AND HEADERS";
+        var maxAgeSeconds = 5 * 60 * 60;
+        var nextRefreshSeconds = 3 * 60 * 60;
+        responseEntity =
+                HeaderUtility.createOKResponseEntity(body, maxAgeSeconds, nextRefreshSeconds);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCodeValue());
         assertEquals(body, responseEntity.getBody());
@@ -60,7 +68,7 @@ class HeaderUtilityTest {
 
     @Test
     void testSetHeaders() {
-        HttpServletResponse response = new MockHttpServletResponse();
+        var response = new MockHttpServletResponse();
 
         var maxAgeSeconds = 60 * 60;
         var nextRefreshSeconds = 30 * 60;
