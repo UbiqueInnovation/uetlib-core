@@ -1,5 +1,13 @@
 package ch.ubique.backend.core.exception;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+/**
+ * Whenever a ResourceNotFoundException is thrown in a spring controller method that is not handled
+ * elsewhere, spring will return a 404 as the defined bey the @ResponseStatus annotation here.
+ */
+@ResponseStatus(value = HttpStatus.NOT_FOUND) // 404
 public class ResourceNotFoundException extends RuntimeException {
 
     private static final long serialVersionUID = -3763002992193794029L;
