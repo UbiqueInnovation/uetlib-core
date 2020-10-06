@@ -1,5 +1,8 @@
 package ch.ubique.backend.core.exception;
 
+import java.text.MessageFormat;
+import java.util.function.Supplier;
+import javax.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -22,5 +25,15 @@ public class ResourceNotFoundException extends RuntimeException {
 
     public ResourceNotFoundException(String message, Throwable cause) {
         super(message, cause);
+    }
+
+    public static ResourceNotFoundException withMessage(
+            @NotNull String pattern, Object... arguments) {
+        return new ResourceNotFoundException(MessageFormat.format(pattern, arguments));
+    }
+
+    public static Supplier<ResourceNotFoundException> throwWithMessage(
+            @NotNull String pattern, Object... arguments) {
+        return () -> new ResourceNotFoundException(MessageFormat.format(pattern, arguments));
     }
 }
