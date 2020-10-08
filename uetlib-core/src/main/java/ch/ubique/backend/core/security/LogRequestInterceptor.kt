@@ -16,7 +16,7 @@ class LogRequestInterceptor : HandlerInterceptor, Filter {
             request: HttpServletRequest,
             response: HttpServletResponse,
             handler: Any,
-            modelAndView: ModelAndView) {
+            modelAndView: ModelAndView?) {
         log(request, response)
     }
 
