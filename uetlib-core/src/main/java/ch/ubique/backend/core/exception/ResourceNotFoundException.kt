@@ -18,11 +18,14 @@ class ResourceNotFoundException : RuntimeException {
 
     companion object {
         private const val serialVersionUID = -3763002992193794029L
+
+        @JvmStatic
         fun withMessage(
                 pattern: @NotNull String?, vararg arguments: Any?): ResourceNotFoundException {
             return ResourceNotFoundException(MessageFormat.format(pattern ?: "", *arguments))
         }
 
+        @JvmStatic
         fun throwWithMessage(
                 pattern: @NotNull String?, vararg arguments: Any?): Supplier<ResourceNotFoundException> {
             return Supplier {
