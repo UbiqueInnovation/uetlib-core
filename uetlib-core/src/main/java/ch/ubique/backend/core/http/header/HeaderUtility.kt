@@ -56,6 +56,17 @@ class HeaderUtility private constructor() {
         }
 
         /**
+         * Creates a [ResponseEntity] with the given body and HTTP-Status 200 and 'content-range' header.
+         *
+         * @param body [T] The body of the response
+         * @return [ResponseEntity] with the given body, headers and status OK
+         */
+        @JvmStatic
+        fun <T> createOKContentRangeResponseEntity(body: T, perPage: Int, totalElements: Long): ResponseEntity<T> {
+            return ResponseEntity.ok().header("content-range", "$perPage/$totalElements").body(body)
+        }
+
+        /**
          * Creates a [ResponseEntity] with the given body and HTTP-Status 500.
          *
          * @param body [T] The body of the response
