@@ -18,10 +18,10 @@ class HeaderUtility private constructor() {
         val headerDateFormatter = ThreadLocal<SimpleDateFormat>()
 
         /**
-         * Create a [<] with HTTP-Status 404, not found. Does not contain any body
+         * Create a [ResponseEntity] with HTTP-Status 404, not found. Does not contain any body
          * data.
          *
-         * @return [<]
+         * @return [ResponseEntity]
          */
         @JvmStatic
         fun <T> createNotFoundResponseEntity(): ResponseEntity<T> {
@@ -29,13 +29,13 @@ class HeaderUtility private constructor() {
         }
 
         /**
-         * Creates a [<] with the given body, HTTP-Status 200, and the max age and
+         * Creates a [ResponseEntity] with the given body, HTTP-Status 200, and the max age and
          * next refresh headers.
          *
          * @param body [T] The body of the response
          * @param maxAgeSeconds max-age value in seconds
          * @param nextRefreshSeconds X-Next-Refresh value in seconds
-         * @return [<] with the given body, headers and status OK
+         * @return [ResponseEntity] with the given body, headers and status OK
          */
         @JvmStatic
         fun <T> createOKResponseEntity(
@@ -45,10 +45,10 @@ class HeaderUtility private constructor() {
         }
 
         /**
-         * Creates a [<] with the given body and HTTP-Status 200.
+         * Creates a [ResponseEntity] with the given body and HTTP-Status 200.
          *
          * @param body [T] The body of the response
-         * @return [<] with the given body, headers and status OK
+         * @return [ResponseEntity] with the given body, headers and status OK
          */
         @JvmStatic
         fun <T> createOKResponseEntity(body: T): ResponseEntity<T> {
@@ -56,14 +56,58 @@ class HeaderUtility private constructor() {
         }
 
         /**
-         * Creates a [<] with the given body and HTTP-Status 500.
+         * Creates a [ResponseEntity] with the given body and HTTP-Status 500.
          *
          * @param body [T] The body of the response
-         * @return [<] with the given body, headers and status OK
+         * @return [ResponseEntity] with the given body, headers and status 500
          */
         @JvmStatic
         fun <T> createInternalServerErrorResponseEntity(body: T): ResponseEntity<T> {
             return ResponseEntity(body, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+
+        /**
+         * Creates an empty [ResponseEntity] with HTTP-Status 500.
+         *
+         * @return [ResponseEntity] with status 503
+         */
+        @JvmStatic
+        fun createInternalServerErrorResponseEntity(): ResponseEntity<Any> {
+            return ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+
+        /**
+         * Creates a [ResponseEntity] with the given body and HTTP-Status 400.
+         *
+         * @param body [T] The body of the response
+         * @return [ResponseEntity] with the given body, headers and status 400
+         */
+        @JvmStatic
+        fun <T> createBadRequestResponseEntity(body: T): ResponseEntity<T> {
+            return ResponseEntity(body, HttpStatus.BAD_REQUEST)
+        }
+
+        /**
+         * Returns an empty [ResponseEntity] with HTTP-Status 503.
+         *
+         * @return
+         */
+        @JvmStatic
+        fun <T> createServiceUnavailableResponseEntity(): ResponseEntity<T> {
+            return ResponseEntity<T>(HttpStatus.SERVICE_UNAVAILABLE)
+        }
+
+        /**
+         * Returns an empty [ResponseEntity] with HTTP-Status 204 (no content)
+         *
+         * @param nextRefreshSeconds
+         * @param maxAgeSeconds
+         * @return
+         */
+        @JvmStatic
+        fun <T> createNoContentResponseEntity(nextRefreshSeconds: Int, maxAgeSeconds: Int): ResponseEntity<T> {
+            val headers = createHeaders(maxAgeSeconds, nextRefreshSeconds)
+            return ResponseEntity<T>(headers, HttpStatus.NO_CONTENT)
         }
 
         /**

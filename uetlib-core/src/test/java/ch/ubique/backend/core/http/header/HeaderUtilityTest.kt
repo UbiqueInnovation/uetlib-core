@@ -60,6 +60,22 @@ class HeaderUtilityTest {
     }
 
     @Test
+    fun testCreateServiceUnavailableResponse() {
+        val responseEntity = HeaderUtility.createServiceUnavailableResponseEntity<Any>()
+        Assertions.assertEquals(HttpStatus.SERVICE_UNAVAILABLE, responseEntity.statusCode)
+        Assertions.assertEquals(HttpStatus.SERVICE_UNAVAILABLE.value(), responseEntity.statusCodeValue)
+        Assertions.assertEquals(null, responseEntity.body)
+    }
+
+    @Test
+    fun testCreateNoContentResponseEntity() {
+        val responseEntity = HeaderUtility.createNoContentResponseEntity<Any>(3600, 10800)
+        Assertions.assertEquals(HttpStatus.NO_CONTENT, responseEntity.statusCode)
+        Assertions.assertEquals(HttpStatus.NO_CONTENT.value(), responseEntity.statusCodeValue)
+        Assertions.assertEquals(null, responseEntity.body)
+    }
+
+    @Test
     fun testSetHeaders() {
         val response = MockHttpServletResponse()
         val maxAgeSeconds = 60 * 60
