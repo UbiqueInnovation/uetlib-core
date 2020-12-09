@@ -44,7 +44,11 @@ class HeaderUtilityTest {
         body = "BODY AND HEADERS"
         val maxAgeSeconds = 5 * 60 * 60
         val nextRefreshSeconds = 3 * 60 * 60
-        responseEntity = HeaderUtility.createOKResponseEntity(body, maxAgeSeconds, nextRefreshSeconds)
+        responseEntity = HeaderUtility.createOKResponseEntity(
+            body,
+            nextRefreshSeconds = nextRefreshSeconds,
+            maxAgeSeconds = maxAgeSeconds
+        )
         Assertions.assertEquals(HttpStatus.OK, responseEntity.statusCode)
         Assertions.assertEquals(HttpStatus.OK.value(), responseEntity.statusCodeValue)
         Assertions.assertEquals(body, responseEntity.body)
