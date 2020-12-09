@@ -38,10 +38,12 @@ class HeaderUtility private constructor() {
          * @return [ResponseEntity] with the given body, headers and status OK
          */
         @JvmStatic
-        fun <T> createOKResponseEntity(
-                body: T, maxAgeSeconds: Int, nextRefreshSeconds: Int): ResponseEntity<T> {
+        fun <T> createOKResponseEntity(body: T, nextRefreshSeconds: Int, maxAgeSeconds: Int): ResponseEntity<T> {
             return ResponseEntity(
-                    body, createHeaders(maxAgeSeconds, nextRefreshSeconds), HttpStatus.OK)
+                body,
+                createHeaders(nextRefreshSeconds = nextRefreshSeconds, maxAgeSeconds = maxAgeSeconds),
+                HttpStatus.OK
+            )
         }
 
         /**
@@ -117,7 +119,7 @@ class HeaderUtility private constructor() {
          */
         @JvmStatic
         fun <T> createNoContentResponseEntity(nextRefreshSeconds: Int, maxAgeSeconds: Int): ResponseEntity<T> {
-            val headers = createHeaders(maxAgeSeconds, nextRefreshSeconds)
+            val headers = createHeaders(nextRefreshSeconds = nextRefreshSeconds, maxAgeSeconds = maxAgeSeconds)
             return ResponseEntity<T>(headers, HttpStatus.NO_CONTENT)
         }
 
@@ -135,7 +137,8 @@ class HeaderUtility private constructor() {
          */
         @JvmStatic
         fun setHeaders(
-                response: HttpServletResponse, maxAgeSeconds: Int, nextRefreshSeconds: Int) {
+            response: HttpServletResponse, maxAgeSeconds: Int, nextRefreshSeconds: Int
+        ) {
             response.setHeader(CACHE_CONTROL, createMaxAgeHeaderValue(maxAgeSeconds))
             response.setHeader(NEXT_REFRESH, createNextRefreshHeaderValue(nextRefreshSeconds))
         }
