@@ -1,4 +1,4 @@
-package ch.ubique.backend.core.watch;
+package ch.ubique.backend.core.file.watch;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -1,4 +1,4 @@
-package ch.ubique.backend.core.watch;
+package ch.ubique.backend.core.file.watch;
 
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
