@@ -1,4 +1,4 @@
-package scheduler;
+package ch.ubique.backend.core.scheduler;
 
 import org.quartz.CronScheduleBuilder;
 import org.quartz.Job;
