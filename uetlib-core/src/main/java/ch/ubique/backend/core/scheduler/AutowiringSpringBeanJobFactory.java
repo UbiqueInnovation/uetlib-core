@@ -1,4 +1,4 @@
-package scheduler;
+package ch.ubique.backend.core.scheduler;
 
 import org.quartz.spi.TriggerFiredBundle;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
