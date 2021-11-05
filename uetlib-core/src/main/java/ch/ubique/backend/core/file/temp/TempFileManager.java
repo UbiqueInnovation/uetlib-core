@@ -30,6 +30,19 @@ public class TempFileManager {
     }
 
     /**
+     * Creates a temporary file and returns the path.
+     *
+     * @param suffix
+     * @return
+     * @throws IOException
+     */
+    public Path createEmptyTempFile(final String suffix) throws IOException {
+        final var tmpFile = createTempPath(suffix);
+        temporaryFileList.add(tmpFile);
+        return tmpFile;
+    }
+
+    /**
      * Writes the given content in a temporary file and returns the path.
      *
      * @param in
