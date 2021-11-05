@@ -10,8 +10,6 @@ import org.junit.jupiter.api.Test;
 
 class TempFileManagerTest {
 
-    private final TempFileManager tempFileManager = new TempFileManager();
-
     @Test
     void testCreateTempFiles() {
         final var testString = "teststringfortenpfilecreations";
@@ -19,20 +17,20 @@ class TempFileManagerTest {
         assertDoesNotThrow(
                 () -> {
                     final var tempFileBytes =
-                            tempFileManager.createTempFile(
+                            TempFileManager.createTempFile(
                                     testString.getBytes(StandardCharsets.UTF_8), ".tmp");
                     final var tempFileStream =
-                            tempFileManager.createTempFile(
+                            TempFileManager.createTempFile(
                                     new ByteArrayInputStream(
                                             testString.getBytes(StandardCharsets.UTF_8)),
                                     ".tmp");
 
                     assertNotNull(tempFileBytes);
                     assertNotNull(tempFileStream);
-                    assertTrue(tempFileManager.getTempFiles().contains(tempFileBytes));
-                    assertTrue(tempFileManager.getTempFiles().contains(tempFileStream));
+                    assertTrue(TempFileManager.getTempFiles().contains(tempFileBytes));
+                    assertTrue(TempFileManager.getTempFiles().contains(tempFileStream));
                 });
 
-        tempFileManager.deleteTempFiles();
+        TempFileManager.deleteTempFiles();
     }
 }
