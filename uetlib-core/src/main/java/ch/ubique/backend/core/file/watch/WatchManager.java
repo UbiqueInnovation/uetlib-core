@@ -11,7 +11,6 @@ import java.nio.file.WatchEvent;
 import java.nio.file.WatchEvent.Kind;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,9 +18,8 @@ public class WatchManager implements Runnable {
 
     private final WatchService watchService;
     private final FileEventListener listener;
-    private Thread thread;
-
     private final Logger logger = LoggerFactory.getLogger(WatchManager.class);
+    private Thread thread;
 
     public WatchManager(WatchService watchService, FileEventListener listener) {
         this.watchService = watchService;
@@ -37,7 +35,7 @@ public class WatchManager implements Runnable {
     }
 
     public void watch() {
-        logger.info("Start watch manager: " + watchService.toString());
+        logger.info("Start watch manager: {}", watchService.toString());
         this.thread = new Thread(this);
         this.thread.setDaemon(true);
         this.thread.start();
@@ -65,7 +63,7 @@ public class WatchManager implements Runnable {
     }
 
     private void notifyListeners(Kind<?> kind, Path file) {
-        logger.info("New file event: " + file.toString() + " Event: " + kind.toString());
+        logger.info("New file event: {} Event: {}", file.toString(), kind.toString());
         if (kind == ENTRY_CREATE) {
             listener.onCreated(file);
         } else if (kind == ENTRY_MODIFY) {
