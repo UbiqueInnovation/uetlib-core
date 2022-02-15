@@ -1,5 +1,6 @@
 package ch.ubique.backend.core.scheduler;
 
+import org.jetbrains.annotations.NotNull;
 import org.quartz.spi.TriggerFiredBundle;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
@@ -9,15 +10,16 @@ import org.springframework.scheduling.quartz.SpringBeanJobFactory;
 public final class AutowiringSpringBeanJobFactory extends SpringBeanJobFactory
         implements ApplicationContextAware {
 
-    private transient AutowireCapableBeanFactory beanFactory;
+    private AutowireCapableBeanFactory beanFactory;
 
-    public void setApplicationContext(final ApplicationContext context) {
+    @Override
+    public void setApplicationContext(final @NotNull ApplicationContext context) {
         super.setApplicationContext(context);
         beanFactory = context.getAutowireCapableBeanFactory();
     }
 
     @Override
-    protected Object createJobInstance(final TriggerFiredBundle bundle) throws Exception {
+    protected Object createJobInstance(final @NotNull TriggerFiredBundle bundle) throws Exception {
         final Object job = super.createJobInstance(bundle);
         beanFactory.autowireBean(job);
         return job;
