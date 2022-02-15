@@ -30,12 +30,12 @@ public class WatchManager implements Runnable {
         try {
             this.thread.interrupt();
             this.watchService.close();
-        } catch (IOException e) {
+        } catch (IOException ignored) {
         }
     }
 
     public void watch() {
-        logger.info("Start watch manager: {}", watchService.toString());
+        logger.info("Start watch manager: {}", watchService);
         this.thread = new Thread(this);
         this.thread.setDaemon(true);
         this.thread.start();
@@ -63,7 +63,7 @@ public class WatchManager implements Runnable {
     }
 
     private void notifyListeners(Kind<?> kind, Path file) {
-        logger.info("New file event: {} Event: {}", file.toString(), kind.toString());
+        logger.info("New file event: {} Event: {}", file, kind);
         if (kind == ENTRY_CREATE) {
             listener.onCreated(file);
         } else if (kind == ENTRY_MODIFY) {
