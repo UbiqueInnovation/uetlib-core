@@ -11,24 +11,24 @@ public class StringFormattingUtils {
             return "0";
         }
 
-        long millis = durationInMillis % 1000;
-        long seconds = (durationInMillis / Duration.ofSeconds(1).toMillis()) % 60;
-        long minutes = (durationInMillis / Duration.ofMinutes(1).toMillis()) % 60;
-        long hours = (durationInMillis / Duration.ofHours(1).toMillis()) % 24;
+        final var seconds = Math.round(1f * durationInMillis / Duration.ofSeconds(1).toMillis()) % 60;
+        final var minutes = (durationInMillis / Duration.ofMinutes(1).toMillis()) % 60;
+        final var hours = (durationInMillis / Duration.ofHours(1).toMillis()) % 24;
 
         final var parts = new ArrayList<String>();
 
         if (hours > 0) {
-            parts.add(String.format("%02dh", hours));
+            parts.add(String.format("%dh", hours));
         }
         if (hours > 0 || minutes > 0) {
-            parts.add(String.format("%02dm", minutes));
+            parts.add(String.format("%dm", minutes));
         }
         if (hours > 0 || minutes > 0 || seconds > 0) {
-            parts.add(String.format("%02ds", seconds));
+            parts.add(String.format("%ds", seconds));
         }
-
-        parts.add(String.format("%03dms", millis));
+        else {
+            parts.add("< 1s");
+        }
 
         return String.join(" ", parts);
     }
