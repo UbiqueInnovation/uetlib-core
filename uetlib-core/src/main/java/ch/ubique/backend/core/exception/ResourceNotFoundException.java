@@ -2,6 +2,7 @@ package ch.ubique.backend.core.exception;
 
 import java.text.MessageFormat;
 import java.util.function.Supplier;
+
 import javax.validation.constraints.NotNull;
 
 public class ResourceNotFoundException extends RuntimeException {

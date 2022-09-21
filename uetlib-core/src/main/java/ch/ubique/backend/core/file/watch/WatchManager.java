@@ -4,6 +4,9 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.nio.file.ClosedWatchServiceException;
 import java.nio.file.Path;
@@ -11,8 +14,6 @@ import java.nio.file.WatchEvent;
 import java.nio.file.WatchEvent.Kind;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class WatchManager implements Runnable {
 
@@ -28,17 +29,17 @@ public class WatchManager implements Runnable {
 
     public void destroy() {
         try {
-            this.thread.interrupt();
-            this.watchService.close();
+            thread.interrupt();
+            watchService.close();
         } catch (IOException ignored) {
         }
     }
 
     public void watch() {
         logger.info("Start watch manager: {}", watchService);
-        this.thread = new Thread(this);
-        this.thread.setDaemon(true);
-        this.thread.start();
+        thread = new Thread(this);
+        thread.setDaemon(true);
+        thread.start();
     }
 
     @Override

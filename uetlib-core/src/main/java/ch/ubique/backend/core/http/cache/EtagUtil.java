@@ -1,5 +1,8 @@
 package ch.ubique.backend.core.http.cache;
 
+import org.apache.commons.codec.binary.Hex;
+import org.springframework.core.io.ClassPathResource;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,8 +11,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Objects;
-import org.apache.commons.codec.binary.Hex;
-import org.springframework.core.io.ClassPathResource;
 
 public class EtagUtil {
 
