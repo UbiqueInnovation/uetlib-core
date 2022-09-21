@@ -11,7 +11,8 @@ public class StringFormattingUtils {
             return "0";
         }
 
-        final var seconds = Math.round(1f * durationInMillis / Duration.ofSeconds(1).toMillis()) % 60;
+        final var seconds =
+                Math.round(1f * durationInMillis / Duration.ofSeconds(1).toMillis()) % 60;
         final var minutes = (durationInMillis / Duration.ofMinutes(1).toMillis()) % 60;
         final var hours = (durationInMillis / Duration.ofHours(1).toMillis()) % 24;
 
@@ -25,8 +26,7 @@ public class StringFormattingUtils {
         }
         if (hours > 0 || minutes > 0 || seconds > 0) {
             parts.add(String.format("%ds", seconds));
-        }
-        else {
+        } else {
             parts.add("< 1s");
         }
 

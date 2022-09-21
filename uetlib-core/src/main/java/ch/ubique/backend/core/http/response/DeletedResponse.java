@@ -1,8 +1,9 @@
 package ch.ubique.backend.core.http.response;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 import java.util.List;
-import org.jetbrains.annotations.NotNull;
 
 public class DeletedResponse {
     private final List<Integer> ids;
