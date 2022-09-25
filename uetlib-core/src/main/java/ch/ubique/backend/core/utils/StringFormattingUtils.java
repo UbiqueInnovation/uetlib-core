@@ -1,20 +1,27 @@
 package ch.ubique.backend.core.utils;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class StringFormattingUtils {
 
-    public static String millisToString(long durationInMillis) {
-        durationInMillis = Math.abs(durationInMillis);
-        if (durationInMillis == 0) {
+    private StringFormattingUtils() {}
+
+    public static String formatDuration(final Instant from, final Instant to) {
+        return millisToString(
+                Duration.between(from, Objects.requireNonNullElse(to, Instant.now())));
+    }
+
+    public static String millisToString(final Duration duration) {
+        if (Duration.ZERO.equals(duration)) {
             return "0";
         }
 
-        final var seconds =
-                Math.round(1f * durationInMillis / Duration.ofSeconds(1).toMillis()) % 60;
-        final var minutes = (durationInMillis / Duration.ofMinutes(1).toMillis()) % 60;
-        final var hours = (durationInMillis / Duration.ofHours(1).toMillis()) % 24;
+        final var seconds = duration.toSecondsPart();
+        final var minutes = duration.toMinutesPart();
+        final var hours = duration.toHours();
 
         final var parts = new ArrayList<String>();
 
