@@ -32,6 +32,7 @@ public class WatchManager implements Runnable {
             thread.interrupt();
             watchService.close();
         } catch (IOException ignored) {
+            // ignore exception
         }
     }
 
