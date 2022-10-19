@@ -17,9 +17,11 @@ import java.nio.file.WatchService;
 
 public class WatchManager implements Runnable {
 
+    private static final Logger logger = LoggerFactory.getLogger(WatchManager.class);
+
     private final WatchService watchService;
     private final FileEventListener listener;
-    private final Logger logger = LoggerFactory.getLogger(WatchManager.class);
+
     private Thread thread;
 
     public WatchManager(WatchService watchService, FileEventListener listener) {
