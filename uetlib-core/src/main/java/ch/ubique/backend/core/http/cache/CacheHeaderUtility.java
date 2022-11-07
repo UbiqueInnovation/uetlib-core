@@ -12,6 +12,7 @@ public class CacheHeaderUtility {
     public static final String REFRESH_BACKOFF_SHORT = "backoff";
     public static final String MINIMUM_API_VERSION_SHORT = "minimumapiversion";
     public static final String MAX_AGE = "max-age";
+    public static final String S_MAX_AGE = "s-maxage";
     public static final long DEFAULT_API_VERSION = 1;
 
     private CacheHeaderUtility() {}
