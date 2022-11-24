@@ -1,11 +1,13 @@
 package ch.ubique.backend.core.localized;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class LocalizedString extends LinkedList<LocalizedStringEntry> {
+public class LocalizedString extends ArrayList<LocalizedStringEntry> {
 
     public LocalizedString() {}
 
@@ -71,5 +73,11 @@ public class LocalizedString extends LinkedList<LocalizedStringEntry> {
     @Override
     public String toString() {
         return this.stream().map(LocalizedStringEntry::toString).collect(Collectors.joining(", "));
+    }
+
+    @Override
+    @Schema(hidden = true)
+    public boolean isEmpty() {
+        return super.isEmpty();
     }
 }
