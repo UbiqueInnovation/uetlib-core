@@ -15,6 +15,10 @@ public class StringFormattingUtils {
     }
 
     public static String millisToString(final Duration duration) {
+        return formatDuration(duration);
+    }
+
+    public static String formatDuration(final Duration duration) {
         if (Duration.ZERO.equals(duration)) {
             return "0";
         }
