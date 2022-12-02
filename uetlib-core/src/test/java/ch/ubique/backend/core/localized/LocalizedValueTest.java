@@ -28,7 +28,7 @@ class LocalizedValueTest {
         Assertions.assertNull(LocalizedString.builder().en(" ").buildNullable());
         Assertions.assertThrows(
                 IllegalArgumentException.class,
-                () -> LocalizedString.builder().add(" ", "abc").build());
+                () -> LocalizedString.builder().add("abc", " ").build());
 
         Assertions.assertNotNull(LocalizedString.builder().de(".").buildNullable());
     }
