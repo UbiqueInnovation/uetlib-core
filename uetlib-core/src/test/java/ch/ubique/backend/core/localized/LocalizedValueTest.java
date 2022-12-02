@@ -13,8 +13,8 @@ class LocalizedValueTest {
 
     @Test
     void testSerialization() throws JsonProcessingException {
-        final var v1 = LocalizedString.en("Test");
-        LocalizedString.from("Literal", Locale.CHINESE);
+        final var v1 = LocalizedValue.en("Test");
+        LocalizedValue.from("Literal", Locale.CHINESE);
         Assertions.assertEquals("{\"en\":\"Test\"}", objectMapper.writeValueAsString(v1));
     }
 
@@ -25,11 +25,11 @@ class LocalizedValueTest {
         Assertions.assertNull(LocalizedValue.builder().buildNullable());
         Assertions.assertTrue(LocalizedValue.builder().buildOptional().isEmpty());
 
-        Assertions.assertNull(LocalizedString.builder().en(" ").buildNullable());
+        Assertions.assertNull(LocalizedValue.builder().en(" ").buildNullable());
         Assertions.assertThrows(
                 IllegalArgumentException.class,
-                () -> LocalizedString.builder().add("abc", " ").build());
+                () -> LocalizedValue.builder().add("abc", " ").build());
 
-        Assertions.assertNotNull(LocalizedString.builder().de(".").buildNullable());
+        Assertions.assertNotNull(LocalizedValue.builder().de(".").buildNullable());
     }
 }

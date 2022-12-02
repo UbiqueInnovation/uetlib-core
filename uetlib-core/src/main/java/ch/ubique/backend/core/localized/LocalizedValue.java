@@ -6,12 +6,16 @@ import java.util.Collections;
 import java.util.Locale;
 import java.util.Map;
 
-public sealed class LocalizedValue<T> permits LocalizedString {
+public class LocalizedValue<T> {
 
     @JsonValue private final Map<Locale, T> values;
 
     LocalizedValue(final Map<Locale, T> values) {
         this.values = Collections.unmodifiableMap(values);
+    }
+
+    public static <S> LocalizedValueBuilder<S> builder() {
+        return new LocalizedValueBuilder<>();
     }
 
     /**
@@ -20,10 +24,6 @@ public sealed class LocalizedValue<T> permits LocalizedString {
      */
     public static <S> LocalizedValue<S> from(final S value, final Locale locale) {
         return LocalizedValue.<S>builder().add(value, locale).build();
-    }
-
-    public static <S> LocalizedValueBuilder<S> builder() {
-        return new LocalizedValueBuilder<>();
     }
 
     /**
