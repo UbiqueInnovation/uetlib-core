@@ -18,6 +18,8 @@ public final class LocalizedValueBuilder<T> {
     private final Map<Locale, T> values = new HashMap<>();
     private boolean keepLanguageOnly = true;
 
+    private boolean uppercaseLanguageKeys;
+
     LocalizedValueBuilder() {}
 
     public LocalizedValueBuilder<T> en(final T value) {
@@ -61,6 +63,16 @@ public final class LocalizedValueBuilder<T> {
         return this;
     }
 
+    public LocalizedValueBuilder<T> fromMap(final Map<Locale, T> values) {
+        values.forEach((locale, value) -> add(value, locale));
+        return this;
+    }
+
+    public LocalizedValueBuilder<T> fromStringMap(final Map<String, T> values) {
+        values.forEach((locale, value) -> add(value, locale));
+        return this;
+    }
+
     /**
      * By default, only the language is kept. I.e. if you add a text for "en_US", the final map will
      * contain the entry "en" by default.
@@ -69,6 +81,16 @@ public final class LocalizedValueBuilder<T> {
      */
     public LocalizedValueBuilder<T> fullLocale() {
         keepLanguageOnly = false;
+        return this;
+    }
+
+    /**
+     * Call this method if you want the language keys to be upper case, e.g. 'DE' instead of 'de'.
+     *
+     * <p>By default, the language key is lower case, according to the ISO standard.
+     */
+    public LocalizedValueBuilder<T> uppercaseLanguageKeys() {
+        uppercaseLanguageKeys = true;
         return this;
     }
 
@@ -82,7 +104,7 @@ public final class LocalizedValueBuilder<T> {
         final var cleanValues =
                 values.entrySet().stream()
                         .filter(this::isEntryValid)
-                        .collect(Collectors.toMap(this::effectiveLocale, Map.Entry::getValue));
+                        .collect(Collectors.toMap(this::finalKey, Map.Entry::getValue));
 
         if (cleanValues.isEmpty()) {
             return Optional.empty();
@@ -104,8 +126,15 @@ public final class LocalizedValueBuilder<T> {
         return true;
     }
 
-    private Locale effectiveLocale(final Entry<Locale, ?> entry) {
-        final var locale = entry.getKey();
+    private String finalKey(final Entry<Locale, ?> entry) {
+        final var locale = finalLocale(entry.getKey());
+        if (uppercaseLanguageKeys) {
+            return locale.toString().toUpperCase();
+        }
+        return locale.toString();
+    }
+
+    private Locale finalLocale(final Locale locale) {
         if (keepLanguageOnly) {
             return Locale.forLanguageTag(locale.getLanguage());
         }
