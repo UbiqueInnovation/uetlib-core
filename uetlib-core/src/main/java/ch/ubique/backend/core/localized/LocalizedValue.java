@@ -8,13 +8,17 @@ import java.util.Map;
 
 public class LocalizedValue<T> {
 
-    @JsonValue private final Map<Locale, T> values;
+    @JsonValue private final Map<String, T> values;
 
-    LocalizedValue(final Map<Locale, T> values) {
+    LocalizedValue(final Map<String, T> values) {
         this.values = Collections.unmodifiableMap(values);
     }
 
     public static <S> LocalizedValueBuilder<S> builder() {
+        return new LocalizedValueBuilder<>();
+    }
+
+    public static LocalizedValueBuilder<String> stringBuilder() {
         return new LocalizedValueBuilder<>();
     }
 
@@ -32,6 +36,22 @@ public class LocalizedValue<T> {
      */
     public static <S> LocalizedValue<S> from(final S value, final Collection<Locale> locales) {
         return LocalizedValue.<S>builder().add(value, locales).build();
+    }
+
+    /**
+     * Convenience method if you want to initialize the localized value from a map. The standard
+     * validation will be called, i.e. the correct null handling is still enforced.
+     */
+    public static <S> LocalizedValue<S> fromMap(final Map<Locale, S> values) {
+        return LocalizedValue.<S>builder().fromMap(values).build();
+    }
+
+    /**
+     * Convenience method if you want to initialize the localized value from a map. The standard
+     * validation will be called, i.e. the correct null handling is still enforced.
+     */
+    public static <S> LocalizedValue<S> fromStringMap(final Map<String, S> values) {
+        return LocalizedValue.<S>builder().fromStringMap(values).build();
     }
 
     /**
@@ -72,9 +92,5 @@ public class LocalizedValue<T> {
      */
     public static <S> LocalizedValue<S> romansh(final S value) {
         return LocalizedValue.<S>builder().romansh(value).build();
-    }
-
-    public Map<Locale, T> values() {
-        return values;
     }
 }
