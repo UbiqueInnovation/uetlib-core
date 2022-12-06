@@ -1,5 +1,7 @@
 package ch.ubique.backend.core.localized;
 
+import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
@@ -7,8 +9,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import javax.annotation.Nullable;
-import javax.validation.constraints.NotNull;
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -119,11 +119,7 @@ public final class LocalizedValueBuilder<T> {
         }
 
         // Special case string: also disallow blank strings
-        if (entry.getValue() instanceof String string && StringUtils.isBlank(string)) {
-            return false;
-        }
-
-        return true;
+        return !(entry.getValue() instanceof String string) || !StringUtils.isBlank(string);
     }
 
     private String finalKey(final Entry<Locale, ?> entry) {

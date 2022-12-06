@@ -1,8 +1,7 @@
 package ch.ubique.backend.core.hibernate.converter;
 
+import jakarta.persistence.AttributeConverter;
 import java.util.Base64;
-
-import javax.persistence.AttributeConverter;
 
 public class Base64ImageConverter implements AttributeConverter<String, byte[]> {
 
