@@ -66,6 +66,16 @@ public class StreamUtils {
         return zipEntry;
     }
 
+    /**
+     * Creates a stream of chunks with lists of size {@param size}. The returned lists are created
+     * lazily for each chunk, hence the stream is only consumed partially for each chunk and not all
+     * at once to create the chunk lists.
+     *
+     * @param list the input list to be chunked
+     * @param size size of the chunks
+     * @return a stream of chunks
+     * @param <T> The type of the list elements
+     */
     public static <T> Stream<List<T>> chunked(final List<T> list, final int size) {
         final var iterator = list.stream().iterator();
         final var listIterator =
