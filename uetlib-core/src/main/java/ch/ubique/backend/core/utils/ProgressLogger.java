@@ -2,6 +2,7 @@ package ch.ubique.backend.core.utils;
 
 import static java.lang.Math.max;
 
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 public class ProgressLogger {
 
+    private final String prefix;
     private final long total;
     private final AtomicLong count;
     private final long startTime;
@@ -17,6 +19,11 @@ public class ProgressLogger {
     private final Logger logger;
 
     public ProgressLogger(final long total) {
+        this(null, total);
+    }
+
+    public ProgressLogger(final String prefix, final long total) {
+        this.prefix = Optional.ofNullable(prefix).orElse("");
         this.total = total;
         this.startTime = System.currentTimeMillis();
         this.count = new AtomicLong();
@@ -25,8 +32,9 @@ public class ProgressLogger {
 
     public <T, R> Function<T, R> watch(final Function<T, R> function) {
         return t -> {
+            final var result = function.apply(t);
             logProgress();
-            return function.apply(t);
+            return result;
         };
     }
 
@@ -36,14 +44,15 @@ public class ProgressLogger {
             final var percent = 100 * currentCount / total;
             final var currentTime = System.currentTimeMillis();
             final var elementsPerSecond = 1000. * currentCount / (currentTime - startTime);
-            logger.info("Processed {}% ({} elements per second)", percent, elementsPerSecond);
+            logger.info(
+                    "{}Processed {}% ({} elements per second)", prefix, percent, elementsPerSecond);
         }
     }
 
     public <T> Consumer<T> watch(final Consumer<T> consumer) {
         return t -> {
-            logProgress();
             consumer.accept(t);
+            logProgress();
         };
     }
 }
