@@ -1,6 +1,10 @@
 package ch.ubique.backend.core.localized;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.mchange.v2.ser.SerializableUtils;
+import com.pivovarit.function.exception.WrappedException;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
@@ -92,5 +96,18 @@ public class LocalizedValue<T> {
      */
     public static <S> LocalizedValue<S> romansh(final S value) {
         return LocalizedValue.<S>builder().romansh(value).build();
+    }
+
+    /**
+     * @return a deep copy of the internal map
+     */
+    @JsonIgnore
+    public Map<String, T> values() {
+        try {
+            //noinspection unchecked
+            return (Map<String, T>) SerializableUtils.deepCopy(values);
+        } catch (final IOException | ClassNotFoundException e) {
+            throw new WrappedException(e);
+        }
     }
 }
