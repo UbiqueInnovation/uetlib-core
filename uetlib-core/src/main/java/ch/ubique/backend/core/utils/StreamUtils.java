@@ -18,6 +18,7 @@ import java.util.zip.ZipInputStream;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 
+@SuppressWarnings("unused")
 public class StreamUtils {
 
     private StreamUtils() {}
