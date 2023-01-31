@@ -2,6 +2,7 @@ package ch.ubique.backend.core.utils;
 
 import static java.lang.Math.max;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
@@ -15,7 +16,7 @@ public class ProgressLogger {
     private final long total;
     private final AtomicLong count;
     private final long startTime;
-
+    private final Map<String, String> mdcContextMap;
     private final Logger logger;
 
     public ProgressLogger(final long total) {
@@ -23,11 +24,17 @@ public class ProgressLogger {
     }
 
     public ProgressLogger(final String prefix, final long total) {
+        this(prefix, total, null);
+    }
+
+    public ProgressLogger(
+            final String prefix, final long total, final Map<String, String> mdcContextMap) {
         this.prefix = Optional.ofNullable(prefix).orElse("");
         this.total = total;
         this.startTime = System.currentTimeMillis();
         this.count = new AtomicLong();
         this.logger = LoggerFactory.getLogger(getClass());
+        this.mdcContextMap = mdcContextMap;
     }
 
     public <T, R> Function<T, R> watch(final Function<T, R> function) {
@@ -39,6 +46,10 @@ public class ProgressLogger {
     }
 
     private void logProgress() {
+        MdcUtils.runWithContext(this::logProgressInternal, mdcContextMap);
+    }
+
+    private void logProgressInternal() {
         final var currentCount = count.incrementAndGet();
         if (currentCount % max(1, total / 100) == 0) {
             final var percent = 100 * currentCount / total;
