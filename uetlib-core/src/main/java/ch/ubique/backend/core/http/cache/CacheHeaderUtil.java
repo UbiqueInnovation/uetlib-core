@@ -7,7 +7,7 @@ import java.util.Locale;
 
 public final class CacheHeaderUtil {
 
-    public static final DateTimeFormatter HTTP_DATE_FORMATTER =
+    private static final DateTimeFormatter HTTP_DATE_FORMATTER =
             DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss z", Locale.US)
                     .withZone(ZoneId.of("UTC"));
 
