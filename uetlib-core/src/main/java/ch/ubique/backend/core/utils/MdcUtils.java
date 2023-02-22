@@ -3,7 +3,7 @@ package ch.ubique.backend.core.utils;
 import java.util.Map;
 import org.slf4j.MDC;
 
-public class MdcUtils {
+public final class MdcUtils {
 
     private MdcUtils() {}
 

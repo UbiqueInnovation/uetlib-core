@@ -5,7 +5,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class StringFormattingUtils {
+public final class StringFormattingUtils {
 
     private StringFormattingUtils() {}
 

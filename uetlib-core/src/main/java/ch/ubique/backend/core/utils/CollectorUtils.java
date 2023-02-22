@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
 
-public class CollectorUtils {
+public final class CollectorUtils {
 
     private CollectorUtils() {}
 

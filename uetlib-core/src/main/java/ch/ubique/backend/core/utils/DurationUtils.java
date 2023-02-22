@@ -2,7 +2,7 @@ package ch.ubique.backend.core.utils;
 
 import java.time.Duration;
 
-public class DurationUtils {
+public final class DurationUtils {
 
     private DurationUtils() {}
 

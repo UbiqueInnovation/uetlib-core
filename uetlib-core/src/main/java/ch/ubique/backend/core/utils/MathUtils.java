@@ -1,6 +1,6 @@
 package ch.ubique.backend.core.utils;
 
-public class MathUtils {
+public final class MathUtils {
 
     private MathUtils() {}
 
