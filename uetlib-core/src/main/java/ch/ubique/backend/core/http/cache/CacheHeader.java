@@ -6,7 +6,7 @@ public enum CacheHeader {
     S_MAX_AGE("s-maxage"),
     NEXT_REFRESH("next-refresh"),
     BEST_BEFORE("best-before"),
-    REFRESH_BACKOFF("backoff");
+    BACKOFF("backoff");
 
     private final String value;
 
