@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import org.apache.commons.compress.archivers.ArchiveEntry;
@@ -46,19 +47,22 @@ public final class InputStreamUtils {
     public static ZipEntry findZipEntry(
             final ZipInputStream zipInputStream, final String zipEntryNameRegex)
             throws IOException {
+        final var pattern = Pattern.compile(zipEntryNameRegex);
         ZipEntry zipEntry;
         do {
             zipEntry = zipInputStream.getNextEntry();
-        } while (zipEntry != null && !(zipEntry.getName()).matches(zipEntryNameRegex));
+        } while (zipEntry != null && !pattern.matcher(zipEntry.getName()).matches());
         return zipEntry;
     }
 
     public static ArchiveEntry findZipEntry(
-            final ZipArchiveInputStream zipInputStream, final String name) throws IOException {
-        ArchiveEntry zipEntry;
+            final ZipArchiveInputStream zipArchiveInputStream, final String archiveEntryNameRegex)
+            throws IOException {
+        final var pattern = Pattern.compile(archiveEntryNameRegex);
+        ArchiveEntry archiveEntry;
         do {
-            zipEntry = zipInputStream.getNextEntry();
-        } while (zipEntry != null && !(zipEntry.getName()).matches(name));
-        return zipEntry;
+            archiveEntry = zipArchiveInputStream.getNextEntry();
+        } while (archiveEntry != null && !pattern.matcher(archiveEntry.getName()).matches());
+        return archiveEntry;
     }
 }
