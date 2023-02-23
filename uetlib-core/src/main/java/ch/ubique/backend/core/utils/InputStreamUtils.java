@@ -1,6 +1,9 @@
 package ch.ubique.backend.core.utils;
 
 import ch.ubique.backend.core.file.ByteFile;
+import org.apache.commons.compress.archivers.ArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -8,8 +11,6 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-import org.apache.commons.compress.archivers.ArchiveEntry;
-import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 
 @SuppressWarnings("unused")
 public final class InputStreamUtils {
@@ -31,9 +32,16 @@ public final class InputStreamUtils {
     public static ByteFile byteFileFromStream(
             final InputStream inputStream, final String fileName, final String contentType)
             throws IOException {
+
+        return new ByteFile()
+                .setFileName(fileName)
+                .setBytes(readBytesAndClose(inputStream))
+                .setContentType(contentType);
+    }
+
+    public static byte[] readBytesAndClose(final InputStream inputStream) throws IOException {
         try (inputStream) {
-            final var bytes = inputStream.readAllBytes();
-            return new ByteFile().setFileName(fileName).setBytes(bytes).setContentType(contentType);
+            return inputStream.readAllBytes();
         }
     }
 
