@@ -8,11 +8,11 @@ public final class DurationUtils {
 
     private static final long SECOND_TO_NANOS = Duration.ofSeconds(1).toNanos();
 
-    public static Duration ofSeconds(final double seconds) {
+    public static Duration ofFractionalSeconds(final double seconds) {
         return Duration.ofNanos(Math.round(seconds * SECOND_TO_NANOS));
     }
 
-    public static double toSeconds(final Duration duration) {
+    public static double toFractionalSeconds(final Duration duration) {
         return 1.0 * duration.toNanos() / SECOND_TO_NANOS;
     }
 }
