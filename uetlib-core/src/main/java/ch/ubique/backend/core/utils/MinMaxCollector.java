@@ -59,28 +59,6 @@ public final class MinMaxCollector {
                                 : Optional.of(acc.toMinMax()));
     }
 
-    /**
-     * @return MinMax<T> with {@link MinMax#min} and {@link MinMax#max} both set to not-null or the
-     *     whole object set to null of the stream did not contain any elements
-     */
-    public static <T extends Comparable<T>> Collector<T, ?, MinMax<T>> collectNullable() {
-        return collectNullable(Comparator.<T>naturalOrder());
-    }
-
-    /**
-     * @return MinMax<T> with {@link MinMax#min} and {@link MinMax#max} both set to not-null or the
-     *     whole object set to null of the stream did not contain any elements
-     */
-    public static <T extends Comparable<T>> Collector<T, ?, MinMax<T>> collectNullable(
-            @NotNull final Comparator<T> comparator) {
-        return Collectors.collectingAndThen(
-                collectMinMaxAccumulator(comparator),
-                acc ->
-                        acc.min() == null || acc.max() == null
-                                ? null
-                                : new MinMax<>(acc.min, acc.max));
-    }
-
     private static <T extends Comparable<T>>
             Collector<T, ?, MinMaxAccumulator<T>> collectMinMaxAccumulator(
                     @NotNull final Comparator<T> comparator) {
@@ -95,15 +73,14 @@ public final class MinMaxCollector {
 
     @Nullable
     @Contract("null, _ -> param2; _, null -> param2; !null, !null -> !null")
-    public static <T extends Comparable<T>> T minNullable(
-            @Nullable final T a, @Nullable final T b) {
+    static <T extends Comparable<T>> T minNullable(@Nullable final T a, @Nullable final T b) {
         return minNullable(a, b, Comparator.naturalOrder());
     }
 
     @Nullable
     @Contract(
             "null, _, _ -> param2; _, null, _ -> param2; !null, !null, !null -> !null; !null, !null, null -> fail")
-    public static <T extends Comparable<T>> T minNullable(
+    static <T extends Comparable<T>> T minNullable(
             @Nullable final T a, @Nullable final T b, @NotNull final Comparator<T> comparator) {
         if (a == null) {
             return b;
@@ -116,15 +93,14 @@ public final class MinMaxCollector {
 
     @Nullable
     @Contract("null, _ -> param2; _, null -> param2; !null, !null -> !null")
-    public static <T extends Comparable<T>> T maxNullable(
-            @Nullable final T a, @Nullable final T b) {
+    static <T extends Comparable<T>> T maxNullable(@Nullable final T a, @Nullable final T b) {
         return maxNullable(a, b, Comparator.naturalOrder());
     }
 
     @Nullable
     @Contract(
             "null, _, _ -> param2; _, null, _ -> param2; !null, !null, !null -> !null; !null, !null, null -> fail")
-    public static <T extends Comparable<T>> T maxNullable(
+    static <T extends Comparable<T>> T maxNullable(
             @Nullable final T a, @Nullable final T b, @NotNull final Comparator<T> comparator) {
         if (a == null) {
             return b;

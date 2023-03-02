@@ -123,61 +123,6 @@ class MinMaxCollectorTest {
     }
 
     @Test
-    @SuppressWarnings("java:S5778")
-    void testNullable() {
-        Assertions.assertNull(Stream.<Integer>of().collect(MinMaxCollector.collectNullable()));
-        Assertions.assertEquals(
-                new MinMax<>(56, 56), Stream.of(56).collect(MinMaxCollector.collectNullable()));
-        Assertions.assertEquals(
-                new MinMax<>(56, 56), Stream.of(56, 56).collect(MinMaxCollector.collectNullable()));
-        Assertions.assertEquals(
-                new MinMax<>(56, 57), Stream.of(56, 57).collect(MinMaxCollector.collectNullable()));
-        Assertions.assertEquals(
-                new MinMax<>(-2, 869),
-                Stream.of(56, 57, -2, 869, 0).collect(MinMaxCollector.collectNullable()));
-        Assertions.assertEquals(
-                new MinMax<>(Integer.MIN_VALUE, Integer.MAX_VALUE),
-                Stream.of(56, 57, -2, 869, 0, Integer.MAX_VALUE, Integer.MIN_VALUE)
-                        .collect(MinMaxCollector.collectNullable()));
-
-        Assertions.assertNull(
-                Stream.<Integer>of()
-                        .collect(
-                                MinMaxCollector.collectNullable(
-                                        Comparator.<Integer>reverseOrder())));
-        Assertions.assertEquals(
-                new MinMax<>(56, 56),
-                Stream.of(56)
-                        .collect(
-                                MinMaxCollector.collectNullable(
-                                        Comparator.<Integer>reverseOrder())));
-        Assertions.assertEquals(
-                new MinMax<>(56, 56),
-                Stream.of(56, 56)
-                        .collect(
-                                MinMaxCollector.collectNullable(
-                                        Comparator.<Integer>reverseOrder())));
-        Assertions.assertEquals(
-                new MinMax<>(57, 56),
-                Stream.of(56, 57)
-                        .collect(
-                                MinMaxCollector.collectNullable(
-                                        Comparator.<Integer>reverseOrder())));
-        Assertions.assertEquals(
-                new MinMax<>(869, -2),
-                Stream.of(56, 57, -2, 869, 0)
-                        .collect(
-                                MinMaxCollector.collectNullable(
-                                        Comparator.<Integer>reverseOrder())));
-        Assertions.assertEquals(
-                new MinMax<>(Integer.MAX_VALUE, Integer.MIN_VALUE),
-                Stream.of(56, 57, -2, 869, 0, Integer.MAX_VALUE, Integer.MIN_VALUE)
-                        .collect(
-                                MinMaxCollector.collectNullable(
-                                        Comparator.<Integer>reverseOrder())));
-    }
-
-    @Test
     void testMinNullable() {
         Assertions.assertNull(MinMaxCollector.minNullable(null, null));
         Assertions.assertEquals(2, MinMaxCollector.minNullable(2, null));
