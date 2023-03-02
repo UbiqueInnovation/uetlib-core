@@ -9,33 +9,31 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.jetbrains.annotations.Contract;
 
-public final class CollectorUtils {
+public final class MinMaxCollector {
 
-    private CollectorUtils() {}
+    private MinMaxCollector() {}
 
     /**
      * @return MinMax<T> NotNull with {@link MinMax#min} and {@link MinMax#max} set
      * @throws NoSuchElementException if the stream did not contain any element
      */
-    @NotNull
-    public static <T extends Comparable<T>> Collector<T, ?, MinMax<T>> collectMinMax() {
-        return collectMinMax(Comparator.<T>naturalOrder());
+    public static <T extends Comparable<T>> Collector<T, ?, MinMax<T>> collect() {
+        return collect(Comparator.<T>naturalOrder());
     }
 
     /**
      * @return MinMax<T> NotNull with {@link MinMax#min} and {@link MinMax#max} set
      * @throws NoSuchElementException if the stream did not contain any elements
      */
-    @NotNull
-    public static <T extends Comparable<T>> Collector<T, ?, MinMax<T>> collectMinMax(
+    public static <T extends Comparable<T>> Collector<T, ?, MinMax<T>> collect(
             @NotNull final Comparator<T> comparator) {
         return Collectors.collectingAndThen(
-                collectMinMaxNullable(comparator),
-                a -> {
-                    if (a.min() == null || a.max() == null) {
+                collectMinMaxAccumulator(comparator),
+                acc -> {
+                    if (acc.min() == null || acc.max() == null) {
                         throw new NoSuchElementException();
                     }
-                    return a;
+                    return acc.toMinMax();
                 });
     }
 
@@ -43,53 +41,59 @@ public final class CollectorUtils {
      * @return Optional that is an {@link Optional#empty()} if the stream did not contain any
      *     elements
      */
-    @NotNull
-    public static <T extends Comparable<T>>
-            Collector<T, ?, Optional<MinMax<T>>> collectMinMaxOptional() {
-        return collectMinMaxOptional(Comparator.<T>naturalOrder());
+    public static <T extends Comparable<T>> Collector<T, ?, Optional<MinMax<T>>> collectOptional() {
+        return collectOptional(Comparator.<T>naturalOrder());
     }
 
     /**
      * @return Optional that is an {@link Optional#empty()} if the stream did not contain any
      *     elements
      */
-    @NotNull
-    public static <T extends Comparable<T>>
-            Collector<T, ?, Optional<MinMax<T>>> collectMinMaxOptional(
-                    @NotNull final Comparator<T> comparator) {
-        return Collectors.collectingAndThen(
-                collectMinMaxNullable(comparator),
-                a -> a.min() == null || a.max() == null ? Optional.empty() : Optional.of(a));
-    }
-
-    /**
-     * @return MinMax<T> with both {@link MinMax#min} and {@link MinMax#max} set or both null if the
-     *     stream did not contain any elements
-     * @throws NoSuchElementException if the stream did not contain any elements
-     */
-    @NotNull
-    public static <T extends Comparable<T>> Collector<T, ?, MinMax<T>> collectMinMaxNullable() {
-        return collectMinMaxNullable(Comparator.<T>naturalOrder());
-    }
-
-    /**
-     * @return MinMax<T> with {@link MinMax#min} and {@link MinMax#max} both set to null if the
-     *     stream did not contain any elements
-     * @throws NoSuchElementException if the stream did not contain any elements
-     */
-    @NotNull
-    public static <T extends Comparable<T>> Collector<T, ?, MinMax<T>> collectMinMaxNullable(
+    public static <T extends Comparable<T>> Collector<T, ?, Optional<MinMax<T>>> collectOptional(
             @NotNull final Comparator<T> comparator) {
+        return Collectors.collectingAndThen(
+                collectMinMaxAccumulator(comparator),
+                acc ->
+                        acc.min() == null || acc.max() == null
+                                ? Optional.empty()
+                                : Optional.of(acc.toMinMax()));
+    }
+
+    /**
+     * @return MinMax<T> with {@link MinMax#min} and {@link MinMax#max} both set to not-null or the
+     *     whole object set to null of the stream did not contain any elements
+     */
+    public static <T extends Comparable<T>> Collector<T, ?, MinMax<T>> collectNullable() {
+        return collectNullable(Comparator.<T>naturalOrder());
+    }
+
+    /**
+     * @return MinMax<T> with {@link MinMax#min} and {@link MinMax#max} both set to not-null or the
+     *     whole object set to null of the stream did not contain any elements
+     */
+    public static <T extends Comparable<T>> Collector<T, ?, MinMax<T>> collectNullable(
+            @NotNull final Comparator<T> comparator) {
+        return Collectors.collectingAndThen(
+                collectMinMaxAccumulator(comparator),
+                acc ->
+                        acc.min() == null || acc.max() == null
+                                ? null
+                                : new MinMax<>(acc.min, acc.max));
+    }
+
+    private static <T extends Comparable<T>>
+            Collector<T, ?, MinMaxAccumulator<T>> collectMinMaxAccumulator(
+                    @NotNull final Comparator<T> comparator) {
         return Collectors.reducing(
-                new MinMax<>(),
-                a -> new MinMax<>(a, a),
+                new MinMaxAccumulator<>(),
+                a -> new MinMaxAccumulator<>(a, a),
                 (a, b) ->
-                        new MinMax<>(
+                        new MinMaxAccumulator<>(
                                 minNullable(a.min(), b.min(), comparator),
                                 maxNullable(a.max(), b.max(), comparator)));
     }
 
-    @NotNull
+    @Nullable
     @Contract("null, _ -> param2; _, null -> param2; !null, !null -> !null")
     public static <T extends Comparable<T>> T minNullable(
             @Nullable final T a, @Nullable final T b) {
@@ -131,10 +135,16 @@ public final class CollectorUtils {
         return comparator.compare(a, b) > 0 ? a : b;
     }
 
-    public record MinMax<T>(@Nullable T min, @Nullable T max) {
+    public record MinMax<T>(@NotNull T min, @NotNull T max) {}
 
-        public MinMax() {
+    private record MinMaxAccumulator<T>(@Nullable T min, @Nullable T max) {
+
+        MinMaxAccumulator() {
             this(null, null);
+        }
+
+        MinMax<T> toMinMax() {
+            return new MinMax<>(min, max);
         }
     }
 }
