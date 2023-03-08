@@ -1,13 +1,14 @@
 package ch.ubique.backend.core.mdc;
 
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.MDC;
+
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.atomic.AtomicReference;
-import org.jetbrains.annotations.NotNull;
-import org.slf4j.MDC;
 
 /**
  * A {@link ForkJoinPool} that inherits MDC contexts from the thread that queues a task.
@@ -16,6 +17,8 @@ import org.slf4j.MDC;
  * @author Ben L. (<a href="https://stackoverflow.com/a/50820315">StackOverflow Answer</a>)
  */
 public final class MdcForkJoinPool extends ForkJoinPool {
+
+    private static final MdcForkJoinPool MDC_COMMON_POOL = new MdcForkJoinPool(64);
     /**
      * Creates a new MdcForkJoinPool.
      *
@@ -46,6 +49,10 @@ public final class MdcForkJoinPool extends ForkJoinPool {
 
     public MdcForkJoinPool(final int parallelism) {
         this(parallelism, defaultForkJoinWorkerThreadFactory, null, false);
+    }
+
+    public static MdcForkJoinPool mdcCommonPool() {
+        return MDC_COMMON_POOL;
     }
 
     @Override
@@ -155,6 +162,26 @@ public final class MdcForkJoinPool extends ForkJoinPool {
     @Override
     public @NotNull ForkJoinTask<?> submit(final Runnable task) {
         return super.submit(wrap(task, MDC.getCopyOfContextMap()));
+    }
+
+    public <T> ForkJoinTask<T> submit(
+            final ForkJoinTask<T> task, final Map<String, String> newContext) {
+        return super.submit(wrap(task, newContext));
+    }
+
+    public <T> @NotNull ForkJoinTask<T> submit(
+            final Callable<T> task, final Map<String, String> newContext) {
+        return super.submit(wrap(task, newContext));
+    }
+
+    public <T> @NotNull ForkJoinTask<T> submit(
+            final Runnable task, final T result, final Map<String, String> newContext) {
+        return super.submit(wrap(task, newContext), result);
+    }
+
+    public @NotNull ForkJoinTask<?> submit(
+            final Runnable task, final Map<String, String> newContext) {
+        return super.submit(wrap(task, newContext));
     }
 
     private <T> Callable<T> wrap(final Callable<T> task, final Map<String, String> newContext) {

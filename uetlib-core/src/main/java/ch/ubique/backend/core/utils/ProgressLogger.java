@@ -3,7 +3,7 @@ package ch.ubique.backend.core.utils;
 import static java.lang.Math.max;
 
 import java.util.Map;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -29,7 +29,7 @@ public class ProgressLogger {
 
     public ProgressLogger(
             final String prefix, final long total, final Map<String, String> mdcContextMap) {
-        this.prefix = Optional.ofNullable(prefix).orElse("");
+        this.prefix = Objects.requireNonNullElse(prefix, "");
         this.total = total;
         this.startTime = System.currentTimeMillis();
         this.count = new AtomicLong();

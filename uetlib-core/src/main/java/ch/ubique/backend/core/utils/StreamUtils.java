@@ -21,15 +21,32 @@ public final class StreamUtils {
      * at once to create the chunk lists.
      *
      * @param list the input list to be chunked
-     * @param size size of the chunks
+     * @param chunkSize size of the chunks
      * @return a stream of chunks
      * @param <T> The type of the list elements
      */
-    public static <T> Stream<List<T>> chunked(final List<T> list, final int size) {
-        if (list == null || size <= 0) {
+    public static <T> Stream<List<T>> chunked(final List<T> list, final int chunkSize) {
+        if (list == null || chunkSize <= 0) {
             return Stream.empty();
         }
-        final var iterator = list.stream().iterator();
+        return chunked(list.stream(), chunkSize);
+    }
+
+    /**
+     * Creates a stream of chunks with lists of size {@param size}. The returned lists are created
+     * lazily for each chunk, hence the stream is only consumed partially for each chunk and not all
+     * at once to create the chunk lists.
+     *
+     * @param stream the input stream to be chunked
+     * @param chunkSize size of the chunks
+     * @return a stream of chunks
+     * @param <T> The type of the stream elements
+     */
+    public static <T> Stream<List<T>> chunked(final Stream<T> stream, final int chunkSize) {
+        if (stream == null || chunkSize <= 0) {
+            return Stream.empty();
+        }
+        final var iterator = stream.iterator();
         final var listIterator =
                 new Iterator<List<T>>() {
 
@@ -38,7 +55,8 @@ public final class StreamUtils {
                     }
 
                     public List<T> next() {
-                        return IntStream.iterate(0, i -> i < size && iterator.hasNext(), i -> i + 1)
+                        return IntStream.iterate(
+                                        0, i -> i < chunkSize && iterator.hasNext(), i -> i + 1)
                                 .mapToObj(i -> iterator.next())
                                 .toList();
                     }
