@@ -1,8 +1,11 @@
 package ch.ubique.backend.core.localized;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import io.swagger.v3.oas.annotations.media.Schema;
+
 import jakarta.validation.constraints.NotBlank;
+
 import org.apache.commons.lang3.StringUtils;
 
 @Schema(description = "A localized entry.")

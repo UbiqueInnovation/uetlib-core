@@ -1,6 +1,7 @@
 package ch.ubique.backend.core.exception;
 
 import jakarta.validation.constraints.NotNull;
+
 import java.text.MessageFormat;
 import java.util.function.Supplier;
 

@@ -2,6 +2,10 @@ package ch.ubique.backend.core.localized;
 
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
+
+import org.apache.commons.lang3.LocaleUtils;
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
@@ -9,8 +13,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import org.apache.commons.lang3.LocaleUtils;
-import org.apache.commons.lang3.StringUtils;
 
 public final class LocalizedValueBuilder<T> {
 

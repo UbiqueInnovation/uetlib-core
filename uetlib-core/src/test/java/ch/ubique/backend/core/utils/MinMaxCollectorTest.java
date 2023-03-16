@@ -1,12 +1,14 @@
 package ch.ubique.backend.core.utils;
 
 import ch.ubique.backend.core.utils.MinMaxCollector.MinMax;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import java.util.Comparator;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Stream;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 
 class MinMaxCollectorTest {
 
