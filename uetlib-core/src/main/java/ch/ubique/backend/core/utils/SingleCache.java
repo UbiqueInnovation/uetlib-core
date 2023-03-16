@@ -1,8 +1,10 @@
 package ch.ubique.backend.core.utils;
 
 import com.github.benmanes.caffeine.cache.Cache;
-import java.util.function.Supplier;
+
 import org.checkerframework.checker.nullness.qual.PolyNull;
+
+import java.util.function.Supplier;
 
 public final class SingleCache<T> {
     private static final String KEY = "KEY";

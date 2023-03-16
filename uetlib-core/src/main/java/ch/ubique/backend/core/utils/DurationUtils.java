@@ -4,9 +4,9 @@ import java.time.Duration;
 
 public final class DurationUtils {
 
-    private DurationUtils() {}
-
     private static final long SECOND_TO_NANOS = Duration.ofSeconds(1).toNanos();
+
+    private DurationUtils() {}
 
     public static Duration ofFractionalSeconds(final double seconds) {
         return Duration.ofNanos(Math.round(seconds * SECOND_TO_NANOS));

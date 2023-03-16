@@ -11,9 +11,9 @@ import java.util.function.Supplier;
 
 public final class Timer {
 
-    private Timer() {}
-
     private static final Logger logger = LoggerFactory.getLogger(Timer.class);
+
+    private Timer() {}
 
     public static void measureAndLog(final Runnable runnable) {
         measureAndLog(asNullSupplier(runnable));

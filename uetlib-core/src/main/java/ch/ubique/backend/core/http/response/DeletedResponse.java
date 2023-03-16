@@ -1,6 +1,7 @@
 package ch.ubique.backend.core.http.response;
 
 import jakarta.validation.constraints.NotNull;
+
 import java.util.Arrays;
 import java.util.List;
 

@@ -1,6 +1,10 @@
 package ch.ubique.backend.core.utils;
 
 import ch.ubique.backend.core.file.ByteFile;
+
+import org.apache.commons.compress.archivers.ArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -8,8 +12,6 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-import org.apache.commons.compress.archivers.ArchiveEntry;
-import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 
 @SuppressWarnings("unused")
 public final class InputStreamUtils {

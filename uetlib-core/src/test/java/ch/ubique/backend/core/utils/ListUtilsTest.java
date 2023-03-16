@@ -1,10 +1,11 @@
 package ch.ubique.backend.core.utils;
 
-import java.util.List;
-import java.util.function.Function;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+import java.util.function.Function;
 
 class ListUtilsTest {
 

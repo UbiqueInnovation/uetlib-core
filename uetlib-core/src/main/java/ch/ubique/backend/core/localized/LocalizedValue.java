@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.mchange.v2.ser.SerializableUtils;
 import com.pivovarit.function.exception.WrappedException;
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;

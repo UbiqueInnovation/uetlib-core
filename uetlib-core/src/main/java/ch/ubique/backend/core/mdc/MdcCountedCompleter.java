@@ -1,8 +1,9 @@
 package ch.ubique.backend.core.mdc;
 
+import org.slf4j.MDC;
+
 import java.util.Map;
 import java.util.concurrent.CountedCompleter;
-import org.slf4j.MDC;
 
 /**
  * A {@link CountedCompleter} that inherits MDC contexts from the thread that queues a task.

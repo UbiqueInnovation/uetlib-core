@@ -1,8 +1,9 @@
 package ch.ubique.backend.core.utils;
 
-import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 class StringUtilsTest {
 

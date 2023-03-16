@@ -14,10 +14,10 @@ import java.util.Objects;
 
 public class EtagUtil {
 
-    private EtagUtil() {}
-
     private static final String WEAK_PREFIX = "W/";
     private static final String SHA_1 = "SHA-1";
+
+    private EtagUtil() {}
 
     /**
      * generates a weak etag for a list that does not depend on element order
