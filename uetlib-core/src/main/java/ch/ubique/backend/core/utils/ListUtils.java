@@ -1,5 +1,7 @@
 package ch.ubique.backend.core.utils;
 
+import ch.ubique.backend.core.mdc.MdcForkJoinPool;
+
 import org.slf4j.MDC;
 
 import java.util.Collection;
@@ -38,13 +40,14 @@ public final class ListUtils {
             final Collection<E> remove,
             final Function<E, K> keyExtractor) {
         final var mdcContext = MDC.getCopyOfContextMap();
-        return MdcUtils.mdcCommonPoolSubmitUnchecked(
+        return MdcForkJoinPool.mdcCommonPool()
+                .submit(
                         () ->
                                 collection.parallelStream()
                                         .filter(containsAnyByKey(remove, keyExtractor))
                                         .toList(),
                         mdcContext)
-                .get();
+                .join();
     }
 
     public static <E, K> Predicate<E> containsAnyByKey(
