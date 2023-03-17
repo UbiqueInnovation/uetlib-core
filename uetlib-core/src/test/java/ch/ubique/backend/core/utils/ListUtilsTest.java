@@ -42,4 +42,38 @@ class ListUtilsTest {
         Assertions.assertEquals(
                 List.of(Pair.of("A", 3)), ListUtils.removeAll(pairs2, pairs1, Pair::getRight));
     }
+
+    @Test
+    void removeAllParallelIdentity() {
+        Assertions.assertEquals(
+                org.apache.commons.collections4.ListUtils.removeAll(pairs1, pairs2),
+                ListUtils.removeAllParallel(pairs1, pairs2, Function.identity()));
+        Assertions.assertEquals(
+                ListUtils.removeAllParallel(pairs1, pairs2, Function.identity()),
+                org.apache.commons.collections4.ListUtils.removeAll(pairs1, pairs2));
+
+        Assertions.assertEquals(
+                List.of(Pair.of("A", 2), Pair.of("C", 1)),
+                ListUtils.removeAllParallel(pairs1, pairs2, Function.identity()));
+
+        Assertions.assertEquals(
+                List.of(Pair.of("A", 3)),
+                ListUtils.removeAllParallel(pairs2, pairs1, Function.identity()));
+    }
+
+    @Test
+    void removeAllParallel() {
+        Assertions.assertEquals(
+                List.of(Pair.of("C", 1)),
+                ListUtils.removeAllParallel(pairs1, pairs2, Pair::getLeft));
+        Assertions.assertEquals(
+                List.of(), ListUtils.removeAllParallel(pairs2, pairs1, Pair::getLeft));
+
+        Assertions.assertEquals(
+                List.of(Pair.of("A", 2)),
+                ListUtils.removeAllParallel(pairs1, pairs2, Pair::getRight));
+        Assertions.assertEquals(
+                List.of(Pair.of("A", 3)),
+                ListUtils.removeAllParallel(pairs2, pairs1, Pair::getRight));
+    }
 }
