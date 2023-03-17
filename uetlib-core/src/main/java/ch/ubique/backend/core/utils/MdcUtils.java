@@ -4,6 +4,7 @@ import ch.ubique.backend.core.mdc.MdcForkJoinPool;
 
 import com.pivovarit.function.ThrowingConsumer;
 import com.pivovarit.function.ThrowingFunction;
+import com.pivovarit.function.ThrowingSupplier;
 
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.MDC;
@@ -11,6 +12,7 @@ import org.slf4j.MDC;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public final class MdcUtils {
@@ -75,5 +77,22 @@ public final class MdcUtils {
                         MdcForkJoinPool.mdcCommonPool()
                                 .submit(() -> consumer.accept(arg), newContext)
                                 .get());
+    }
+
+    /**
+     * Use this to submit a supplier to the {@link MdcForkJoinPool#mdcCommonPool()}. Use as follows:
+     *
+     * <pre>{@code
+     * final var mdcContext = MDC.getCopyOfContextMap();
+     * final var result = MdcUtils.mdcCommonPoolSubmitUnchecked(supplier, newContext);
+     * }</pre>
+     *
+     * @param supplier supplier to be executed with the given MDC context
+     * @param newContext MDC context that is set in the executing thread
+     */
+    public static <T> @NotNull Supplier<T> mdcCommonPoolSubmitUnchecked(
+            final Supplier<T> supplier, final Map<String, String> newContext) {
+        return ThrowingSupplier.unchecked(
+                () -> MdcForkJoinPool.mdcCommonPool().submit(supplier::get, newContext).get());
     }
 }
