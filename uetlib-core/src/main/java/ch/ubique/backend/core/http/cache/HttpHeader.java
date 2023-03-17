@@ -1,7 +1,7 @@
 package ch.ubique.backend.core.http.cache;
 
 /** dashes are stripped for Azure headers for custom headers, as they do not support them. */
-public enum CacheHeader {
+public enum HttpHeader {
     MAX_AGE("max-age"),
     S_MAX_AGE("s-maxage"),
     NEXT_REFRESH("next-refresh"),
@@ -14,7 +14,7 @@ public enum CacheHeader {
     private final String withMicrosoftPrefix;
     private final String withAmazonPrefix;
 
-    CacheHeader(final String value) {
+    HttpHeader(final String value) {
         this.value = value;
         this.noDashesAzure = value.replace("-", "");
         this.withMicrosoftPrefix = "x-ms-meta-" + noDashesAzure;
