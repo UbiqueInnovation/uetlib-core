@@ -9,6 +9,8 @@ public class ResourceNotFoundException extends RuntimeException {
 
     private static final long serialVersionUID = -3763002992193794029L;
 
+    public ResourceNotFoundException() {}
+
     public ResourceNotFoundException(final String message) {
         super(message);
     }
