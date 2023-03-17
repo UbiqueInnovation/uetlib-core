@@ -1,4 +1,4 @@
-package ch.ubique.backend.core.http.cache;
+package ch.ubique.backend.core.http.header;
 
 /** dashes are stripped for Azure headers for custom headers, as they do not support them. */
 public enum HttpHeader {
