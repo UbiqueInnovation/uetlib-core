@@ -10,9 +10,15 @@ public enum CacheHeader {
     CONTENT_LENGTH_UNCOMPRESSED("content-length-uncompressed");
 
     private final String value;
+    private final String noDashesAzure;
+    private final String withMicrosoftPrefix;
+    private final String withAmazonPrefix;
 
     CacheHeader(final String value) {
         this.value = value;
+        this.noDashesAzure = value.replace("-", "");
+        this.withMicrosoftPrefix = "x-ms-meta-" + noDashesAzure;
+        this.withAmazonPrefix = "x-amz-meta-" + value;
     }
 
     public String value() {
@@ -20,14 +26,14 @@ public enum CacheHeader {
     }
 
     public String noDashesAzure() {
-        return value.replace("-", "");
+        return noDashesAzure;
     }
 
     public String withMicrosoftPrefix() {
-        return "x-ms-meta-" + noDashesAzure();
+        return withMicrosoftPrefix;
     }
 
     public String withAmazonPrefix() {
-        return "x-amz-meta-" + value;
+        return withAmazonPrefix;
     }
 }
