@@ -11,7 +11,7 @@ public class LegacyLocalizedString extends ArrayList<LegacyLocalizedStringEntry>
 
     public LegacyLocalizedString() {}
 
-    private LegacyLocalizedString(Collection<LegacyLocalizedStringEntry> entries) {
+    private LegacyLocalizedString(final Collection<LegacyLocalizedStringEntry> entries) {
         super(entries);
     }
 
@@ -21,7 +21,7 @@ public class LegacyLocalizedString extends ArrayList<LegacyLocalizedStringEntry>
      * status_it: ... }
      */
     public static LegacyLocalizedString fromSuffixStrings(
-            Map<String, ?> stringMap, String key, Collection<String> languages) {
+            final Map<String, ?> stringMap, final String key, final Collection<String> languages) {
         final var localizedText = new LegacyLocalizedString();
         for (final var langCode : languages) {
             final var localKey = String.format("%s_%s", key, langCode);
@@ -32,13 +32,13 @@ public class LegacyLocalizedString extends ArrayList<LegacyLocalizedStringEntry>
         return localizedText.clean();
     }
 
-    public LegacyLocalizedString add(String langKey, String value) {
+    public LegacyLocalizedString add(final String langKey, final String value) {
         add(new LegacyLocalizedStringEntry(langKey, value));
         return this;
     }
 
     public LegacyLocalizedString clean() {
-        var entries = stream().filter(LegacyLocalizedStringEntry::isValid).toList();
+        final var entries = stream().filter(LegacyLocalizedStringEntry::isValid).toList();
 
         if (entries.isEmpty()) {
             return null;
@@ -46,7 +46,7 @@ public class LegacyLocalizedString extends ArrayList<LegacyLocalizedStringEntry>
         return new LegacyLocalizedString(entries);
     }
 
-    public LegacyLocalizedString addForDeEnItFr(String value) {
+    public LegacyLocalizedString addForDeEnItFr(final String value) {
         de(value);
         en(value);
         it(value);
@@ -54,27 +54,25 @@ public class LegacyLocalizedString extends ArrayList<LegacyLocalizedStringEntry>
         return this;
     }
 
-    public LegacyLocalizedString de(String value) {
+    public LegacyLocalizedString de(final String value) {
         return add("de", value);
     }
 
-    public LegacyLocalizedString en(String value) {
+    public LegacyLocalizedString en(final String value) {
         return add("en", value);
     }
 
-    public LegacyLocalizedString it(String value) {
+    public LegacyLocalizedString it(final String value) {
         return add("it", value);
     }
 
-    public LegacyLocalizedString fr(String value) {
+    public LegacyLocalizedString fr(final String value) {
         return add("fr", value);
     }
 
     @Override
     public String toString() {
-        return this.stream()
-                .map(LegacyLocalizedStringEntry::toString)
-                .collect(Collectors.joining(", "));
+        return stream().map(LegacyLocalizedStringEntry::toString).collect(Collectors.joining(", "));
     }
 
     @Override
