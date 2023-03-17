@@ -4,9 +4,9 @@ import java.nio.file.Path;
 
 public interface FileEventListener {
 
-    public void onCreated(Path file);
+    void onCreated(Path file);
 
-    public void onDeleted(Path file);
+    void onDeleted(Path file);
 
-    public void onModified(Path file);
+    void onModified(Path file);
 }

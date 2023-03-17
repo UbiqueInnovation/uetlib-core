@@ -9,25 +9,21 @@ public class ResourceNotFoundException extends RuntimeException {
 
     private static final long serialVersionUID = -3763002992193794029L;
 
-    public ResourceNotFoundException() {
-        super();
-    }
-
-    public ResourceNotFoundException(String message) {
+    public ResourceNotFoundException(final String message) {
         super(message);
     }
 
-    public ResourceNotFoundException(String message, Throwable cause) {
+    public ResourceNotFoundException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
     public static ResourceNotFoundException withMessage(
-            @NotNull String pattern, Object... arguments) {
+            @NotNull final String pattern, final Object... arguments) {
         return new ResourceNotFoundException(MessageFormat.format(pattern, arguments));
     }
 
     public static Supplier<ResourceNotFoundException> throwWithMessage(
-            @NotNull String pattern, Object... arguments) {
+            @NotNull final String pattern, final Object... arguments) {
         return () -> new ResourceNotFoundException(MessageFormat.format(pattern, arguments));
     }
 }

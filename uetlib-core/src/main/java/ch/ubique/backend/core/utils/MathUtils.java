@@ -4,7 +4,7 @@ public final class MathUtils {
 
     private MathUtils() {}
 
-    public static int clamp(int value, int min, int max) {
+    public static int clamp(final int value, final int min, final int max) {
         return Math.max(min, Math.min(value, max));
     }
 }

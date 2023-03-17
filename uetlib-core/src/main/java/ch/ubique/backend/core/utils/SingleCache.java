@@ -11,16 +11,16 @@ public final class SingleCache<T> {
 
     private final Cache<String, T> cache;
 
-    public SingleCache(Cache<String, T> cache) {
+    public SingleCache(final Cache<String, T> cache) {
         this.cache = cache;
     }
 
-    public SingleCache(Cache<String, T> cache, T initialValue) {
+    public SingleCache(final Cache<String, T> cache, final T initialValue) {
         this(cache);
         set(initialValue);
     }
 
-    public void set(T value) {
+    public void set(final T value) {
         cache.put(KEY, value);
     }
 
@@ -28,7 +28,7 @@ public final class SingleCache<T> {
         return cache.getIfPresent(KEY);
     }
 
-    public T get(Supplier<? extends @PolyNull T> valueGetter) {
+    public T get(final Supplier<? extends @PolyNull T> valueGetter) {
         return cache.get(KEY, key -> valueGetter.get());
     }
 }

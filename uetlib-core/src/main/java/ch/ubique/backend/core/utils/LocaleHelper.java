@@ -14,24 +14,25 @@ public final class LocaleHelper {
 
     private LocaleHelper() {}
 
-    public static Optional<String> localValue(Map<Locale, String> values, Locale locale) {
+    public static Optional<String> localValue(
+            final Map<Locale, String> values, final Locale locale) {
         final var matchedLocale =
                 Locale.lookup(
                         List.of(new Locale.LanguageRange(locale.toLanguageTag())), values.keySet());
         return Optional.ofNullable(matchedLocale).map(values::get);
     }
 
-    public static Optional<Locale> getLocale(String key) {
+    public static Optional<Locale> getLocale(final String key) {
         try {
             final var locale = LocaleUtils.toLocale(key);
             return LocaleUtils.isAvailableLocale(locale) ? Optional.of(locale) : Optional.empty();
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             return Optional.empty();
         }
     }
 
     public static Map<Locale, String> getLocalizedStrings(
-            final Map<String, ?> dictionary, final String keyPrefix, String separator) {
+            final Map<String, ?> dictionary, final String keyPrefix, final String separator) {
         return dictionary.entrySet().stream()
                 .map(entry -> tryToGetLocalizedString(entry, keyPrefix, separator))
                 .filter(Optional::isPresent)

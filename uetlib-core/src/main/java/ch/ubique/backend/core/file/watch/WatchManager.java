@@ -24,7 +24,7 @@ public class WatchManager implements Runnable {
 
     private Thread thread;
 
-    public WatchManager(WatchService watchService, FileEventListener listener) {
+    public WatchManager(final WatchService watchService, final FileEventListener listener) {
         this.watchService = watchService;
         this.listener = listener;
     }
@@ -33,7 +33,7 @@ public class WatchManager implements Runnable {
         try {
             thread.interrupt();
             watchService.close();
-        } catch (IOException ignored) {
+        } catch (final IOException ignored) {
             // ignore exception
         }
     }
@@ -51,22 +51,22 @@ public class WatchManager implements Runnable {
         while (poll) {
             try {
                 poll = pollEvents(watchService);
-            } catch (InterruptedException | ClosedWatchServiceException e) {
+            } catch (final InterruptedException | ClosedWatchServiceException e) {
                 Thread.currentThread().interrupt();
             }
         }
     }
 
-    private boolean pollEvents(WatchService watchService) throws InterruptedException {
-        WatchKey key = watchService.take();
-        Path path = (Path) key.watchable();
-        for (WatchEvent<?> event : key.pollEvents()) {
+    private boolean pollEvents(final WatchService watchService) throws InterruptedException {
+        final WatchKey key = watchService.take();
+        final Path path = (Path) key.watchable();
+        for (final WatchEvent<?> event : key.pollEvents()) {
             notifyListeners(event.kind(), path.resolve((Path) event.context()));
         }
         return key.reset();
     }
 
-    private void notifyListeners(Kind<?> kind, Path file) {
+    private void notifyListeners(final Kind<?> kind, final Path file) {
         logger.info("New file event: {} Event: {}", file, kind);
         if (kind == ENTRY_CREATE) {
             listener.onCreated(file);

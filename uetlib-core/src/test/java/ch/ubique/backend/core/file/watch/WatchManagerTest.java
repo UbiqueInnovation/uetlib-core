@@ -43,17 +43,17 @@ class WatchManagerTest {
                         new FileEventListener() {
 
                             @Override
-                            public void onModified(Path file) {
+                            public void onModified(final Path file) {
                                 modified.set(true);
                             }
 
                             @Override
-                            public void onDeleted(Path file) {
+                            public void onDeleted(final Path file) {
                                 deleted.set(true);
                             }
 
                             @Override
-                            public void onCreated(Path file) {
+                            public void onCreated(final Path file) {
                                 created.set(true);
                             }
                         });
@@ -61,17 +61,17 @@ class WatchManagerTest {
 
         assertFalse(created.get());
         Files.createFile(testFilePath);
-        Thread.sleep(100l);
+        Thread.sleep(100L);
         assertTrue(created.get());
 
         assertFalse(modified.get());
         Files.writeString(testFilePath, "This is a test string for a test file");
-        Thread.sleep(100l);
+        Thread.sleep(100L);
         assertTrue(modified.get());
 
         assertFalse(deleted.get());
         Files.delete(testFilePath);
-        Thread.sleep(100l);
+        Thread.sleep(100L);
         assertTrue(deleted.get());
 
         wm.destroy();

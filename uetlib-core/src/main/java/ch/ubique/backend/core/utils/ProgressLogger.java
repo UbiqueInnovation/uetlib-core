@@ -55,7 +55,7 @@ public class ProgressLogger {
         if (currentCount % max(1, total / 100) == 0) {
             final var percent = 100 * currentCount / total;
             final var currentTime = System.currentTimeMillis();
-            final var elementsPerSecond = 1000. * currentCount / (currentTime - startTime);
+            final var elementsPerSecond = 1000.0 * currentCount / (currentTime - startTime);
             logger.info(
                     "{}Processed {}% ({} elements per second)", prefix, percent, elementsPerSecond);
         }
