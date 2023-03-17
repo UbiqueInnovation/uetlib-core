@@ -1,11 +1,10 @@
-package ch.ubique.backend.core.http.cache;
+package ch.ubique.backend.core.http.header;
 
 import org.apache.commons.codec.binary.Hex;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -25,47 +24,47 @@ public class EtagUtil {
      * @param list
      * @return
      */
-    public static String getUnsortedListEtag(boolean asWeakEtag, List<? extends Object> list) {
-        int hash = list != null ? list.stream().map(Objects::hash).reduce(0, (a, b) -> a ^ b) : 0;
-        String hashString = String.valueOf(hash);
+    public static String getUnsortedListEtag(final boolean asWeakEtag, final List<? extends Object> list) {
+        final var hash = list != null ? list.stream().map(Objects::hash).reduce(0, (a, b) -> a ^ b) : 0;
+        final var hashString = String.valueOf(hash);
         return asWeakEtag ? toWeakEtag(hashString) : hashString;
     }
 
-    public static String getSha1HashForFiles(boolean asWeakEtag, String... pathToFiles)
+    public static String getSha1HashForFiles(final boolean asWeakEtag, final String... pathToFiles)
             throws IOException, NoSuchAlgorithmException {
-        MessageDigest sha1 = MessageDigest.getInstance(SHA_1);
-        for (String pathToFile : pathToFiles) {
-            final String classpathPrefix = "classpath:";
-            try (InputStream is =
+        final var sha1 = MessageDigest.getInstance(SHA_1);
+        for (final var pathToFile : pathToFiles) {
+            final var classpathPrefix = "classpath:";
+            try (final var is =
                     pathToFile.startsWith(classpathPrefix)
                             ? new ClassPathResource(pathToFile.replace(classpathPrefix, ""))
                                     .getInputStream()
                             : new FileInputStream(pathToFile)) {
 
-                byte[] buffer = new byte[8192];
-                int len = is.read(buffer);
+                final var buffer = new byte[8192];
+                var len = is.read(buffer);
                 while (len != -1) {
                     sha1.update(buffer, 0, len);
                     len = is.read(buffer);
                 }
             }
         }
-        String hash = Hex.encodeHexString(sha1.digest());
+        final var hash = Hex.encodeHexString(sha1.digest());
         return asWeakEtag ? toWeakEtag(hash) : hash;
     }
 
-    public static String getSha1HashForStrings(boolean asWeakEtag, String... strings)
+    public static String getSha1HashForStrings(final boolean asWeakEtag, final String... strings)
             throws NoSuchAlgorithmException {
-        MessageDigest sha1 = MessageDigest.getInstance(SHA_1);
-        for (String string : strings) {
-            byte[] bytes = string.getBytes(StandardCharsets.UTF_8);
+        final var sha1 = MessageDigest.getInstance(SHA_1);
+        for (final var string : strings) {
+            final var bytes = string.getBytes(StandardCharsets.UTF_8);
             sha1.update(bytes);
         }
-        String hash = Hex.encodeHexString(sha1.digest());
+        final var hash = Hex.encodeHexString(sha1.digest());
         return asWeakEtag ? toWeakEtag(hash) : hash;
     }
 
-    public static String toWeakEtag(String hash) {
+    public static String toWeakEtag(final String hash) {
         return WEAK_PREFIX + "\"" + hash + "\"";
     }
 }
