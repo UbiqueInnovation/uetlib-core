@@ -1,5 +1,6 @@
 package ch.ubique.backend.core.utils;
 
+import java.util.Objects;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -17,5 +18,11 @@ public final class StringUtils {
         }
         return IntStream.range(0, string.length() - size + 1)
                 .mapToObj(start -> string.substring(start, start + size));
+    }
+
+    public static String requireNonBlankElse(final String obj, final String defaultObj) {
+        return org.apache.commons.lang3.StringUtils.isNotBlank(obj)
+                ? obj
+                : Objects.requireNonNull(defaultObj, "defaultObj");
     }
 }
