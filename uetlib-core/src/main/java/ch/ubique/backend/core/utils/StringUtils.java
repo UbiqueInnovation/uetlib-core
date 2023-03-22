@@ -48,7 +48,7 @@ public final class StringUtils {
     }
 
     public static String requireNonBlankElseGet(final String obj, final Supplier<String> supplier) {
-        return obj != null
+        return org.apache.commons.lang3.StringUtils.isNotBlank(obj)
                 ? obj
                 : requireNonBlank(
                         Objects.requireNonNull(supplier, "supplier").get(), "supplier.get()");
