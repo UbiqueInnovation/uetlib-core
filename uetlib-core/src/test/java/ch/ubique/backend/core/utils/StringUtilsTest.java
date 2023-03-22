@@ -37,24 +37,33 @@ class StringUtilsTest {
         Assertions.assertThrows(
                 NullPointerException.class, () -> StringUtils.requireNonBlankElse("    ", null));
         Assertions.assertThrows(
-                IllegalStateException.class, () -> StringUtils.requireNonBlankElse(null, ""));
+                IllegalArgumentException.class, () -> StringUtils.requireNonBlankElse(null, ""));
         Assertions.assertThrows(
-                IllegalStateException.class, () -> StringUtils.requireNonBlankElse("", ""));
+                IllegalArgumentException.class, () -> StringUtils.requireNonBlankElse("", ""));
         Assertions.assertThrows(
-                IllegalStateException.class, () -> StringUtils.requireNonBlankElse("    ", ""));
+                IllegalArgumentException.class, () -> StringUtils.requireNonBlankElse("    ", ""));
         Assertions.assertThrows(
-                IllegalStateException.class, () -> StringUtils.requireNonBlankElse(null, "   "));
+                IllegalArgumentException.class, () -> StringUtils.requireNonBlankElse(null, "\t"));
         Assertions.assertThrows(
-                IllegalStateException.class, () -> StringUtils.requireNonBlankElse("", "   "));
+                IllegalArgumentException.class, () -> StringUtils.requireNonBlankElse("", "\t"));
         Assertions.assertThrows(
-                IllegalStateException.class, () -> StringUtils.requireNonBlankElse("    ", "   "));
+                IllegalArgumentException.class,
+                () -> StringUtils.requireNonBlankElse("    ", "\t"));
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> StringUtils.requireNonBlankElse("    ", "\n"));
+        Assertions.assertDoesNotThrow(() -> StringUtils.requireNonBlankElse("abc", null));
+        Assertions.assertDoesNotThrow(() -> StringUtils.requireNonBlankElse("abc", ""));
+        Assertions.assertDoesNotThrow(() -> StringUtils.requireNonBlankElse("abc", "    "));
         Assertions.assertDoesNotThrow(() -> StringUtils.requireNonBlankElse(null, " a "));
         Assertions.assertDoesNotThrow(() -> StringUtils.requireNonBlankElse("", " a "));
-        Assertions.assertDoesNotThrow(() -> StringUtils.requireNonBlankElse("   ", " a "));
+        Assertions.assertDoesNotThrow(() -> StringUtils.requireNonBlankElse("\t", " a "));
     }
 
     @Test
     void requireNonBlankElseGet() {
+        Assertions.assertThrows(
+                NullPointerException.class, () -> StringUtils.requireNonBlankElseGet(null, null));
         Assertions.assertThrows(
                 NullPointerException.class,
                 () -> StringUtils.requireNonBlankElseGet(null, () -> null));
@@ -65,25 +74,28 @@ class StringUtilsTest {
                 NullPointerException.class,
                 () -> StringUtils.requireNonBlankElseGet("    ", () -> null));
         Assertions.assertThrows(
-                IllegalStateException.class,
+                IllegalArgumentException.class,
                 () -> StringUtils.requireNonBlankElseGet(null, () -> ""));
         Assertions.assertThrows(
-                IllegalStateException.class,
+                IllegalArgumentException.class,
                 () -> StringUtils.requireNonBlankElseGet("", () -> ""));
         Assertions.assertThrows(
-                IllegalStateException.class,
+                IllegalArgumentException.class,
                 () -> StringUtils.requireNonBlankElseGet("    ", () -> ""));
         Assertions.assertThrows(
-                IllegalStateException.class,
-                () -> StringUtils.requireNonBlankElseGet(null, () -> "   "));
+                IllegalArgumentException.class,
+                () -> StringUtils.requireNonBlankElseGet(null, () -> "\t"));
         Assertions.assertThrows(
-                IllegalStateException.class,
-                () -> StringUtils.requireNonBlankElseGet("", () -> "   "));
+                IllegalArgumentException.class,
+                () -> StringUtils.requireNonBlankElseGet("", () -> "\t"));
         Assertions.assertThrows(
-                IllegalStateException.class,
-                () -> StringUtils.requireNonBlankElseGet("    ", () -> "   "));
+                IllegalArgumentException.class,
+                () -> StringUtils.requireNonBlankElseGet("    ", () -> "\t"));
+        Assertions.assertDoesNotThrow(() -> StringUtils.requireNonBlankElseGet("abc", null));
+        Assertions.assertDoesNotThrow(() -> StringUtils.requireNonBlankElseGet("abc", () -> null));
+        Assertions.assertDoesNotThrow(() -> StringUtils.requireNonBlankElseGet("abc", () -> " "));
         Assertions.assertDoesNotThrow(() -> StringUtils.requireNonBlankElseGet(null, () -> " a "));
         Assertions.assertDoesNotThrow(() -> StringUtils.requireNonBlankElseGet("", () -> " a "));
-        Assertions.assertDoesNotThrow(() -> StringUtils.requireNonBlankElseGet("   ", () -> " a "));
+        Assertions.assertDoesNotThrow(() -> StringUtils.requireNonBlankElseGet("\t", () -> " a "));
     }
 }

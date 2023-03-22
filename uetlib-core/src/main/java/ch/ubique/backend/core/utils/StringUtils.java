@@ -1,5 +1,7 @@
 package ch.ubique.backend.core.utils;
 
+import org.jetbrains.annotations.Contract;
+
 import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
@@ -21,32 +23,32 @@ public final class StringUtils {
                 .mapToObj(start -> string.substring(start, start + size));
     }
 
+    @Contract("null -> fail")
     public static String requireNonBlank(final String obj) {
-        if (obj == null) {
-            throw new NullPointerException();
-        }
+        Objects.requireNonNull(obj);
         if (org.apache.commons.lang3.StringUtils.isBlank(obj)) {
             throw new IllegalStateException("must not be blank");
         }
         return obj;
     }
 
+    @Contract("null, _ -> fail")
     public static String requireNonBlank(final String obj, final String message) {
-        if (obj == null) {
-            throw new NullPointerException(message);
-        }
+        Objects.requireNonNull(obj, message);
         if (org.apache.commons.lang3.StringUtils.isBlank(obj)) {
-            throw new IllegalStateException(message);
+            throw new IllegalArgumentException(message);
         }
         return obj;
     }
 
+    @Contract("null, null -> fail")
     public static String requireNonBlankElse(final String obj, final String defaultObj) {
         return org.apache.commons.lang3.StringUtils.isNotBlank(obj)
                 ? obj
                 : requireNonBlank(defaultObj, "defaultObj");
     }
 
+    @Contract("null, null -> fail")
     public static String requireNonBlankElseGet(final String obj, final Supplier<String> supplier) {
         return org.apache.commons.lang3.StringUtils.isNotBlank(obj)
                 ? obj
