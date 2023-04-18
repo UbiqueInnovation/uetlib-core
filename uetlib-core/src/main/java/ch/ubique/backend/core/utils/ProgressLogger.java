@@ -47,17 +47,18 @@ public class ProgressLogger {
     }
 
     private void logProgress() {
-        MdcUtils.runWithContext(this::logProgressInternal, mdcContextMap);
-    }
 
-    private void logProgressInternal() {
         final var currentCount = count.incrementAndGet();
         if (currentCount % max(1, total / 100) == 0) {
             final var percent = 100 * currentCount / total;
             final var currentTime = System.currentTimeMillis();
             final var elementsPerSecond = 1000.0 * currentCount / (currentTime - startTime);
-            logger.info(
-                    "{}Processed {}% ({} elements per second)", prefix, percent, elementsPerSecond);
+            MdcUtils.runWithContext(
+                    () ->
+                            logger.info(
+                                    "{}Processed {}% ({} elements per second)",
+                                    prefix, percent, elementsPerSecond),
+                    mdcContextMap);
         }
     }
 
