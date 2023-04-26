@@ -97,7 +97,7 @@ public final class StreamUtils {
      * Returns a {@link Stream<T>} containing the elements from {@code collection}, or an empty
      * {@link Stream<T>} none if {@code collection} is empty or {@code null}
      */
-    public static <T> Stream<T> collectionAsStream(final Collection<T> collection) {
+    public static <T> Stream<T> emptyIfNull(final Collection<T> collection) {
         return CollectionUtils.emptyIfNull(collection).stream();
     }
 }
