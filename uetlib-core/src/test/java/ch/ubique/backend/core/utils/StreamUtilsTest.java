@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 class StreamUtilsTest {
@@ -53,5 +54,16 @@ class StreamUtilsTest {
                         List.of('T', 'e', 's'),
                         List.of('e', 's', 't')),
                 StreamUtils.windows(List.of('T', 'e', 's', 't', 'T', 'e', 's', 't'), 3).toList());
+    }
+
+    @Test
+    void collectionAsStream() {
+        Assertions.assertEquals(List.of(), StreamUtils.collectionAsStream(null).toList());
+
+        Assertions.assertEquals(List.of(), StreamUtils.collectionAsStream(List.of()).toList());
+        Assertions.assertEquals(List.of(), StreamUtils.collectionAsStream(Set.of()).toList());
+
+        Assertions.assertEquals(List.of(1), StreamUtils.collectionAsStream(List.of(1)).toList());
+        Assertions.assertEquals(List.of(1), StreamUtils.collectionAsStream(Set.of(1)).toList());
     }
 }

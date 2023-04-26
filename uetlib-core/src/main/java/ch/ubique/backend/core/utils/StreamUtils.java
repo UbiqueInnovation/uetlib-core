@@ -1,5 +1,8 @@
 package ch.ubique.backend.core.utils;
 
+import org.apache.commons.collections4.CollectionUtils;
+
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -88,5 +91,13 @@ public final class StreamUtils {
         }
         return IntStream.range(0, list.size() - size + 1)
                 .mapToObj(start -> list.subList(start, start + size));
+    }
+
+    /**
+     * Returns a {@link Stream<T>} containing the elements from {@code collection}, or an empty
+     * {@link Stream<T>} none if {@code collection} is empty or {@code null}
+     */
+    public static <T> Stream<T> collectionAsStream(final Collection<T> collection) {
+        return CollectionUtils.emptyIfNull(collection).stream();
     }
 }
