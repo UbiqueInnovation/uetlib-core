@@ -57,13 +57,13 @@ class StreamUtilsTest {
     }
 
     @Test
-    void collectionAsStream() {
-        Assertions.assertEquals(List.of(), StreamUtils.collectionAsStream(null).toList());
+    void emptyIfNull() {
+        Assertions.assertEquals(List.of(), StreamUtils.emptyIfNull(null).toList());
 
-        Assertions.assertEquals(List.of(), StreamUtils.collectionAsStream(List.of()).toList());
-        Assertions.assertEquals(List.of(), StreamUtils.collectionAsStream(Set.of()).toList());
+        Assertions.assertEquals(List.of(), StreamUtils.emptyIfNull(List.of()).toList());
+        Assertions.assertEquals(List.of(), StreamUtils.emptyIfNull(Set.of()).toList());
 
-        Assertions.assertEquals(List.of(1), StreamUtils.collectionAsStream(List.of(1)).toList());
-        Assertions.assertEquals(List.of(1), StreamUtils.collectionAsStream(Set.of(1)).toList());
+        Assertions.assertEquals(List.of(1), StreamUtils.emptyIfNull(List.of(1)).toList());
+        Assertions.assertEquals(List.of(1), StreamUtils.emptyIfNull(Set.of(1)).toList());
     }
 }
