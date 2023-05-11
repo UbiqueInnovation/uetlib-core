@@ -12,46 +12,15 @@ public final class TimeUtils {
     public static final String ZONE_NAME_EUROPE_ZURICH = "Europe/Zurich";
 
     public static final ZoneId ZONE_ID_UTC = ZoneId.of(ZONE_NAME_UTC);
-    public static final ZoneId ZONE_ID_EUROPE_BERLIN = ZoneId.of(ZONE_NAME_EUROPE_BERLIN);
-    public static final ZoneId ZONE_ID_EUROPE_ZURICH = ZoneId.of(ZONE_NAME_EUROPE_ZURICH);
-
-    public static final TimeUtils TIME_UTILS_EUROPE_BERLIN = new TimeUtils(ZONE_ID_EUROPE_BERLIN);
-    public static final TimeUtils TIME_UTILS_EUROPE_ZURICH = new TimeUtils(ZONE_ID_EUROPE_ZURICH);
     public static final TimeUtils TIME_UTILS_UTC = new TimeUtils(ZONE_ID_UTC);
-
+    public static final ZoneId ZONE_ID_EUROPE_BERLIN = ZoneId.of(ZONE_NAME_EUROPE_BERLIN);
+    public static final TimeUtils TIME_UTILS_EUROPE_BERLIN = new TimeUtils(ZONE_ID_EUROPE_BERLIN);
+    public static final ZoneId ZONE_ID_EUROPE_ZURICH = ZoneId.of(ZONE_NAME_EUROPE_ZURICH);
+    public static final TimeUtils TIME_UTILS_EUROPE_ZURICH = new TimeUtils(ZONE_ID_EUROPE_ZURICH);
     private final ZoneId zoneId;
 
     public TimeUtils(final ZoneId zoneId) {
         this.zoneId = zoneId;
-    }
-
-    public ZonedDateTime now() {
-        return ZonedDateTime.now(zoneId);
-    }
-
-    public ZonedDateTime ofMillis(final long millis) {
-        return Instant.ofEpochMilli(millis).atZone(zoneId);
-    }
-
-    public ZonedDateTime ofLocalDateLocalTime(
-            final LocalDate localDate, final LocalTime localTime) {
-        return ZonedDateTime.of(localDate, localTime, zoneId);
-    }
-
-    public ZonedDateTime withZoneSameInstant(final ZonedDateTime zonedDateTime) {
-        return zonedDateTime.withZoneSameInstant(zoneId);
-    }
-
-    public LocalDate toLocalDate(final ZonedDateTime zonedDateTime) {
-        return withZoneSameInstant(zonedDateTime).toLocalDate();
-    }
-
-    public LocalTime toLocalTime(final ZonedDateTime zonedDateTime) {
-        return withZoneSameInstant(zonedDateTime).toLocalTime();
-    }
-
-    public LocalDateTime toLocalDateTime(final ZonedDateTime zonedDateTime) {
-        return withZoneSameInstant(zonedDateTime).toLocalDateTime();
     }
 
     /**
@@ -67,26 +36,6 @@ public final class TimeUtils {
             final ZonedDateTime input, final TemporalField floorTo, final int roundIncrement) {
         /* Extract the field being floored. */
         final var field = input.getLong(floorTo);
-
-        /* Distance from previous floor. */
-        final var remainder = field % roundIncrement;
-
-        return floor(input, floorTo, remainder);
-    }
-
-    /**
-     * Adapted from <a href="https://stackoverflow.com/a/37423588/15150382">here</a>. Truncates the
-     * given input to the given field with the given increment.
-     *
-     * @param input to floor
-     * @param floorTo field to floor to
-     * @param roundIncrement floor to multiples of this value in the given field
-     * @return a copy representing the floored value
-     */
-    public static Duration floorTo(
-            final Duration input, final TemporalUnit floorTo, final int roundIncrement) {
-        /* Extract the field being floored. */
-        final var field = input.get(floorTo);
 
         /* Distance from previous floor. */
         final var remainder = field % roundIncrement;
@@ -115,35 +64,9 @@ public final class TimeUtils {
         return input.equals(floor) ? floor : ceil(input, ceilTo, roundIncrement, remainder);
     }
 
-    /**
-     * Adapted from <a href="https://stackoverflow.com/a/37423588/15150382">here</a>. Ceils the
-     * given input to the given field with the given increment.
-     *
-     * @param input to ceil
-     * @param ceilTo field to ceil to
-     * @param roundIncrement ceil to multiples of this value in the given field
-     * @return a copy representing the ceiled value
-     */
-    public static Duration ceilTo(
-            final Duration input, final TemporalUnit ceilTo, final int roundIncrement) {
-        /* Extract the field being rounded. */
-        final var field = input.get(ceilTo);
-
-        /* Distance from previous floor. */
-        final var remainder = field % roundIncrement;
-
-        final var floor = floor(input, ceilTo, remainder);
-        return input.equals(floor) ? floor : ceil(input, ceilTo, roundIncrement, remainder);
-    }
-
     private static ZonedDateTime floor(
             final ZonedDateTime input, final TemporalField floorTo, final long remainder) {
         return input.plus(-remainder, floorTo.getBaseUnit()).truncatedTo(floorTo.getBaseUnit());
-    }
-
-    private static Duration floor(
-            final Duration input, final TemporalUnit floorTo, final long remainder) {
-        return input.plus(-remainder, floorTo).truncatedTo(floorTo);
     }
 
     /**
@@ -158,55 +81,20 @@ public final class TimeUtils {
                 .truncatedTo(ceilTo.getBaseUnit());
     }
 
-    /**
-     * helper function for floorTo/ceilTo. This function ALWAYS ceils, even if input = floor(input)
-     */
-    private static Duration ceil(
-            final Duration input,
-            final TemporalUnit ceilTo,
-            final int roundIncrement,
-            final long remainder) {
-        return input.plus(roundIncrement - remainder, ceilTo).truncatedTo(ceilTo);
-    }
-
     public static ZonedDateTime floorToQuarterHours(final ZonedDateTime input) {
         return floorTo(input, ChronoField.MINUTE_OF_HOUR, 15);
-    }
-
-    public static Duration floorToQuarterHours(final Duration input) {
-        return floorTo(input, ChronoUnit.SECONDS, 15 * 60);
     }
 
     public static ZonedDateTime ceilToQuarterHours(final ZonedDateTime input) {
         return ceilTo(input, ChronoField.MINUTE_OF_HOUR, 15);
     }
 
-    public static Duration ceilToQuarterHours(final Duration input) {
-        return ceilTo(input, ChronoUnit.SECONDS, 15 * 60);
-    }
-
     public static ZonedDateTime ceilToHours(final ZonedDateTime input) {
         return ceilTo(input, ChronoField.MINUTE_OF_HOUR, 60);
     }
 
-    public static Duration ceilToHours(final Duration input) {
-        return ceilTo(input, ChronoUnit.SECONDS, 60 * 60);
-    }
-
     public static ZonedDateTime floorToHours(final ZonedDateTime input) {
         return floorTo(input, ChronoField.MINUTE_OF_HOUR, 60);
-    }
-
-    public static Duration floorToHours(final Duration input) {
-        return floorTo(input, ChronoUnit.SECONDS, 60 * 60);
-    }
-
-    /**
-     * This is distinct from {@link Duration#toHours()} which returns the hours as a floored {@link
-     * long};
-     */
-    public static double durationToHoursDouble(final Duration duration) {
-        return (double) duration.getSeconds() / 60 / 60;
     }
 
     /**
@@ -238,6 +126,35 @@ public final class TimeUtils {
         return !time.isBefore(start) && time.isBefore(end);
     }
 
+    public ZonedDateTime now() {
+        return ZonedDateTime.now(zoneId);
+    }
+
+    public ZonedDateTime ofMillis(final long millis) {
+        return Instant.ofEpochMilli(millis).atZone(zoneId);
+    }
+
+    public ZonedDateTime ofLocalDateLocalTime(
+            final LocalDate localDate, final LocalTime localTime) {
+        return ZonedDateTime.of(localDate, localTime, zoneId);
+    }
+
+    public ZonedDateTime withZoneSameInstant(final ZonedDateTime zonedDateTime) {
+        return zonedDateTime.withZoneSameInstant(zoneId);
+    }
+
+    public LocalDate toLocalDate(final ZonedDateTime zonedDateTime) {
+        return withZoneSameInstant(zonedDateTime).toLocalDate();
+    }
+
+    public LocalTime toLocalTime(final ZonedDateTime zonedDateTime) {
+        return withZoneSameInstant(zonedDateTime).toLocalTime();
+    }
+
+    public LocalDateTime toLocalDateTime(final ZonedDateTime zonedDateTime) {
+        return withZoneSameInstant(zonedDateTime).toLocalDateTime();
+    }
+
     public boolean isMidnight(final ZonedDateTime zonedDateTime) {
         return toLocalTime(zonedDateTime).equals(LocalTime.MIDNIGHT);
     }
@@ -256,14 +173,5 @@ public final class TimeUtils {
 
     public ZonedDateTime startOfNextMonth() {
         return now().with(TemporalAdjusters.firstDayOfNextMonth()).truncatedTo(ChronoUnit.DAYS);
-    }
-
-    public static Duration ceilToHours(final ZonedDateTime startAt, final ZonedDateTime endAt) {
-        return ceilToHours(Duration.between(startAt, endAt));
-    }
-
-    public static Duration ceilToQuarterHours(
-            final ZonedDateTime startAt, final ZonedDateTime endAt) {
-        return ceilToQuarterHours(Duration.between(startAt, endAt));
     }
 }

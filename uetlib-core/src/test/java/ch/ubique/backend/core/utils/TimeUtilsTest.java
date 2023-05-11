@@ -97,18 +97,6 @@ class TimeUtilsTest {
     }
 
     @Test
-    void floorToDuration() {
-        final var input = Duration.of(2100, ChronoUnit.SECONDS);
-        assertEquals(
-                Duration.of(2000, ChronoUnit.SECONDS), floorTo(input, ChronoUnit.SECONDS, 1000));
-        assertEquals(
-                Duration.of(2100, ChronoUnit.SECONDS),
-                floorTo(input, ChronoUnit.SECONDS, 15 * 140));
-        assertEquals(
-                Duration.of(2096, ChronoUnit.SECONDS), floorTo(input, ChronoUnit.SECONDS, 8 * 262));
-    }
-
-    @Test
     void ceilToZonedDateTime() {
         final var input = ZonedDateTime.of(2022, 4, 29, 8, 55, 19, 547000000, ZONE_ID_UTC);
         assertEquals(
@@ -134,17 +122,6 @@ class TimeUtilsTest {
         assertEquals(
                 ZonedDateTime.of(2022, 4, 29, 8, 45, 0, 0, ZONE_ID_UTC),
                 ceilTo(input2, ChronoField.MINUTE_OF_HOUR, 15));
-    }
-
-    @Test
-    void ceilToDuration() {
-        final var input = Duration.of(2100, ChronoUnit.SECONDS);
-        assertEquals(
-                Duration.of(3000, ChronoUnit.SECONDS), ceilTo(input, ChronoUnit.SECONDS, 1000));
-        assertEquals(
-                Duration.of(2100, ChronoUnit.SECONDS), ceilTo(input, ChronoUnit.SECONDS, 15 * 140));
-        assertEquals(
-                Duration.of(4192, ChronoUnit.SECONDS), ceilTo(input, ChronoUnit.SECONDS, 8 * 262));
     }
 
     @Test
@@ -179,115 +156,50 @@ class TimeUtilsTest {
     }
 
     @Test
-    void floorToQuarterHoursDuration() {
-        final var input = Duration.of(2100, ChronoUnit.SECONDS);
-        assertEquals(Duration.of(1800, ChronoUnit.SECONDS), floorToQuarterHours(input));
-        final var input2 = Duration.of(1801, ChronoUnit.SECONDS);
-        assertEquals(Duration.of(1800, ChronoUnit.SECONDS), floorToQuarterHours(input2));
-        final var input3 = Duration.of(2699, ChronoUnit.SECONDS);
-        assertEquals(Duration.of(1800, ChronoUnit.SECONDS), floorToQuarterHours(input3));
-        final var input4 = Duration.of(-1, ChronoUnit.SECONDS);
-        assertEquals(Duration.of(0, ChronoUnit.SECONDS), floorToQuarterHours(input4));
-        final var input5 = Duration.of(0, ChronoUnit.SECONDS);
-        assertEquals(Duration.of(0, ChronoUnit.SECONDS), floorToQuarterHours(input5));
-        final var input6 = Duration.of(-1000, ChronoUnit.SECONDS);
-        assertEquals(Duration.of(-900, ChronoUnit.SECONDS), floorToQuarterHours(input6));
-    }
-
-    @Test
     void ceilToQuarterHoursZonedDateTime() {
         final var input = ZonedDateTime.of(2022, 4, 29, 8, 0, 14, 547000000, ZONE_ID_UTC);
         assertEquals(
-                ZonedDateTime.of(2022, 4, 29, 8, 15, 0, 0, ZONE_ID_UTC),
-                TimeUtils.ceilToQuarterHours(input));
+                ZonedDateTime.of(2022, 4, 29, 8, 15, 0, 0, ZONE_ID_UTC), ceilToQuarterHours(input));
         final var input2 = ZonedDateTime.of(2022, 4, 29, 8, 14, 14, 547000000, ZONE_ID_UTC);
         assertEquals(
                 ZonedDateTime.of(2022, 4, 29, 8, 15, 0, 0, ZONE_ID_UTC),
-                TimeUtils.ceilToQuarterHours(input2));
+                ceilToQuarterHours(input2));
         final var input3 = ZonedDateTime.of(2022, 4, 29, 8, 19, 14, 547000000, ZONE_ID_UTC);
         assertEquals(
                 ZonedDateTime.of(2022, 4, 29, 8, 30, 0, 0, ZONE_ID_UTC),
-                TimeUtils.ceilToQuarterHours(input3));
+                ceilToQuarterHours(input3));
         final var input4 = ZonedDateTime.of(2022, 4, 29, 8, 31, 14, 547000000, ZONE_ID_UTC);
         assertEquals(
                 ZonedDateTime.of(2022, 4, 29, 8, 45, 0, 0, ZONE_ID_UTC),
-                TimeUtils.ceilToQuarterHours(input4));
+                ceilToQuarterHours(input4));
         final var input5 = ZonedDateTime.of(2022, 4, 29, 8, 45, 0, 0, ZONE_ID_UTC);
         assertEquals(
                 ZonedDateTime.of(2022, 4, 29, 8, 45, 0, 0, ZONE_ID_UTC),
-                TimeUtils.ceilToQuarterHours(input5));
+                ceilToQuarterHours(input5));
         final var input6 = ZonedDateTime.of(2022, 4, 29, 8, 45, 14, 547000000, ZONE_ID_UTC);
         assertEquals(
-                ZonedDateTime.of(2022, 4, 29, 9, 0, 0, 0, ZONE_ID_UTC),
-                TimeUtils.ceilToQuarterHours(input6));
+                ZonedDateTime.of(2022, 4, 29, 9, 0, 0, 0, ZONE_ID_UTC), ceilToQuarterHours(input6));
         final var input7 = ZonedDateTime.of(2022, 4, 29, 8, 59, 59, 999999999, ZONE_ID_UTC);
         assertEquals(
-                ZonedDateTime.of(2022, 4, 29, 9, 0, 0, 0, ZONE_ID_UTC),
-                TimeUtils.ceilToQuarterHours(input7));
-    }
-
-    @Test
-    void ceilToQuarterHoursDuration() {
-        final var input = Duration.of(2100, ChronoUnit.SECONDS);
-        assertEquals(Duration.of(2700, ChronoUnit.SECONDS), TimeUtils.ceilToQuarterHours(input));
-        final var input2 = Duration.of(1801, ChronoUnit.SECONDS);
-        assertEquals(Duration.of(2700, ChronoUnit.SECONDS), TimeUtils.ceilToQuarterHours(input2));
-        final var input3 = Duration.of(2699, ChronoUnit.SECONDS);
-        assertEquals(Duration.of(2700, ChronoUnit.SECONDS), TimeUtils.ceilToQuarterHours(input3));
-        final var input4 = Duration.of(-1, ChronoUnit.SECONDS);
-        assertEquals(Duration.of(900, ChronoUnit.SECONDS), TimeUtils.ceilToQuarterHours(input4));
-        final var input5 = Duration.of(0, ChronoUnit.SECONDS);
-        assertEquals(Duration.of(0, ChronoUnit.SECONDS), TimeUtils.ceilToQuarterHours(input5));
-        final var input6 = Duration.of(-1000, ChronoUnit.SECONDS);
-        assertEquals(Duration.of(0, ChronoUnit.SECONDS), TimeUtils.ceilToQuarterHours(input6));
+                ZonedDateTime.of(2022, 4, 29, 9, 0, 0, 0, ZONE_ID_UTC), ceilToQuarterHours(input7));
     }
 
     @Test
     void ceilToHoursZonedDateTime() {
         final var input = ZonedDateTime.of(2022, 4, 29, 8, 0, 14, 547000000, ZONE_ID_UTC);
-        assertEquals(
-                ZonedDateTime.of(2022, 4, 29, 9, 0, 0, 0, ZONE_ID_UTC),
-                TimeUtils.ceilToHours(input));
+        assertEquals(ZonedDateTime.of(2022, 4, 29, 9, 0, 0, 0, ZONE_ID_UTC), ceilToHours(input));
         final var input2 = ZonedDateTime.of(2022, 4, 29, 8, 14, 14, 547000000, ZONE_ID_UTC);
-        assertEquals(
-                ZonedDateTime.of(2022, 4, 29, 9, 0, 0, 0, ZONE_ID_UTC),
-                TimeUtils.ceilToHours(input2));
+        assertEquals(ZonedDateTime.of(2022, 4, 29, 9, 0, 0, 0, ZONE_ID_UTC), ceilToHours(input2));
         final var input3 = ZonedDateTime.of(2022, 4, 29, 8, 19, 14, 547000000, ZONE_ID_UTC);
-        assertEquals(
-                ZonedDateTime.of(2022, 4, 29, 9, 0, 0, 0, ZONE_ID_UTC),
-                TimeUtils.ceilToHours(input3));
+        assertEquals(ZonedDateTime.of(2022, 4, 29, 9, 0, 0, 0, ZONE_ID_UTC), ceilToHours(input3));
         final var input4 = ZonedDateTime.of(2022, 4, 29, 8, 31, 14, 547000000, ZONE_ID_UTC);
-        assertEquals(
-                ZonedDateTime.of(2022, 4, 29, 9, 0, 0, 0, ZONE_ID_UTC),
-                TimeUtils.ceilToHours(input4));
+        assertEquals(ZonedDateTime.of(2022, 4, 29, 9, 0, 0, 0, ZONE_ID_UTC), ceilToHours(input4));
         final var input5 = ZonedDateTime.of(2022, 4, 29, 8, 45, 0, 0, ZONE_ID_UTC);
-        assertEquals(
-                ZonedDateTime.of(2022, 4, 29, 9, 0, 0, 0, ZONE_ID_UTC),
-                TimeUtils.ceilToHours(input5));
+        assertEquals(ZonedDateTime.of(2022, 4, 29, 9, 0, 0, 0, ZONE_ID_UTC), ceilToHours(input5));
         final var input6 = ZonedDateTime.of(2022, 4, 29, 8, 45, 14, 547000000, ZONE_ID_UTC);
-        assertEquals(
-                ZonedDateTime.of(2022, 4, 29, 9, 0, 0, 0, ZONE_ID_UTC),
-                TimeUtils.ceilToHours(input6));
+        assertEquals(ZonedDateTime.of(2022, 4, 29, 9, 0, 0, 0, ZONE_ID_UTC), ceilToHours(input6));
         final var input7 = ZonedDateTime.of(2022, 4, 29, 8, 59, 59, 999999999, ZONE_ID_UTC);
-        assertEquals(
-                ZonedDateTime.of(2022, 4, 29, 9, 0, 0, 0, ZONE_ID_UTC),
-                TimeUtils.ceilToHours(input7));
-    }
-
-    @Test
-    void ceilToHoursDuration() {
-        final var input = Duration.of(4000, ChronoUnit.SECONDS);
-        assertEquals(Duration.of(7200, ChronoUnit.SECONDS), TimeUtils.ceilToHours(input));
-        final var input2 = Duration.of(3601, ChronoUnit.SECONDS);
-        assertEquals(Duration.of(7200, ChronoUnit.SECONDS), TimeUtils.ceilToHours(input2));
-        final var input3 = Duration.of(7199, ChronoUnit.SECONDS);
-        assertEquals(Duration.of(7200, ChronoUnit.SECONDS), TimeUtils.ceilToHours(input3));
-        final var input4 = Duration.of(0, ChronoUnit.SECONDS);
-        assertEquals(Duration.of(0, ChronoUnit.SECONDS), TimeUtils.ceilToHours(input4));
-        final var input5 = Duration.of(3600, ChronoUnit.SECONDS);
-        assertEquals(Duration.of(3600, ChronoUnit.SECONDS), TimeUtils.ceilToHours(input5));
-        final var input6 = Duration.of(1, ChronoUnit.SECONDS);
-        assertEquals(Duration.of(3600, ChronoUnit.SECONDS), TimeUtils.ceilToHours(input6));
+        assertEquals(ZonedDateTime.of(2022, 4, 29, 9, 0, 0, 0, ZONE_ID_UTC), ceilToHours(input7));
     }
 
     @Test
@@ -306,29 +218,6 @@ class TimeUtilsTest {
         assertEquals(ZonedDateTime.of(2022, 4, 29, 8, 0, 0, 0, ZONE_ID_UTC), floorToHours(input6));
         final var input7 = ZonedDateTime.of(2022, 4, 29, 8, 59, 59, 999999999, ZONE_ID_UTC);
         assertEquals(ZonedDateTime.of(2022, 4, 29, 8, 0, 0, 0, ZONE_ID_UTC), floorToHours(input7));
-    }
-
-    @Test
-    void floorToHoursDuration() {
-        final var input = Duration.of(4000, ChronoUnit.SECONDS);
-        assertEquals(Duration.of(3600, ChronoUnit.SECONDS), floorToHours(input));
-        final var input2 = Duration.of(3601, ChronoUnit.SECONDS);
-        assertEquals(Duration.of(3600, ChronoUnit.SECONDS), floorToHours(input2));
-        final var input3 = Duration.of(7199, ChronoUnit.SECONDS);
-        assertEquals(Duration.of(3600, ChronoUnit.SECONDS), floorToHours(input3));
-        final var input4 = Duration.of(0, ChronoUnit.SECONDS);
-        assertEquals(Duration.of(0, ChronoUnit.SECONDS), floorToHours(input4));
-        final var input5 = Duration.of(3600, ChronoUnit.SECONDS);
-        assertEquals(Duration.of(3600, ChronoUnit.SECONDS), floorToHours(input5));
-        final var input6 = Duration.of(1, ChronoUnit.SECONDS);
-        assertEquals(Duration.of(0, ChronoUnit.SECONDS), floorToHours(input6));
-    }
-
-    @Test
-    void durationToHours() {
-        assertEquals(0.25, durationToHoursDouble(Duration.of(900, ChronoUnit.SECONDS)));
-        assertEquals(1.0, durationToHoursDouble(Duration.of(3600, ChronoUnit.SECONDS)));
-        assertEquals(0.0, durationToHoursDouble(Duration.of(0, ChronoUnit.SECONDS)));
     }
 
     @Test
@@ -481,40 +370,5 @@ class TimeUtilsTest {
         final var startOfTodayEuZh = TIME_UTILS_EUROPE_ZURICH.startOfToday();
         final var nowEuZh = TIME_UTILS_EUROPE_ZURICH.now();
         assertEquals(startOfTodayEuZh, TIME_UTILS_EUROPE_ZURICH.startOfDay(nowEuZh));
-    }
-
-    @Test
-    void ceilToHours() {
-        final var startOfTodayEuZh = TIME_UTILS_EUROPE_ZURICH.startOfToday();
-        assertEquals(
-                Duration.of(7200, ChronoUnit.SECONDS),
-                TimeUtils.ceilToHours(startOfTodayEuZh, startOfTodayEuZh.plusHours(2)));
-        assertEquals(
-                Duration.of(14400, ChronoUnit.SECONDS),
-                TimeUtils.ceilToHours(startOfTodayEuZh, startOfTodayEuZh.plusMinutes(200)));
-        assertEquals(
-                Duration.of(3600, ChronoUnit.SECONDS),
-                TimeUtils.ceilToHours(startOfTodayEuZh, startOfTodayEuZh.plusSeconds(60 * 35)));
-        assertEquals(
-                Duration.of(0, ChronoUnit.SECONDS),
-                TimeUtils.ceilToHours(startOfTodayEuZh, startOfTodayEuZh));
-    }
-
-    @Test
-    void ceilToQuarterHours() {
-        final var startOfTodayEuZh = TIME_UTILS_EUROPE_ZURICH.startOfToday();
-        assertEquals(
-                Duration.of(7200, ChronoUnit.SECONDS),
-                TimeUtils.ceilToQuarterHours(startOfTodayEuZh, startOfTodayEuZh.plusHours(2)));
-        assertEquals(
-                Duration.of(12600, ChronoUnit.SECONDS),
-                TimeUtils.ceilToQuarterHours(startOfTodayEuZh, startOfTodayEuZh.plusMinutes(200)));
-        assertEquals(
-                Duration.of(2700, ChronoUnit.SECONDS),
-                TimeUtils.ceilToQuarterHours(
-                        startOfTodayEuZh, startOfTodayEuZh.plusSeconds(60 * 35)));
-        assertEquals(
-                Duration.of(0, ChronoUnit.SECONDS),
-                TimeUtils.ceilToQuarterHours(startOfTodayEuZh, startOfTodayEuZh));
     }
 }
