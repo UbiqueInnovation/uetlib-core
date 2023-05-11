@@ -5,52 +5,53 @@ import jakarta.validation.constraints.NotNull;
 import java.time.*;
 import java.time.temporal.*;
 
-public class TimeUtils {
+public final class TimeUtils {
+
     public static final String ZONE_NAME_UTC = "UTC";
-    public static final String ZONE_NAME_EU_BERLIN = "Europe/Berlin";
-    public static final String ZONE_NAME_EU_ZURICH = "Europe/Zurich";
+    public static final String ZONE_NAME_EUROPE_BERLIN = "Europe/Berlin";
+    public static final String ZONE_NAME_EUROPE_ZURICH = "Europe/Zurich";
 
     public static final ZoneId ZONE_ID_UTC = ZoneId.of(ZONE_NAME_UTC);
-    public static final ZoneId ZONE_ID_EU_BERLIN = ZoneId.of(ZONE_NAME_EU_BERLIN);
-    public static final ZoneId ZONE_ID_EU_ZURICH = ZoneId.of(ZONE_NAME_EU_ZURICH);
+    public static final ZoneId ZONE_ID_EUROPE_BERLIN = ZoneId.of(ZONE_NAME_EUROPE_BERLIN);
+    public static final ZoneId ZONE_ID_EUROPE_ZURICH = ZoneId.of(ZONE_NAME_EUROPE_ZURICH);
 
-    private TimeUtils() {}
+    public static final TimeUtils TIME_UTILS_EUROPE_BERLIN = new TimeUtils(ZONE_ID_EUROPE_BERLIN);
+    public static final TimeUtils TIME_UTILS_EUROPE_ZURICH = new TimeUtils(ZONE_ID_EUROPE_ZURICH);
+    public static final TimeUtils TIME_UTILS_UTC = new TimeUtils(ZONE_ID_UTC);
 
-    public static ZonedDateTime now(final ZoneId zone) {
-        return ZonedDateTime.now(zone);
+    private final ZoneId zoneId;
+
+    public TimeUtils(final ZoneId zoneId) {
+        this.zoneId = zoneId;
     }
 
-    public static ZonedDateTime nowEuZh() {
-        return now(ZONE_ID_EU_ZURICH);
+    public ZonedDateTime now() {
+        return ZonedDateTime.now(zoneId);
     }
 
-    public static ZonedDateTime ofMillisEuZh(final long millis) {
-        return Instant.ofEpochMilli(millis).atZone(ZONE_ID_EU_ZURICH);
+    public ZonedDateTime ofMillis(final long millis) {
+        return Instant.ofEpochMilli(millis).atZone(zoneId);
     }
 
-    public static ZonedDateTime ofLocalDateLocalTimeEuZh(
+    public ZonedDateTime ofLocalDateLocalTime(
             final LocalDate localDate, final LocalTime localTime) {
-        return ZonedDateTime.of(localDate, localTime, ZONE_ID_EU_ZURICH);
+        return ZonedDateTime.of(localDate, localTime, zoneId);
     }
 
-    public static ZonedDateTime withZoneSameInstantEuZh(final ZonedDateTime zonedDateTime) {
-        return zonedDateTime.withZoneSameInstant(ZONE_ID_EU_ZURICH);
+    public ZonedDateTime withZoneSameInstant(final ZonedDateTime zonedDateTime) {
+        return zonedDateTime.withZoneSameInstant(zoneId);
     }
 
-    public static ZonedDateTime withZoneSameInstantUtc(final ZonedDateTime zonedDateTime) {
-        return zonedDateTime.withZoneSameInstant(ZONE_ID_UTC);
+    public LocalDate toLocalDate(final ZonedDateTime zonedDateTime) {
+        return withZoneSameInstant(zonedDateTime).toLocalDate();
     }
 
-    public static LocalDate toLocalDateEuZh(final ZonedDateTime zonedDateTime) {
-        return withZoneSameInstantEuZh(zonedDateTime).toLocalDate();
+    public LocalTime toLocalTime(final ZonedDateTime zonedDateTime) {
+        return withZoneSameInstant(zonedDateTime).toLocalTime();
     }
 
-    public static LocalTime toLocalTimeEuZh(final ZonedDateTime zonedDateTime) {
-        return withZoneSameInstantEuZh(zonedDateTime).toLocalTime();
-    }
-
-    public static LocalDateTime toLocalDateTimeEuZh(final ZonedDateTime zonedDateTime) {
-        return withZoneSameInstantEuZh(zonedDateTime).toLocalDateTime();
+    public LocalDateTime toLocalDateTime(final ZonedDateTime zonedDateTime) {
+        return withZoneSameInstant(zonedDateTime).toLocalDateTime();
     }
 
     /**
@@ -237,32 +238,24 @@ public class TimeUtils {
         return !time.isBefore(start) && time.isBefore(end);
     }
 
-    public static boolean isMidnightEuZh(final ZonedDateTime zonedDateTime) {
-        return toLocalTimeEuZh(zonedDateTime).equals(LocalTime.MIDNIGHT);
+    public boolean isMidnight(final ZonedDateTime zonedDateTime) {
+        return toLocalTime(zonedDateTime).equals(LocalTime.MIDNIGHT);
     }
 
-    public static ZonedDateTime startOfTodayEuZh() {
-        return nowEuZh().truncatedTo(ChronoUnit.DAYS);
+    public ZonedDateTime startOfToday() {
+        return now().truncatedTo(ChronoUnit.DAYS);
     }
 
-    public static ZonedDateTime startOfDayEuZh(final ZonedDateTime zonedDateTime) {
-        return withZoneSameInstantEuZh(zonedDateTime).truncatedTo(ChronoUnit.DAYS);
+    public ZonedDateTime startOfDay(final ZonedDateTime zonedDateTime) {
+        return withZoneSameInstant(zonedDateTime).truncatedTo(ChronoUnit.DAYS);
     }
 
-    public static ZonedDateTime startOfMonth(final ZoneId zone) {
-        return now(zone).with(TemporalAdjusters.firstDayOfMonth()).truncatedTo(ChronoUnit.DAYS);
+    public ZonedDateTime startOfMonth() {
+        return now().with(TemporalAdjusters.firstDayOfMonth()).truncatedTo(ChronoUnit.DAYS);
     }
 
-    public static ZonedDateTime startOfNextMonth(final ZoneId zone) {
-        return now(zone).with(TemporalAdjusters.firstDayOfNextMonth()).truncatedTo(ChronoUnit.DAYS);
-    }
-
-    public static ZonedDateTime startOfMonthEuZh() {
-        return nowEuZh().with(TemporalAdjusters.firstDayOfMonth()).truncatedTo(ChronoUnit.DAYS);
-    }
-
-    public static ZonedDateTime startOfNextMonthEuZh() {
-        return nowEuZh().with(TemporalAdjusters.firstDayOfNextMonth()).truncatedTo(ChronoUnit.DAYS);
+    public ZonedDateTime startOfNextMonth() {
+        return now().with(TemporalAdjusters.firstDayOfNextMonth()).truncatedTo(ChronoUnit.DAYS);
     }
 
     public static Duration ceilToHours(final ZonedDateTime startAt, final ZonedDateTime endAt) {
