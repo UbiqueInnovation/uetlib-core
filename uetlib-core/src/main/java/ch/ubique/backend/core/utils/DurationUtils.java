@@ -12,17 +12,24 @@ public final class DurationUtils {
 
     private DurationUtils() {}
 
+    /** Uses nanos precision */
     public static Duration ofFractionalSeconds(final double seconds) {
         return Duration.ofNanos(Math.round(seconds * SECOND_TO_NANOS));
     }
 
+    /** Uses nanos precision */
     public static double toFractionalSeconds(final Duration duration) {
         return (double) duration.toNanos() / SECOND_TO_NANOS;
     }
 
+    /** Uses seconds precision */
+    public static Duration ofFractionalHours(final double hours) {
+        return Duration.ofSeconds(Math.round(hours * HOURS_TO_SECONDS));
+    }
+
     /**
      * This is distinct from {@link Duration#toHours()} which returns the hours as a floored {@link
-     * long};
+     * long}. Uses seconds precision;
      */
     public static double toFractionalHours(final Duration duration) {
         return (double) duration.toSeconds() / HOURS_TO_SECONDS;

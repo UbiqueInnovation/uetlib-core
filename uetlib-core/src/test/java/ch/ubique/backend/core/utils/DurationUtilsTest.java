@@ -13,21 +13,31 @@ class DurationUtilsTest {
 
     @Test
     void ofFractionalSeconds() {
-        // TODO @dsparber
+        assertEquals(Duration.ofMillis(900), DurationUtils.ofFractionalSeconds(0.9));
+        assertEquals(Duration.ofSeconds(1), DurationUtils.ofFractionalSeconds(1.0));
+        assertEquals(Duration.ZERO, DurationUtils.ofFractionalSeconds(0));
+        assertEquals(Duration.ofMillis(-1_200), DurationUtils.ofFractionalSeconds(-1.2));
+    }
+
+    @Test
+    void ofFractionalHours() {
+        assertEquals(Duration.ofMinutes(45), DurationUtils.ofFractionalHours(0.75));
+        assertEquals(Duration.ZERO, DurationUtils.ofFractionalHours(0));
+        assertEquals(Duration.ofMinutes(135), DurationUtils.ofFractionalHours(2.25));
     }
 
     @Test
     void toFractionalSeconds() {
-        assertEquals(0.25, DurationUtils.toFractionalSeconds(Duration.ofSeconds(900)));
-        assertEquals(1.0, DurationUtils.toFractionalSeconds(Duration.ofSeconds(3600)));
-        assertEquals(0.0, DurationUtils.toFractionalSeconds(Duration.ofSeconds(0)));
+        assertEquals(0.9, DurationUtils.toFractionalSeconds(Duration.ofMillis(900)));
+        assertEquals(1.0, DurationUtils.toFractionalSeconds(Duration.ofSeconds(1)));
+        assertEquals(0, DurationUtils.toFractionalSeconds(Duration.ZERO));
     }
 
     @Test
     void toFractionalHours() {
-        assertEquals(0.25, DurationUtils.toFractionalHours(Duration.ofSeconds(900)));
-        assertEquals(1.0, DurationUtils.toFractionalHours(Duration.ofSeconds(3600)));
-        assertEquals(0.0, DurationUtils.toFractionalHours(Duration.ofSeconds(0)));
+        assertEquals(0.25, DurationUtils.toFractionalHours(Duration.ofMinutes(15)));
+        assertEquals(1.0, DurationUtils.toFractionalHours(Duration.ofHours(1)));
+        assertEquals(0.0, DurationUtils.toFractionalHours(Duration.ZERO));
     }
 
     @Test
