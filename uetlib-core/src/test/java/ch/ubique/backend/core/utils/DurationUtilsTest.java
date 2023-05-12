@@ -22,6 +22,8 @@ class DurationUtilsTest {
                 DurationUtils.ofFractionalSeconds(0.750000001));
         assertEquals(Duration.ZERO, DurationUtils.ofFractionalSeconds(0));
         assertEquals(Duration.ofMillis(2250), DurationUtils.ofFractionalSeconds(2.25));
+
+        assertEquals(Duration.ofMillis(-1_200), DurationUtils.ofFractionalSeconds(-1.2));
     }
 
     @Test
@@ -33,8 +35,11 @@ class DurationUtilsTest {
         assertEquals(
                 0.750000001,
                 DurationUtils.toFractionalSeconds(Duration.ofMillis(750).plusNanos(1)));
+
         assertEquals(0, DurationUtils.toFractionalSeconds(Duration.ZERO));
         assertEquals(2.25, DurationUtils.toFractionalSeconds(Duration.ofMillis(2250)));
+
+        assertEquals(-1.2, DurationUtils.toFractionalSeconds(Duration.ofMillis(-1_200)));
     }
 
     @Test
@@ -54,6 +59,13 @@ class DurationUtilsTest {
                 Duration.ofMillis(750),
                 DurationUtils.ofFractionalSeconds(
                         DurationUtils.toFractionalSeconds(Duration.ofMillis(750))));
+
+        assertEquals(
+                -1.2, DurationUtils.toFractionalSeconds(DurationUtils.ofFractionalSeconds(-1.2)));
+        assertEquals(
+                Duration.ofMillis(-1_200),
+                DurationUtils.ofFractionalSeconds(
+                        DurationUtils.toFractionalSeconds(Duration.ofMillis(-1_200))));
     }
 
     @Test
@@ -65,8 +77,11 @@ class DurationUtilsTest {
         assertEquals(
                 Duration.ofMinutes(45).plusMillis(1),
                 DurationUtils.ofFractionalHours(0.7500002777777778));
+
         assertEquals(Duration.ZERO, DurationUtils.ofFractionalHours(0));
         assertEquals(Duration.ofMinutes(135), DurationUtils.ofFractionalHours(2.25));
+
+        assertEquals(Duration.ofMinutes(-72), DurationUtils.ofFractionalHours(-1.2));
     }
 
     @Test
@@ -79,8 +94,11 @@ class DurationUtilsTest {
         assertEquals(
                 0.7500002777777778,
                 DurationUtils.toFractionalHours(Duration.ofMinutes(45).plusNanos(1_000_000)));
+
         assertEquals(0, DurationUtils.toFractionalHours(Duration.ZERO));
         assertEquals(2.25, DurationUtils.toFractionalHours(Duration.ofMinutes(135)));
+
+        assertEquals(-1.2, DurationUtils.toFractionalHours(Duration.ofMinutes(-72)));
     }
 
     @Test
@@ -104,6 +122,12 @@ class DurationUtilsTest {
                 DurationUtils.ofFractionalHours(
                         DurationUtils.toFractionalHours(
                                 Duration.ofMinutes(45).plusNanos(999_999))));
+
+        assertEquals(-1.2, DurationUtils.toFractionalHours(DurationUtils.ofFractionalHours(-1.2)));
+        assertEquals(
+                Duration.ofMillis(-72),
+                DurationUtils.ofFractionalHours(
+                        DurationUtils.toFractionalHours(Duration.ofMillis(-72))));
     }
 
     @Test
