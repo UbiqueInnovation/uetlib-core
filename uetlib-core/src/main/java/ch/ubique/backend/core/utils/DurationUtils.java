@@ -8,7 +8,7 @@ import java.time.temporal.TemporalUnit;
 public final class DurationUtils {
 
     private static final long SECOND_TO_NANOS = Duration.ofSeconds(1).toNanos();
-    private static final long HOURS_TO_SECONDS = Duration.ofHours(1).toSeconds();
+    private static final long HOURS_TO_MILLIS = Duration.ofHours(1).toMillis();
 
     private DurationUtils() {}
 
@@ -22,9 +22,9 @@ public final class DurationUtils {
         return (double) duration.toNanos() / SECOND_TO_NANOS;
     }
 
-    /** Uses seconds precision */
+    /** Uses millis precision */
     public static Duration ofFractionalHours(final double hours) {
-        return Duration.ofSeconds(Math.round(hours * HOURS_TO_SECONDS));
+        return Duration.ofMillis(Math.round(hours * HOURS_TO_MILLIS));
     }
 
     /**
@@ -32,7 +32,7 @@ public final class DurationUtils {
      * long}. Uses seconds precision;
      */
     public static double toFractionalHours(final Duration duration) {
-        return (double) duration.toSeconds() / HOURS_TO_SECONDS;
+        return (double) duration.toSeconds() / HOURS_TO_MILLIS;
     }
 
     /**
