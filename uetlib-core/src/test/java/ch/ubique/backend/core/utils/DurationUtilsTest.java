@@ -22,6 +22,12 @@ class DurationUtilsTest {
     @Test
     void ofFractionalHours() {
         assertEquals(Duration.ofMinutes(45), DurationUtils.ofFractionalHours(0.75));
+        // PT45M0.0004S -> 45 min + 0.4968 millis -> rounded down to 45 min (millisecond precision)
+        assertEquals(Duration.ofMinutes(45), DurationUtils.ofFractionalHours(0.750000138));
+        // PT45M0.0004S -> 45 min + 0.4968 millis -> rounded down to 45 min + 0 millis (millisecond precision)
+        // PT45M0.0005S -> 45 min + 0.5004 millis -> rounded up to 45 min + 1 millis (millisecond precision)
+        assertEquals(
+                Duration.ofMinutes(45).plusMillis(1), DurationUtils.ofFractionalHours(0.750000139));
         assertEquals(Duration.ZERO, DurationUtils.ofFractionalHours(0));
         assertEquals(Duration.ofMinutes(135), DurationUtils.ofFractionalHours(2.25));
     }
