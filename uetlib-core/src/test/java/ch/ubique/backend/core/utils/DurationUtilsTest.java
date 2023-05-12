@@ -13,37 +13,97 @@ class DurationUtilsTest {
 
     @Test
     void ofFractionalSeconds() {
-        assertEquals(Duration.ofMillis(900), DurationUtils.ofFractionalSeconds(0.9));
-        assertEquals(Duration.ofSeconds(1), DurationUtils.ofFractionalSeconds(1.0));
+        assertEquals(Duration.ofMillis(750), DurationUtils.ofFractionalSeconds(0.75));
+        // 750 ms + 0.9 nanos -> truncated to 750 ms
+        assertEquals(Duration.ofMillis(750), DurationUtils.ofFractionalSeconds(0.7500000009));
+        // 750 ms + 1 nano -> truncated to 750 ms + 1 nano
+        assertEquals(
+                Duration.ofMillis(750).plusNanos(1),
+                DurationUtils.ofFractionalSeconds(0.750000001));
         assertEquals(Duration.ZERO, DurationUtils.ofFractionalSeconds(0));
-        assertEquals(Duration.ofMillis(-1_200), DurationUtils.ofFractionalSeconds(-1.2));
+        assertEquals(Duration.ofMillis(2250), DurationUtils.ofFractionalSeconds(2.25));
+    }
+
+    @Test
+    void toFractionalSeconds() {
+        assertEquals(0.75, DurationUtils.toFractionalSeconds(Duration.ofMillis(750)));
+        // toFractionalSeconds truncates the duration to nanos first
+        assertEquals(0.75, DurationUtils.toFractionalSeconds(Duration.ofMillis(750)));
+        // toFractionalSeconds truncates the duration to nanos first
+        assertEquals(
+                0.750000001,
+                DurationUtils.toFractionalSeconds(Duration.ofMillis(750).plusNanos(1)));
+        assertEquals(0, DurationUtils.toFractionalSeconds(Duration.ZERO));
+        assertEquals(2.25, DurationUtils.toFractionalSeconds(Duration.ofMillis(2250)));
+    }
+
+    @Test
+    void fractionalSeconds() {
+        assertEquals(
+                0.750000001,
+                DurationUtils.toFractionalSeconds(DurationUtils.ofFractionalSeconds(0.750000001)));
+        assertEquals(
+                Duration.ofMillis(750).plusNanos(1),
+                DurationUtils.ofFractionalSeconds(
+                        DurationUtils.toFractionalSeconds(Duration.ofMillis(750).plusNanos(1))));
+
+        assertEquals(
+                0.75,
+                DurationUtils.toFractionalSeconds(DurationUtils.ofFractionalSeconds(0.7500000009)));
+        assertEquals(
+                Duration.ofMillis(750),
+                DurationUtils.ofFractionalSeconds(
+                        DurationUtils.toFractionalSeconds(Duration.ofMillis(750))));
     }
 
     @Test
     void ofFractionalHours() {
         assertEquals(Duration.ofMinutes(45), DurationUtils.ofFractionalHours(0.75));
-        // PT45M0.0004S -> 45 min + 0.4968 millis -> rounded down to 45 min (millisecond precision)
-        assertEquals(Duration.ofMinutes(45), DurationUtils.ofFractionalHours(0.750000138));
-        // PT45M0.0004S -> 45 min + 0.4968 millis -> rounded down to 45 min + 0 millis (millisecond precision)
-        // PT45M0.0005S -> 45 min + 0.5004 millis -> rounded up to 45 min + 1 millis (millisecond precision)
+        // 45 min + 999_999 nanos -> truncated to 45 min
+        assertEquals(Duration.ofMinutes(45), DurationUtils.ofFractionalHours(0.7500002777777777));
+        // 45 min + 1 milli -> truncated to 45 min + 1 milli
         assertEquals(
-                Duration.ofMinutes(45).plusMillis(1), DurationUtils.ofFractionalHours(0.750000139));
+                Duration.ofMinutes(45).plusMillis(1),
+                DurationUtils.ofFractionalHours(0.7500002777777778));
         assertEquals(Duration.ZERO, DurationUtils.ofFractionalHours(0));
         assertEquals(Duration.ofMinutes(135), DurationUtils.ofFractionalHours(2.25));
     }
 
     @Test
-    void toFractionalSeconds() {
-        assertEquals(0.9, DurationUtils.toFractionalSeconds(Duration.ofMillis(900)));
-        assertEquals(1.0, DurationUtils.toFractionalSeconds(Duration.ofSeconds(1)));
-        assertEquals(0, DurationUtils.toFractionalSeconds(Duration.ZERO));
+    void toFractionalHours() {
+        assertEquals(0.75, DurationUtils.toFractionalHours(Duration.ofMinutes(45)));
+        // toFractionalHours truncates the duration to millis first
+        assertEquals(
+                0.75, DurationUtils.toFractionalHours(Duration.ofMinutes(45).plusNanos(999_999)));
+        // toFractionalHours truncates the duration to millis first
+        assertEquals(
+                0.7500002777777778,
+                DurationUtils.toFractionalHours(Duration.ofMinutes(45).plusNanos(1_000_000)));
+        assertEquals(0, DurationUtils.toFractionalHours(Duration.ZERO));
+        assertEquals(2.25, DurationUtils.toFractionalHours(Duration.ofMinutes(135)));
     }
 
     @Test
-    void toFractionalHours() {
-        assertEquals(0.25, DurationUtils.toFractionalHours(Duration.ofMinutes(15)));
-        assertEquals(1.0, DurationUtils.toFractionalHours(Duration.ofHours(1)));
-        assertEquals(0.0, DurationUtils.toFractionalHours(Duration.ZERO));
+    void fractionalHours() {
+        assertEquals(
+                0.7500002777777778,
+                DurationUtils.toFractionalHours(
+                        DurationUtils.ofFractionalHours(0.7500002777777778)));
+        assertEquals(
+                Duration.ofMinutes(45).plusNanos(1_000_000),
+                DurationUtils.ofFractionalHours(
+                        DurationUtils.toFractionalHours(
+                                Duration.ofMinutes(45).plusNanos(1_000_000))));
+
+        assertEquals(
+                0.75,
+                DurationUtils.toFractionalHours(
+                        DurationUtils.ofFractionalHours(0.750000277777777)));
+        assertEquals(
+                Duration.ofMinutes(45),
+                DurationUtils.ofFractionalHours(
+                        DurationUtils.toFractionalHours(
+                                Duration.ofMinutes(45).plusNanos(999_999))));
     }
 
     @Test
