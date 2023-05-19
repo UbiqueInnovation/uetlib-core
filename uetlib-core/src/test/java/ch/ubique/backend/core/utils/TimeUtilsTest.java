@@ -310,6 +310,38 @@ class TimeUtilsTest {
     }
 
     @Test
+    void toMillis() {
+        assertEquals(
+                0,
+                TimeUtils.toMillis(
+                        ZonedDateTime.of(
+                                LocalDate.of(1970, 1, 1), LocalTime.MIDNIGHT, ZONE_ID_UTC)));
+        assertEquals(
+                946_758_000_000L,
+                TimeUtils.toMillis(
+                        ZonedDateTime.of(
+                                LocalDate.of(2000, 1, 1), LocalTime.of(20, 20), ZONE_ID_UTC)));
+        assertEquals(
+                1_000_000_000_000L,
+                TimeUtils.toMillis(
+                        ZonedDateTime.of(
+                                LocalDate.of(2001, 9, 9), LocalTime.of(1, 46, 40), ZONE_ID_UTC)));
+        assertEquals(
+                -30_610_180_800_000L,
+                TimeUtils.toMillis(
+                        ZonedDateTime.of(LocalDate.of(1000, 1, 1), LocalTime.NOON, ZONE_ID_UTC)));
+
+        assertEquals(
+                946_758_000_000L, TimeUtils.toMillis(TIME_UTILS_UTC.ofMillis(946_758_000_000L)));
+        assertEquals(
+                946_758_000_000L,
+                TimeUtils.toMillis(TIME_UTILS_EUROPE_ZURICH.ofMillis(946_758_000_000L)));
+        assertEquals(
+                946_758_000_000L,
+                TimeUtils.toMillis(TIME_UTILS_EUROPE_BERLIN.ofMillis(946_758_000_000L)));
+    }
+
+    @Test
     void isBetween() {
         final var time1 = ZonedDateTime.of(2022, 4, 29, 8, 19, 14, 547000000, ZONE_ID_UTC);
         final var time2 = ZonedDateTime.of(2022, 4, 29, 8, 19, 14, 547000001, ZONE_ID_UTC);

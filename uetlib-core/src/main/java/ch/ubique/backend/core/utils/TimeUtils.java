@@ -126,6 +126,10 @@ public final class TimeUtils {
         return !time.isBefore(start) && time.isBefore(end);
     }
 
+    public static long toMillis(final ZonedDateTime zonedDateTime) {
+        return zonedDateTime.toInstant().toEpochMilli();
+    }
+
     public ZonedDateTime now() {
         return ZonedDateTime.now(zoneId);
     }
