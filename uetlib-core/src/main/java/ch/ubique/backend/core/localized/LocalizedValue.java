@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.mchange.v2.ser.SerializableUtils;
 import com.pivovarit.function.exception.WrappedException;
 
+import jakarta.validation.constraints.NotEmpty;
+
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -17,7 +19,7 @@ import java.util.*;
 
 public class LocalizedValue<T> {
 
-    @JsonValue private final Map<String, T> values;
+    @JsonValue @NotEmpty private final Map<String, T> values;
 
     @JsonCreator
     LocalizedValue(final Map<String, T> values) {
