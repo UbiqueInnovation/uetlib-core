@@ -1,31 +1,50 @@
 package ch.ubique.backend.core.utils;
 
+import jakarta.validation.constraints.NotNull;
+
+import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.lang3.LocaleUtils;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public final class LocaleHelper {
 
     private LocaleHelper() {}
 
+    public static Locale findBestMatchLocale(
+            final Locale locale, final Iterable<Locale> candidates) {
+        final var lookupList = LocaleUtils.localeLookupList(locale);
+        return lookupList.stream()
+                .map(lookupLocale -> IterableUtils.find(candidates, lookupLocale::equals))
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(null);
+    }
+
+    public static String findBestMatchLocaleString(
+            final Locale locale, final @NotNull Collection<String> candidateStrings) {
+        final var candidates = candidateStrings.stream().map(LocaleUtils::toLocale).toList();
+        final var lookupList = LocaleUtils.localeLookupList(locale);
+        return lookupList.stream()
+                .map(lookupLocale -> IterableUtils.find(candidates, lookupLocale::equals))
+                .filter(Objects::nonNull)
+                .findFirst()
+                .map(Locale::toString)
+                .orElse(null);
+    }
+
     public static Optional<String> localValue(
             final Map<Locale, String> values, final Locale locale) {
-        final var matchedLocale =
-                Locale.lookup(
-                        List.of(new Locale.LanguageRange(locale.toLanguageTag())), values.keySet());
-        return Optional.ofNullable(matchedLocale).map(values::get);
+        final var matchedLocale = findBestMatchLocale(locale, values.keySet());
+        return Optional.ofNullable(values.get(matchedLocale));
     }
 
     public static Optional<Locale> getLocale(final String key) {
         try {
-            final var locale = LocaleUtils.toLocale(key);
-            return LocaleUtils.isAvailableLocale(locale) ? Optional.of(locale) : Optional.empty();
+            return Optional.ofNullable(LocaleUtils.toLocale(key))
+                    .filter(LocaleUtils::isAvailableLocale);
         } catch (final IllegalArgumentException e) {
             return Optional.empty();
         }
