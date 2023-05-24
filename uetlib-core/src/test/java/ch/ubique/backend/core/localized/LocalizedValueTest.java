@@ -15,22 +15,32 @@ class LocalizedValueTest {
 
     @Test
     void testSerialization() throws JsonProcessingException {
-        final var v1 = LocalizedValue.en("Test");
-        LocalizedValue.from("Literal", Locale.CHINESE);
-        Assertions.assertEquals("{\"en\":\"Test\"}", objectMapper.writeValueAsString(v1));
+        Assertions.assertEquals(
+                "{\"zh\":\"Literal\"}",
+                objectMapper.writeValueAsString(LocalizedValue.from("Literal", Locale.CHINESE)));
+        Assertions.assertEquals(
+                "{\"en\":\"Test\"}", objectMapper.writeValueAsString(LocalizedValue.en("Test")));
+    }
+
+    @Test
+    void testDeserialization() throws JsonProcessingException {
+        Assertions.assertEquals(
+                LocalizedValue.from("Literal", Locale.CHINESE),
+                objectMapper.readValue("{\"zh\":\"Literal\"}", LocalizedValue.class));
+        Assertions.assertEquals(
+                LocalizedValue.en("Test"),
+                objectMapper.readValue("{\"en\":\"Test\"}", LocalizedValue.class));
     }
 
     @Test
     void testBuilder() {
-        Assertions.assertThrows(
-                NoValidValuesException.class, () -> LocalizedValue.builder().build());
+        final var builder = LocalizedValue.builder();
+        Assertions.assertThrows(NoValidValuesException.class, builder::build);
         Assertions.assertNull(LocalizedValue.builder().buildNullable());
         Assertions.assertTrue(LocalizedValue.builder().buildOptional().isEmpty());
 
         Assertions.assertNull(LocalizedValue.builder().en(" ").buildNullable());
-        Assertions.assertThrows(
-                IllegalArgumentException.class,
-                () -> LocalizedValue.builder().add("abc", " ").build());
+        Assertions.assertThrows(IllegalArgumentException.class, () -> builder.add("abc", " "));
 
         Assertions.assertNotNull(LocalizedValue.builder().de(".").buildNullable());
     }
