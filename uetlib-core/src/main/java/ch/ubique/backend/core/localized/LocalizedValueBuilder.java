@@ -1,9 +1,10 @@
 package ch.ubique.backend.core.localized;
 
+import ch.ubique.backend.core.utils.LocaleHelper;
+
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 
-import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collection;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 
 public final class LocalizedValueBuilder<T> {
 
-    private static final Locale romansh = new Locale("rm");
+    private static final Locale ROMANSH = new Locale("rm");
     private final Map<Locale, T> values = new HashMap<>();
     private boolean keepLanguageOnly = true;
     private boolean uppercaseLanguageKeys;
@@ -45,12 +46,12 @@ public final class LocalizedValueBuilder<T> {
 
     /** Rätoromanisch */
     public LocalizedValueBuilder<T> romansh(final T value) {
-        values.put(romansh, value);
+        values.put(ROMANSH, value);
         return this;
     }
 
     public LocalizedValueBuilder<T> add(final T value, final String localeCode) {
-        values.put(LocaleUtils.toLocale(localeCode), value);
+        values.put(LocaleHelper.fromLanguageTagThenPosix(localeCode), value);
         return this;
     }
 

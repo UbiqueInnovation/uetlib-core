@@ -11,7 +11,22 @@ import java.util.stream.Collectors;
 
 public final class LocaleHelper {
 
+    static final Locale EMPTY = Locale.forLanguageTag("");
+
     private LocaleHelper() {}
+
+    /**
+     * Try to create the locale object first using {@link Locale#forLanguageTag(String)} and then
+     * using {@link LocaleUtils#toLocale(Locale)}.
+     */
+    public static Locale fromLanguageTagThenPosix(final String localeCode) {
+        final var byLanguageTag = Locale.forLanguageTag(localeCode);
+        if (!EMPTY.equals(byLanguageTag)) {
+            return byLanguageTag;
+        }
+
+        return LocaleUtils.toLocale(localeCode);
+    }
 
     public static Locale findBestMatchLocale(
             final Locale locale, final Iterable<Locale> candidates) {
