@@ -13,6 +13,8 @@ import jakarta.validation.constraints.NotEmpty;
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.IOException;
 import java.util.*;
@@ -22,9 +24,13 @@ public class LocalizedValue<T> {
 
     @JsonValue @NotEmpty private final Map<String, T> values;
 
-    @JsonCreator
     LocalizedValue(final Map<String, T> values) {
-        this.values = Collections.unmodifiableMap(values);
+        try {
+            //noinspection unchecked
+            this.values = (Map<String, T>) SerializableUtils.deepCopy(values);
+        } catch (final IOException | ClassNotFoundException e) {
+            throw new WrappedException(e);
+        }
     }
 
     public static <S> LocalizedValueBuilder<S> builder() {
@@ -65,6 +71,16 @@ public class LocalizedValue<T> {
      */
     public static <S> LocalizedValue<S> fromStringMap(final Map<String, S> values) {
         return LocalizedValue.<S>builder().fromStringMap(values).build();
+    }
+
+    /**
+     * Convenience method if you want to initialize the localized value from a map and retain the
+     * full locale. The standard validation will be called, i.e. the correct null handling is still
+     * enforced.
+     */
+    @JsonCreator
+    public static <S> LocalizedValue<S> fromStringMapFullLocale(final Map<String, S> values) {
+        return LocalizedValue.<S>builder().fullLocale().fromStringMap(values).build();
     }
 
     /**
@@ -159,5 +175,12 @@ public class LocalizedValue<T> {
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37).append(values).toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("values", values)
+                .toString();
     }
 }
