@@ -16,6 +16,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class LocalizedValue<T> {
 
@@ -133,6 +134,15 @@ public class LocalizedValue<T> {
         } catch (final IOException | ClassNotFoundException e) {
             throw new WrappedException(e);
         }
+    }
+
+    @JsonIgnore
+    public Map<Locale, T> valuesWithLocaleKeys() {
+        return values.entrySet().stream()
+                .collect(
+                        Collectors.toMap(
+                                entry -> Locale.forLanguageTag(entry.getKey()),
+                                Map.Entry::getValue));
     }
 
     @Override

@@ -25,13 +25,13 @@ public final class LocaleHelper {
 
     public static String findBestMatchLocaleString(
             final Locale locale, final @NotNull Collection<String> candidateStrings) {
-        final var candidates = candidateStrings.stream().map(LocaleUtils::toLocale).toList();
+        final var candidates = candidateStrings.stream().map(Locale::forLanguageTag).toList();
         final var lookupList = LocaleUtils.localeLookupList(locale);
         return lookupList.stream()
                 .map(lookupLocale -> IterableUtils.find(candidates, lookupLocale::equals))
                 .filter(Objects::nonNull)
                 .findFirst()
-                .map(Locale::toString)
+                .map(Locale::toLanguageTag)
                 .orElse(null);
     }
 

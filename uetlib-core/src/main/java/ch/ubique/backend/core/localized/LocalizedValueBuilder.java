@@ -19,7 +19,6 @@ public final class LocalizedValueBuilder<T> {
     private static final Locale romansh = new Locale("rm");
     private final Map<Locale, T> values = new HashMap<>();
     private boolean keepLanguageOnly = true;
-
     private boolean uppercaseLanguageKeys;
 
     LocalizedValueBuilder() {}
@@ -96,6 +95,10 @@ public final class LocalizedValueBuilder<T> {
         return this;
     }
 
+    /**
+     * {@link Locale}s are serialized using {@link Locale#toLanguageTag()} which produces <a
+     * href="https://en.wikipedia.org/wiki/IETF_language_tag">BCP 47 Language Tags</a>.
+     */
     @NotNull
     public LocalizedValue<T> build() {
         return buildOptional().orElseThrow(() -> new NoValidValuesException(values));
@@ -121,22 +124,14 @@ public final class LocalizedValueBuilder<T> {
         }
 
         // Special case string: also disallow blank strings
-        return !(entry.getValue() instanceof String string) || !StringUtils.isBlank(string);
+        return !(entry.getValue() instanceof final String string && StringUtils.isBlank(string));
     }
 
     private String finalKey(final Entry<Locale, ?> entry) {
-        final var locale = finalLocale(entry.getKey());
-        if (uppercaseLanguageKeys) {
-            return locale.toString().toUpperCase();
-        }
-        return locale.toString();
-    }
-
-    private Locale finalLocale(final Locale locale) {
-        if (keepLanguageOnly) {
-            return Locale.forLanguageTag(locale.getLanguage());
-        }
-        return locale;
+        final var locale = entry.getKey();
+        final var finalLocale = keepLanguageOnly ? new Locale(locale.getLanguage()) : locale;
+        final var localeString = finalLocale.toLanguageTag();
+        return uppercaseLanguageKeys ? localeString.toUpperCase() : localeString;
     }
 
     @Nullable
