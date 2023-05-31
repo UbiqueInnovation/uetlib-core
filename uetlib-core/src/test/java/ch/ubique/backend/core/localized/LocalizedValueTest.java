@@ -74,6 +74,13 @@ class LocalizedValueTest {
         assertEquals(
                 LocalizedValue.en("Test"),
                 objectMapper.readValue("{\"en\":\"Test\"}", LocalizedValue.class));
+
+        assertEquals(
+                LocalizedValue.from("Literal", Locale.CHINA),
+                objectMapper.readValue("{\"ZH\":\"Literal\"}", LocalizedValue.class));
+        assertEquals(
+                LocalizedValue.stringBuilder().fullLocale().add("Literal", Locale.CHINA).build(),
+                objectMapper.readValue("{\"ZH-CN\":\"Literal\"}", LocalizedValue.class));
     }
 
     @Test
@@ -83,7 +90,8 @@ class LocalizedValueTest {
         assertNull(LocalizedValue.builder().buildNullable());
         assertTrue(LocalizedValue.builder().buildOptional().isEmpty());
 
-        assertThrows(IllegalArgumentException.class, () -> builder.add(List.of(1), " "));
+        final var list = List.of(1);
+        assertThrows(IllegalArgumentException.class, () -> builder.add(list, " "));
 
         assertNotNull(LocalizedValue.builder().en(List.of()).buildNullable());
         assertNotNull(LocalizedValue.builder().de(List.of(0)).buildNullable());
