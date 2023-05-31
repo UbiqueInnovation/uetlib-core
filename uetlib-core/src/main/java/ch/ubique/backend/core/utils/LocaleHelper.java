@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotNull;
 
 import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.lang3.LocaleUtils;
+import org.jetbrains.annotations.Contract;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -19,7 +20,11 @@ public final class LocaleHelper {
      * Try to create the locale object first using {@link Locale#forLanguageTag(String)} and then
      * using {@link LocaleUtils#toLocale(Locale)}.
      */
+    @Contract("null -> null; !null -> new")
     public static Locale fromLanguageTagThenPosix(final String localeCode) {
+        if (null == localeCode) {
+            return null;
+        }
         final var byLanguageTag = Locale.forLanguageTag(localeCode);
         if (!EMPTY.equals(byLanguageTag)) {
             return byLanguageTag;
@@ -29,7 +34,7 @@ public final class LocaleHelper {
     }
 
     public static Locale findBestMatchLocale(
-            final Locale locale, final Iterable<Locale> candidates) {
+            final Locale locale, final @NotNull Iterable<Locale> candidates) {
         final var lookupList = LocaleUtils.localeLookupList(locale);
         return lookupList.stream()
                 .map(lookupLocale -> IterableUtils.find(candidates, lookupLocale::equals))
@@ -41,11 +46,7 @@ public final class LocaleHelper {
     public static String findBestMatchLocaleString(
             final Locale locale, final @NotNull Collection<String> candidateStrings) {
         final var candidates = candidateStrings.stream().map(Locale::forLanguageTag).toList();
-        final var lookupList = LocaleUtils.localeLookupList(locale);
-        return lookupList.stream()
-                .map(lookupLocale -> IterableUtils.find(candidates, lookupLocale::equals))
-                .filter(Objects::nonNull)
-                .findFirst()
+        return Optional.ofNullable(findBestMatchLocale(locale, candidates))
                 .map(Locale::toLanguageTag)
                 .orElse(null);
     }
