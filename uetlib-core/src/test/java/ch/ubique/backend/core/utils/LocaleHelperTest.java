@@ -13,6 +13,10 @@ class LocaleHelperTest {
 
     @Test
     void fromLanguageTagThenPosix() {
+        assertThrows(NullPointerException.class, () -> Locale.forLanguageTag(null));
+        assertNull(LocaleUtils.toLocale((String) null));
+        assertNull(LocaleHelper.fromLanguageTagThenPosix(null));
+
         assertEquals(LocaleHelper.EMPTY, Locale.forLanguageTag(""));
         assertEquals(LocaleHelper.EMPTY, LocaleUtils.toLocale(""));
         assertEquals(LocaleHelper.EMPTY, LocaleHelper.fromLanguageTagThenPosix(""));
@@ -20,8 +24,6 @@ class LocaleHelperTest {
         assertEquals(Locale.GERMAN, LocaleHelper.fromLanguageTagThenPosix("de"));
         assertEquals(new Locale("de", "CH"), LocaleHelper.fromLanguageTagThenPosix("de-CH"));
         assertEquals(new Locale("de", "CH"), LocaleHelper.fromLanguageTagThenPosix("de_CH"));
-
-        assertThrows(NullPointerException.class, () -> LocaleHelper.fromLanguageTagThenPosix(null));
 
         assertEquals(LocaleHelper.EMPTY, Locale.forLanguageTag(" "));
         assertThrows(IllegalArgumentException.class, () -> LocaleUtils.toLocale(" "));

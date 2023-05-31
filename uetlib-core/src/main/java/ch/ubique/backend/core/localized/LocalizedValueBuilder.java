@@ -20,7 +20,6 @@ public final class LocalizedValueBuilder<T> {
     private static final Locale ROMANSH = new Locale("rm");
     private final Map<Locale, T> values = new HashMap<>();
     private boolean keepLanguageOnly = true;
-    private boolean uppercaseLanguageKeys;
 
     LocalizedValueBuilder() {}
 
@@ -87,16 +86,6 @@ public final class LocalizedValueBuilder<T> {
     }
 
     /**
-     * Call this method if you want the language keys to be upper case, e.g. 'DE' instead of 'de'.
-     *
-     * <p>By default, the language key is lower case, according to the ISO standard.
-     */
-    public LocalizedValueBuilder<T> uppercaseLanguageKeys() {
-        uppercaseLanguageKeys = true;
-        return this;
-    }
-
-    /**
      * {@link Locale}s are serialized using {@link Locale#toLanguageTag()} which produces <a
      * href="https://en.wikipedia.org/wiki/IETF_language_tag">BCP 47 Language Tags</a>.
      */
@@ -110,7 +99,7 @@ public final class LocalizedValueBuilder<T> {
         final var cleanValues =
                 values.entrySet().stream()
                         .filter(this::isEntryValid)
-                        .collect(Collectors.toMap(this::finalKey, Map.Entry::getValue));
+                        .collect(Collectors.toMap(this::finalLocale, Map.Entry::getValue));
 
         if (cleanValues.isEmpty()) {
             return Optional.empty();
@@ -128,11 +117,9 @@ public final class LocalizedValueBuilder<T> {
         return !(entry.getValue() instanceof final String string && StringUtils.isBlank(string));
     }
 
-    private String finalKey(final Entry<Locale, ?> entry) {
+    private Locale finalLocale(final Entry<Locale, ?> entry) {
         final var locale = entry.getKey();
-        final var finalLocale = keepLanguageOnly ? new Locale(locale.getLanguage()) : locale;
-        final var localeString = finalLocale.toLanguageTag();
-        return uppercaseLanguageKeys ? localeString.toUpperCase() : localeString;
+        return keepLanguageOnly ? new Locale(locale.getLanguage()) : locale;
     }
 
     @Nullable
