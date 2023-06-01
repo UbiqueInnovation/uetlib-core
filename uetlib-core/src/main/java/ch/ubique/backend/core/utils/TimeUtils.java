@@ -2,6 +2,8 @@ package ch.ubique.backend.core.utils;
 
 import jakarta.validation.constraints.NotNull;
 
+import org.jetbrains.annotations.Contract;
+
 import java.time.*;
 import java.time.temporal.*;
 
@@ -19,7 +21,8 @@ public final class TimeUtils {
     public static final TimeUtils TIME_UTILS_EUROPE_ZURICH = new TimeUtils(ZONE_ID_EUROPE_ZURICH);
     private final ZoneId zoneId;
 
-    public TimeUtils(final ZoneId zoneId) {
+    @Contract(pure = true)
+    public TimeUtils(@NotNull final ZoneId zoneId) {
         this.zoneId = zoneId;
     }
 
@@ -32,8 +35,10 @@ public final class TimeUtils {
      * @param roundIncrement floor to multiples of this value in the given field
      * @return a copy representing the floored value
      */
-    public static ZonedDateTime floorTo(
-            final ZonedDateTime input, final TemporalField floorTo, final int roundIncrement) {
+    public static @NotNull ZonedDateTime floorTo(
+            final @NotNull ZonedDateTime input,
+            final TemporalField floorTo,
+            final int roundIncrement) {
         /* Extract the field being floored. */
         final var field = input.getLong(floorTo);
 
@@ -64,24 +69,28 @@ public final class TimeUtils {
         return input.equals(floor) ? floor : ceil(input, ceilTo, roundIncrement, remainder);
     }
 
-    private static ZonedDateTime floor(
-            final ZonedDateTime input, final TemporalField floorTo, final long remainder) {
+    @Contract("_, _, _ -> new")
+    private static @NotNull ZonedDateTime floor(
+            final @NotNull ZonedDateTime input,
+            final @NotNull TemporalField floorTo,
+            final long remainder) {
         return input.plus(-remainder, floorTo.getBaseUnit()).truncatedTo(floorTo.getBaseUnit());
     }
 
     /**
      * helper function for floorTo/ceilTo. This function ALWAYS ceils, even if input = floor(input)
      */
-    private static ZonedDateTime ceil(
+    @Contract("_, _, _, _ -> new")
+    private static @NotNull ZonedDateTime ceil(
             final ZonedDateTime input,
-            final TemporalField ceilTo,
+            final @NotNull TemporalField ceilTo,
             final int roundIncrement,
             final long remainder) {
         return input.plus(roundIncrement - remainder, ceilTo.getBaseUnit())
                 .truncatedTo(ceilTo.getBaseUnit());
     }
 
-    public static ZonedDateTime floorToQuarterHours(final ZonedDateTime input) {
+    public static @NotNull ZonedDateTime floorToQuarterHours(final ZonedDateTime input) {
         return floorTo(input, ChronoField.MINUTE_OF_HOUR, 15);
     }
 
@@ -126,24 +135,27 @@ public final class TimeUtils {
         return !time.isBefore(start) && time.isBefore(end);
     }
 
-    public static long toMillis(final ZonedDateTime zonedDateTime) {
+    public static long toMillis(final @NotNull ZonedDateTime zonedDateTime) {
         return zonedDateTime.toInstant().toEpochMilli();
     }
 
-    public ZonedDateTime now() {
+    @Contract(" -> new")
+    public @NotNull ZonedDateTime now() {
         return ZonedDateTime.now(zoneId);
     }
 
-    public ZonedDateTime ofMillis(final long millis) {
+    @Contract("_ -> new")
+    public @NotNull ZonedDateTime ofMillis(final long millis) {
         return Instant.ofEpochMilli(millis).atZone(zoneId);
     }
 
-    public ZonedDateTime ofLocalDateLocalTime(
+    @Contract("_, _ -> new")
+    public @NotNull ZonedDateTime ofLocalDateLocalTime(
             final LocalDate localDate, final LocalTime localTime) {
         return ZonedDateTime.of(localDate, localTime, zoneId);
     }
 
-    public ZonedDateTime withZoneSameInstant(final ZonedDateTime zonedDateTime) {
+    public @NotNull ZonedDateTime withZoneSameInstant(final @NotNull ZonedDateTime zonedDateTime) {
         return zonedDateTime.withZoneSameInstant(zoneId);
     }
 
@@ -163,19 +175,23 @@ public final class TimeUtils {
         return toLocalTime(zonedDateTime).equals(LocalTime.MIDNIGHT);
     }
 
-    public ZonedDateTime startOfToday() {
+    @Contract(" -> new")
+    public @NotNull ZonedDateTime startOfToday() {
         return now().truncatedTo(ChronoUnit.DAYS);
     }
 
-    public ZonedDateTime startOfDay(final ZonedDateTime zonedDateTime) {
+    @Contract("_ -> new")
+    public @NotNull ZonedDateTime startOfDay(final ZonedDateTime zonedDateTime) {
         return withZoneSameInstant(zonedDateTime).truncatedTo(ChronoUnit.DAYS);
     }
 
-    public ZonedDateTime startOfMonth() {
+    @Contract(" -> new")
+    public @NotNull ZonedDateTime startOfMonth() {
         return now().with(TemporalAdjusters.firstDayOfMonth()).truncatedTo(ChronoUnit.DAYS);
     }
 
-    public ZonedDateTime startOfNextMonth() {
+    @Contract(" -> new")
+    public @NotNull ZonedDateTime startOfNextMonth() {
         return now().with(TemporalAdjusters.firstDayOfNextMonth()).truncatedTo(ChronoUnit.DAYS);
     }
 }
