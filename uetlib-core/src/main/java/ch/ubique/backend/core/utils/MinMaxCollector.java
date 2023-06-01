@@ -20,7 +20,7 @@ public final class MinMaxCollector {
      * @return MinMax<T> NotNull with {@link MinMax#min} and {@link MinMax#max} set
      * @throws NoSuchElementException if the stream did not contain any element
      */
-    public static <T extends Comparable<T>> Collector<T, ?, MinMax<T>> collect() {
+    public static <T extends Comparable<? super T>> Collector<T, ?, MinMax<T>> collect() {
         return collect(Comparator.<T>naturalOrder());
     }
 
@@ -28,7 +28,7 @@ public final class MinMaxCollector {
      * @return MinMax<T> NotNull with {@link MinMax#min} and {@link MinMax#max} set
      * @throws NoSuchElementException if the stream did not contain any elements
      */
-    public static <T extends Comparable<T>> Collector<T, ?, MinMax<T>> collect(
+    public static <T extends Comparable<? super T>> Collector<T, ?, MinMax<T>> collect(
             @NotNull final Comparator<T> comparator) {
         return Collectors.collectingAndThen(
                 collectMinMaxAccumulator(comparator),
@@ -44,7 +44,8 @@ public final class MinMaxCollector {
      * @return Optional that is an {@link Optional#empty()} if the stream did not contain any
      *     elements
      */
-    public static <T extends Comparable<T>> Collector<T, ?, Optional<MinMax<T>>> collectOptional() {
+    public static <T extends Comparable<? super T>>
+            Collector<T, ?, Optional<MinMax<T>>> collectOptional() {
         return collectOptional(Comparator.<T>naturalOrder());
     }
 
@@ -52,8 +53,9 @@ public final class MinMaxCollector {
      * @return Optional that is an {@link Optional#empty()} if the stream did not contain any
      *     elements
      */
-    public static <T extends Comparable<T>> Collector<T, ?, Optional<MinMax<T>>> collectOptional(
-            @NotNull final Comparator<T> comparator) {
+    public static <T extends Comparable<? super T>>
+            Collector<T, ?, Optional<MinMax<T>>> collectOptional(
+                    @NotNull final Comparator<T> comparator) {
         return Collectors.collectingAndThen(
                 collectMinMaxAccumulator(comparator),
                 acc ->
@@ -62,7 +64,7 @@ public final class MinMaxCollector {
                                 : Optional.of(acc.toMinMax()));
     }
 
-    private static <T extends Comparable<T>>
+    private static <T extends Comparable<? super T>>
             Collector<T, ?, MinMaxAccumulator<T>> collectMinMaxAccumulator(
                     @NotNull final Comparator<T> comparator) {
         return Collectors.reducing(
@@ -76,14 +78,14 @@ public final class MinMaxCollector {
 
     @Nullable
     @Contract("null, _ -> param2; _, null -> param2; !null, !null -> !null")
-    static <T extends Comparable<T>> T minNullable(@Nullable final T a, @Nullable final T b) {
+    static <T extends Comparable<? super T>> T minNullable(
+            @Nullable final T a, @Nullable final T b) {
         return minNullable(a, b, Comparator.naturalOrder());
     }
 
     @Nullable
-    @Contract(
-            "null, _, _ -> param2; _, null, _ -> param2; !null, !null, !null -> !null; !null, !null, null -> fail")
-    static <T extends Comparable<T>> T minNullable(
+    @Contract("null, _, _ -> param2; _, null, _ -> param2")
+    static <T extends Comparable<? super T>> T minNullable(
             @Nullable final T a, @Nullable final T b, @NotNull final Comparator<T> comparator) {
         if (a == null) {
             return b;
@@ -96,14 +98,14 @@ public final class MinMaxCollector {
 
     @Nullable
     @Contract("null, _ -> param2; _, null -> param2; !null, !null -> !null")
-    static <T extends Comparable<T>> T maxNullable(@Nullable final T a, @Nullable final T b) {
+    static <T extends Comparable<? super T>> T maxNullable(
+            @Nullable final T a, @Nullable final T b) {
         return maxNullable(a, b, Comparator.naturalOrder());
     }
 
     @Nullable
-    @Contract(
-            "null, _, _ -> param2; _, null, _ -> param2; !null, !null, !null -> !null; !null, !null, null -> fail")
-    static <T extends Comparable<T>> T maxNullable(
+    @Contract("null, _, _ -> param2; _, null, _ -> param2")
+    static <T extends Comparable<? super T>> T maxNullable(
             @Nullable final T a, @Nullable final T b, @NotNull final Comparator<T> comparator) {
         if (a == null) {
             return b;
@@ -123,6 +125,7 @@ public final class MinMaxCollector {
         }
 
         MinMax<T> toMinMax() {
+            //noinspection DataFlowIssue
             return new MinMax<>(min, max);
         }
     }

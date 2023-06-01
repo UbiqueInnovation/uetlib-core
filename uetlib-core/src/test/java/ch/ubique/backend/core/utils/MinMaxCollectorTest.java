@@ -5,6 +5,7 @@ import ch.ubique.backend.core.utils.MinMaxCollector.MinMax;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -15,7 +16,6 @@ class MinMaxCollectorTest {
     @Test
     @SuppressWarnings("java:S5778")
     void testMinMax() {
-        //noinspection ResultOfMethodCallIgnored
         Assertions.assertThrows(
                 NoSuchElementException.class,
                 () -> Stream.<Integer>of().collect(MinMaxCollector.collect()));
@@ -33,7 +33,6 @@ class MinMaxCollectorTest {
                 Stream.of(56, 57, -2, 869, 0, Integer.MAX_VALUE, Integer.MIN_VALUE)
                         .collect(MinMaxCollector.collect()));
 
-        //noinspection ResultOfMethodCallIgnored
         Assertions.assertThrows(
                 NoSuchElementException.class,
                 () ->
