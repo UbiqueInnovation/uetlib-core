@@ -566,18 +566,13 @@ class TimeUtilsTest {
         final var instant1 = Instant.ofEpochSecond(1651220354, 547000000);
         final var instant2 = Instant.ofEpochSecond(1651220354, 547000001);
 
-        assertEquals(instant1, TimeUtils.min(instant1, instant1));
+        assertEquals(instant1, TimeUtils.min(instant1, instant1, null));
+        assertEquals(instant1, TimeUtils.min(instant1, instant2, null));
+        assertEquals(instant1, TimeUtils.min(instant2, instant1, null));
         assertEquals(instant1, TimeUtils.min(instant1, instant2));
-        assertEquals(instant1, TimeUtils.min(instant2, instant1));
-
-        assertThrowsWithMessage(
-                NullPointerException.class,
-                () -> TimeUtils.min(instant1, null),
-                "Cannot read field \"seconds\" because \"otherInstant\" is null");
-        assertThrowsWithMessage(
-                NullPointerException.class,
-                () -> TimeUtils.min(null, instant1),
-                "Cannot invoke \"java.lang.Comparable.compareTo(Object)\" because \"left\" is null");
+        assertEquals(instant1, TimeUtils.min(instant1));
+        assertNull(TimeUtils.min((Instant) null));
+        assertNull(TimeUtils.min((Instant[]) null));
 
         final var zdt = ZonedDateTime.now();
         assertEquals(zdt, TimeUtils.min(zdt, zdt));
@@ -602,18 +597,13 @@ class TimeUtilsTest {
         final var instant1 = Instant.ofEpochSecond(1651220354, 547000000);
         final var instant2 = Instant.ofEpochSecond(1651220354, 547000001);
 
-        assertEquals(instant2, TimeUtils.max(instant2, instant2));
-        assertEquals(instant2, TimeUtils.max(instant1, instant2));
+        assertEquals(instant2, TimeUtils.max(instant2, instant2, null));
+        assertEquals(instant2, TimeUtils.max(instant1, instant2, null));
+        assertEquals(instant2, TimeUtils.max(instant2, instant1, null));
         assertEquals(instant2, TimeUtils.max(instant2, instant1));
-
-        assertThrowsWithMessage(
-                NullPointerException.class,
-                () -> TimeUtils.max(instant2, null),
-                "Cannot read field \"seconds\" because \"otherInstant\" is null");
-        assertThrowsWithMessage(
-                NullPointerException.class,
-                () -> TimeUtils.max(null, instant2),
-                "Cannot invoke \"java.lang.Comparable.compareTo(Object)\" because \"left\" is null");
+        assertEquals(instant2, TimeUtils.max(instant2));
+        assertNull(TimeUtils.max((Instant) null));
+        assertNull(TimeUtils.max((Instant[]) null));
 
         final var zdt = ZonedDateTime.now();
         assertEquals(zdt, TimeUtils.max(zdt, zdt));
