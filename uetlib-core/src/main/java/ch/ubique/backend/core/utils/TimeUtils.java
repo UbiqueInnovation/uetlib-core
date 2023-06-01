@@ -139,6 +139,18 @@ public final class TimeUtils {
         return zonedDateTime.toInstant().toEpochMilli();
     }
 
+    @Contract(pure = true)
+    public static <T extends Temporal & Comparable<? super T>> T min(
+            @NotNull final T left, @NotNull final T right) {
+        return left.compareTo(right) <= 0 ? left : right;
+    }
+
+    @Contract(pure = true)
+    public static <T extends Temporal & Comparable<? super T>> T max(
+            @NotNull final T left, @NotNull final T right) {
+        return left.compareTo(right) >= 0 ? left : right;
+    }
+
     @Contract(" -> new")
     public @NotNull ZonedDateTime now() {
         return ZonedDateTime.now(zoneId);
