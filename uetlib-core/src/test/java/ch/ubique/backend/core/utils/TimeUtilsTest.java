@@ -562,6 +562,78 @@ class TimeUtilsTest {
     }
 
     @Test
+    void min() {
+        final var instant1 = Instant.ofEpochSecond(1651220354, 547000000);
+        final var instant2 = Instant.ofEpochSecond(1651220354, 547000001);
+
+        assertEquals(instant1, TimeUtils.min(instant1, instant1));
+        assertEquals(instant1, TimeUtils.min(instant1, instant2));
+        assertEquals(instant1, TimeUtils.min(instant2, instant1));
+
+        assertThrowsWithMessage(
+                NullPointerException.class,
+                () -> TimeUtils.min(instant1, null),
+                "Cannot read field \"seconds\" because \"otherInstant\" is null");
+        assertThrowsWithMessage(
+                NullPointerException.class,
+                () -> TimeUtils.min(null, instant1),
+                "Cannot invoke \"java.lang.Comparable.compareTo(Object)\" because \"left\" is null");
+
+        final var zdt = ZonedDateTime.now();
+        assertEquals(zdt, TimeUtils.min(zdt, zdt));
+        assertEquals(zdt, TimeUtils.min(zdt.plusHours(1), zdt));
+
+        final var oft = OffsetDateTime.now();
+        assertEquals(oft, TimeUtils.min(oft, oft));
+        assertEquals(oft, TimeUtils.min(oft.plusHours(1), oft));
+
+        final var ldt = LocalDateTime.now();
+        assertEquals(ldt, TimeUtils.min(ldt.plusHours(1), ldt));
+
+        final var ld = LocalDate.now();
+        assertEquals(ld, TimeUtils.min(ld.plusDays(1), ld));
+
+        final var lt = LocalTime.now();
+        assertEquals(lt, TimeUtils.min(lt.plusHours(1), lt));
+    }
+
+    @Test
+    void max() {
+        final var instant1 = Instant.ofEpochSecond(1651220354, 547000000);
+        final var instant2 = Instant.ofEpochSecond(1651220354, 547000001);
+
+        assertEquals(instant2, TimeUtils.max(instant2, instant2));
+        assertEquals(instant2, TimeUtils.max(instant1, instant2));
+        assertEquals(instant2, TimeUtils.max(instant2, instant1));
+
+        assertThrowsWithMessage(
+                NullPointerException.class,
+                () -> TimeUtils.max(instant2, null),
+                "Cannot read field \"seconds\" because \"otherInstant\" is null");
+        assertThrowsWithMessage(
+                NullPointerException.class,
+                () -> TimeUtils.max(null, instant2),
+                "Cannot invoke \"java.lang.Comparable.compareTo(Object)\" because \"left\" is null");
+
+        final var zdt = ZonedDateTime.now();
+        assertEquals(zdt, TimeUtils.max(zdt, zdt));
+        assertEquals(zdt, TimeUtils.max(zdt.minusHours(1), zdt));
+
+        final var oft = OffsetDateTime.now();
+        assertEquals(oft, TimeUtils.max(oft, oft));
+        assertEquals(oft, TimeUtils.max(oft.minusHours(1), oft));
+
+        final var ldt = LocalDateTime.now();
+        assertEquals(ldt, TimeUtils.max(ldt.minusHours(1), ldt));
+
+        final var ld = LocalDate.now();
+        assertEquals(ld, TimeUtils.max(ld.minusDays(1), ld));
+
+        final var lt = LocalTime.now();
+        assertEquals(lt, TimeUtils.max(lt.minusHours(1), lt));
+    }
+
+    @Test
     void isBetween() {
         final var time1 = ZonedDateTime.of(2022, 4, 29, 8, 19, 14, 547000000, ZONE_ID_UTC);
         final var time2 = ZonedDateTime.of(2022, 4, 29, 8, 19, 14, 547000001, ZONE_ID_UTC);
