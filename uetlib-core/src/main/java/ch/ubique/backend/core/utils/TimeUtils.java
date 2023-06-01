@@ -98,19 +98,19 @@ public final class TimeUtils {
     }
 
     /**
-     * @return true iff time1 >= time2
+     * @return true iff temporal1 >= temporal2
      */
-    public static boolean isAfterOrEqual(
-            @NotNull final ZonedDateTime time1, @NotNull final ZonedDateTime time2) {
-        return !time1.isBefore(time2);
+    public static <T extends Temporal & Comparable<? super T>> boolean isAfterOrEqual(
+            @NotNull final T temporal1, @NotNull final T temporal2) {
+        return temporal1.compareTo(temporal2) >= 0;
     }
 
     /**
-     * @return true iff time1 <= time2
+     * @return true iff temporal1 <= temporal2
      */
-    public static boolean isBeforeOrEqual(
-            @NotNull final ZonedDateTime time1, @NotNull final ZonedDateTime time2) {
-        return !time1.isAfter(time2);
+    public static <T extends Temporal & Comparable<? super T>> boolean isBeforeOrEqual(
+            @NotNull final T temporal1, @NotNull final T temporal2) {
+        return temporal1.compareTo(temporal2) <= 0;
     }
 
     /**
