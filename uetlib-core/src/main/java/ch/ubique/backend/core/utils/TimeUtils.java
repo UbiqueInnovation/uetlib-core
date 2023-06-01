@@ -2,6 +2,7 @@ package ch.ubique.backend.core.utils;
 
 import jakarta.validation.constraints.NotNull;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.jetbrains.annotations.Contract;
 
 import java.time.*;
@@ -139,16 +140,16 @@ public final class TimeUtils {
         return zonedDateTime.toInstant().toEpochMilli();
     }
 
+    @SafeVarargs
     @Contract(pure = true)
-    public static <T extends Temporal & Comparable<? super T>> T min(
-            @NotNull final T left, @NotNull final T right) {
-        return left.compareTo(right) <= 0 ? left : right;
+    public static <T extends Comparable<? super T>> T min(final T... values) {
+        return ObjectUtils.min(values);
     }
 
+    @SafeVarargs
     @Contract(pure = true)
-    public static <T extends Temporal & Comparable<? super T>> T max(
-            @NotNull final T left, @NotNull final T right) {
-        return left.compareTo(right) >= 0 ? left : right;
+    public static <T extends Comparable<? super T>> T max(final T... values) {
+        return ObjectUtils.max(values);
     }
 
     @Contract(" -> new")
