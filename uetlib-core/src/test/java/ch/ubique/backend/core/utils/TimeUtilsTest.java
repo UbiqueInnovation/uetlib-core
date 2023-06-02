@@ -277,7 +277,7 @@ class TimeUtilsTest {
                 NullPointerException.class,
                 () -> isAfterOrEqual(null, instant1),
                 "Cannot invoke \"java.time.Instant.isBefore(java.time.Instant)\" because"
-                    + " \"temporal1\" is null");
+                        + " \"temporal1\" is null");
     }
 
     @Test
@@ -296,7 +296,7 @@ class TimeUtilsTest {
                 NullPointerException.class,
                 () -> isAfterOrEqual(zonedDateTime1, null),
                 "Cannot invoke \"java.time.chrono.ChronoZonedDateTime.toEpochSecond()\" because"
-                    + " \"other\" is null");
+                        + " \"other\" is null");
         assertThrowsWithMessage(
                 NullPointerException.class,
                 () -> isAfterOrEqual(null, zonedDateTime1),
@@ -324,12 +324,12 @@ class TimeUtilsTest {
                 NullPointerException.class,
                 () -> isAfterOrEqual(offsetDateTime1, null),
                 "Cannot invoke \"java.time.OffsetDateTime.toEpochSecond()\" because \"other\" is"
-                    + " null");
+                        + " null");
         assertThrowsWithMessage(
                 NullPointerException.class,
                 () -> isAfterOrEqual(null, offsetDateTime1),
                 "Cannot invoke \"java.time.OffsetDateTime.isBefore(java.time.OffsetDateTime)\""
-                    + " because \"temporal1\" is null");
+                        + " because \"temporal1\" is null");
     }
 
     @Test
@@ -348,7 +348,7 @@ class TimeUtilsTest {
                 NullPointerException.class,
                 () -> isAfterOrEqual(localDateTime1, null),
                 "Cannot invoke \"java.time.chrono.ChronoLocalDateTime.toLocalDate()\" because"
-                    + " \"other\" is null");
+                        + " \"other\" is null");
         assertThrowsWithMessage(
                 NullPointerException.class,
                 () -> isAfterOrEqual(null, localDateTime1),
@@ -373,12 +373,12 @@ class TimeUtilsTest {
                 NullPointerException.class,
                 () -> isAfterOrEqual(localDate1, null),
                 "Cannot invoke \"java.time.chrono.ChronoLocalDate.toEpochDay()\" because \"other\""
-                    + " is null");
+                        + " is null");
         assertThrowsWithMessage(
                 NullPointerException.class,
                 () -> isAfterOrEqual(null, localDate1),
                 "Cannot invoke \"java.time.LocalDate.isBefore(java.time.chrono.ChronoLocalDate)\""
-                    + " because \"temporal1\" is null");
+                        + " because \"temporal1\" is null");
     }
 
     @Test
@@ -402,7 +402,7 @@ class TimeUtilsTest {
                 NullPointerException.class,
                 () -> isAfterOrEqual(null, localTime1),
                 "Cannot invoke \"java.time.LocalTime.isBefore(java.time.LocalTime)\" because"
-                    + " \"temporal1\" is null");
+                        + " \"temporal1\" is null");
     }
 
     @Test
@@ -425,7 +425,7 @@ class TimeUtilsTest {
                 NullPointerException.class,
                 () -> isBeforeOrEqual(null, instant1),
                 "Cannot invoke \"java.time.Instant.isAfter(java.time.Instant)\" because"
-                    + " \"temporal1\" is null");
+                        + " \"temporal1\" is null");
     }
 
     @Test
@@ -472,12 +472,12 @@ class TimeUtilsTest {
                 NullPointerException.class,
                 () -> isBeforeOrEqual(offsetDateTime1, null),
                 "Cannot invoke \"java.time.OffsetDateTime.toEpochSecond()\" because \"other\" is"
-                    + " null");
+                        + " null");
         assertThrowsWithMessage(
                 NullPointerException.class,
                 () -> isBeforeOrEqual(null, offsetDateTime1),
                 "Cannot invoke \"java.time.OffsetDateTime.isAfter(java.time.OffsetDateTime)\""
-                    + " because \"temporal1\" is null");
+                        + " because \"temporal1\" is null");
     }
 
     @Test
@@ -496,7 +496,7 @@ class TimeUtilsTest {
                 NullPointerException.class,
                 () -> isBeforeOrEqual(localDateTime1, null),
                 "Cannot invoke \"java.time.chrono.ChronoLocalDateTime.toLocalDate()\" because"
-                    + " \"other\" is null");
+                        + " \"other\" is null");
         assertThrowsWithMessage(
                 NullPointerException.class,
                 () -> isBeforeOrEqual(null, localDateTime1),
@@ -521,12 +521,12 @@ class TimeUtilsTest {
                 NullPointerException.class,
                 () -> isBeforeOrEqual(localDate1, null),
                 "Cannot invoke \"java.time.chrono.ChronoLocalDate.toEpochDay()\" because \"other\""
-                    + " is null");
+                        + " is null");
         assertThrowsWithMessage(
                 NullPointerException.class,
                 () -> isBeforeOrEqual(null, localDate1),
                 "Cannot invoke \"java.time.LocalDate.isAfter(java.time.chrono.ChronoLocalDate)\""
-                    + " because \"temporal1\" is null");
+                        + " because \"temporal1\" is null");
     }
 
     @Test
@@ -549,7 +549,7 @@ class TimeUtilsTest {
                 NullPointerException.class,
                 () -> isBeforeOrEqual(null, localTime1),
                 "Cannot invoke \"java.time.LocalTime.isAfter(java.time.LocalTime)\" because"
-                    + " \"temporal1\" is null");
+                        + " \"temporal1\" is null");
     }
 
     @Test

@@ -19,6 +19,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public final class MdcForkJoinPool extends ForkJoinPool {
 
     private static final MdcForkJoinPool MDC_COMMON_POOL = new MdcForkJoinPool(64);
+
     /**
      * Creates a new MdcForkJoinPool.
      *
