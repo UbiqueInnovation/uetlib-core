@@ -110,17 +110,97 @@ public final class TimeUtils {
     /**
      * @return true iff temporal1 >= temporal2
      */
-    public static <T extends Temporal & Comparable<? super T>> boolean isAfterOrEqual(
-            @NotNull final T temporal1, @NotNull final T temporal2) {
-        return temporal1.compareTo(temporal2) >= 0;
+    public static boolean isAfterOrEqual(
+            @NotNull final Instant temporal1, @NotNull final Instant temporal2) {
+        return !temporal1.isBefore(temporal2);
     }
 
     /**
      * @return true iff temporal1 <= temporal2
      */
-    public static <T extends Temporal & Comparable<? super T>> boolean isBeforeOrEqual(
-            @NotNull final T temporal1, @NotNull final T temporal2) {
-        return temporal1.compareTo(temporal2) <= 0;
+    public static boolean isBeforeOrEqual(
+            @NotNull final Instant temporal1, @NotNull final Instant temporal2) {
+        return !temporal1.isAfter(temporal2);
+    }
+
+    /**
+     * @return true iff temporal1 >= temporal2
+     */
+    public static boolean isAfterOrEqual(
+            @NotNull final ZonedDateTime temporal1, @NotNull final ZonedDateTime temporal2) {
+        return !temporal1.isBefore(temporal2);
+    }
+
+    /**
+     * @return true iff temporal1 <= temporal2
+     */
+    public static boolean isBeforeOrEqual(
+            @NotNull final ZonedDateTime temporal1, @NotNull final ZonedDateTime temporal2) {
+        return !temporal1.isAfter(temporal2);
+    }
+
+    /**
+     * @return true iff temporal1 >= temporal2
+     */
+    public static boolean isAfterOrEqual(
+            @NotNull final OffsetDateTime temporal1, @NotNull final OffsetDateTime temporal2) {
+        return !temporal1.isBefore(temporal2);
+    }
+
+    /**
+     * @return true iff temporal1 <= temporal2
+     */
+    public static boolean isBeforeOrEqual(
+            @NotNull final OffsetDateTime temporal1, @NotNull final OffsetDateTime temporal2) {
+        return !temporal1.isAfter(temporal2);
+    }
+
+    /**
+     * @return true iff temporal1 >= temporal2
+     */
+    public static boolean isAfterOrEqual(
+            @NotNull final LocalDateTime temporal1, @NotNull final LocalDateTime temporal2) {
+        return !temporal1.isBefore(temporal2);
+    }
+
+    /**
+     * @return true iff temporal1 <= temporal2
+     */
+    public static boolean isBeforeOrEqual(
+            @NotNull final LocalDateTime temporal1, @NotNull final LocalDateTime temporal2) {
+        return !temporal1.isAfter(temporal2);
+    }
+
+    /**
+     * @return true iff temporal1 >= temporal2
+     */
+    public static boolean isAfterOrEqual(
+            @NotNull final LocalDate temporal1, @NotNull final LocalDate temporal2) {
+        return !temporal1.isBefore(temporal2);
+    }
+
+    /**
+     * @return true iff temporal1 <= temporal2
+     */
+    public static boolean isBeforeOrEqual(
+            @NotNull final LocalDate temporal1, @NotNull final LocalDate temporal2) {
+        return !temporal1.isAfter(temporal2);
+    }
+
+    /**
+     * @return true iff temporal1 >= temporal2
+     */
+    public static boolean isAfterOrEqual(
+            @NotNull final LocalTime temporal1, @NotNull final LocalTime temporal2) {
+        return !temporal1.isBefore(temporal2);
+    }
+
+    /**
+     * @return true iff temporal1 <= temporal2
+     */
+    public static boolean isBeforeOrEqual(
+            @NotNull final LocalTime temporal1, @NotNull final LocalTime temporal2) {
+        return !temporal1.isAfter(temporal2);
     }
 
     /**
