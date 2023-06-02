@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
@@ -15,7 +16,7 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public final class LocalizedValueBuilder<T> {
+public final class LocalizedValueBuilder<T extends Serializable> {
 
     private static final Locale ROMANSH = new Locale("rm");
     private final Map<Locale, T> values = new HashMap<>();

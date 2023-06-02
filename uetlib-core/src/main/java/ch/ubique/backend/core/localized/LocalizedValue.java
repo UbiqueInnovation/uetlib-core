@@ -17,10 +17,11 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class LocalizedValue<T> {
+public class LocalizedValue<T extends Serializable> {
 
     @JsonValue @NotEmpty private final Map<Locale, T> values;
 
@@ -33,7 +34,7 @@ public class LocalizedValue<T> {
         }
     }
 
-    public static <S> LocalizedValueBuilder<S> builder() {
+    public static <S extends Serializable> LocalizedValueBuilder<S> builder() {
         return new LocalizedValueBuilder<>();
     }
 
@@ -45,7 +46,8 @@ public class LocalizedValue<T> {
      * Convenience method for single {@link Locale}. For full flexibility, {@link
      * LocalizedValue#builder()} can be used.
      */
-    public static <S> LocalizedValue<S> from(final S value, final Locale locale) {
+    public static <S extends Serializable> LocalizedValue<S> from(
+            final S value, final Locale locale) {
         return LocalizedValue.<S>builder().add(value, locale).build();
     }
 
@@ -53,7 +55,8 @@ public class LocalizedValue<T> {
      * Convenience method if you want to set the same value for multiple {@link Locale}s. For full
      * flexibility, {@link LocalizedValue#builder()} can be used.
      */
-    public static <S> LocalizedValue<S> from(final S value, final Collection<Locale> locales) {
+    public static <S extends Serializable> LocalizedValue<S> from(
+            final S value, final Collection<Locale> locales) {
         return LocalizedValue.<S>builder().add(value, locales).build();
     }
 
@@ -61,7 +64,7 @@ public class LocalizedValue<T> {
      * Convenience method if you want to initialize the localized value from a map. The standard
      * validation will be called, i.e. the correct null handling is still enforced.
      */
-    public static <S> LocalizedValue<S> fromMap(final Map<Locale, S> values) {
+    public static <S extends Serializable> LocalizedValue<S> fromMap(final Map<Locale, S> values) {
         return LocalizedValue.<S>builder().fromMap(values).build();
     }
 
@@ -69,7 +72,8 @@ public class LocalizedValue<T> {
      * Convenience method if you want to initialize the localized value from a map. The standard
      * validation will be called, i.e. the correct null handling is still enforced.
      */
-    public static <S> LocalizedValue<S> fromStringMap(final Map<String, S> values) {
+    public static <S extends Serializable> LocalizedValue<S> fromStringMap(
+            final Map<String, S> values) {
         return LocalizedValue.<S>builder().fromStringMap(values).build();
     }
 
@@ -79,7 +83,8 @@ public class LocalizedValue<T> {
      * enforced.
      */
     @JsonCreator
-    public static <S> LocalizedValue<S> fromStringMapFullLocale(final Map<String, S> values) {
+    public static <S extends Serializable> LocalizedValue<S> fromStringMapFullLocale(
+            final Map<String, S> values) {
         return LocalizedValue.<S>builder().fullLocale().fromStringMap(values).build();
     }
 
@@ -87,7 +92,7 @@ public class LocalizedValue<T> {
      * Convenience method if you only need English. For multiple languages, {@link
      * LocalizedValue#builder()} can be used.
      */
-    public static <S> LocalizedValue<S> en(final S value) {
+    public static <S extends Serializable> LocalizedValue<S> en(final S value) {
         return LocalizedValue.<S>builder().en(value).build();
     }
 
@@ -95,7 +100,7 @@ public class LocalizedValue<T> {
      * Convenience method if you only need German. For multiple languages, {@link
      * LocalizedValue#builder()} can be used.
      */
-    public static <S> LocalizedValue<S> de(final S value) {
+    public static <S extends Serializable> LocalizedValue<S> de(final S value) {
         return LocalizedValue.<S>builder().de(value).build();
     }
 
@@ -103,7 +108,7 @@ public class LocalizedValue<T> {
      * Convenience method if you only need French. For multiple languages, {@link
      * LocalizedValue#builder()} can be used.
      */
-    public static <S> LocalizedValue<S> fr(final S value) {
+    public static <S extends Serializable> LocalizedValue<S> fr(final S value) {
         return LocalizedValue.<S>builder().fr(value).build();
     }
 
@@ -111,7 +116,7 @@ public class LocalizedValue<T> {
      * Convenience method if you only need Italian. For multiple languages, {@link
      * LocalizedValue#builder()} can be used.
      */
-    public static <S> LocalizedValue<S> it(final S value) {
+    public static <S extends Serializable> LocalizedValue<S> it(final S value) {
         return LocalizedValue.<S>builder().it(value).build();
     }
 
@@ -119,7 +124,7 @@ public class LocalizedValue<T> {
      * Convenience method if you only need Romansch (Rätoromanisch). For multiple languages, {@link
      * LocalizedValue#builder()} can be used.
      */
-    public static <S> LocalizedValue<S> romansh(final S value) {
+    public static <S extends Serializable> LocalizedValue<S> romansh(final S value) {
         return LocalizedValue.<S>builder().romansh(value).build();
     }
 

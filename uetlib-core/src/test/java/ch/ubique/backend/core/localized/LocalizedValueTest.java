@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -91,10 +92,10 @@ class LocalizedValueTest {
         assertTrue(LocalizedValue.builder().buildOptional().isEmpty());
 
         final var list = List.of(1);
-        assertThrows(IllegalArgumentException.class, () -> builder.add(list, " "));
+        assertThrows(IllegalArgumentException.class, () -> builder.add((Serializable) list, " "));
 
-        assertNotNull(LocalizedValue.builder().en(List.of()).buildNullable());
-        assertNotNull(LocalizedValue.builder().de(List.of(0)).buildNullable());
+        assertNotNull(LocalizedValue.builder().en((Serializable) List.of()).buildNullable());
+        assertNotNull(LocalizedValue.builder().de((Serializable) List.of(0)).buildNullable());
     }
 
     @Test
