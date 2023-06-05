@@ -41,7 +41,7 @@ class LocalizedValueTest {
                                 .fullLocale()
                                 .add("Literal", Locale.CHINA)
                                 .build()
-                                .withPosixLocaleKeys()));
+                                .toMapWithPosixLocaleKeys()));
         assertEquals(
                 "{\"ZH-CN\":\"Literal\"}",
                 objectMapper.writeValueAsString(
@@ -49,14 +49,14 @@ class LocalizedValueTest {
                                 .fullLocale()
                                 .add("Literal", Locale.CHINA)
                                 .build()
-                                .withUppercaseKeys()));
+                                .toMapWithUppercaseKeys()));
         assertEquals(
                 "{\"ZH\":\"Literal\"}",
                 objectMapper.writeValueAsString(
                         LocalizedValue.stringBuilder()
                                 .add("Literal", Locale.CHINA)
                                 .build()
-                                .withUppercaseKeys()));
+                                .toMapWithUppercaseKeys()));
         assertEquals(
                 "{\"en\":\"Test\"}", objectMapper.writeValueAsString(LocalizedValue.en("Test")));
     }
@@ -166,82 +166,86 @@ class LocalizedValueTest {
     void jsonWithPosixLocaleKeys() throws JsonProcessingException {
         final var lv1 = LocalizedValue.from("Literal", Locale.CHINA);
         assertEquals(
-                "{\"zh\":\"Literal\"}", objectMapper.writeValueAsString(lv1.withPosixLocaleKeys()));
+                "{\"zh\":\"Literal\"}",
+                objectMapper.writeValueAsString(lv1.toMapWithPosixLocaleKeys()));
         final var lv2 =
                 LocalizedValue.stringBuilder().fullLocale().add("Literal", Locale.CHINA).build();
         assertEquals(
                 "{\"zh_CN\":\"Literal\"}",
-                objectMapper.writeValueAsString(lv2.withPosixLocaleKeys()));
+                objectMapper.writeValueAsString(lv2.toMapWithPosixLocaleKeys()));
 
         final var lv3 = LocalizedValue.en("Test");
         assertEquals(
-                "{\"en\":\"Test\"}", objectMapper.writeValueAsString(lv3.withPosixLocaleKeys()));
+                "{\"en\":\"Test\"}",
+                objectMapper.writeValueAsString(lv3.toMapWithPosixLocaleKeys()));
     }
 
     @Test
     void jsonWithUppercaseKeys() throws JsonProcessingException {
         final var lv1 = LocalizedValue.from("Literal", Locale.CHINA);
         assertEquals(
-                "{\"ZH\":\"Literal\"}", objectMapper.writeValueAsString(lv1.withUppercaseKeys()));
+                "{\"ZH\":\"Literal\"}",
+                objectMapper.writeValueAsString(lv1.toMapWithUppercaseKeys()));
         final var lv2 =
                 LocalizedValue.stringBuilder().fullLocale().add("Literal", Locale.CHINA).build();
         assertEquals(
                 "{\"ZH-CN\":\"Literal\"}",
-                objectMapper.writeValueAsString(lv2.withUppercaseKeys()));
+                objectMapper.writeValueAsString(lv2.toMapWithUppercaseKeys()));
 
         final var lv3 = LocalizedValue.en("Test");
-        assertEquals("{\"EN\":\"Test\"}", objectMapper.writeValueAsString(lv3.withUppercaseKeys()));
+        assertEquals(
+                "{\"EN\":\"Test\"}", objectMapper.writeValueAsString(lv3.toMapWithUppercaseKeys()));
     }
 
     @Test
     void values() {
         final var lv1 = LocalizedValue.from("Literal", Locale.CHINA);
-        assertEquals(Map.of(Locale.forLanguageTag("zh"), "Literal"), lv1.values());
+        assertEquals(Map.of(Locale.forLanguageTag("zh"), "Literal"), lv1.toMapWithLocaleKeys());
 
         final var lv2 =
                 LocalizedValue.stringBuilder().fullLocale().add("Literal", Locale.CHINA).build();
-        assertEquals(Map.of(Locale.forLanguageTag("zh-CN"), "Literal"), lv2.values());
+        assertEquals(Map.of(Locale.forLanguageTag("zh-CN"), "Literal"), lv2.toMapWithLocaleKeys());
 
         final var lv3 = LocalizedValue.en("Test");
-        assertEquals(Map.of(Locale.forLanguageTag("en"), "Test"), lv3.values());
+        assertEquals(Map.of(Locale.forLanguageTag("en"), "Test"), lv3.toMapWithLocaleKeys());
     }
 
     @Test
     void withLanguageTagKeys() {
         final var lv1 = LocalizedValue.from("Literal", Locale.CHINA);
-        assertEquals(Map.of("zh", "Literal"), lv1.withLanguageTagKeys());
+        assertEquals(Map.of("zh", "Literal"), lv1.toMapWithLanguageTagKeys());
 
         final var lv2 =
                 LocalizedValue.stringBuilder().fullLocale().add("Literal", Locale.CHINA).build();
-        assertEquals(Map.of("zh-CN", "Literal"), lv2.withLanguageTagKeys());
+        assertEquals(Map.of("zh-CN", "Literal"), lv2.toMapWithLanguageTagKeys());
 
         final var lv3 = LocalizedValue.en("Test");
-        assertEquals(Map.of("en", "Test"), lv3.withLanguageTagKeys());
+        assertEquals(Map.of("en", "Test"), lv3.toMapWithLanguageTagKeys());
     }
 
     @Test
     void withPosixLocaleKeys() {
         final var lv1 = LocalizedValue.from("Literal", Locale.CHINA);
-        assertEquals(Map.of("zh", "Literal"), lv1.withPosixLocaleKeys());
+        assertEquals(Map.of("zh", "Literal"), lv1.toMapWithPosixLocaleKeys());
 
         final var lv2 =
                 LocalizedValue.stringBuilder().fullLocale().add("Literal", Locale.CHINA).build();
-        assertEquals(Map.of("zh_CN", "Literal"), lv2.withPosixLocaleKeys());
+        assertEquals(Map.of("zh_CN", "Literal"), lv2.toMapWithPosixLocaleKeys());
 
         final var lv3 = LocalizedValue.en("Test");
-        assertEquals(Map.of("en", "Test"), lv3.withPosixLocaleKeys());
+        assertEquals(Map.of("en", "Test"), lv3.toMapWithPosixLocaleKeys());
     }
 
     @Test
     void withUppercaseKeys() {
         final var lv1 = LocalizedValue.from("Literal", Locale.CHINA);
-        assertEquals(Map.of("ZH", "Literal"), lv1.withUppercaseKeys());
+        assertEquals(Map.of("ZH", "Literal"), lv1.toMapWithUppercaseKeys());
 
         final var lv2 =
                 LocalizedValue.stringBuilder().fullLocale().add("Literal", Locale.CHINA).build();
-        assertEquals(Map.of("ZH-CN", "Literal"), lv2.withUppercaseKeys());
+        assertEquals(Map.of("ZH-CN", "Literal"), lv2.toMapWithUppercaseKeys());
 
         final var lv3 = LocalizedValue.en("Test");
-        assertEquals(Map.of("EN", "Test"), lv3.withUppercaseKeys());
+        assertEquals(Map.of("EN", "Test"), lv3.toMapWithUppercaseKeys());
     }
 }
