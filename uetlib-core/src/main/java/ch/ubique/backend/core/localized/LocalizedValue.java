@@ -157,7 +157,7 @@ public class LocalizedValue<T extends Serializable> {
      * @return a deep copy of the internal map
      */
     @JsonIgnore
-    public Map<Locale, T> values() {
+    public Map<Locale, T> toMapWithLocaleKeys() {
         try {
             //noinspection unchecked
             return (Map<Locale, T>) SerializableUtils.deepCopy(values);
@@ -172,7 +172,7 @@ public class LocalizedValue<T extends Serializable> {
      * <p>{@code new Locale("de", "CH")} would be serialized to {@code "de-CH"}
      */
     @JsonValue
-    public Map<String, T> withLanguageTagKeys() {
+    public Map<String, T> toMapWithLanguageTagKeys() {
         return values.entrySet().stream()
                 .collect(
                         Collectors.toMap(
@@ -184,7 +184,7 @@ public class LocalizedValue<T extends Serializable> {
      *
      * <p>{@code new Locale("de", "CH")} would be serialized to {@code "de_CH"}
      */
-    public Map<String, T> withPosixLocaleKeys() {
+    public Map<String, T> toMapWithPosixLocaleKeys() {
         return values.entrySet().stream()
                 .collect(Collectors.toMap(entry -> entry.getKey().toString(), Map.Entry::getValue));
     }
@@ -194,7 +194,7 @@ public class LocalizedValue<T extends Serializable> {
      *
      * <p>{@code new Locale("de", "CH")} would be serialized to {@code "DE-CH"}
      */
-    public Map<String, T> withUppercaseKeys() {
+    public Map<String, T> toMapWithUppercaseKeys() {
         return values.entrySet().stream()
                 .collect(
                         Collectors.toMap(
