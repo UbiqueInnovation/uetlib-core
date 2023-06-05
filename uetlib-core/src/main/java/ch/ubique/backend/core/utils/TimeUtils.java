@@ -7,24 +7,50 @@ import org.jetbrains.annotations.Contract;
 
 import java.time.*;
 import java.time.temporal.*;
+import java.util.HashMap;
+import java.util.Map;
 
+/**
+ * Access instances of {@link TimeUtils} via the provided static fields {@link
+ * TimeUtils#getInstance} to retrieve an instance for the given {@link ZoneId}. The supplied {@link
+ * ZoneId} is normalized, see {@link ZoneId#normalized()}.
+ */
 public final class TimeUtils {
 
     public static final String ZONE_NAME_UTC = "UTC";
     public static final String ZONE_NAME_EUROPE_BERLIN = "Europe/Berlin";
     public static final String ZONE_NAME_EUROPE_ZURICH = "Europe/Zurich";
 
-    public static final ZoneId ZONE_ID_UTC = ZoneId.of(ZONE_NAME_UTC);
+    public static final ZoneId ZONE_ID_UTC = ZoneId.of(ZONE_NAME_UTC).normalized();
     public static final TimeUtils TIME_UTILS_UTC = new TimeUtils(ZONE_ID_UTC);
-    public static final ZoneId ZONE_ID_EUROPE_BERLIN = ZoneId.of(ZONE_NAME_EUROPE_BERLIN);
+    public static final ZoneId ZONE_ID_EUROPE_BERLIN =
+            ZoneId.of(ZONE_NAME_EUROPE_BERLIN).normalized();
     public static final TimeUtils TIME_UTILS_EUROPE_BERLIN = new TimeUtils(ZONE_ID_EUROPE_BERLIN);
-    public static final ZoneId ZONE_ID_EUROPE_ZURICH = ZoneId.of(ZONE_NAME_EUROPE_ZURICH);
+    public static final ZoneId ZONE_ID_EUROPE_ZURICH =
+            ZoneId.of(ZONE_NAME_EUROPE_ZURICH).normalized();
     public static final TimeUtils TIME_UTILS_EUROPE_ZURICH = new TimeUtils(ZONE_ID_EUROPE_ZURICH);
+
+    private static final Map<ZoneId, TimeUtils> INSTANCES =
+            new HashMap<>(
+                    Map.ofEntries(
+                            Map.entry(ZONE_ID_UTC, TIME_UTILS_UTC),
+                            Map.entry(ZONE_ID_EUROPE_ZURICH, TIME_UTILS_EUROPE_ZURICH),
+                            Map.entry(ZONE_ID_EUROPE_BERLIN, TIME_UTILS_EUROPE_BERLIN)));
     private final ZoneId zoneId;
 
     @Contract(pure = true)
-    public TimeUtils(@NotNull final ZoneId zoneId) {
-        this.zoneId = zoneId;
+    private TimeUtils(@NotNull final ZoneId zoneId) {
+        this.zoneId = zoneId.normalized();
+    }
+
+    public static TimeUtils getInstance(@NotNull final ZoneId zoneId) {
+        final var normalized = zoneId.normalized();
+        return INSTANCES.computeIfAbsent(normalized, TimeUtils::new);
+    }
+
+    public static TimeUtils getInstance(@NotNull final String zoneId) {
+        final var normalized = ZoneId.of(zoneId).normalized();
+        return INSTANCES.computeIfAbsent(normalized, TimeUtils::new);
     }
 
     /**
