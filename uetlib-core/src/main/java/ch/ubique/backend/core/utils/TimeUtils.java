@@ -268,10 +268,20 @@ public final class TimeUtils {
         return Instant.ofEpochMilli(millis).atZone(zoneId);
     }
 
+    @Contract("_ -> new")
+    public @NotNull ZonedDateTime ofInstant(final Instant instant) {
+        return instant.atZone(zoneId);
+    }
+
     @Contract("_, _ -> new")
     public @NotNull ZonedDateTime ofLocalDateLocalTime(
             final LocalDate localDate, final LocalTime localTime) {
         return ZonedDateTime.of(localDate, localTime, zoneId);
+    }
+
+    @Contract("_ -> new")
+    public @NotNull ZonedDateTime ofLocalDateTime(final LocalDateTime localDateTime) {
+        return ZonedDateTime.of(localDateTime, zoneId);
     }
 
     public @NotNull ZonedDateTime withZoneSameInstant(final @NotNull ZonedDateTime zonedDateTime) {
