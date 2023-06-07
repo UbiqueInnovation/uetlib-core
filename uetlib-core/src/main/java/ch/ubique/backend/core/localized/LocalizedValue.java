@@ -9,6 +9,7 @@ import com.mchange.v2.ser.SerializableUtils;
 import com.pivovarit.function.exception.WrappedException;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -151,6 +152,72 @@ public class LocalizedValue<T extends Serializable> {
     public T get(final Locale locale) {
         final var matchedKey = LocaleHelper.findBestMatchLocale(locale, values.keySet());
         return values.get(matchedKey);
+    }
+
+    /**
+     * Applies the keys in order to {@link #get(Locale)} and returns the first non-null value.
+     * Throws {@link NoSuchElementException} if none match.
+     *
+     * @return T
+     * @throws NoSuchElementException if none match.
+     */
+    @NotNull
+    public T coalesce(final Locale... locales) {
+        return coalesceFirst(locales).orElseThrow();
+    }
+
+    /**
+     * Applies the keys in order to {@link #get(String)} and returns the first non-null value.
+     * Throws {@link NoSuchElementException} if none match.
+     *
+     * @return T
+     * @throws NoSuchElementException if none match.
+     */
+    @NotNull
+    public T coalesce(final String... keys) {
+        return coalesceFirst(keys).orElseThrow();
+    }
+
+    /**
+     * Applies the keys in order to {@link #get(Locale)} and returns the first non-null value.
+     * Returns any value from the internal map if none match.
+     *
+     * @return T
+     */
+    @NotNull
+    public T coalesceAny(final Locale... locales) {
+        return coalesceFirst(locales).orElseGet(this::getAny);
+    }
+
+    /**
+     * Applies the keys in order to {@link #get(String)} and returns the first non-null value.
+     * Returns any value from the internal map if none match.
+     *
+     * @return T
+     */
+    @NotNull
+    public T coalesceAny(final String... keys) {
+        return coalesceFirst(keys).orElseGet(this::getAny);
+    }
+
+    private Optional<T> coalesceFirst(final Locale... locales) {
+        return Arrays.stream(locales).map(this::get).findFirst();
+    }
+
+    private Optional<T> coalesceFirst(final String... keys) {
+        return Arrays.stream(keys).map(this::get).findFirst();
+    }
+
+    /**
+     * Returns any value from the internal map.
+     *
+     * @return T
+     * @throws NoSuchElementException if no value exists (This should be disallowed by the builder
+     *     methods of {@link LocalizedValue}).
+     */
+    @NotNull
+    public T getAny() {
+        return values.values().stream().findFirst().orElseThrow();
     }
 
     /**
