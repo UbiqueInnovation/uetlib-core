@@ -4,7 +4,9 @@ import com.pivovarit.function.ThrowingSupplier;
 import com.pivovarit.function.exception.WrappedException;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class OptionalUtils {
     private OptionalUtils() {}
@@ -30,21 +32,11 @@ public class OptionalUtils {
 
     @SafeVarargs
     public static <T> Optional<T> coalesce(final Optional<T>... args) {
-        for (final var arg : args) {
-            if (arg.isPresent()) {
-                return arg;
-            }
-        }
-        return Optional.empty();
+        return Stream.of(args).flatMap(Optional::stream).findFirst();
     }
 
     @SafeVarargs
     public static <T> Optional<T> coalesce(final T... args) {
-        for (final var arg : args) {
-            if (arg != null) {
-                return Optional.of(arg);
-            }
-        }
-        return Optional.empty();
+        return Stream.of(args).filter(Objects::nonNull).findFirst();
     }
 }
