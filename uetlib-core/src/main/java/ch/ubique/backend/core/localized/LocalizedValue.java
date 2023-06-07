@@ -201,11 +201,11 @@ public class LocalizedValue<T extends Serializable> {
     }
 
     private Optional<T> coalesceFirst(final Locale... locales) {
-        return Arrays.stream(locales).map(this::get).findFirst();
+        return Arrays.stream(locales).map(this::get).filter(Objects::nonNull).findFirst();
     }
 
     private Optional<T> coalesceFirst(final String... keys) {
-        return Arrays.stream(keys).map(this::get).findFirst();
+        return Arrays.stream(keys).map(this::get).filter(Objects::nonNull).findFirst();
     }
 
     /**
