@@ -163,7 +163,7 @@ public class LocalizedValue<T extends Serializable> {
      */
     @NotNull
     public T coalesce(final Locale... locales) {
-        return coalesceFirst(locales).orElseThrow();
+        return coalesceOptional(locales).orElseThrow();
     }
 
     /**
@@ -175,7 +175,7 @@ public class LocalizedValue<T extends Serializable> {
      */
     @NotNull
     public T coalesce(final String... keys) {
-        return coalesceFirst(keys).orElseThrow();
+        return coalesceOptional(keys).orElseThrow();
     }
 
     /**
@@ -185,8 +185,8 @@ public class LocalizedValue<T extends Serializable> {
      * @return T
      */
     @NotNull
-    public T coalesceAny(final Locale... locales) {
-        return coalesceFirst(locales).orElseGet(this::getAny);
+    public T coalesceOrGetAny(final Locale... locales) {
+        return coalesceOptional(locales).orElseGet(this::getAny);
     }
 
     /**
@@ -196,15 +196,15 @@ public class LocalizedValue<T extends Serializable> {
      * @return T
      */
     @NotNull
-    public T coalesceAny(final String... keys) {
-        return coalesceFirst(keys).orElseGet(this::getAny);
+    public T coalesceOrGetAny(final String... keys) {
+        return coalesceOptional(keys).orElseGet(this::getAny);
     }
 
-    private Optional<T> coalesceFirst(final Locale... locales) {
+    public Optional<T> coalesceOptional(final Locale... locales) {
         return Arrays.stream(locales).map(this::get).filter(Objects::nonNull).findFirst();
     }
 
-    private Optional<T> coalesceFirst(final String... keys) {
+    public Optional<T> coalesceOptional(final String... keys) {
         return Arrays.stream(keys).map(this::get).filter(Objects::nonNull).findFirst();
     }
 
@@ -217,7 +217,7 @@ public class LocalizedValue<T extends Serializable> {
      */
     @NotNull
     public T getAny() {
-        return values.values().stream().findFirst().orElseThrow();
+        return values.values().stream().findAny().orElseThrow();
     }
 
     /**

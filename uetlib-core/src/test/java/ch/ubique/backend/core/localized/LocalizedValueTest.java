@@ -10,9 +10,7 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.junit.jupiter.api.Test;
 
 import java.io.Serializable;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 class LocalizedValueTest {
 
@@ -245,7 +243,44 @@ class LocalizedValueTest {
                 LocalizedValue.stringBuilder().fullLocale().add("Literal", Locale.CHINA).build();
         assertEquals(Map.of("ZH-CN", "Literal"), lv2.toMapWithUppercaseKeys());
 
-        final var lv3 = LocalizedValue.en("Test");
+        final var lv3 = LocalizedValue.fromMap(Map.of(Locale.US, "Test"));
         assertEquals(Map.of("EN", "Test"), lv3.toMapWithUppercaseKeys());
+    }
+
+    @Test
+    void coalesce() {
+        final var sample = LocalizedValue.stringBuilder().romansh("rm").de("de").build();
+
+        assertEquals("rm", sample.coalesce("es", "it", "rm"));
+        assertThrows(NoSuchElementException.class, () -> sample.coalesce("es", "it"));
+        assertEquals("de", sample.coalesce(Locale.US, Locale.GERMANY, Locale.CHINA));
+        assertThrows(NoSuchElementException.class, () -> sample.coalesce(Locale.US, Locale.CHINA));
+    }
+
+    @Test
+    void coalesceOrGetAny() {
+        final var sample = LocalizedValue.fromStringMap(Map.of("rm", "rm"));
+
+        assertEquals("rm", sample.coalesceOrGetAny("es", "it", "en"));
+        assertEquals("rm", sample.coalesceOrGetAny(Locale.US, Locale.CHINA, Locale.GERMANY));
+    }
+
+    @Test
+    void coalesceOptional() {
+        final var sample = LocalizedValue.stringBuilder().romansh("rm").de("de").fr("fr").build();
+
+        assertEquals(Optional.of("rm"), sample.coalesceOptional("es", "it", "rm"));
+        assertFalse(sample.coalesceOptional("es", "it").isPresent());
+        assertEquals(
+                Optional.of("de"),
+                sample.coalesceOptional(Locale.US, Locale.GERMANY, Locale.CHINA));
+        assertFalse(sample.coalesceOptional(Locale.US, Locale.CHINA).isPresent());
+    }
+
+    @Test
+    void getAny() {
+        assertDoesNotThrow(LocalizedValue.romansh("rm")::getAny);
+        assertDoesNotThrow(LocalizedValue.fr("fr")::getAny);
+        assertEquals("rm", LocalizedValue.romansh("rm").getAny());
     }
 }
