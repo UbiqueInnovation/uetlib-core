@@ -1,7 +1,7 @@
 package ch.ubique.backend.core.utils;
 
-import static ch.ubique.backend.core.assertion.AssertionUtils.assertThrowsWithMessage;
 import static ch.ubique.backend.core.utils.TimeUtils.*;
+import static ch.ubique.backend.test.assertion.AssertionUtils.assertThrowsWithMessage;
 
 import static org.junit.jupiter.api.Assertions.*;
 
