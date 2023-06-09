@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.junit.jupiter.api.Test;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.*;
 
 class LocalizedValueTest {
@@ -57,6 +58,19 @@ class LocalizedValueTest {
                                 .toMapWithUppercaseKeys()));
         assertEquals(
                 "{\"en\":\"Test\"}", objectMapper.writeValueAsString(LocalizedValue.en("Test")));
+
+        assertEquals(
+                "{\"de\":\"Test\"}", objectMapper.writeValueAsString(LocalizedValue.de("Test")));
+
+        assertEquals(
+                "{\"fr\":\"Test\"}", objectMapper.writeValueAsString(LocalizedValue.fr("Test")));
+
+        assertEquals(
+                "{\"it\":\"Test\"}", objectMapper.writeValueAsString(LocalizedValue.it("Test")));
+
+        assertEquals(
+                "{\"rm\":\"Test\"}",
+                objectMapper.writeValueAsString(LocalizedValue.romansh("Test")));
     }
 
     @Test
@@ -112,22 +126,22 @@ class LocalizedValueTest {
     @Test
     void get() {
         final var lv1 = LocalizedValue.from("Literal", Locale.CHINA);
-        assertNull(lv1.get((Locale) null));
-        assertNull(lv1.get((String) null));
-        assertNull(lv1.get(Locale.ENGLISH));
-        assertNull(lv1.get("en"));
+        assertThrows(NoSuchElementException.class, () -> lv1.get((Locale) null));
+        assertThrows(NoSuchElementException.class, () -> lv1.get((String) null));
+        assertThrows(NoSuchElementException.class, () -> lv1.get(Locale.ENGLISH));
+        assertThrows(NoSuchElementException.class, () -> lv1.get("en"));
         assertEquals("Literal", lv1.get(Locale.CHINESE));
         assertEquals("Literal", lv1.get(Locale.CHINA));
         assertEquals("Literal", lv1.get(new Locale("zh", "CN", "XX")));
 
         final var lv2 =
                 LocalizedValue.stringBuilder().fullLocale().add("Literal", Locale.CHINA).build();
-        assertNull(lv2.get((Locale) null));
-        assertNull(lv2.get((String) null));
-        assertNull(lv2.get(Locale.ENGLISH));
-        assertNull(lv2.get("en"));
-        assertNull(lv2.get(Locale.CHINESE));
-        assertNull(lv2.get("zh"));
+        assertThrows(NoSuchElementException.class, () -> lv2.get((Locale) null));
+        assertThrows(NoSuchElementException.class, () -> lv2.get((String) null));
+        assertThrows(NoSuchElementException.class, () -> lv2.get(Locale.ENGLISH));
+        assertThrows(NoSuchElementException.class, () -> lv2.get("en"));
+        assertThrows(NoSuchElementException.class, () -> lv2.get(Locale.CHINESE));
+        assertThrows(NoSuchElementException.class, () -> lv2.get("zh"));
         assertEquals("Literal", lv2.get(Locale.CHINA));
         assertEquals("Literal", lv2.get(new Locale("zh", "CN", "XX")));
 
@@ -136,16 +150,98 @@ class LocalizedValueTest {
                         .fullLocale()
                         .add("Literal", new Locale("zh", "CN", "XX"))
                         .build();
-        assertNull(lv3.get((Locale) null));
-        assertNull(lv3.get((String) null));
-        assertNull(lv3.get(Locale.ENGLISH));
-        assertNull(lv3.get("en"));
-        assertNull(lv3.get(Locale.CHINESE));
-        assertNull(lv3.get("zh"));
-        assertNull(lv3.get(Locale.CHINA));
-        assertNull(lv3.get("zh-CN"));
-        assertNull(lv3.get("zh_CN"));
+
+        assertThrows(NoSuchElementException.class, () -> lv3.get((Locale) null));
+        assertThrows(NoSuchElementException.class, () -> lv3.get((String) null));
+        assertThrows(NoSuchElementException.class, () -> lv3.get(Locale.ENGLISH));
+        assertThrows(NoSuchElementException.class, () -> lv3.get("en"));
+        assertThrows(NoSuchElementException.class, () -> lv3.get(Locale.CHINESE));
+        assertThrows(NoSuchElementException.class, () -> lv3.get("zh"));
+        assertThrows(NoSuchElementException.class, () -> lv3.get(Locale.CHINA));
+        assertThrows(NoSuchElementException.class, () -> lv3.get("zh-CN"));
+        assertThrows(NoSuchElementException.class, () -> lv3.get("zh_CN"));
         assertEquals("Literal", lv3.get(new Locale("zh", "CN", "XX")));
+    }
+
+    @Test
+    void getNullable() {
+        final var lv1 = LocalizedValue.from("Literal", Set.of(Locale.CHINA, Locale.GERMANY));
+        assertNull(lv1.getNullable((Locale) null));
+        assertNull(lv1.getNullable((String) null));
+        assertNull(lv1.getNullable(Locale.ENGLISH));
+        assertNull(lv1.getNullable("en"));
+        assertEquals("Literal", lv1.getNullable(Locale.CHINESE));
+        assertEquals("Literal", lv1.getNullable(Locale.CHINA));
+        assertEquals("Literal", lv1.getNullable(new Locale("zh", "CN", "XX")));
+
+        final var lv2 =
+                LocalizedValue.stringBuilder().fullLocale().add("Literal", Locale.CHINA).build();
+
+        assertNull(lv2.getNullable((Locale) null));
+        assertNull(lv2.getNullable((String) null));
+        assertNull(lv2.getNullable(Locale.ENGLISH));
+        assertNull(lv2.getNullable("en"));
+        assertNull(lv2.getNullable(Locale.CHINESE));
+        assertNull(lv2.getNullable("zh"));
+        assertEquals("Literal", lv2.getNullable(Locale.CHINA));
+        assertEquals("Literal", lv2.getNullable(new Locale("zh", "CN", "XX")));
+
+        final var lv3 =
+                LocalizedValue.stringBuilder()
+                        .fullLocale()
+                        .add("Literal", new Locale("zh", "CN", "XX"))
+                        .build();
+
+        assertNull(lv3.getNullable((Locale) null));
+        assertNull(lv3.getNullable((String) null));
+        assertNull(lv3.getNullable(Locale.ENGLISH));
+        assertNull(lv3.getNullable("en"));
+        assertNull(lv3.getNullable(Locale.CHINESE));
+        assertNull(lv3.getNullable("zh"));
+        assertNull(lv3.getNullable(Locale.CHINA));
+        assertNull(lv3.getNullable("zh-CN"));
+        assertNull(lv3.getNullable("zh_CN"));
+        assertEquals("Literal", lv3.getNullable(new Locale("zh", "CN", "XX")));
+    }
+
+    @Test
+    void getOptional() {
+        final var lv1 = LocalizedValue.from("Literal", Locale.CHINA);
+        assertEquals(Optional.empty(), lv1.getOptional((Locale) null));
+        assertEquals(Optional.empty(), lv1.getOptional((String) null));
+        assertEquals(Optional.empty(), lv1.getOptional(Locale.ENGLISH));
+        assertEquals(Optional.empty(), lv1.getOptional("en"));
+        assertEquals(Optional.of("Literal"), lv1.getOptional(Locale.CHINESE));
+        assertEquals(Optional.of("Literal"), lv1.getOptional(Locale.CHINA));
+        assertEquals(Optional.of("Literal"), lv1.getOptional(new Locale("zh", "CN", "XX")));
+
+        final var lv2 =
+                LocalizedValue.stringBuilder().fullLocale().add("Literal", Locale.CHINA).build();
+        assertEquals(Optional.empty(), lv2.getOptional((Locale) null));
+        assertEquals(Optional.empty(), lv2.getOptional((String) null));
+        assertEquals(Optional.empty(), lv2.getOptional(Locale.ENGLISH));
+        assertEquals(Optional.empty(), lv2.getOptional("en"));
+        assertEquals(Optional.empty(), lv2.getOptional(Locale.CHINESE));
+        assertEquals(Optional.empty(), lv2.getOptional("zh"));
+        assertEquals(Optional.of("Literal"), lv2.getOptional(Locale.CHINA));
+        assertEquals(Optional.of("Literal"), lv2.getOptional(new Locale("zh", "CN", "XX")));
+
+        final var lv3 =
+                LocalizedValue.stringBuilder()
+                        .fullLocale()
+                        .add("Literal", new Locale("zh", "CN", "XX"))
+                        .build();
+        assertEquals(Optional.empty(), lv3.getOptional((Locale) null));
+        assertEquals(Optional.empty(), lv3.getOptional((String) null));
+        assertEquals(Optional.empty(), lv3.getOptional(Locale.ENGLISH));
+        assertEquals(Optional.empty(), lv3.getOptional("en"));
+        assertEquals(Optional.empty(), lv3.getOptional(Locale.CHINESE));
+        assertEquals(Optional.empty(), lv3.getOptional("zh"));
+        assertEquals(Optional.empty(), lv3.getOptional(Locale.CHINA));
+        assertEquals(Optional.empty(), lv3.getOptional("zh-CN"));
+        assertEquals(Optional.empty(), lv3.getOptional("zh_CN"));
+
+        assertEquals(Optional.of("Literal"), lv3.getOptional(new Locale("zh", "CN", "XX")));
     }
 
     @Test
@@ -282,5 +378,116 @@ class LocalizedValueTest {
         assertDoesNotThrow(LocalizedValue.romansh("rm")::getAny);
         assertDoesNotThrow(LocalizedValue.fr("fr")::getAny);
         assertEquals("rm", LocalizedValue.romansh("rm").getAny());
+    }
+
+    @SuppressWarnings("EqualsWithItself")
+    @Test
+    void testEqualsAndHashCode() {
+        final var a = LocalizedValue.stringBuilder().en("en").de("de").fr("fr").build();
+        final var b = LocalizedValue.stringBuilder().en("en").de("de").fr("fr").build();
+        final var c = LocalizedValue.stringBuilder().en("en").de("de").it("it").build();
+
+        assertEquals(a, a);
+        assertEquals(b, b);
+        assertEquals(c, c);
+
+        assertEquals(a, b);
+        assertEquals(b, a);
+
+        assertNotEquals(a, c);
+        assertNotEquals(b, c);
+        assertNotEquals(c, a);
+        assertNotEquals(c, b);
+
+        assertEquals(a.hashCode(), a.hashCode());
+        assertEquals(b.hashCode(), b.hashCode());
+        assertEquals(c.hashCode(), c.hashCode());
+
+        assertEquals(a.hashCode(), b.hashCode());
+        assertEquals(b.hashCode(), a.hashCode());
+
+        assertNotEquals(a.hashCode(), c.hashCode());
+        assertNotEquals(b.hashCode(), c.hashCode());
+        assertNotEquals(c.hashCode(), a.hashCode());
+        assertNotEquals(c.hashCode(), b.hashCode());
+
+        assertTrue(Set.of(a, c).contains(b));
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> Set.of(a, b)); // IllegalArgumentException: duplicate element
+    }
+
+    @Test
+    void toStringTest() {
+        final var a = LocalizedValue.stringBuilder().en("en").de("de").fr("fr").build();
+        final var b = LocalizedValue.stringBuilder().en("en").de("de").fr("fr").build();
+        final var c = LocalizedValue.stringBuilder().en("en").de("de").it("it").build();
+
+        assertEquals(a.toString(), b.toString());
+        assertNotEquals(a.toString(), c.toString());
+
+        assertEquals("{de=de, en=en, fr=fr}", a.toString());
+        assertEquals("{de=de, en=en, it=it}", c.toString());
+    }
+
+    @Test
+    void testGetLanguage() {
+        final var now = Instant.now();
+        final var nowPlusMinute = now.plusSeconds(60);
+        final var localizedInstant =
+                LocalizedValue.<Instant>builder().en(now).fr(nowPlusMinute).build();
+
+        assertEquals(now, localizedInstant.en());
+        assertEquals(nowPlusMinute, localizedInstant.fr());
+
+        assertEquals(now, localizedInstant.enNullable());
+        assertEquals(nowPlusMinute, localizedInstant.frNullable());
+
+        assertEquals(Optional.of(now), localizedInstant.enOptional());
+        assertEquals(Optional.of(nowPlusMinute), localizedInstant.frOptional());
+
+        assertThrows(NoSuchElementException.class, localizedInstant::de);
+        assertThrows(NoSuchElementException.class, localizedInstant::it);
+        assertThrows(NoSuchElementException.class, localizedInstant::romansh);
+
+        assertNull(localizedInstant.deNullable());
+        assertNull(localizedInstant.itNullable());
+        assertNull(localizedInstant.romanshNullable());
+
+        assertFalse(localizedInstant.deOptional().isPresent());
+        assertFalse(localizedInstant.itOptional().isPresent());
+        assertFalse(localizedInstant.romanshOptional().isPresent());
+    }
+
+    @Test
+    void testGetKeysNotSwapped() {
+
+        final var localizedString =
+                LocalizedValue.fromStringMap(
+                        Map.ofEntries(
+                                Map.entry("de", "de"),
+                                Map.entry("en", "en"),
+                                Map.entry("fr", "fr"),
+                                Map.entry("rm", "rm"),
+                                Map.entry("it", "it")));
+
+        assertEquals("en", localizedString.en());
+        assertEquals("fr", localizedString.fr());
+        assertEquals("it", localizedString.it());
+        assertEquals("de", localizedString.de());
+        assertEquals("rm", localizedString.romansh());
+
+        assertEquals("en", localizedString.enNullable());
+        assertEquals("fr", localizedString.frNullable());
+        assertEquals("it", localizedString.itNullable());
+        assertEquals("de", localizedString.deNullable());
+        assertEquals("rm", localizedString.romanshNullable());
+
+        assertEquals(Optional.of("en"), localizedString.enOptional());
+        assertEquals(Optional.of("fr"), localizedString.frOptional());
+        assertEquals(Optional.of("it"), localizedString.itOptional());
+        assertEquals(Optional.of("de"), localizedString.deOptional());
+        assertEquals(Optional.of("rm"), localizedString.romanshOptional());
     }
 }
