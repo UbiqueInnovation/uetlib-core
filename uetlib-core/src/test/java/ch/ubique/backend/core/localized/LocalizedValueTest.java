@@ -427,8 +427,8 @@ class LocalizedValueTest {
         assertEquals(a.toString(), b.toString());
         assertNotEquals(a.toString(), c.toString());
 
-        assertEquals("{de=de, en=en, fr=fr}", a.toString());
-        assertEquals("{de=de, en=en, it=it}", c.toString());
+        assertEquals("LocalizedValue[values={de=de, fr=fr, en=en}]", a.toString());
+        assertEquals("LocalizedValue[values={de=de, en=en, it=it}]", c.toString());
     }
 
     @Test
