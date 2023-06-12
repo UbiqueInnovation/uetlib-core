@@ -14,6 +14,8 @@ import jakarta.validation.constraints.NotNull;
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -432,11 +434,8 @@ public class LocalizedValue<T extends Serializable> {
     @Override
     @NotNull
     public String toString() {
-        return '{'
-                + values.entrySet().stream()
-                        .map(Objects::toString)
-                        .sorted()
-                        .collect(Collectors.joining(", "))
-                + '}';
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("values", values)
+                .build();
     }
 }
