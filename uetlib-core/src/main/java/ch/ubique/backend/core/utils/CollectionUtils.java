@@ -69,7 +69,7 @@ public class CollectionUtils {
                                                             .min()
                                                             .orElseThrow()))
                             .filter(list -> minDistance(valueExtractor, item, list) <= epsilon)
-                            .findAny()
+                            .findFirst()
                             .orElseGet(
                                     () -> {
                                         final var newClass = new ArrayList<T>();
