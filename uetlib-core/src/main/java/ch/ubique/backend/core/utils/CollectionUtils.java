@@ -1,9 +1,6 @@
 package ch.ubique.backend.core.utils;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
@@ -58,9 +55,19 @@ public class CollectionUtils {
             final double epsilon) {
         final var valueClasses = new HashSet<Collection<T>>();
 
-        for (final var item : items) {
+        final var sortedItems =
+                items.stream().sorted(Comparator.comparingDouble(valueExtractor)).toList();
+
+        for (final var item : sortedItems) {
             final var valueClass =
                     valueClasses.stream()
+                            .sorted(
+                                    Comparator.comparingDouble(
+                                            list ->
+                                                    list.stream()
+                                                            .mapToDouble(valueExtractor)
+                                                            .min()
+                                                            .orElseThrow()))
                             .filter(list -> minDistance(valueExtractor, item, list) <= epsilon)
                             .findAny()
                             .orElseGet(
