@@ -11,6 +11,19 @@ import java.util.stream.Collectors;
 public class CollectionUtils {
     private CollectionUtils() {}
 
+    /**
+     * Groups all items with the same value (according to valueExtractor).
+     *
+     * <p>Example: valueClasses(Set.of(1.2, 1.4, 1.9, 2.3), Math::round, 0) -> {1: [1.2, 1.4], 2:
+     * [1.9, 2.3]}
+     *
+     * @param items collection of items to put in value classes
+     * @param valueExtractor applied to every item. Value class is assigned based on evaluation of
+     *     this extractor
+     * @param epsilon the tolerance within which values are considered equal
+     * @return A map with values as keys. For each key the value is a collection of items with that
+     *     value (with epsilon tolerance).
+     */
     public static <T> Map<Double, Collection<T>> groupByValue(
             final Collection<T> items,
             final ToDoubleFunction<T> valueExtractor,
@@ -26,6 +39,19 @@ public class CollectionUtils {
                                 Function.identity()));
     }
 
+    /**
+     * Groups all items with the same value (according to valueExtractor).
+     *
+     * <p>Example: valueClasses(Set.of(1.2, 1.4, 1.9, 2.3), Math::round, 0) -> [[1.2, 1.4], [1.9,
+     * 2.3]]
+     *
+     * @param items collection of items to put in value classes
+     * @param valueExtractor applied to every item. Value class is assigned based on evaluation of
+     *     this extractor
+     * @param epsilon the tolerance within which values are considered equal
+     * @return A collection of value classes. Each value class contains all items with the same
+     *     value (with epsilon tolerance)
+     */
     public static <T> Collection<Collection<T>> valueClasses(
             final Collection<T> items,
             final ToDoubleFunction<T> valueExtractor,
