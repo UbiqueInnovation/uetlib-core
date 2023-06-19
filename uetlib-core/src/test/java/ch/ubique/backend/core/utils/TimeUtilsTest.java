@@ -629,8 +629,13 @@ class TimeUtilsTest {
         final var ld = LocalDate.now();
         assertEquals(ld, TimeUtils.min(ld.plusDays(1), ld));
 
-        final var lt = LocalTime.now();
-        assertEquals(lt, TimeUtils.min(lt.plusHours(1), lt));
+        final var justAfterMidnight = LocalTime.of(0,30);
+        final var justBeforeMidnight = LocalTime.of(23,30);
+        assertEquals(justAfterMidnight, TimeUtils.min(justAfterMidnight.plusHours(1), justAfterMidnight));
+        assertEquals(justAfterMidnight, TimeUtils.min(justBeforeMidnight.plusHours(1), justBeforeMidnight));
+
+        final var noon = LocalTime.of(12,0);
+        assertEquals(noon, TimeUtils.min(noon.plusHours(1), noon));
     }
 
     @Test
@@ -660,8 +665,13 @@ class TimeUtilsTest {
         final var ld = LocalDate.now();
         assertEquals(ld, TimeUtils.max(ld.minusDays(1), ld));
 
-        final var lt = LocalTime.now();
-        assertEquals(lt, TimeUtils.max(lt.minusHours(1), lt));
+        final var justAfterMidnight = LocalTime.of(0,30);
+        final var justBeforeMidnight = LocalTime.of(23,30);
+        assertEquals(justBeforeMidnight, TimeUtils.max(justAfterMidnight.minusHours(1), justAfterMidnight));
+        assertEquals(justBeforeMidnight, TimeUtils.max(justBeforeMidnight.minusHours(1), justBeforeMidnight));
+
+        final var noon = LocalTime.of(12,0);
+        assertEquals(noon, TimeUtils.max(noon.minusHours(1), noon));
     }
 
     @Test
