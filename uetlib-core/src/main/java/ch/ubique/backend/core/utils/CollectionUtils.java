@@ -14,7 +14,7 @@ public class CollectionUtils {
     /**
      * Groups all items with the same value (according to valueExtractor).
      *
-     * <p>Example: valueClasses(Set.of(1.2, 1.4, 1.9, 2.3), Math::round, 0) -> {1: [1.2, 1.4], 2:
+     * <p>Example: groupByValue(Set.of(1.2, 1.4, 1.9, 2.3), Math::round, 0) -> {1: [1.2, 1.4], 2:
      * [1.9, 2.3]}
      *
      * @param items collection of items to put in value classes
