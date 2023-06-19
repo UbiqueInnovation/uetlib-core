@@ -1,5 +1,7 @@
 package ch.ubique.backend.core.utils;
 
+import jakarta.validation.constraints.NotEmpty;
+
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.ToDoubleFunction;
@@ -26,14 +28,7 @@ public class CollectionUtils {
             final ToDoubleFunction<T> valueExtractor,
             final double epsilon) {
         return valueClasses(items, valueExtractor, epsilon).stream()
-                .collect(
-                        Collectors.toMap(
-                                collection ->
-                                        collection.stream()
-                                                .mapToDouble(valueExtractor)
-                                                .average()
-                                                .orElseThrow(),
-                                Function.identity()));
+                .collect(Collectors.toMap(c -> averageBy(c, valueExtractor), Function.identity()));
     }
 
     /**
@@ -53,32 +48,32 @@ public class CollectionUtils {
             final Collection<T> items,
             final ToDoubleFunction<T> valueExtractor,
             final double epsilon) {
-        final var valueClasses = new HashSet<Collection<T>>();
+        final var valueClasses =
+                new TreeSet<Collection<T>>(
+                        Comparator.comparingDouble(c -> minBy(c, valueExtractor)));
 
         final var sortedItems =
                 items.stream().sorted(Comparator.comparingDouble(valueExtractor)).toList();
 
         for (final var item : sortedItems) {
-            final var valueClass =
-                    valueClasses.stream()
-                            .sorted(
-                                    Comparator.comparingDouble(
-                                            list ->
-                                                    list.stream()
-                                                            .mapToDouble(valueExtractor)
-                                                            .min()
-                                                            .orElseThrow()))
-                            .filter(list -> minDistance(valueExtractor, item, list) <= epsilon)
-                            .findFirst()
-                            .orElseGet(
-                                    () -> {
-                                        final var newClass = new ArrayList<T>();
-                                        valueClasses.add(newClass);
-                                        return newClass;
-                                    });
-            valueClass.add(item);
+            valueClasses.stream()
+                    .filter(list -> minDistance(valueExtractor, item, list) <= epsilon)
+                    .findFirst()
+                    .ifPresentOrElse(
+                            v -> v.add(item),
+                            () -> valueClasses.add(new ArrayList<>(List.of(item))));
         }
         return valueClasses;
+    }
+
+    public static <T> double minBy(
+            @NotEmpty final Collection<T> collection, final ToDoubleFunction<T> valueExtractor) {
+        return collection.stream().mapToDouble(valueExtractor).min().orElseThrow();
+    }
+
+    public static <T> double averageBy(
+            @NotEmpty final Collection<T> collection, final ToDoubleFunction<T> valueExtractor) {
+        return collection.stream().mapToDouble(valueExtractor).average().orElseThrow();
     }
 
     private static <T> double minDistance(
