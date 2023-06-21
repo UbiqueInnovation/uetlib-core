@@ -3,9 +3,12 @@ package ch.ubique.backend.core.utils;
 import com.pivovarit.function.ThrowingSupplier;
 import com.pivovarit.function.exception.WrappedException;
 
+import jakarta.validation.constraints.NotNull;
+
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class OptionalUtils {
@@ -38,5 +41,14 @@ public class OptionalUtils {
     @SafeVarargs
     public static <T> Optional<T> coalesce(final T... args) {
         return Stream.of(args).filter(Objects::nonNull).findFirst();
+    }
+
+    @NotNull
+    public static <T> Stream<T> generateAsLongAsPresent(
+            final Supplier<Optional<T>> optionalSupplier) {
+
+        return Stream.generate(optionalSupplier)
+                .takeWhile(Optional::isPresent)
+                .map(Optional::orElseThrow);
     }
 }
