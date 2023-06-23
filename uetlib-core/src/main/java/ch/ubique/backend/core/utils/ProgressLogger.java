@@ -41,12 +41,12 @@ public class ProgressLogger {
     public <T, R> Function<T, R> watch(final Function<T, R> function) {
         return t -> {
             final var result = function.apply(t);
-            logProgress();
+            step();
             return result;
         };
     }
 
-    private void logProgress() {
+    public void step() {
 
         final var currentCount = count.incrementAndGet();
         if (currentCount % max(1, total / 100) == 0) {
@@ -65,7 +65,7 @@ public class ProgressLogger {
     public <T> Consumer<T> watch(final Consumer<T> consumer) {
         return t -> {
             consumer.accept(t);
-            logProgress();
+            step();
         };
     }
 }
