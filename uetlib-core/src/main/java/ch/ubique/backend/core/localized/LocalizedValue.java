@@ -150,14 +150,23 @@ public class LocalizedValue<T extends Serializable> {
             @NotNull final Collection<LocalizedValue<S>> mergees) {
         final var mergedValues =
                 mergees.stream()
-                        .map(LocalizedValue::toMapWithLocaleKeys)
+                        .map(mergee -> mergee.values)
                         .reduce(
                                 new HashMap<>(),
                                 (left, right) -> {
                                     left.putAll(right);
                                     return left;
                                 });
-        return LocalizedValue.fromMap(mergedValues);
+        return LocalizedValue.fromMap(deepCopy(mergedValues));
+    }
+
+    private static <S extends Serializable> Map<Locale, S> deepCopy(final Map<Locale, S> values) {
+        try {
+            //noinspection unchecked
+            return (Map<Locale, S>) SerializableUtils.deepCopy(values);
+        } catch (final IOException | ClassNotFoundException e) {
+            throw new WrappedException(e);
+        }
     }
 
     /**
@@ -166,9 +175,7 @@ public class LocalizedValue<T extends Serializable> {
      */
     @NotNull
     public LocalizedValue<T> mergeWith(@NotNull final LocalizedValue<T> mergee) {
-        final var mergedValues = toMapWithLocaleKeys();
-        mergedValues.putAll(mergee.toMapWithLocaleKeys());
-        return LocalizedValue.fromMap(mergedValues);
+        return mergeAll(Set.of(this, mergee));
     }
 
     /**
@@ -398,12 +405,7 @@ public class LocalizedValue<T extends Serializable> {
      */
     @NotEmpty
     public Map<Locale, T> toMapWithLocaleKeys() {
-        try {
-            //noinspection unchecked
-            return (Map<Locale, T>) SerializableUtils.deepCopy(values);
-        } catch (final IOException | ClassNotFoundException e) {
-            throw new WrappedException(e);
-        }
+        return deepCopy(values);
     }
 
     /**
