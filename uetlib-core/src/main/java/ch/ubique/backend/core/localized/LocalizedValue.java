@@ -142,13 +142,21 @@ public class LocalizedValue<T extends Serializable> {
     }
 
     /**
-     * Return a new LocalizedValue with the merged set of entries, where the argument values
-     * override the current object.
+     * Return a new LocalizedValue with the merged set of entries, where the later argument values
+     * override the previous.
      */
     @NotNull
-    public LocalizedValue<T> mergeWith(final LocalizedValue<T> other) {
-        final var mergedValues = toMapWithLocaleKeys();
-        mergedValues.putAll(other.toMapWithLocaleKeys());
+    public static <S extends Serializable> LocalizedValue<S> mergeAll(
+            @NotNull final Collection<LocalizedValue<S>> mergees) {
+        final var mergedValues =
+                mergees.stream()
+                        .map(LocalizedValue::toMapWithLocaleKeys)
+                        .reduce(
+                                new HashMap<>(),
+                                (left, right) -> {
+                                    left.putAll(right);
+                                    return left;
+                                });
         return LocalizedValue.fromMap(mergedValues);
     }
 
