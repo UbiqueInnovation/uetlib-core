@@ -157,10 +157,10 @@ public class LocalizedValue<T extends Serializable> {
                                     left.putAll(right);
                                     return left;
                                 });
-        return LocalizedValue.fromMap(deepCopy(mergedValues));
+        return LocalizedValue.fromMap(deepCopyValues(mergedValues));
     }
 
-    private static <S extends Serializable> Map<Locale, S> deepCopy(final Map<Locale, S> values) {
+    private static <S extends Serializable> Map<Locale, S> deepCopyValues(final Map<Locale, S> values) {
         try {
             //noinspection unchecked
             return (Map<Locale, S>) SerializableUtils.deepCopy(values);
@@ -405,7 +405,7 @@ public class LocalizedValue<T extends Serializable> {
      */
     @NotEmpty
     public Map<Locale, T> toMapWithLocaleKeys() {
-        return deepCopy(values);
+        return deepCopyValues(values);
     }
 
     /**
