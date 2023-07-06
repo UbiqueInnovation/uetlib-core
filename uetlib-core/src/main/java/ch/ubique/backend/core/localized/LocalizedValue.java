@@ -175,7 +175,7 @@ public class LocalizedValue<T extends Serializable> {
      */
     @NotNull
     public LocalizedValue<T> mergeWith(@NotNull final LocalizedValue<T> mergee) {
-        return mergeAll(Set.of(this, mergee));
+        return mergeAll(Arrays.asList(this, mergee));
     }
 
     /**
