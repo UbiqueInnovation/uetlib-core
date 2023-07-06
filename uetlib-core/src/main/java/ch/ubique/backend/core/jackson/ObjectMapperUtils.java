@@ -23,11 +23,9 @@ public final class ObjectMapperUtils {
 
         return JsonMapper.builder()
                 .addModule(javaTimeModule)
-                .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
                 .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .disable(DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .enable(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE)
-                .enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
                 .build();
     }
 }
