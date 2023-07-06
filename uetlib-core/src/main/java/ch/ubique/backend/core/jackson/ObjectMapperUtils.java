@@ -1,7 +1,6 @@
 package ch.ubique.backend.core.jackson;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
@@ -15,7 +14,7 @@ public final class ObjectMapperUtils {
 
     private ObjectMapperUtils() {}
 
-    public static ObjectMapper objectMapper() {
+    public static JsonMapper.Builder objectMapperBuilder() {
         final var javaTimeModule = new JavaTimeModule();
         final var localDateSerializer =
                 new LocalDateSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
@@ -25,7 +24,10 @@ public final class ObjectMapperUtils {
                 .addModule(javaTimeModule)
                 .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .disable(DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS)
-                .enable(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE)
-                .build();
+                .enable(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE);
+    }
+
+    public static ObjectMapper objectMapper() {
+        return objectMapperBuilder().build();
     }
 }
