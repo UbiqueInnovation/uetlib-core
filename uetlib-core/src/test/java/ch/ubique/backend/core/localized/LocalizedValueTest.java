@@ -13,6 +13,7 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.util.*;
 
+@SuppressWarnings("DataFlowIssue")
 class LocalizedValueTest {
 
     private final ObjectMapper objectMapper = new JsonMapper();
@@ -489,5 +490,26 @@ class LocalizedValueTest {
         assertEquals(Optional.of("it"), localizedString.itOptional());
         assertEquals(Optional.of("de"), localizedString.deOptional());
         assertEquals(Optional.of("rm"), localizedString.romanshOptional());
+    }
+
+    @Test
+    void mergeAll() {
+        final var de1 = LocalizedValue.de("de1");
+        final var de2 = LocalizedValue.de("de2");
+        final var en1 = LocalizedValue.en("en1");
+        final var de1en1 = LocalizedValue.stringBuilder().de("de1").en("en1").build();
+        final var de2en1 = LocalizedValue.stringBuilder().de("de2").en("en1").build();
+
+        assertThrows(NullPointerException.class, () -> LocalizedValue.mergeAll(null));
+        final var emptyList = List.<LocalizedValue<Serializable>>of();
+        assertThrows(NoValidValuesException.class, () -> LocalizedValue.mergeAll(emptyList));
+
+        assertEquals(de1, LocalizedValue.mergeAll(List.of(de1)));
+        assertEquals(de1, LocalizedValue.mergeAll(List.of(de2, de1)));
+        assertEquals(de2, LocalizedValue.mergeAll(List.of(de1, de2)));
+        assertEquals(de1, LocalizedValue.mergeAll(List.of(de2, de1, de1)));
+        assertEquals(de1, LocalizedValue.mergeAll(List.of(de1, de2, de1)));
+        assertEquals(de2, LocalizedValue.mergeAll(List.of(de1, de1, de2)));
+        assertEquals(de2en1, LocalizedValue.mergeAll(List.of(de1, en1, de2)));
     }
 }
