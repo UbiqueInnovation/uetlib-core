@@ -196,6 +196,7 @@ public final class MdcForkJoinPool extends ForkJoinPool {
         return super.submit(wrap(task, newContext), result);
     }
 
+    @SuppressWarnings("java:S1452") // super.submit returns ? wildcard type
     public @NotNull ForkJoinTask<?> submit(
             final Runnable task, final Map<String, String> newContext) {
         return super.submit(wrap(task, newContext));
