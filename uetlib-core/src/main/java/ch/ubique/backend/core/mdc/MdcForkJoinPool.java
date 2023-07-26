@@ -150,9 +150,17 @@ public final class MdcForkJoinPool extends ForkJoinPool {
         return super.submit(wrap(task, MDC.getCopyOfContextMap()));
     }
 
+    public <T> T submitAndJoin(final ForkJoinTask<T> task) {
+        return super.submit(wrap(task, MDC.getCopyOfContextMap())).join();
+    }
+
     @Override
     public <T> @NotNull ForkJoinTask<T> submit(final Callable<T> task) {
         return super.submit(wrap(task, MDC.getCopyOfContextMap()));
+    }
+
+    public <T> T submitAndJoin(final Callable<T> task) {
+        return super.submit(wrap(task, MDC.getCopyOfContextMap())).join();
     }
 
     @Override
@@ -160,9 +168,17 @@ public final class MdcForkJoinPool extends ForkJoinPool {
         return super.submit(wrap(task, MDC.getCopyOfContextMap()), result);
     }
 
+    public <T> T submitAndJoin(final Runnable task, final T result) {
+        return super.submit(wrap(task, MDC.getCopyOfContextMap()), result).join();
+    }
+
     @Override
     public @NotNull ForkJoinTask<?> submit(final Runnable task) {
         return super.submit(wrap(task, MDC.getCopyOfContextMap()));
+    }
+
+    public void submitAndJoin(final Runnable task) {
+        super.submit(wrap(task, MDC.getCopyOfContextMap())).join();
     }
 
     public <T> ForkJoinTask<T> submit(
