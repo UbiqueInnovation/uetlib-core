@@ -56,8 +56,8 @@ public class ProgressLogger {
             MdcUtils.runWithContext(
                     () ->
                             logger.info(
-                                    "{}Processed {}% ({} elements per second)",
-                                    prefix, percent, elementsPerSecond),
+                                    "{}Processed {}% ({} elements per second, {} of {})",
+                                    prefix, percent, elementsPerSecond, currentCount, total),
                     mdcContextMap);
         }
     }
