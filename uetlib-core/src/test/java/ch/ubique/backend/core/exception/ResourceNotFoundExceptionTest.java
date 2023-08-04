@@ -42,7 +42,7 @@ class ResourceNotFoundExceptionTest {
         assertThrows(
                 ResourceNotFoundException.class,
                 () -> {
-                    throw ResourceNotFoundException.throwWithMessage("with message").get();
+                    throw ResourceNotFoundException.supplierWithMessage("with message").get();
                 });
     }
 }

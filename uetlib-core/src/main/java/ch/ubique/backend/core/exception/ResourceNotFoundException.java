@@ -26,7 +26,7 @@ public class ResourceNotFoundException extends RuntimeException {
         return new ResourceNotFoundException(MessageFormat.format(pattern, arguments));
     }
 
-    public static Supplier<ResourceNotFoundException> throwWithMessage(
+    public static Supplier<ResourceNotFoundException> supplierWithMessage(
             @NotNull final String pattern, final Object... arguments) {
         return () -> withMessage(pattern, arguments);
     }
