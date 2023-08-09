@@ -1,9 +1,5 @@
 package ch.ubique.backend.core.utils;
 
-import ch.ubique.backend.core.mdc.MdcForkJoinPool;
-
-import org.slf4j.MDC;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
@@ -29,8 +25,7 @@ public final class ListUtils {
 
     /**
      * Adapted from {@link org.apache.commons.collections4.ListUtils#removeAll} to support other
-     * comparison than just using {@link Object#equals} by supplying a keyExtractor. Uses a
-     * parallelStream.
+     * comparison than just using {@link Object#equals} by supplying a keyExtractor.
      *
      * <p>Use {@link org.apache.commons.collections4.ListUtils#removeAll} if your keyExtractor is
      * {@link Function#identity()}
@@ -39,15 +34,7 @@ public final class ListUtils {
             final Collection<E> collection,
             final Collection<E> remove,
             final Function<E, K> keyExtractor) {
-        final var mdcContext = MDC.getCopyOfContextMap();
-        return MdcForkJoinPool.mdcCommonPool()
-                .submit(
-                        () ->
-                                collection.parallelStream()
-                                        .filter(containsAnyByKey(remove, keyExtractor))
-                                        .toList(),
-                        mdcContext)
-                .join();
+        return collection.parallelStream().filter(containsAnyByKey(remove, keyExtractor)).toList();
     }
 
     public static <E, K> Predicate<E> containsAnyByKey(
