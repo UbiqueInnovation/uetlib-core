@@ -39,26 +39,24 @@ public class ProgressLogger {
     }
 
     public <T, R> Function<T, R> watch(final Function<T, R> function) {
-        return t -> {
-            final var result = function.apply(t);
-            step();
-            return result;
-        };
+        return MdcUtils.runWithContext(
+                t -> {
+                    final var result = function.apply(t);
+                    step();
+                    return result;
+                },
+                mdcContextMap);
     }
 
     public void step() {
-
         final var currentCount = count.incrementAndGet();
         if (currentCount % max(1, total / 100) == 0) {
             final var percent = 100 * currentCount / total;
             final var currentTime = System.currentTimeMillis();
             final var elementsPerSecond = 1000.0 * currentCount / (currentTime - startTime);
-            MdcUtils.runWithContext(
-                    () ->
-                            logger.info(
-                                    "{}Processed {}% ({} elements per second, {} of {})",
-                                    prefix, percent, elementsPerSecond, currentCount, total),
-                    mdcContextMap);
+            logger.info(
+                    "{}Processed {}% ({} elements per second, {} of {})",
+                    prefix, percent, elementsPerSecond, currentCount, total);
         }
     }
 
