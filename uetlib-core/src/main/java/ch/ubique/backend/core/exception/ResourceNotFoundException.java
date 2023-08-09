@@ -2,11 +2,13 @@ package ch.ubique.backend.core.exception;
 
 import jakarta.validation.constraints.NotNull;
 
+import java.io.Serial;
 import java.text.MessageFormat;
 import java.util.function.Supplier;
 
 public class ResourceNotFoundException extends RuntimeException {
 
+    @Serial
     private static final long serialVersionUID = -3763002992193794029L;
 
     public ResourceNotFoundException() {}
@@ -24,8 +26,8 @@ public class ResourceNotFoundException extends RuntimeException {
         return new ResourceNotFoundException(MessageFormat.format(pattern, arguments));
     }
 
-    public static Supplier<ResourceNotFoundException> throwWithMessage(
+    public static Supplier<ResourceNotFoundException> supplierWithMessage(
             @NotNull final String pattern, final Object... arguments) {
-        return () -> new ResourceNotFoundException(MessageFormat.format(pattern, arguments));
+        return () -> withMessage(pattern, arguments);
     }
 }
