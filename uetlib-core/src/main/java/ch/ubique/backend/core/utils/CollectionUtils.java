@@ -97,16 +97,17 @@ public class CollectionUtils {
      * Deep copies a map, creating a new map with the same keys and deep copies of the values.
      *
      * @param values the map to be deep copied
-     * @param <K> the type of the keys in the map
+     * @param <K> the type of the keys in the map (must implement the Serializable interface)
      * @param <V> the type of the values in the map (must implement the Serializable interface)
      * @return a new map with the same keys and deep copies of the values
      */
     @NotNull
-    public static <K, V extends Serializable> Map<K, V> deepCopy(@NotNull final Map<K, V> values) {
+    public static <K extends Serializable, V extends Serializable> Map<K, V> deepCopy(
+            @NotNull final Map<K, V> values) {
         return values.entrySet().stream()
                 .collect(
                         Collectors.toMap(
-                                Map.Entry::getKey,
+                                entry -> SerializationUtils.clone(entry.getKey()),
                                 entry -> SerializationUtils.clone(entry.getValue())));
     }
 }
