@@ -1,7 +1,11 @@
 package ch.ubique.backend.core.utils;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
+import org.apache.commons.lang3.SerializationUtils;
+
+import java.io.Serializable;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.ToDoubleFunction;
@@ -87,5 +91,22 @@ public class CollectionUtils {
     private static <T> double distance(
             final ToDoubleFunction<T> valueExtractor, final T a, final T b) {
         return Math.abs(valueExtractor.applyAsDouble(a) - valueExtractor.applyAsDouble(b));
+    }
+
+    /**
+     * Deep copies a map, creating a new map with the same keys and deep copies of the values.
+     *
+     * @param values the map to be deep copied
+     * @param <K> the type of the keys in the map
+     * @param <V> the type of the values in the map (must implement the Serializable interface)
+     * @return a new map with the same keys and deep copies of the values
+     */
+    @NotNull
+    public static <K, V extends Serializable> Map<K, V> deepCopy(@NotNull final Map<K, V> values) {
+        return values.entrySet().stream()
+                .collect(
+                        Collectors.toMap(
+                                Map.Entry::getKey,
+                                entry -> SerializationUtils.clone(entry.getValue())));
     }
 }
