@@ -1,11 +1,10 @@
 package ch.ubique.backend.core.localized;
 
+import ch.ubique.backend.core.utils.CollectionUtils;
 import ch.ubique.backend.core.utils.LocaleHelper;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.mchange.v2.ser.SerializableUtils;
-import com.pivovarit.function.exception.WrappedException;
 
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotEmpty;
@@ -17,7 +16,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -27,12 +25,7 @@ public class LocalizedValue<T extends Serializable> {
     @NotEmpty private final Map<Locale, T> values;
 
     LocalizedValue(final Map<Locale, T> values) {
-        try {
-            //noinspection unchecked
-            this.values = (Map<Locale, T>) SerializableUtils.deepCopy(values);
-        } catch (final IOException | ClassNotFoundException e) {
-            throw new WrappedException(e);
-        }
+        this.values = CollectionUtils.deepCopy(values);
     }
 
     @NotNull
@@ -160,13 +153,9 @@ public class LocalizedValue<T extends Serializable> {
         return LocalizedValue.fromMap(deepCopyValues(mergedValues));
     }
 
-    private static <S extends Serializable> Map<Locale, S> deepCopyValues(final Map<Locale, S> values) {
-        try {
-            //noinspection unchecked
-            return (Map<Locale, S>) SerializableUtils.deepCopy(values);
-        } catch (final IOException | ClassNotFoundException e) {
-            throw new WrappedException(e);
-        }
+    private static <S extends Serializable> Map<Locale, S> deepCopyValues(
+            final Map<Locale, S> values) {
+        return CollectionUtils.deepCopy(values);
     }
 
     /**
