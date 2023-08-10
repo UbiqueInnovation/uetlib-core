@@ -1,7 +1,5 @@
 package ch.ubique.backend.core.utils;
 
-import static java.lang.Math.max;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,6 +9,8 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static java.lang.Math.max;
+
 public class ProgressLogger {
 
     private final String prefix;
@@ -19,7 +19,7 @@ public class ProgressLogger {
     private final long startTime;
     private final Map<String, String> mdcContextMap;
     private final Logger logger;
-    private final double step;
+    private final int steps;
 
     public ProgressLogger(final long total) {
         this(null, total);
@@ -35,14 +35,14 @@ public class ProgressLogger {
     }
 
     public ProgressLogger(
-            final String prefix, final long total, final Map<String, String> mdcContextMap, double step) {
+            final String prefix, final long total, final Map<String, String> mdcContextMap, final int nrOfLogSteps) {
         this.prefix = Objects.requireNonNullElse(prefix, "");
         this.total = total;
         this.startTime = System.currentTimeMillis();
         this.count = new AtomicLong();
         this.logger = LoggerFactory.getLogger(getClass());
         this.mdcContextMap = mdcContextMap;
-        this.step = step;
+        this.steps = nrOfLogSteps;
     }
 
     public <T, R> Function<T, R> watch(final Function<T, R> function) {
@@ -57,7 +57,7 @@ public class ProgressLogger {
 
     public void step() {
         final var currentCount = count.incrementAndGet();
-        if (currentCount % max(1, total / step) == 0) {
+        if (currentCount % max(1, total / steps) == 0) {
             final var percent = 100 * currentCount / total;
             final var currentTime = System.currentTimeMillis();
             final var elementsPerSecond = 1000.0 * currentCount / (currentTime - startTime);
