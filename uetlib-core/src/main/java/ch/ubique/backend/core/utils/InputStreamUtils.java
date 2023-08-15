@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
@@ -80,7 +82,8 @@ public final class InputStreamUtils {
     }
 
     /**
-     * Wrap an input stream in a {@link BOMInputStream} if the file starts with a BOM that needs to be stripped before parsing.
+     * Wrap an input stream in a {@link BOMInputStream} if the file starts with a BOM that needs to
+     * be stripped before parsing.
      */
     @NotNull
     public static BOMInputStream bomInputStream(final InputStream inputStream) {
@@ -89,7 +92,13 @@ public final class InputStreamUtils {
     }
 
     @NotNull
+    public static BufferedReader bufferedReader(
+            final InputStream inputStream, final Charset charset) {
+        return new BufferedReader(new InputStreamReader(inputStream, charset));
+    }
+
+    @NotNull
     public static BufferedReader bufferedReader(final InputStream inputStream) {
-        return new BufferedReader(new InputStreamReader(inputStream));
+        return bufferedReader(inputStream, StandardCharsets.UTF_8);
     }
 }
