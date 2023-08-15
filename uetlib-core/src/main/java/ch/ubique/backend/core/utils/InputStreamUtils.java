@@ -4,9 +4,13 @@ import ch.ubique.backend.core.file.ByteFile;
 
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
+import org.apache.commons.io.input.BOMInputStream;
+import org.jetbrains.annotations.NotNull;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.function.Function;
 import java.util.regex.Pattern;
@@ -73,5 +77,19 @@ public final class InputStreamUtils {
             archiveEntry = zipArchiveInputStream.getNextEntry();
         } while (archiveEntry != null && !pattern.matcher(archiveEntry.getName()).matches());
         return archiveEntry;
+    }
+
+    /**
+     * Wrap an input stream in a {@link BOMInputStream} if the file starts with a BOM that needs to be stripped before parsing.
+     */
+    @NotNull
+    public static BOMInputStream bomInputStream(final InputStream inputStream) {
+        // asSupplier to wrap the IOException with UncheckedIOException
+        return BOMInputStream.builder().setInputStream(inputStream).asSupplier().get();
+    }
+
+    @NotNull
+    public static BufferedReader bufferedReader(final InputStream inputStream) {
+        return new BufferedReader(new InputStreamReader(inputStream));
     }
 }
