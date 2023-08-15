@@ -55,4 +55,26 @@ public final class StringUtils {
                 : requireNonBlank(
                         Objects.requireNonNull(supplier, "supplier").get(), "supplier.get()");
     }
+
+    /**
+     * normalizes the String by replacing whitespace by a normal space. Uses {@link
+     * org.apache.commons.lang3.StringUtils#normalizeSpace} but additionally replaces non-breaking
+     * spaces {@code   (\u00A0)} by spaces.
+     */
+    @Contract("null -> null")
+    public static String normalizeSpaceAndNonBreakingSpace(final String input) {
+        // \u00A0 is non-breaking space
+        final var nonBreakingSpaceReplaced = input == null ? null : input.replace('\u00A0', ' ');
+        return org.apache.commons.lang3.StringUtils.normalizeSpace(nonBreakingSpaceReplaced);
+    }
+
+    /**
+     * normalizes the String using {@link #normalizeSpaceAndNonBreakingSpace} and strip whitespace
+     * using {@link org.apache.commons.lang3.StringUtils#stripToNull}
+     */
+    @Contract("null -> null")
+    public static String normalizeAndStripToNull(final String input) {
+        return org.apache.commons.lang3.StringUtils.stripToNull(
+                normalizeSpaceAndNonBreakingSpace(input));
+    }
 }
