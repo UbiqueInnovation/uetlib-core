@@ -8,14 +8,14 @@ import org.springframework.beans.BeanWrapperImpl;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class AllOrNoneNotNullValidator implements ConstraintValidator<AllOrNoneNotNull, Object> {
+public class AllNullOrAllNotNullValidator implements ConstraintValidator<AllNullOrAllNotNull, Object> {
 
     private String[] fields;
 
     @Override
-    public void initialize(final AllOrNoneNotNull allOrNoneNotNull
+    public void initialize(final AllNullOrAllNotNull allNullOrAllNotNull
     ) {
-        fields = allOrNoneNotNull.fields();
+        fields = allNullOrAllNotNull.fields();
     }
 
     @Override
