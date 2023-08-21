@@ -512,7 +512,6 @@ class LocalizedValueTest {
         assertEquals(de2, LocalizedValue.mergeAll(List.of(de1, de1, de2)));
         assertEquals(de2en1, LocalizedValue.mergeAll(List.of(de1, en1, de2)));
 
-
         assertThrows(NullPointerException.class, () -> de1.mergeWith(null));
 
         assertEquals(de1, de1.mergeWith(de1));
