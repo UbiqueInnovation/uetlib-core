@@ -11,9 +11,9 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = AllOrNoneNotNullValidator.class)
+@Constraint(validatedBy = AllNullOrAllNotNullValidator.class)
 @Documented
-public @interface AllOrNoneNotNull {
+public @interface AllNullOrAllNotNull {
 
     String message() default "Either all or exactly none the provided fields must be non-null";
 
