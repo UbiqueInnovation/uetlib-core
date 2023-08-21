@@ -319,8 +319,8 @@ class TimeUtilsTest {
                 NullPointerException.class,
                 () -> isAfterOrEqual(null, zonedDateTime1),
                 "Cannot invoke"
-                        + " \"java.time.ZonedDateTime.isBefore(java.time.chrono.ChronoZonedDateTime)\""
-                        + " because \"temporal1\" is null");
+                    + " \"java.time.ZonedDateTime.isBefore(java.time.chrono.ChronoZonedDateTime)\""
+                    + " because \"temporal1\" is null");
     }
 
     @Test
@@ -371,8 +371,8 @@ class TimeUtilsTest {
                 NullPointerException.class,
                 () -> isAfterOrEqual(null, localDateTime1),
                 "Cannot invoke"
-                        + " \"java.time.LocalDateTime.isBefore(java.time.chrono.ChronoLocalDateTime)\""
-                        + " because \"temporal1\" is null");
+                    + " \"java.time.LocalDateTime.isBefore(java.time.chrono.ChronoLocalDateTime)\""
+                    + " because \"temporal1\" is null");
     }
 
     @Test
@@ -467,8 +467,8 @@ class TimeUtilsTest {
                 NullPointerException.class,
                 () -> isBeforeOrEqual(null, zonedDateTime1),
                 "Cannot invoke"
-                        + " \"java.time.ZonedDateTime.isAfter(java.time.chrono.ChronoZonedDateTime)\""
-                        + " because \"temporal1\" is null");
+                    + " \"java.time.ZonedDateTime.isAfter(java.time.chrono.ChronoZonedDateTime)\""
+                    + " because \"temporal1\" is null");
     }
 
     @Test
@@ -519,8 +519,8 @@ class TimeUtilsTest {
                 NullPointerException.class,
                 () -> isBeforeOrEqual(null, localDateTime1),
                 "Cannot invoke"
-                        + " \"java.time.LocalDateTime.isAfter(java.time.chrono.ChronoLocalDateTime)\""
-                        + " because \"temporal1\" is null");
+                    + " \"java.time.LocalDateTime.isAfter(java.time.chrono.ChronoLocalDateTime)\""
+                    + " because \"temporal1\" is null");
     }
 
     @Test
@@ -629,12 +629,16 @@ class TimeUtilsTest {
         final var ld = LocalDate.now();
         assertEquals(ld, TimeUtils.min(ld.plusDays(1), ld));
 
-        final var justAfterMidnight = LocalTime.of(0,30);
-        final var justBeforeMidnight = LocalTime.of(23,30);
-        assertEquals(justAfterMidnight, TimeUtils.min(justAfterMidnight.plusHours(1), justAfterMidnight));
-        assertEquals(justAfterMidnight, TimeUtils.min(justBeforeMidnight.plusHours(1), justBeforeMidnight));
+        final var justAfterMidnight = LocalTime.of(0, 30);
+        final var justBeforeMidnight = LocalTime.of(23, 30);
+        assertEquals(
+                justAfterMidnight,
+                TimeUtils.min(justAfterMidnight.plusHours(1), justAfterMidnight));
+        assertEquals(
+                justAfterMidnight,
+                TimeUtils.min(justBeforeMidnight.plusHours(1), justBeforeMidnight));
 
-        final var noon = LocalTime.of(12,0);
+        final var noon = LocalTime.of(12, 0);
         assertEquals(noon, TimeUtils.min(noon.plusHours(1), noon));
     }
 
@@ -665,12 +669,16 @@ class TimeUtilsTest {
         final var ld = LocalDate.now();
         assertEquals(ld, TimeUtils.max(ld.minusDays(1), ld));
 
-        final var justAfterMidnight = LocalTime.of(0,30);
-        final var justBeforeMidnight = LocalTime.of(23,30);
-        assertEquals(justBeforeMidnight, TimeUtils.max(justAfterMidnight.minusHours(1), justAfterMidnight));
-        assertEquals(justBeforeMidnight, TimeUtils.max(justBeforeMidnight.minusHours(1), justBeforeMidnight));
+        final var justAfterMidnight = LocalTime.of(0, 30);
+        final var justBeforeMidnight = LocalTime.of(23, 30);
+        assertEquals(
+                justBeforeMidnight,
+                TimeUtils.max(justAfterMidnight.minusHours(1), justAfterMidnight));
+        assertEquals(
+                justBeforeMidnight,
+                TimeUtils.max(justBeforeMidnight.minusHours(1), justBeforeMidnight));
 
-        final var noon = LocalTime.of(12,0);
+        final var noon = LocalTime.of(12, 0);
         assertEquals(noon, TimeUtils.max(noon.minusHours(1), noon));
     }
 
@@ -701,8 +709,8 @@ class TimeUtilsTest {
                 NullPointerException.class,
                 () -> TimeUtils.isBetween(null, time1, time3),
                 "Cannot invoke"
-                        + " \"java.time.ZonedDateTime.isBefore(java.time.chrono.ChronoZonedDateTime)\""
-                        + " because \"time\" is null");
+                    + " \"java.time.ZonedDateTime.isBefore(java.time.chrono.ChronoZonedDateTime)\""
+                    + " because \"time\" is null");
     }
 
     @Test

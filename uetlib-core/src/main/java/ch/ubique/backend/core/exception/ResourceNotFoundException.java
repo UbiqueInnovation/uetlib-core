@@ -8,8 +8,7 @@ import java.util.function.Supplier;
 
 public class ResourceNotFoundException extends RuntimeException {
 
-    @Serial
-    private static final long serialVersionUID = -3763002992193794029L;
+    @Serial private static final long serialVersionUID = -3763002992193794029L;
 
     public ResourceNotFoundException() {}
 

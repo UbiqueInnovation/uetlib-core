@@ -1,5 +1,7 @@
 package ch.ubique.backend.core.utils;
 
+import static java.lang.Math.max;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,8 +10,6 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 import java.util.function.Function;
-
-import static java.lang.Math.max;
 
 public class ProgressLogger {
 
@@ -35,7 +35,10 @@ public class ProgressLogger {
     }
 
     public ProgressLogger(
-            final String prefix, final long total, final Map<String, String> mdcContextMap, final int nrOfLogSteps) {
+            final String prefix,
+            final long total,
+            final Map<String, String> mdcContextMap,
+            final int nrOfLogSteps) {
         this.prefix = Objects.requireNonNullElse(prefix, "");
         this.total = total;
         this.startTime = System.currentTimeMillis();
