@@ -7,6 +7,10 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * @deprecated since 1.5, use {@link LocalizedValue}
+ */
+@Deprecated(since = "1.5", forRemoval = true)
 public class LegacyLocalizedString extends ArrayList<LegacyLocalizedStringEntry> {
 
     public LegacyLocalizedString() {}
