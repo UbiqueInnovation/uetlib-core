@@ -20,7 +20,7 @@ public final class StringFormattingUtils {
 
     public static String formatDuration(final Duration duration) {
         if (Duration.ZERO.equals(duration)) {
-            return "0";
+            return "0s";
         }
 
         final var seconds = duration.toSecondsPart();
