@@ -4,6 +4,8 @@ import ch.ubique.backend.core.utils.CollectionUtils;
 import ch.ubique.backend.core.utils.LocaleHelper;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import jakarta.annotation.Nullable;
@@ -385,6 +387,7 @@ public class LocalizedValue<T extends Serializable> {
      *     methods of {@link LocalizedValue}).
      */
     @NotNull
+    @JsonIgnore
     public T getAny() {
         return values.values().stream().findAny().orElseThrow();
     }
