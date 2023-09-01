@@ -415,6 +415,32 @@ public class LocalizedValue<T extends Serializable> {
     }
 
     /**
+     * default serialization method using IETF BCP 47 Language Tag. Additionally, this methods
+     * emulates the behaviour of {@link JsonUnwrapped} until the annotation is supported on maps,
+     * see <a
+     * href="https://github.com/FasterXML/jackson-databind/issues/171">github/jackson-databind</a>
+     *
+     * <p>{@code new Locale("de", "CH")} would be serialized to {@code "de-CH"}
+     *
+     * @param prefix for each like {@link JsonUnwrapped#prefix()}
+     * @param suffix for each like {@link JsonUnwrapped#suffix()}
+     */
+    @NotEmpty
+    public Map<String, T> toMapWithLanguageTagKeysJsonUnwrapped(
+            @Nullable final String prefix, @Nullable final String suffix) {
+        final var nonNullPrefix = Objects.requireNonNullElse(prefix, "");
+        final var nonNullSuffix = Objects.requireNonNullElse(suffix, "");
+        return values.entrySet().stream()
+                .collect(
+                        Collectors.toMap(
+                                entry ->
+                                        nonNullPrefix
+                                                + entry.getKey().toLanguageTag()
+                                                + nonNullSuffix,
+                                Map.Entry::getValue));
+    }
+
+    /**
      * alternative serialization method using Posix Locales.
      *
      * <p>{@code new Locale("de", "CH")} would be serialized to {@code "de_CH"}
@@ -441,9 +467,13 @@ public class LocalizedValue<T extends Serializable> {
 
     @Override
     public boolean equals(final Object o) {
-        if (this == o) return true;
+        if (this == o) {
+            return true;
+        }
 
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         final var that = (LocalizedValue<?>) o;
 
