@@ -248,7 +248,9 @@ class LocalizedValueTest {
     @Test
     void json() throws JsonProcessingException {
         final var lv1 = LocalizedValue.from("Literal", Locale.CHINA);
-        assertEquals("{\"zh\":\"Literal\"}", objectMapper.writeValueAsString(lv1));
+        assertEquals(
+                "{\"zh\":\"Literal\"}",
+                objectMapper.writeValueAsString(lv1.toMapWithLanguageTagKeys()));
         final var lv2 =
                 LocalizedValue.stringBuilder().fullLocale().add("Literal", Locale.CHINA).build();
         assertEquals("{\"zh-CN\":\"Literal\"}", objectMapper.writeValueAsString(lv2));
@@ -518,5 +520,32 @@ class LocalizedValueTest {
         assertEquals(de1, de2.mergeWith(de1));
         assertEquals(de2, de1.mergeWith(de2));
         assertEquals(de1en1, de1.mergeWith(en1));
+    }
+
+    @Test
+    void jsonUnwrapped() throws JsonProcessingException {
+        final var lv1 = LocalizedValue.from("Literal", Locale.CHINA);
+        assertEquals(
+                "{\"zh\":\"Literal\"}",
+                objectMapper.writeValueAsString(
+                        lv1.toMapWithLanguageTagKeysJsonUnwrapped(null, null)));
+
+        final var lv2 = LocalizedValue.from("Literal", Locale.CHINA);
+        assertEquals(
+                "{\"prefix:zh\":\"Literal\"}",
+                objectMapper.writeValueAsString(
+                        lv1.toMapWithLanguageTagKeysJsonUnwrapped("prefix:", null)));
+
+        final var lv3 = LocalizedValue.from("Literal", Locale.CHINA);
+        assertEquals(
+                "{\"zh:suffix\":\"Literal\"}",
+                objectMapper.writeValueAsString(
+                        lv1.toMapWithLanguageTagKeysJsonUnwrapped(null, ":suffix")));
+
+        final var lv4 = LocalizedValue.from("Literal", Locale.CHINA);
+        assertEquals(
+                "{\"prefix:zh:suffix\":\"Literal\"}",
+                objectMapper.writeValueAsString(
+                        lv1.toMapWithLanguageTagKeysJsonUnwrapped("prefix:", ":suffix")));
     }
 }
