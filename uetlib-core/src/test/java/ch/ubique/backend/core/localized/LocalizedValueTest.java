@@ -1,10 +1,16 @@
 package ch.ubique.backend.core.localized;
 
+ import static ch.ubique.backend.test.assertion.AssertionUtils.assertThrowsWithMessage;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import ch.ubique.backend.core.localized.annotation.JsonUnwrappedLocalizedValueSerializer;
+
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 
 import org.junit.jupiter.api.Test;
@@ -524,28 +530,54 @@ class LocalizedValueTest {
 
     @Test
     void jsonUnwrapped() throws JsonProcessingException {
-        final var lv1 = LocalizedValue.from("Literal", Locale.CHINA);
+        final var wrapper1 =
+                new Wrapper1(LocalizedValue.stringBuilder().de("value_de").en("value_en").build());
         assertEquals(
-                "{\"zh\":\"Literal\"}",
-                objectMapper.writeValueAsString(
-                        lv1.toMapWithLanguageTagKeysJsonUnwrapped(null, null)));
-
-        final var lv2 = LocalizedValue.from("Literal", Locale.CHINA);
+                "{\"de\":\"value_de\",\"en\":\"value_en\"}",
+                objectMapper.writeValueAsString(wrapper1));
+        final var wrapper2 =
+                new Wrapper2(LocalizedValue.stringBuilder().de("value_de").en("value_en").build());
         assertEquals(
-                "{\"prefix:zh\":\"Literal\"}",
-                objectMapper.writeValueAsString(
-                        lv1.toMapWithLanguageTagKeysJsonUnwrapped("prefix:", null)));
-
-        final var lv3 = LocalizedValue.from("Literal", Locale.CHINA);
+                "{\"pre:de\":\"value_de\",\"pre:en\":\"value_en\"}",
+                objectMapper.writeValueAsString(wrapper2));
+        final var wrapper3 =
+                new Wrapper3(LocalizedValue.stringBuilder().de("value_de").en("value_en").build());
         assertEquals(
-                "{\"zh:suffix\":\"Literal\"}",
-                objectMapper.writeValueAsString(
-                        lv1.toMapWithLanguageTagKeysJsonUnwrapped(null, ":suffix")));
-
-        final var lv4 = LocalizedValue.from("Literal", Locale.CHINA);
+                "{\"de:suf\":\"value_de\",\"en:suf\":\"value_en\"}",
+                objectMapper.writeValueAsString(wrapper3));
+        final var wrapper4 =
+                new Wrapper4(LocalizedValue.stringBuilder().de("value_de").en("value_en").build());
         assertEquals(
-                "{\"prefix:zh:suffix\":\"Literal\"}",
-                objectMapper.writeValueAsString(
-                        lv1.toMapWithLanguageTagKeysJsonUnwrapped("prefix:", ":suffix")));
+                "{\"pre:de:suf\":\"value_de\",\"pre:en:suf\":\"value_en\"}",
+                objectMapper.writeValueAsString(wrapper4));
+        final var wrapper5 =
+                new Wrapper5(LocalizedValue.stringBuilder().de("value_de").en("value_en").build());
+        assertThrowsWithMessage(
+                IllegalStateException.class,
+                () -> objectMapper.writeValueAsString(wrapper5),
+                "Annotation 'JsonUnwrapped' not found on field name");
     }
+
+    record Wrapper1(
+            @JsonUnwrapped @JsonSerialize(using = JsonUnwrappedLocalizedValueSerializer.class)
+                    LocalizedValue<String> name) {}
+
+    record Wrapper2(
+            @JsonUnwrapped(prefix = "pre:")
+                    @JsonSerialize(using = JsonUnwrappedLocalizedValueSerializer.class)
+                    LocalizedValue<String> name) {}
+
+    record Wrapper3(
+            @JsonUnwrapped(suffix = ":suf")
+                    @JsonSerialize(using = JsonUnwrappedLocalizedValueSerializer.class)
+                    LocalizedValue<String> name) {}
+
+    record Wrapper4(
+            @JsonUnwrapped(prefix = "pre:", suffix = ":suf")
+                    @JsonSerialize(using = JsonUnwrappedLocalizedValueSerializer.class)
+                    LocalizedValue<String> name) {}
+
+    record Wrapper5(
+            @JsonSerialize(using = JsonUnwrappedLocalizedValueSerializer.class)
+                    LocalizedValue<String> name) {}
 }
