@@ -8,6 +8,10 @@ import jakarta.validation.constraints.NotBlank;
 
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * @deprecated since 1.5, use {@link LocalizedValue}
+ */
+@Deprecated(since = "1.5", forRemoval = true)
 @Schema(description = "A localized entry.")
 public record LegacyLocalizedStringEntry(
         @NotBlank @Schema(example = "en") String langKey,
