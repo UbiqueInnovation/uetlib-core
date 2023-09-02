@@ -5,7 +5,6 @@ import ch.ubique.backend.core.utils.LocaleHelper;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import jakarta.annotation.Nullable;
@@ -412,32 +411,6 @@ public class LocalizedValue<T extends Serializable> {
                 .collect(
                         Collectors.toMap(
                                 entry -> entry.getKey().toLanguageTag(), Map.Entry::getValue));
-    }
-
-    /**
-     * default serialization method using IETF BCP 47 Language Tag. Additionally, this methods
-     * emulates the behaviour of {@link JsonUnwrapped} until the annotation is supported on maps,
-     * see <a
-     * href="https://github.com/FasterXML/jackson-databind/issues/171">github/jackson-databind</a>
-     *
-     * <p>{@code new Locale("de", "CH")} would be serialized to {@code "de-CH"}
-     *
-     * @param prefix for each like {@link JsonUnwrapped#prefix()}
-     * @param suffix for each like {@link JsonUnwrapped#suffix()}
-     */
-    @NotEmpty
-    public Map<String, T> toMapWithLanguageTagKeysJsonUnwrapped(
-            @Nullable final String prefix, @Nullable final String suffix) {
-        final var nonNullPrefix = Objects.requireNonNullElse(prefix, "");
-        final var nonNullSuffix = Objects.requireNonNullElse(suffix, "");
-        return values.entrySet().stream()
-                .collect(
-                        Collectors.toMap(
-                                entry ->
-                                        nonNullPrefix
-                                                + entry.getKey().toLanguageTag()
-                                                + nonNullSuffix,
-                                Map.Entry::getValue));
     }
 
     /**
