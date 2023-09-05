@@ -71,6 +71,30 @@ class TimeUtilsTest {
     }
 
     @Test
+    void offsetToLocalDateEuZh() {
+        final var offsetDateTime =
+                OffsetDateTime.ofInstant(Instant.ofEpochSecond(1648076980), ZONE_ID_EUROPE_ZURICH);
+        final var localDate = LocalDate.of(2022, 3, 24);
+        assertEquals(localDate, TIME_UTILS_EUROPE_ZURICH.toLocalDate(offsetDateTime));
+    }
+
+    @Test
+    void offsetToLocalTimeEuZh() {
+        final var offsetDateTime =
+                OffsetDateTime.ofInstant(Instant.ofEpochSecond(1648076980), ZONE_ID_EUROPE_ZURICH);
+        final var localTime = LocalTime.of(0, 9, 40);
+        assertEquals(localTime, TIME_UTILS_EUROPE_ZURICH.toLocalTime(offsetDateTime));
+    }
+
+    @Test
+    void offsetToLocalDateTimeEuZh() {
+        final var offsetDateTime =
+                OffsetDateTime.ofInstant(Instant.ofEpochSecond(1648076980), ZONE_ID_EUROPE_ZURICH);
+        final var localDateTime = LocalDateTime.of(2022, 3, 24, 0, 9, 40);
+        assertEquals(localDateTime, TIME_UTILS_EUROPE_ZURICH.toLocalDateTime(offsetDateTime));
+    }
+
+    @Test
     void toLocalDateEuZh() {
         final var zonedDateTime =
                 ZonedDateTime.ofInstant(Instant.ofEpochSecond(1648076980), ZONE_ID_EUROPE_ZURICH);
@@ -319,8 +343,8 @@ class TimeUtilsTest {
                 NullPointerException.class,
                 () -> isAfterOrEqual(null, zonedDateTime1),
                 "Cannot invoke"
-                    + " \"java.time.ZonedDateTime.isBefore(java.time.chrono.ChronoZonedDateTime)\""
-                    + " because \"temporal1\" is null");
+                        + " \"java.time.ZonedDateTime.isBefore(java.time.chrono.ChronoZonedDateTime)\""
+                        + " because \"temporal1\" is null");
     }
 
     @Test
@@ -371,8 +395,8 @@ class TimeUtilsTest {
                 NullPointerException.class,
                 () -> isAfterOrEqual(null, localDateTime1),
                 "Cannot invoke"
-                    + " \"java.time.LocalDateTime.isBefore(java.time.chrono.ChronoLocalDateTime)\""
-                    + " because \"temporal1\" is null");
+                        + " \"java.time.LocalDateTime.isBefore(java.time.chrono.ChronoLocalDateTime)\""
+                        + " because \"temporal1\" is null");
     }
 
     @Test
@@ -467,8 +491,8 @@ class TimeUtilsTest {
                 NullPointerException.class,
                 () -> isBeforeOrEqual(null, zonedDateTime1),
                 "Cannot invoke"
-                    + " \"java.time.ZonedDateTime.isAfter(java.time.chrono.ChronoZonedDateTime)\""
-                    + " because \"temporal1\" is null");
+                        + " \"java.time.ZonedDateTime.isAfter(java.time.chrono.ChronoZonedDateTime)\""
+                        + " because \"temporal1\" is null");
     }
 
     @Test
@@ -519,8 +543,8 @@ class TimeUtilsTest {
                 NullPointerException.class,
                 () -> isBeforeOrEqual(null, localDateTime1),
                 "Cannot invoke"
-                    + " \"java.time.LocalDateTime.isAfter(java.time.chrono.ChronoLocalDateTime)\""
-                    + " because \"temporal1\" is null");
+                        + " \"java.time.LocalDateTime.isAfter(java.time.chrono.ChronoLocalDateTime)\""
+                        + " because \"temporal1\" is null");
     }
 
     @Test
@@ -709,8 +733,8 @@ class TimeUtilsTest {
                 NullPointerException.class,
                 () -> TimeUtils.isBetween(null, time1, time3),
                 "Cannot invoke"
-                    + " \"java.time.ZonedDateTime.isBefore(java.time.chrono.ChronoZonedDateTime)\""
-                    + " because \"time\" is null");
+                        + " \"java.time.ZonedDateTime.isBefore(java.time.chrono.ChronoZonedDateTime)\""
+                        + " because \"time\" is null");
     }
 
     @Test
@@ -742,5 +766,15 @@ class TimeUtilsTest {
         final var startOfTodayEuZh = TIME_UTILS_EUROPE_ZURICH.startOfToday();
         final var nowEuZh = TIME_UTILS_EUROPE_ZURICH.now();
         assertEquals(startOfTodayEuZh, TIME_UTILS_EUROPE_ZURICH.startOfDay(nowEuZh));
+    }
+
+    @Test
+    void getInstance() {
+        assertEquals(TIME_UTILS_EUROPE_ZURICH, TimeUtils.getInstance(ZONE_ID_EUROPE_ZURICH));
+        assertEquals(TIME_UTILS_EUROPE_ZURICH, TimeUtils.getInstance(ZONE_NAME_EUROPE_ZURICH));
+
+        final var americaNewYork = TimeUtils.getInstance("America/New_York");
+        assertEquals(americaNewYork, TimeUtils.getInstance("America/New_York"));
+        assertEquals(americaNewYork, TimeUtils.getInstance(ZoneId.of("America/New_York")));
     }
 }

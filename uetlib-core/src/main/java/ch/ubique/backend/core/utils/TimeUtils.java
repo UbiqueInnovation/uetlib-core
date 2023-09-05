@@ -284,6 +284,7 @@ public final class TimeUtils {
         return ZonedDateTime.of(localDateTime, zoneId);
     }
 
+    @Contract("_ -> new")
     public @NotNull ZonedDateTime withZoneSameInstant(final @NotNull ZonedDateTime zonedDateTime) {
         return zonedDateTime.withZoneSameInstant(zoneId);
     }
@@ -298,6 +299,23 @@ public final class TimeUtils {
 
     public LocalDateTime toLocalDateTime(final ZonedDateTime zonedDateTime) {
         return withZoneSameInstant(zonedDateTime).toLocalDateTime();
+    }
+
+    @Contract("_ -> new")
+    public @NotNull ZonedDateTime atZoneSameInstant(final @NotNull OffsetDateTime offsetDateTime) {
+        return offsetDateTime.atZoneSameInstant(zoneId);
+    }
+
+    public LocalDate toLocalDate(final OffsetDateTime offsetDateTime) {
+        return atZoneSameInstant(offsetDateTime).toLocalDate();
+    }
+
+    public LocalTime toLocalTime(final OffsetDateTime offsetDateTime) {
+        return atZoneSameInstant(offsetDateTime).toLocalTime();
+    }
+
+    public LocalDateTime toLocalDateTime(final OffsetDateTime offsetDateTime) {
+        return atZoneSameInstant(offsetDateTime).toLocalDateTime();
     }
 
     public boolean isMidnight(final ZonedDateTime zonedDateTime) {
