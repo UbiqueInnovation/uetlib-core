@@ -1,7 +1,10 @@
 package ch.ubique.backend.core.utils;
 
+import com.pivovarit.function.exception.WrappedException;
+
 import org.apache.commons.collections4.CollectionUtils;
 
+import java.io.*;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -99,5 +102,30 @@ public final class StreamUtils {
      */
     public static <T> Stream<T> emptyIfNull(final Collection<T> collection) {
         return CollectionUtils.emptyIfNull(collection).stream();
+    }
+
+    @SuppressWarnings("java:S2095")
+    public static InputStream pipeOutputToInputStream(final ByteArrayOutputStream originOut) {
+
+        // connect the pipe
+        final var inPipe = new PipedInputStream();
+
+        try {
+            final var outPipe = new PipedOutputStream(inPipe);
+            new Thread(
+                            () -> {
+                                // write originOut into outPipe
+                                try (outPipe) {
+                                    originOut.writeTo(outPipe);
+                                } catch (final IOException e) {
+                                    throw new WrappedException(e);
+                                }
+                            })
+                    .start();
+            // return the input stream
+            return inPipe;
+        } catch (final IOException e) {
+            throw new WrappedException(e);
+        }
     }
 }

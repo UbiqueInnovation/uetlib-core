@@ -1,8 +1,11 @@
 package ch.ubique.backend.core.utils;
 
-import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -11,41 +14,38 @@ class StreamUtilsTest {
 
     @Test
     void chunked() {
-        Assertions.assertEquals(List.of(), StreamUtils.chunked((List<Integer>) null, 3).toList());
-        Assertions.assertEquals(
+        assertEquals(List.of(), StreamUtils.chunked((List<Integer>) null, 3).toList());
+        assertEquals(
                 List.of(List.of('T', 'e')), StreamUtils.chunked(List.of('T', 'e'), 3).toList());
-        Assertions.assertEquals(
+        assertEquals(
                 List.of(List.of('T', 'e', 's')),
                 StreamUtils.chunked(List.of('T', 'e', 's'), 3).toList());
-        Assertions.assertEquals(
-                List.of(), StreamUtils.chunked(List.of('T', 'e', 's'), -1).toList());
-        Assertions.assertEquals(
+        assertEquals(List.of(), StreamUtils.chunked(List.of('T', 'e', 's'), -1).toList());
+        assertEquals(
                 List.of(List.of('T', 'e', 's'), List.of('t', 'T', 'e'), List.of('s', 't')),
                 StreamUtils.chunked(List.of('T', 'e', 's', 't', 'T', 'e', 's', 't'), 3).toList());
 
-        Assertions.assertEquals(List.of(), StreamUtils.chunked((Stream<Integer>) null, 3).toList());
-        Assertions.assertEquals(
+        assertEquals(List.of(), StreamUtils.chunked((Stream<Integer>) null, 3).toList());
+        assertEquals(
                 List.of(List.of('T', 'e')), StreamUtils.chunked(Stream.of('T', 'e'), 3).toList());
-        Assertions.assertEquals(
+        assertEquals(
                 List.of(List.of('T', 'e', 's')),
                 StreamUtils.chunked(Stream.of('T', 'e', 's'), 3).toList());
-        Assertions.assertEquals(
-                List.of(), StreamUtils.chunked(Stream.of('T', 'e', 's'), -1).toList());
-        Assertions.assertEquals(
+        assertEquals(List.of(), StreamUtils.chunked(Stream.of('T', 'e', 's'), -1).toList());
+        assertEquals(
                 List.of(List.of('T', 'e', 's'), List.of('t', 'T', 'e'), List.of('s', 't')),
                 StreamUtils.chunked(Stream.of('T', 'e', 's', 't', 'T', 'e', 's', 't'), 3).toList());
     }
 
     @Test
     void windows() {
-        Assertions.assertEquals(List.of(), StreamUtils.windows(null, 3).toList());
-        Assertions.assertEquals(List.of(), StreamUtils.windows(List.of('T', 'e'), 3).toList());
-        Assertions.assertEquals(
+        assertEquals(List.of(), StreamUtils.windows(null, 3).toList());
+        assertEquals(List.of(), StreamUtils.windows(List.of('T', 'e'), 3).toList());
+        assertEquals(
                 List.of(List.of('T', 'e', 's')),
                 StreamUtils.windows(List.of('T', 'e', 's'), 3).toList());
-        Assertions.assertEquals(
-                List.of(), StreamUtils.windows(List.of('T', 'e', 's'), -1).toList());
-        Assertions.assertEquals(
+        assertEquals(List.of(), StreamUtils.windows(List.of('T', 'e', 's'), -1).toList());
+        assertEquals(
                 List.of(
                         List.of('T', 'e', 's'),
                         List.of('e', 's', 't'),
@@ -58,12 +58,24 @@ class StreamUtilsTest {
 
     @Test
     void emptyIfNull() {
-        Assertions.assertEquals(List.of(), StreamUtils.emptyIfNull(null).toList());
+        assertEquals(List.of(), StreamUtils.emptyIfNull(null).toList());
 
-        Assertions.assertEquals(List.of(), StreamUtils.emptyIfNull(List.of()).toList());
-        Assertions.assertEquals(List.of(), StreamUtils.emptyIfNull(Set.of()).toList());
+        assertEquals(List.of(), StreamUtils.emptyIfNull(List.of()).toList());
+        assertEquals(List.of(), StreamUtils.emptyIfNull(Set.of()).toList());
 
-        Assertions.assertEquals(List.of(1), StreamUtils.emptyIfNull(List.of(1)).toList());
-        Assertions.assertEquals(List.of(1), StreamUtils.emptyIfNull(Set.of(1)).toList());
+        assertEquals(List.of(1), StreamUtils.emptyIfNull(List.of(1)).toList());
+        assertEquals(List.of(1), StreamUtils.emptyIfNull(Set.of(1)).toList());
+    }
+
+    @Test
+    void pipeOutputToInputStream() throws IOException {
+        final var content = "I'm going through the pipe.";
+
+        final var originOut = new ByteArrayOutputStream();
+        originOut.write(content.getBytes());
+
+        final var in = StreamUtils.pipeOutputToInputStream(originOut);
+        final var inContent = new String(in.readAllBytes());
+        assertEquals(content, inContent);
     }
 }
