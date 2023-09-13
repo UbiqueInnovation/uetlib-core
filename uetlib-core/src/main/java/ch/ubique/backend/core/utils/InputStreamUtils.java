@@ -165,7 +165,7 @@ public final class InputStreamUtils {
         }
 
         return switch (contentEncoding) {
-            case "bzip2" -> new BZip2CompressorInputStream(inputStream);
+            case "bzip2", "bz2" -> new BZip2CompressorInputStream(inputStream);
             case "gzip", "gz" -> new GZIPInputStream(inputStream);
             case "zip" -> new ZipInputStream(inputStream);
             default -> {
