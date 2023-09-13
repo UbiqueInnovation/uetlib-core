@@ -2,8 +2,9 @@ package ch.ubique.backend.core.utils;
 
 import ch.ubique.backend.core.file.ByteFile;
 
+import com.j256.simplemagic.ContentInfo;
+import com.j256.simplemagic.ContentInfoInputStreamWrapper;
 import com.j256.simplemagic.ContentInfoUtil;
-import com.j256.simplemagic.ContentType;
 import com.pivovarit.function.exception.WrappedException;
 
 import org.apache.commons.compress.archivers.ArchiveEntry;
@@ -28,7 +29,6 @@ import java.util.zip.ZipInputStream;
 public final class InputStreamUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(InputStreamUtils.class);
-    private static final ContentInfoUtil CONTENT_INFO_UTIL = new ContentInfoUtil();
 
     private InputStreamUtils() {}
 
@@ -135,8 +135,16 @@ public final class InputStreamUtils {
         }
     }
 
-    public static InputStream uncompress(final InputStream inputStream) throws IOException {
-        final var contentType = contentType(inputStream);
+    public static InputStream uncompress(
+            final InputStream inputStream, final String contentEncoding) throws IOException {
+        final var contentInfo = contentType(inputStream);
+        if (contentInfo == null) {
+            logger.info(
+                    "no content type found for input stream, will fallback to uncompressing by content encoding header or file extension.");
+            return uncompressByContentEncoding(inputStream, contentEncoding);
+        }
+
+        final var contentType = contentInfo.getContentType();
         return switch (contentType) {
             case BZIP2 -> new BZip2CompressorInputStream(inputStream);
             case GZIP -> new GZIPInputStream(inputStream);
@@ -150,7 +158,44 @@ public final class InputStreamUtils {
         };
     }
 
-    public static ContentType contentType(final InputStream inputStream) throws IOException {
-        return CONTENT_INFO_UTIL.findMatch(inputStream).getContentType();
+    public static InputStream uncompressByContentEncoding(
+            final InputStream inputStream, final String contentEncoding) throws IOException {
+        if (contentEncoding == null) {
+            return inputStream;
+        }
+
+        return switch (contentEncoding) {
+            case "bzip2" -> new BZip2CompressorInputStream(inputStream);
+            case "gzip", "gz" -> new GZIPInputStream(inputStream);
+            case "zip" -> new ZipInputStream(inputStream);
+            default -> {
+                logger.info(
+                        "content encoding {} not yet handled specifically, returning the stream as-is.",
+                        contentEncoding);
+                yield inputStream;
+            }
+        };
+    }
+
+    /**
+     * Attempts to get {@link ContentInfo} from the given input stream and restoring the supplied
+     * input stream after reading the first bytes to determine the content type
+     */
+    public static ContentInfo contentType(final InputStream inputStream) throws IOException {
+        final var contentInfoInputStreamWrapper = new ContentInfoInputStreamWrapper(inputStream);
+
+        if (!contentInfoInputStreamWrapper.markSupported()) {
+            logger.warn(
+                    "Cannot search the given input stream for it's content type. 'inputStream.markSupported()' return false.");
+            return null;
+        }
+
+        contentInfoInputStreamWrapper.mark(ContentInfoUtil.DEFAULT_READ_SIZE);
+
+        final var match = contentInfoInputStreamWrapper.findMatch();
+        // reset to the mark set above
+        contentInfoInputStreamWrapper.reset();
+
+        return match;
     }
 }
