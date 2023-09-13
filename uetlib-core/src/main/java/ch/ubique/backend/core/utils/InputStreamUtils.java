@@ -2,15 +2,14 @@ package ch.ubique.backend.core.utils;
 
 import ch.ubique.backend.core.file.ByteFile;
 
+import com.pivovarit.function.exception.WrappedException;
+
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.io.input.BOMInputStream;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -100,5 +99,30 @@ public final class InputStreamUtils {
     @NotNull
     public static BufferedReader bufferedReader(final InputStream inputStream) {
         return bufferedReader(inputStream, StandardCharsets.UTF_8);
+    }
+
+    @SuppressWarnings("java:S2095")
+    public static InputStream pipeOutputToInputStream(final ByteArrayOutputStream originOut) {
+
+        // connect the pipe
+        final var inPipe = new PipedInputStream();
+
+        try {
+            final var outPipe = new PipedOutputStream(inPipe);
+            new Thread(
+                            () -> {
+                                // write originOut into outPipe
+                                try (outPipe) {
+                                    originOut.writeTo(outPipe);
+                                } catch (final IOException e) {
+                                    throw new WrappedException(e);
+                                }
+                            })
+                    .start();
+            // return the input stream
+            return inPipe;
+        } catch (final IOException e) {
+            throw new WrappedException(e);
+        }
     }
 }
