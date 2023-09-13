@@ -2,12 +2,17 @@ package ch.ubique.backend.core.utils;
 
 import ch.ubique.backend.core.file.ByteFile;
 
+import com.j256.simplemagic.ContentInfoUtil;
+import com.j256.simplemagic.ContentType;
 import com.pivovarit.function.exception.WrappedException;
 
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
+import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.apache.commons.io.input.BOMInputStream;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.URL;
@@ -15,11 +20,15 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.function.Function;
 import java.util.regex.Pattern;
+import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 @SuppressWarnings("unused")
 public final class InputStreamUtils {
+
+    private static final Logger logger = LoggerFactory.getLogger(InputStreamUtils.class);
+    private static final ContentInfoUtil CONTENT_INFO_UTIL = new ContentInfoUtil();
 
     private InputStreamUtils() {}
 
@@ -124,5 +133,24 @@ public final class InputStreamUtils {
         } catch (final IOException e) {
             throw new WrappedException(e);
         }
+    }
+
+    public static InputStream uncompress(final InputStream inputStream) throws IOException {
+        final var contentType = contentType(inputStream);
+        return switch (contentType) {
+            case BZIP2 -> new BZip2CompressorInputStream(inputStream);
+            case GZIP -> new GZIPInputStream(inputStream);
+            case ZIP -> new ZipInputStream(inputStream);
+            default -> {
+                logger.info(
+                        "content type {} not yet handled specifically, returning the stream as-is.",
+                        contentType);
+                yield inputStream;
+            }
+        };
+    }
+
+    public static ContentType contentType(final InputStream inputStream) throws IOException {
+        return CONTENT_INFO_UTIL.findMatch(inputStream).getContentType();
     }
 }
