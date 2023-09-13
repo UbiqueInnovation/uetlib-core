@@ -4,8 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -65,17 +63,5 @@ class StreamUtilsTest {
 
         assertEquals(List.of(1), StreamUtils.emptyIfNull(List.of(1)).toList());
         assertEquals(List.of(1), StreamUtils.emptyIfNull(Set.of(1)).toList());
-    }
-
-    @Test
-    void pipeOutputToInputStream() throws IOException {
-        final var content = "I'm going through the pipe.";
-
-        final var originOut = new ByteArrayOutputStream();
-        originOut.write(content.getBytes());
-
-        final var in = StreamUtils.pipeOutputToInputStream(originOut);
-        final var inContent = new String(in.readAllBytes());
-        assertEquals(content, inContent);
     }
 }
