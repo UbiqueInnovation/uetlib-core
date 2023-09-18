@@ -29,13 +29,15 @@ public final class TimeUtils {
     public static final ZoneId ZONE_ID_EUROPE_BERLIN =
             ZoneId.of(ZONE_NAME_EUROPE_BERLIN).normalized();
     public static final TimeUtils TIME_UTILS_EUROPE_BERLIN = new TimeUtils(ZONE_ID_EUROPE_BERLIN);
+
     private static final Map<ZoneId, TimeUtils> INSTANCES =
             new HashMap<>(
                     Map.ofEntries(
                             Map.entry(ZONE_ID_UTC, TIME_UTILS_UTC),
                             Map.entry(ZONE_ID_EUROPE_ZURICH, TIME_UTILS_EUROPE_ZURICH),
                             Map.entry(ZONE_ID_EUROPE_BERLIN, TIME_UTILS_EUROPE_BERLIN)));
-    private final ZoneId zoneId;
+
+    @NotNull private final ZoneId zoneId;
 
     @Contract(pure = true)
     private TimeUtils(@NotNull final ZoneId zoneId) {
@@ -48,8 +50,7 @@ public final class TimeUtils {
     }
 
     public static TimeUtils getInstance(@NotNull final String zoneId) {
-        final var normalized = ZoneId.of(zoneId).normalized();
-        return INSTANCES.computeIfAbsent(normalized, TimeUtils::new);
+        return getInstance(ZoneId.of(zoneId));
     }
 
     /**
@@ -315,6 +316,23 @@ public final class TimeUtils {
 
     public LocalDateTime toLocalDateTime(final OffsetDateTime offsetDateTime) {
         return atZoneSameInstant(offsetDateTime).toLocalDateTime();
+    }
+
+    @Contract("_ -> new")
+    public @NotNull ZonedDateTime atZone(final @NotNull Instant instant) {
+        return instant.atZone(zoneId);
+    }
+
+    public LocalDate toLocalDate(final @NotNull Instant instant) {
+        return atZone(instant).toLocalDate();
+    }
+
+    public LocalTime toLocalTime(final @NotNull Instant instant) {
+        return atZone(instant).toLocalTime();
+    }
+
+    public LocalDateTime toLocalDateTime(final @NotNull Instant instant) {
+        return atZone(instant).toLocalDateTime();
     }
 
     public boolean isMidnight(final ZonedDateTime zonedDateTime) {
