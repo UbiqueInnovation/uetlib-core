@@ -95,6 +95,27 @@ class TimeUtilsTest {
     }
 
     @Test
+    void instantToLocalDateEuZh() {
+        final var instant = Instant.ofEpochSecond(1648076980);
+        final var localDate = LocalDate.of(2022, 3, 24);
+        assertEquals(localDate, TIME_UTILS_EUROPE_ZURICH.toLocalDate(instant));
+    }
+
+    @Test
+    void instantToLocalTimeEuZh() {
+        final var instant = Instant.ofEpochSecond(1648076980);
+        final var localTime = LocalTime.of(0, 9, 40);
+        assertEquals(localTime, TIME_UTILS_EUROPE_ZURICH.toLocalTime(instant));
+    }
+
+    @Test
+    void instantToLocalDateTimeEuZh() {
+        final var instant = Instant.ofEpochSecond(1648076980);
+        final var localDateTime = LocalDateTime.of(2022, 3, 24, 0, 9, 40);
+        assertEquals(localDateTime, TIME_UTILS_EUROPE_ZURICH.toLocalDateTime(instant));
+    }
+
+    @Test
     void toLocalDateEuZh() {
         final var zonedDateTime =
                 ZonedDateTime.ofInstant(Instant.ofEpochSecond(1648076980), ZONE_ID_EUROPE_ZURICH);
@@ -268,9 +289,9 @@ class TimeUtilsTest {
         final var startOfDay = TIME_UTILS_EUROPE_ZURICH.startOfDay(now);
         // at beginning of day
         assertEquals(0, startOfDay.get(ChronoField.MILLI_OF_SECOND));
-        assertEquals(0, startOfDay.get(ChronoField.SECOND_OF_MINUTE));
-        assertEquals(0, startOfDay.get(ChronoField.MINUTE_OF_HOUR));
-        assertEquals(0, startOfDay.get(ChronoField.HOUR_OF_DAY));
+        assertEquals(0, startOfDay.getSecond());
+        assertEquals(0, startOfDay.getMinute());
+        assertEquals(0, startOfDay.getHour());
         // same day
         assertEquals(now.getDayOfYear(), startOfDay.getDayOfYear());
     }
