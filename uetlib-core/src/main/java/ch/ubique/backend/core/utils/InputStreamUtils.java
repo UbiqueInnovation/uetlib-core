@@ -185,8 +185,8 @@ public final class InputStreamUtils {
         final var contentInfoInputStreamWrapper = new ContentInfoInputStreamWrapper(inputStream);
 
         if (!contentInfoInputStreamWrapper.markSupported()) {
-            logger.warn(
-                    "Cannot search the given input stream for it's content type. 'inputStream.markSupported()' return false.");
+            logger.debug(
+                    "Cannot search the given input stream for its content type. 'inputStream.markSupported()' returned false.");
             return null;
         }
 
