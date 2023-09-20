@@ -354,9 +354,26 @@ public final class TimeUtils {
         return withZoneSameInstant(zonedDateTime).truncatedTo(ChronoUnit.DAYS);
     }
 
+    @Contract("_ -> new")
+    public @NotNull ZonedDateTime startOfDay(final LocalDate localDate) {
+        return localDate.atStartOfDay(zoneId);
+    }
+
     @Contract(" -> new")
     public @NotNull ZonedDateTime startOfMonth() {
         return now().with(TemporalAdjusters.firstDayOfMonth()).truncatedTo(ChronoUnit.DAYS);
+    }
+
+    @Contract("_ -> new")
+    public @NotNull ZonedDateTime startOfMonth(final ZonedDateTime zonedDateTime) {
+        return withZoneSameInstant(zonedDateTime)
+                .with(TemporalAdjusters.firstDayOfMonth())
+                .truncatedTo(ChronoUnit.DAYS);
+    }
+
+    @Contract("_ -> new")
+    public @NotNull ZonedDateTime startOfMonth(final LocalDate localDate) {
+        return startOfDay(localDate.with(TemporalAdjusters.firstDayOfMonth()));
     }
 
     @Contract(" -> new")

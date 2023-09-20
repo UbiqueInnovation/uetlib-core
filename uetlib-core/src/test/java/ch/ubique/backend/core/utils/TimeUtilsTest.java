@@ -294,16 +294,44 @@ class TimeUtilsTest {
         assertEquals(0, startOfDay.getHour());
         // same day
         assertEquals(now.getDayOfYear(), startOfDay.getDayOfYear());
+
+        final var nowDate = TIME_UTILS_EUROPE_ZURICH.now().toLocalDate();
+        final var startOfDayDate = TIME_UTILS_EUROPE_ZURICH.startOfDay(nowDate);
+        assertEquals(startOfDay, startOfDayDate);
     }
 
     @Test
     void startOfMonth() {
+        final var euZhNow = TIME_UTILS_EUROPE_ZURICH.now();
+        final var utcNow = TIME_UTILS_UTC.now();
         assertEquals(
-                TIME_UTILS_EUROPE_ZURICH.now().withDayOfMonth(1).truncatedTo(ChronoUnit.DAYS),
+                euZhNow.withDayOfMonth(1).truncatedTo(ChronoUnit.DAYS),
                 TIME_UTILS_EUROPE_ZURICH.startOfMonth());
         assertEquals(
-                TIME_UTILS_UTC.now().withDayOfMonth(1).truncatedTo(ChronoUnit.DAYS),
+                utcNow.withDayOfMonth(1).truncatedTo(ChronoUnit.DAYS),
                 TIME_UTILS_UTC.startOfMonth());
+
+        final var euZhPlus2Months =
+                TIME_UTILS_EUROPE_ZURICH.now().plusMonths(2).plusDays(7).plusMinutes(356);
+        final var euZhPlus2MonthsStartOfMonth =
+                TIME_UTILS_EUROPE_ZURICH.startOfMonth(euZhPlus2Months);
+        assertEquals(
+                euZhPlus2Months.withDayOfMonth(1).truncatedTo(ChronoUnit.DAYS),
+                euZhPlus2MonthsStartOfMonth);
+
+        final var utcPlus2Months = TIME_UTILS_UTC.now().plusMonths(2).plusDays(7).plusMinutes(356);
+        final var utcPlus2MonthsStartOfMonth = TIME_UTILS_UTC.startOfMonth(utcPlus2Months);
+        assertEquals(
+                utcPlus2Months.withDayOfMonth(1).truncatedTo(ChronoUnit.DAYS),
+                utcPlus2MonthsStartOfMonth);
+
+        final var euZhPlus2MonthsDate = euZhPlus2Months.toLocalDate();
+        final var euZhPlus2MonthsStartOfMonthDate =
+                TIME_UTILS_EUROPE_ZURICH.startOfMonth(euZhPlus2MonthsDate);
+        assertEquals(euZhPlus2MonthsStartOfMonth, euZhPlus2MonthsStartOfMonthDate);
+        final var utcPlus2MonthsDate = utcPlus2Months.toLocalDate();
+        final var utcPlus2MonthsStartOfMonthDate = TIME_UTILS_UTC.startOfMonth(utcPlus2MonthsDate);
+        assertEquals(utcPlus2MonthsStartOfMonth, utcPlus2MonthsStartOfMonthDate);
     }
 
     @Test
