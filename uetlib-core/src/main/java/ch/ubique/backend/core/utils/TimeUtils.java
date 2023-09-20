@@ -340,6 +340,11 @@ public final class TimeUtils {
     }
 
     @Contract(" -> new")
+    public LocalDate today() {
+        return LocalDate.now(zoneId);
+    }
+
+    @Contract(" -> new")
     public @NotNull ZonedDateTime startOfToday() {
         return now().truncatedTo(ChronoUnit.DAYS);
     }
