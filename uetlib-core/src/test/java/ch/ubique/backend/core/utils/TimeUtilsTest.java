@@ -776,6 +776,13 @@ class TimeUtilsTest {
     }
 
     @Test
+    void todayEuZh() {
+        final var todayEuZh = TIME_UTILS_EUROPE_ZURICH.today();
+        final var nowEuZh = TIME_UTILS_EUROPE_ZURICH.now();
+        assertEquals(nowEuZh.truncatedTo(ChronoUnit.DAYS).toLocalDate(), todayEuZh);
+    }
+
+    @Test
     void startOfTodayEuZh() {
         final var startOfTodayEuZh = TIME_UTILS_EUROPE_ZURICH.startOfToday();
         final var nowEuZh = TIME_UTILS_EUROPE_ZURICH.now();
