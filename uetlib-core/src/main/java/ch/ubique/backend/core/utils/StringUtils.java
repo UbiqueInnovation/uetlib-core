@@ -1,8 +1,10 @@
 package ch.ubique.backend.core.utils;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.jetbrains.annotations.Contract;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -76,5 +78,16 @@ public final class StringUtils {
     public static String normalizeAndStripToNull(final String input) {
         return org.apache.commons.lang3.StringUtils.stripToNull(
                 normalizeSpaceAndNonBreakingSpace(input));
+    }
+
+    public static Optional<Integer> tryParseInt(final String s) {
+        if (NumberUtils.isParsable(s)) {
+            try {
+                return Optional.of(Integer.parseInt(s));
+            } catch (final NumberFormatException ignored) {
+                return Optional.of(Double.parseDouble(s)).map(Double::intValue);
+            }
+        }
+        return Optional.empty();
     }
 }
