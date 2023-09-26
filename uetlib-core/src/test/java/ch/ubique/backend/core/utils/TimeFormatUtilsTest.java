@@ -3,12 +3,16 @@ package ch.ubique.backend.core.utils;
 import static ch.ubique.backend.core.utils.TimeFormatUtils.TIME_FORMAT_UTILS_EUROPE_ZURICH;
 import static ch.ubique.backend.core.utils.TimeUtils.*;
 
+import static ch.ubique.backend.test.assertion.AssertionUtils.assertThrowsWithMessage;
 import static org.junit.jupiter.api.Assertions.*;
 
+import ch.ubique.backend.test.assertion.AssertionUtils;
 import org.junit.jupiter.api.Test;
 
 import java.time.*;
+import java.time.format.DateTimeParseException;
 
+@SuppressWarnings("ResultOfMethodCallIgnored")
 class TimeFormatUtilsTest {
 
     @Test
@@ -66,15 +70,18 @@ class TimeFormatUtilsTest {
         final var offsetDateTime =
                 OffsetDateTime.ofInstant(Instant.ofEpochSecond(1648076980), ZONE_ID_EUROPE_ZURICH);
         assertEquals(
-                "24.03.2022 00:09", TIME_FORMAT_UTILS_EUROPE_ZURICH.formatLocalDateTime(offsetDateTime));
+                "24.03.2022 00:09",
+                TIME_FORMAT_UTILS_EUROPE_ZURICH.formatLocalDateTime(offsetDateTime));
 
         final var instant = Instant.ofEpochSecond(1648076980);
-        assertEquals("24.03.2022 00:09", TIME_FORMAT_UTILS_EUROPE_ZURICH.formatLocalDateTime(instant));
+        assertEquals(
+                "24.03.2022 00:09", TIME_FORMAT_UTILS_EUROPE_ZURICH.formatLocalDateTime(instant));
 
         final var localDateTime =
                 LocalDateTime.ofInstant(Instant.ofEpochSecond(1648076980), ZONE_ID_EUROPE_ZURICH);
         assertEquals(
-                "24.03.2022 00:09", TIME_FORMAT_UTILS_EUROPE_ZURICH.formatLocalDateTime(localDateTime));
+                "24.03.2022 00:09",
+                TIME_FORMAT_UTILS_EUROPE_ZURICH.formatLocalDateTime(localDateTime));
     }
 
     @Test
@@ -129,7 +136,8 @@ class TimeFormatUtilsTest {
                 ZonedDateTime.ofInstant(Instant.ofEpochSecond(1648276980), ZONE_ID_EUROPE_ZURICH);
         assertEquals(
                 "24.03.2022 – 26.03.2022",
-                TIME_FORMAT_UTILS_EUROPE_ZURICH.formatLocalDateRange(startZonedDateTime, endZonedDateTime));
+                TIME_FORMAT_UTILS_EUROPE_ZURICH.formatLocalDateRange(
+                        startZonedDateTime, endZonedDateTime));
 
         final var startOffsetDateTime =
                 OffsetDateTime.ofInstant(Instant.ofEpochSecond(1648076980), ZONE_ID_EUROPE_ZURICH);
@@ -172,7 +180,8 @@ class TimeFormatUtilsTest {
                 ZonedDateTime.ofInstant(Instant.ofEpochSecond(1648276980), ZONE_ID_EUROPE_ZURICH);
         assertEquals(
                 "24.03.2022 00:09 – 26.03.2022 07:43",
-                TIME_FORMAT_UTILS_EUROPE_ZURICH.formatLocalDateTimeRange(startZonedDateTime, endZonedDateTime));
+                TIME_FORMAT_UTILS_EUROPE_ZURICH.formatLocalDateTimeRange(
+                        startZonedDateTime, endZonedDateTime));
 
         final var startOffsetDateTime =
                 OffsetDateTime.ofInstant(Instant.ofEpochSecond(1648076980), ZONE_ID_EUROPE_ZURICH);
@@ -211,5 +220,40 @@ class TimeFormatUtilsTest {
         final var americaNewYork = TimeFormatUtils.getInstance("America/New_York");
         assertEquals(americaNewYork, TimeFormatUtils.getInstance("America/New_York"));
         assertEquals(americaNewYork, TimeFormatUtils.getInstance(ZoneId.of("America/New_York")));
+    }
+
+    @Test
+    void parseLocalDate() {
+        assertEquals(LocalDate.of(2023, 9, 26), TimeFormatUtils.parseLocalDate("26.09.2023"));
+        assertEquals(LocalDate.of(2023, 9, 30), TimeFormatUtils.parseLocalDate("31.09.2023")); // somehow this is legal, lol
+
+        assertThrowsWithMessage(NullPointerException.class, () -> TimeFormatUtils.parseLocalDate(null), "text");
+        assertThrowsWithMessage(DateTimeParseException.class, () -> TimeFormatUtils.parseLocalDate(""), "Text '' could not be parsed at index 0");
+        assertThrowsWithMessage(DateTimeParseException.class, () -> TimeFormatUtils.parseLocalDate("26.9.2023"), "Text '26.9.2023' could not be parsed at index 3");
+        assertThrowsWithMessage(DateTimeParseException.class, () -> TimeFormatUtils.parseLocalDate("32.09.2023"), "Text '32.09.2023' could not be parsed: Invalid value for DayOfMonth (valid values 1 - 28/31): 32");
+    }
+
+    @Test
+    void parseLocalTime() {
+        assertEquals(LocalTime.of(8, 6), TimeFormatUtils.parseLocalTime("08:06"));
+
+        assertThrowsWithMessage(NullPointerException.class, () -> TimeFormatUtils.parseLocalTime(null), "text");
+        assertThrowsWithMessage(DateTimeParseException.class, () -> TimeFormatUtils.parseLocalTime(""), "Text '' could not be parsed at index 0");
+        assertThrowsWithMessage(DateTimeParseException.class, () -> TimeFormatUtils.parseLocalTime("08:6"), "Text '08:6' could not be parsed at index 3");
+        assertThrowsWithMessage(DateTimeParseException.class, () -> TimeFormatUtils.parseLocalTime("8:06"), "Text '8:06' could not be parsed at index 0");
+        assertThrowsWithMessage(DateTimeParseException.class, () -> TimeFormatUtils.parseLocalTime("24:06"), "Text '24:06' could not be parsed: Invalid value for HourOfDay (valid values 0 - 23): 24");
+    }
+
+    @Test
+    void parseLocalDateTime() {
+        assertEquals(LocalDateTime.of(LocalDate.of(2023, 9, 26), LocalTime.of(8, 6)), TimeFormatUtils.parseLocalDateTime("26.09.2023 08:06"));
+        assertEquals(LocalDateTime.of(LocalDate.of(2023, 9, 30), LocalTime.of(8, 6)), TimeFormatUtils.parseLocalDateTime("31.09.2023 08:06")); // somehow this is legal, lol
+
+        assertThrowsWithMessage(NullPointerException.class, () -> TimeFormatUtils.parseLocalDateTime(null), "text");
+        assertThrowsWithMessage(DateTimeParseException.class, () -> TimeFormatUtils.parseLocalDateTime(""), "Text '' could not be parsed at index 0");
+        assertThrowsWithMessage(DateTimeParseException.class, () -> TimeFormatUtils.parseLocalDateTime("26.9.2023 08:06"), "Text '26.9.2023 08:06' could not be parsed at index 3");
+        assertThrowsWithMessage(DateTimeParseException.class, () -> TimeFormatUtils.parseLocalDateTime("32.09.2023 08:06"), "Text '32.09.2023 08:06' could not be parsed: Invalid value for DayOfMonth (valid values 1 - 28/31): 32");
+        assertThrowsWithMessage(DateTimeParseException.class, () -> TimeFormatUtils.parseLocalDateTime("26.09.2023 08:6"), "Text '26.09.2023 08:6' could not be parsed at index 14");
+        assertThrowsWithMessage(DateTimeParseException.class, () -> TimeFormatUtils.parseLocalDateTime("26.09.2023 8:06"), "Text '26.09.2023 8:06' could not be parsed at index 11");
     }
 }

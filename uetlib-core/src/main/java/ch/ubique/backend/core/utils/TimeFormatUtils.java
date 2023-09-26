@@ -49,6 +49,18 @@ public final class TimeFormatUtils {
         return getInstance(ZoneId.of(zoneId));
     }
 
+    public static LocalDate parseLocalDate(final String localDate) {
+        return LocalDate.parse(localDate, LOCAL_DATE_FORMATTER);
+    }
+
+    public static LocalTime parseLocalTime(final String localTime) {
+        return LocalTime.parse(localTime, LOCAL_TIME_FORMATTER);
+    }
+
+    public static LocalDateTime parseLocalDateTime(final String localDateTime) {
+        return LocalDateTime.parse(localDateTime, LOCAL_DATE_TIME_FORMATTER);
+    }
+
     public String formatLocalDate(final ZonedDateTime temporal) {
         return LOCAL_DATE_FORMATTER.format(timeUtils.toLocalDate(temporal));
     }
