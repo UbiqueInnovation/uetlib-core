@@ -139,7 +139,7 @@ public final class InputStreamUtils {
             final InputStream inputStream, final String contentEncoding) throws IOException {
         final var contentInfo = contentType(inputStream);
         if (contentInfo == null) {
-            logger.info(
+            logger.debug(
                     "no content type found for input stream, will fallback to uncompressing by content encoding header or file extension.");
             return uncompressByContentEncoding(inputStream, contentEncoding);
         }
