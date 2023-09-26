@@ -8,7 +8,7 @@ public enum HttpHeader {
     BEST_BEFORE("best-before"),
     BACKOFF("backoff"),
     CONTENT_LENGTH_UNCOMPRESSED("content-length-uncompressed"),
-    ACL_ACCESS_POLICY("x-amz-acl");
+    AMZ_ACL("x-amz-acl");
 
     private final String value;
     private final String noDashesAzure;
@@ -38,22 +38,5 @@ public enum HttpHeader {
         return withAmazonPrefix;
     }
 
-    public enum AwsS3AccessPolicy {
-        PRIVATE("private"),
-        PUBLIC_READ("public-read"),
-        PUBLIC_READ_WRITE("public-read-write"),
-        AUTHENTICATED_READ("authenticated-read"),
-        BUCKET_OWNER_READ("bucket-owner-read"),
-        BUCKET_OWNER_FULL_CONTROL("bucket-owner-full-control");
 
-        private final String value;
-
-        AwsS3AccessPolicy(final String value) {
-            this.value = value;
-        }
-
-        public String value() {
-            return value;
-        }
-    }
 }
