@@ -148,7 +148,7 @@ public class CollectionUtils {
      * @return a sorted List of elements
      * @param <T> the type of elements in the collection
      */
-    public static <T> List<T> asSortedList(final Collection<T> collection) {
+    public static <T extends Comparable<T>> List<T> asSortedList(final Collection<T> collection) {
         return collection.stream().sorted().toList();
     }
 }
