@@ -14,24 +14,24 @@ class TempFileManagerTest {
     @Test
     void testCreateTempFiles() {
         final var testString = "teststringfortenpfilecreations";
-
+        final var tempFileManager = new TempFileManager();
         assertDoesNotThrow(
                 () -> {
                     final var tempFileBytes =
-                            TempFileManager.createTempFile(
+                            tempFileManager.createTempFile(
                                     testString.getBytes(StandardCharsets.UTF_8), ".tmp");
                     final var tempFileStream =
-                            TempFileManager.createTempFile(
+                            tempFileManager.createTempFile(
                                     new ByteArrayInputStream(
                                             testString.getBytes(StandardCharsets.UTF_8)),
                                     ".tmp");
 
                     assertNotNull(tempFileBytes);
                     assertNotNull(tempFileStream);
-                    assertTrue(TempFileManager.getTempFiles().contains(tempFileBytes));
-                    assertTrue(TempFileManager.getTempFiles().contains(tempFileStream));
+                    assertTrue(tempFileManager.getTempFiles().contains(tempFileBytes));
+                    assertTrue(tempFileManager.getTempFiles().contains(tempFileStream));
                 });
 
-        TempFileManager.deleteTempFiles();
+        tempFileManager.deleteTempFiles();
     }
 }
