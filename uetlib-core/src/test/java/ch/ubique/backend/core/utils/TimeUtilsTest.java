@@ -18,7 +18,7 @@ class TimeUtilsTest {
     void now() {
         final var expected = ZonedDateTime.now(ZONE_ID_EUROPE_BERLIN);
         final var actual = TIME_UTILS_EUROPE_BERLIN.now();
-        assertTrue(expected.minus(1L, ChronoUnit.MILLIS).isBefore(actual));
+        assertFalse(expected.isAfter(actual));
         assertTrue(actual.minusSeconds(1L).isBefore(expected));
         assertTrue(expected.minusSeconds(1L).isBefore(actual));
     }
@@ -27,7 +27,7 @@ class TimeUtilsTest {
     void nowEuZh() {
         final var expected = ZonedDateTime.now(ZONE_ID_EUROPE_ZURICH);
         final var actual = TIME_UTILS_EUROPE_ZURICH.now();
-        assertTrue(expected.minus(1L, ChronoUnit.MILLIS).isBefore(actual));
+        assertFalse(expected.isAfter(actual));
         assertTrue(actual.minusSeconds(1L).isBefore(expected));
         assertTrue(expected.minusSeconds(1L).isBefore(actual));
     }
