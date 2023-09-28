@@ -40,17 +40,17 @@ public class StatisticUtils {
             return Optional.empty();
         }
 
-        final var total = collection.size();
+        final var sortedList = CollectionUtils.asSortedList(collection);
 
-        final var median = median(collection).orElseThrow();
-        final var percentiles = percentiles(collection, List.of(1, 5, 25, 75, 95, 99));
+        final var median = medianForSortedList(sortedList).orElseThrow();
+        final var percentiles = percentilesForSortedList(sortedList, List.of(1, 5, 25, 75, 95, 99));
 
         final var doubleSummaryStats =
                 collection.stream().collect(Collectors.summarizingDouble(Double::doubleValue));
 
         return Optional.of(
                 new NumericCollectionStats(
-                        total,
+                        collection.size(),
                         doubleSummaryStats.getMin(),
                         doubleSummaryStats.getMax(),
                         doubleSummaryStats.getAverage(),
@@ -67,12 +67,26 @@ public class StatisticUtils {
      *     empty, otherwise an empty {@code OptionalDouble}
      */
     public static OptionalDouble median(final Collection<Double> collection) {
-        final var sorted = CollectionUtils.asSortedList(collection);
-        final var size = sorted.size();
+        final var sortedList = CollectionUtils.asSortedList(collection);
+        return medianForSortedList(sortedList);
+    }
+
+    /**
+     * Calculates and returns the median value of a sorted list of doubles.
+     *
+     * @param sortedList the sorted list of doubles
+     * @return an {@code OptionalDouble} object containing the median value if the list is not
+     *     empty, otherwise an empty {@code OptionalDouble}
+     */
+    public static OptionalDouble medianForSortedList(final List<Double> sortedList) {
+        final var size = sortedList.size();
         if (size % 2 == 0) {
-            return CollectionUtils.doubleStream(sorted).skip((size / 2) - 1L).limit(2).average();
+            return CollectionUtils.doubleStream(sortedList)
+                    .skip((size / 2) - 1L)
+                    .limit(2)
+                    .average();
         }
-        return CollectionUtils.doubleStream(sorted).skip(size / 2).findFirst();
+        return CollectionUtils.doubleStream(sortedList).skip(size / 2).findFirst();
     }
 
     /**
@@ -85,6 +99,18 @@ public class StatisticUtils {
     public static Map<Integer, Double> percentiles(
             final Collection<Double> collection, final Collection<Integer> percentiles) {
         final var sortedList = CollectionUtils.asSortedList(collection);
+        return percentilesForSortedList(sortedList, percentiles);
+    }
+
+    /**
+     * Calculates the specified percentiles for a sorted list of numeric values.
+     *
+     * @param sortedList the sorted list of numeric values
+     * @param percentiles the collection of percentiles to calculate
+     * @return a map containing the specified percentiles and their corresponding values
+     */
+    public static Map<Integer, Double> percentilesForSortedList(
+            final List<Double> sortedList, final Collection<Integer> percentiles) {
         return percentiles.stream()
                 .collect(
                         Collectors.toMap(
