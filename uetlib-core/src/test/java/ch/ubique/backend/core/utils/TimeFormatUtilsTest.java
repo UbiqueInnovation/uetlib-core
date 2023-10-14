@@ -2,11 +2,10 @@ package ch.ubique.backend.core.utils;
 
 import static ch.ubique.backend.core.utils.TimeFormatUtils.TIME_FORMAT_UTILS_EUROPE_ZURICH;
 import static ch.ubique.backend.core.utils.TimeUtils.*;
-
 import static ch.ubique.backend.test.assertion.AssertionUtils.assertThrowsWithMessage;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-import ch.ubique.backend.test.assertion.AssertionUtils;
 import org.junit.jupiter.api.Test;
 
 import java.time.*;

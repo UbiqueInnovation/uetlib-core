@@ -1,22 +1,14 @@
 package ch.ubique.backend.core.utils;
 
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-import jakarta.validation.ValidationException;
-import jakarta.validation.ValidatorFactory;
-
-import org.hibernate.validator.messageinterpolation.ParameterMessageInterpolator;
+import jakarta.validation.*;
 
 import java.util.Set;
 
 public final class ValidationUtils {
-    private ValidationUtils() {}
+    private static final Validator VALIDATOR =
+            Validation.buildDefaultValidatorFactory().getValidator();
 
-    private static final ValidatorFactory VALIDATOR_FACTORY =
-            Validation.byDefaultProvider()
-                    .configure()
-                    .messageInterpolator(new ParameterMessageInterpolator())
-                    .buildValidatorFactory();
+    private ValidationUtils() {}
 
     public static boolean isValid(final Object object) {
         final var constraintViolations = validate(object);
@@ -33,7 +25,6 @@ public final class ValidationUtils {
     }
 
     public static <T> Set<ConstraintViolation<T>> validate(final T object) {
-        final var validator = VALIDATOR_FACTORY.getValidator();
-        return validator.validate(object);
+        return VALIDATOR.validate(object);
     }
 }
