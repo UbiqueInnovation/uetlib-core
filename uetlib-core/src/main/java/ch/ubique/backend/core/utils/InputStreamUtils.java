@@ -151,7 +151,7 @@ public final class InputStreamUtils {
             case ZIP -> new ZipInputStream(inputStream);
             default -> {
                 logger.info(
-                        "content type {} not yet handled specifically, returning the stream as-is.",
+                        "content type {} not yet handled specifically, returning the stream as-is",
                         contentType);
                 yield inputStream;
             }
@@ -170,7 +170,7 @@ public final class InputStreamUtils {
             case "zip" -> new ZipInputStream(inputStream);
             default -> {
                 logger.info(
-                        "content encoding {} not yet handled specifically, returning the stream as-is.",
+                        "content encoding {} not yet handled specifically, returning the stream as-is",
                         contentEncoding);
                 yield inputStream;
             }
