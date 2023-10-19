@@ -1,5 +1,6 @@
 package ch.ubique.backend.core.utils;
 
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 
 import org.jetbrains.annotations.Contract;
@@ -10,7 +11,6 @@ import java.util.Optional;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import javax.annotation.Nullable;
 
 public final class MinMaxCollector {
 
