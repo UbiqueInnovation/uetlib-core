@@ -13,12 +13,13 @@ import java.util.function.Function;
 
 public class ProgressLogger {
 
+    private static final Logger logger = LoggerFactory.getLogger(ProgressLogger.class);
+
     private final String prefix;
     private final long total;
     private final AtomicLong count;
     private final long startTime;
     private final Map<String, String> mdcContextMap;
-    private final Logger logger;
     private final int steps;
 
     public ProgressLogger(final long total) {
@@ -43,7 +44,6 @@ public class ProgressLogger {
         this.total = total;
         this.startTime = System.currentTimeMillis();
         this.count = new AtomicLong();
-        this.logger = LoggerFactory.getLogger(getClass());
         this.mdcContextMap = mdcContextMap;
         this.steps = nrOfLogSteps;
     }
