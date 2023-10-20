@@ -71,9 +71,11 @@ public class ProgressLogger {
     }
 
     public <T> Consumer<T> watch(final Consumer<T> consumer) {
-        return t -> {
-            consumer.accept(t);
-            step();
-        };
+        return MdcUtils.runWithContext(
+                t -> {
+                    consumer.accept(t);
+                    step();
+                },
+                mdcContextMap);
     }
 }
