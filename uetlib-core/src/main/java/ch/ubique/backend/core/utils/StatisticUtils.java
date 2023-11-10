@@ -3,7 +3,12 @@ package ch.ubique.backend.core.utils;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.util.*;
+import java.util.function.DoubleFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -139,5 +144,32 @@ public class StatisticUtils {
             return OptionalDouble.empty();
         }
         return OptionalDouble.of(sortedList.get(index));
+    }
+
+    public static String formatByteStats(final NumericCollectionStats stats) {
+        return formatStats(stats, FileUtils::byteCountToDisplaySize);
+    }
+
+    public static String formatStats(
+            final NumericCollectionStats stats, final DoubleFunction<String> numberFormatter) {
+        return new ToStringBuilder(stats, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("total", stats.total())
+                .append("sum", numberFormatter.apply(stats.sum()))
+                .append("min", numberFormatter.apply(stats.min()))
+                .append("max", numberFormatter.apply(stats.max()))
+                .append("average", numberFormatter.apply(stats.average()))
+                .append("median", numberFormatter.apply(stats.median()))
+                .append(
+                        "percentiles",
+                        stats.percentiles().entrySet().stream()
+                                .sorted(Map.Entry.comparingByKey())
+                                .map(
+                                        entry ->
+                                                String.format(
+                                                        "%d=%s",
+                                                        entry.getKey(),
+                                                        numberFormatter.apply(entry.getValue())))
+                                .collect(Collectors.joining(", ", "[", "]")))
+                .build();
     }
 }

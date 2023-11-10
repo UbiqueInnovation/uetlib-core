@@ -7,11 +7,12 @@ import com.j256.simplemagic.ContentInfoInputStreamWrapper;
 import com.j256.simplemagic.ContentInfoUtil;
 import com.pivovarit.function.exception.WrappedException;
 
+import jakarta.validation.constraints.NotNull;
+
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.apache.commons.io.input.BOMInputStream;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

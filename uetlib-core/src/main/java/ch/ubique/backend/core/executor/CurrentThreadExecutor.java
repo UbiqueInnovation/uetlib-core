@@ -1,6 +1,6 @@
 package ch.ubique.backend.core.executor;
 
-import org.jetbrains.annotations.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Collection;
 import java.util.Collections;
