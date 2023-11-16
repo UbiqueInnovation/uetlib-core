@@ -132,7 +132,10 @@ public class ProgressLogger {
         final var currentTime = System.currentTimeMillis();
         final var elementsPerSecond = 1000.0 * currentCount / (currentTime - startTime);
         logger.info(
-                "{}Processed {} ({} elements per second)", prefix, currentCount, elementsPerSecond);
+                "{}Processed {} elements ({} elements per second)",
+                prefix,
+                currentCount,
+                elementsPerSecond);
     }
 
     public <T> Consumer<T> watch(final Consumer<T> consumer) {
