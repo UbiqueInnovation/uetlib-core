@@ -8,4 +8,6 @@ public sealed interface ProcessResult permits FinishedProcessResult, UnfinishedP
     List<String> stdout();
 
     List<String> stderr();
+
+    boolean success();
 }
