@@ -11,12 +11,22 @@ import java.util.concurrent.TimeUnit;
 
 public class ProcessUtils {
 
-    private ProcessUtils() {}
-
     private static final Logger logger = LoggerFactory.getLogger(ProcessUtils.class);
 
+    private ProcessUtils() {}
+
+    /**
+     * Executes a process and returns the exit value. The process output is logged to stdout and
+     * stderr.
+     *
+     * @param command The command to execute
+     * @param timeout The timeout after which the process is killed
+     * @return The exit value of the process
+     * @throws IOException If the process could not be started
+     * @throws IllegalStateException If the process exceeds the timeout
+     */
     public static int executeProcess(final List<String> command, final Duration timeout)
-            throws IOException {
+            throws IOException, IllegalStateException {
 
         try {
             logger.debug("Running command: {}", command);
