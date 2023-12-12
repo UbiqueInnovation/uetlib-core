@@ -5,13 +5,21 @@ import ch.ubique.backend.core.process.ProcessConfig;
 import ch.ubique.backend.core.process.ProcessResult;
 import ch.ubique.backend.core.process.UnfinishedProcessResult;
 
+import com.pivovarit.function.exception.WrappedException;
+
+import jakarta.validation.constraints.NotNull;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 public class ProcessUtils {
 
@@ -32,45 +40,30 @@ public class ProcessUtils {
                 builder.directory(config.directory());
             }
             final var process = builder.start();
-            final var stdout = new ConcurrentLinkedDeque<String>();
-            final var stderr = new ConcurrentLinkedDeque<String>();
-            Executors.newSingleThreadExecutor()
-                    .submit(
-                            () -> {
-                                try (final var inputReader = process.inputReader()) {
-                                    inputReader
-                                            .lines()
-                                            .forEach(
-                                                    line -> {
-                                                        logger.atLevel(config.logLevelStdout())
-                                                                .log("stdout: {}", line);
-                                                        stdout.add(line);
-                                                    });
-                                } catch (final IOException e) {
-                                    logger.warn("Error reading stdout", e);
-                                }
-                            });
-            Executors.newSingleThreadExecutor()
-                    .submit(
-                            () -> {
-                                try (final var errorReader = process.errorReader()) {
-                                    errorReader
-                                            .lines()
-                                            .forEach(
-                                                    line -> {
-                                                        logger.atLevel(config.logLevelStderr())
-                                                                .log("stderr: {}", line);
-                                                        stderr.add(line);
-                                                    });
-                                } catch (final IOException e) {
-                                    logger.warn("Error reading stderr", e);
-                                }
-                            });
+            final var stdoutFuture =
+                    Executors.newSingleThreadExecutor()
+                            .submit(
+                                    () ->
+                                            processOutputLines(
+                                                    process::inputReader,
+                                                    config.logLevelStdout(),
+                                                    "stdout"));
+            final var stderrFuture =
+                    Executors.newSingleThreadExecutor()
+                            .submit(
+                                    () ->
+                                            processOutputLines(
+                                                    process::errorReader,
+                                                    config.logLevelStderr(),
+                                                    "stderr"));
             final var didProcessFinish =
                     process.waitFor(config.timeout().toSeconds(), TimeUnit.SECONDS);
+
+            final var stdout = stdoutFuture.get().map(String.class::cast).toList();
+            final var stderr = stderrFuture.get().map(String.class::cast).toList();
+
             if (!didProcessFinish) {
-                return new UnfinishedProcessResult(
-                        stdout.stream().toList(), stderr.stream().toList());
+                return new UnfinishedProcessResult(stdout, stderr);
             }
             final var exitValue = process.exitValue();
             logger.debug("Process finished with exit value {}", exitValue);
@@ -78,7 +71,28 @@ public class ProcessUtils {
                     exitValue, stdout.stream().toList(), stderr.stream().toList());
         } catch (final InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new RuntimeException(e);
+            throw new WrappedException(e);
+        } catch (final ExecutionException e) {
+            throw new WrappedException(e);
         }
+    }
+
+    @NotNull
+    private static Stream<?> processOutputLines(
+            final Supplier<BufferedReader> readerSupplier,
+            final Level config,
+            final String outputStreamName) {
+        try (final var reader = readerSupplier.get()) {
+            //noinspection SimplifyStreamApiCallChains
+            return reader.lines()
+                    .map(
+                            line -> {
+                                logger.atLevel(config).log("{}: {}", outputStreamName, line);
+                                return line;
+                            });
+        } catch (final IOException e) {
+            logger.warn("Error reading {}", outputStreamName, e);
+        }
+        return Stream.of();
     }
 }
