@@ -4,13 +4,17 @@ import ch.ubique.backend.core.process.FinishedProcessResult;
 import ch.ubique.backend.core.process.ProcessResult;
 import ch.ubique.backend.core.process.UnfinishedProcessResult;
 
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.checkerframework.checker.units.qual.N;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -27,29 +31,51 @@ public class ProcessUtils {
 
     public static ProcessResult executeProcess(final List<String> command, final Duration timeout)
             throws IOException {
+        return executeProcess(command, timeout, null);
+    }
+
+    public static ProcessResult executeProcess(
+            final List<String> command, final Duration timeout, @Nullable final File directory)
+            throws IOException {
         final var stdout = new ArrayList<String>();
         final var stderr = new ArrayList<String>();
-        try {
-            final var exitCode =
-                    executeProcessAndHandleLogs(
-                            command,
-                            timeout,
-                            process -> collectProcessOutputsAndErrors(process, stdout, stderr));
-            return new FinishedProcessResult(exitCode, stdout, stderr);
-        } catch (final IllegalStateException e) {
-            return new UnfinishedProcessResult(stdout, stderr, e);
+
+        final var processResult =
+                executeProcessAndHandleLogs(
+                        command,
+                        timeout,
+                        directory,
+                        process -> collectProcessOutputsAndErrors(process, stdout, stderr));
+        if (processResult.getLeft()) {
+            return new FinishedProcessResult(processResult.getRight(), stdout, stderr);
         }
+        return new UnfinishedProcessResult(stdout, stderr);
+    }
+
+    public static Pair<Boolean, Integer> executeProcessAndLog(
+            final List<String> command, final Duration timeout) throws IOException {
+        return executeProcessAndLog(command, timeout, null);
     }
 
     /**
      * Executes a process and returns the exit value. The process output is logged to stdout and
      * stderr at the default levels of {@link Level#DEBUG} and {@link Level#WARN}.
      *
-     * @see #executeProcessAndHandleLogs(List, Duration, Consumer)
+     * @see #executeProcessAndHandleLogs(List, Duration, File, Consumer)
      */
-    public static int executeProcessAndLog(final List<String> command, final Duration timeout)
-            throws IOException, IllegalStateException {
-        return executeProcessAndLog(command, timeout, Level.DEBUG, Level.WARN);
+    public static Pair<Boolean, Integer> executeProcessAndLog(
+            final List<String> command, final Duration timeout, @Nullable final File directory)
+            throws IOException {
+        return executeProcessAndLog(command, timeout, directory, Level.DEBUG, Level.WARN);
+    }
+
+    public static Pair<Boolean, Integer> executeProcessAndLog(
+            final List<String> command,
+            final Duration timeout,
+            final Level logLevelStdout,
+            final Level logLevelStderr)
+            throws IOException {
+        return executeProcessAndLog(command, timeout, null, logLevelStdout, logLevelStderr);
     }
 
     /**
@@ -62,18 +88,19 @@ public class ProcessUtils {
      * @param logLevelStderr The log level for stderr
      * @return The exit value of the process
      * @throws IOException If the process could not be started
-     * @throws IllegalStateException If the process exceeds the timeout
-     * @see #executeProcessAndHandleLogs(List, Duration, Consumer)
+     * @see #executeProcessAndHandleLogs(List, Duration, File, Consumer)
      */
-    public static int executeProcessAndLog(
+    public static Pair<Boolean, Integer> executeProcessAndLog(
             final List<String> command,
             final Duration timeout,
+            @Nullable final File directory,
             final Level logLevelStdout,
             final Level logLevelStderr)
-            throws IOException, IllegalStateException {
+            throws IOException {
         return executeProcessAndHandleLogs(
                 command,
                 timeout,
+                directory,
                 process -> logProcessOutputsAndErrors(process, logLevelStdout, logLevelStderr));
     }
 
@@ -84,27 +111,30 @@ public class ProcessUtils {
      * @param command The command to execute
      * @param timeout The timeout after which the process is killed
      * @param processLogHandler A handler for the process output is passed the process as argument
-     * @return The exit value of the process
+     * @return A pair of (finished, exitCode) where exitCode is null if the process did not finish
      * @throws IOException If the process could not be started
-     * @throws IllegalStateException If the process exceeds the timeout
      */
-    private static int executeProcessAndHandleLogs(
+    private static Pair<Boolean, Integer> executeProcessAndHandleLogs(
             final List<String> command,
             final Duration timeout,
+            @Nullable final File directory,
             final Consumer<Process> processLogHandler)
-            throws IOException, IllegalStateException {
+            throws IOException {
         try {
             logger.debug("Running command: {}", command);
             final var builder = new ProcessBuilder(command);
+            if (directory != null) {
+                builder.directory(directory);
+            }
             final var process = builder.start();
             Executors.newSingleThreadExecutor().submit(() -> processLogHandler.accept(process));
             final var didProcessFinish = process.waitFor(timeout.toSeconds(), TimeUnit.SECONDS);
             if (!didProcessFinish) {
-                throw new IllegalStateException(process + " exceeded timeout.");
+                return new ImmutablePair<>(false, null);
             }
             final var exitValue = process.exitValue();
             logger.debug("Process finished with exit value {}", exitValue);
-            return exitValue;
+            return new ImmutablePair<>(true, exitValue);
         } catch (final InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new RuntimeException(e);
