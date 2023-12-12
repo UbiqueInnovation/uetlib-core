@@ -4,11 +4,8 @@ import ch.ubique.backend.core.process.FinishedProcessResult;
 import ch.ubique.backend.core.process.ProcessConfig;
 import ch.ubique.backend.core.process.ProcessResult;
 import ch.ubique.backend.core.process.UnfinishedProcessResult;
-
 import com.pivovarit.function.exception.WrappedException;
-
 import jakarta.validation.constraints.NotNull;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
@@ -25,7 +22,8 @@ public class ProcessUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(ProcessUtils.class);
 
-    private ProcessUtils() {}
+    private ProcessUtils() {
+    }
 
     /**
      * Executes a process and returns results from the process.
@@ -37,7 +35,7 @@ public class ProcessUtils {
             logger.debug("Running command: {}", config.command());
             final var builder = new ProcessBuilder(config.command());
             if (config.directory() != null) {
-                builder.directory(config.directory());
+                builder.directory(config.directory().toFile());
             }
             final var process = builder.start();
             final var stdoutFuture =
