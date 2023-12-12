@@ -3,20 +3,21 @@ package ch.ubique.backend.core.process;
 import org.slf4j.event.Level;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.time.Duration;
 import java.util.List;
 
 public class ProcessConfig {
     private final List<String> command;
     private final Duration timeout;
-    private final File directory;
+    private final Path directory;
     private final Level logLevelStdout;
     private final Level logLevelStderr;
 
     private ProcessConfig(
             final List<String> command,
             final Duration timeout,
-            final File directory,
+            final Path directory,
             final Level logLevelStdout,
             final Level logLevelStderr) {
         this.command = command;
@@ -24,6 +25,10 @@ public class ProcessConfig {
         this.directory = directory;
         this.logLevelStdout = logLevelStdout;
         this.logLevelStderr = logLevelStderr;
+    }
+
+    public static ProcessConfigBuilder builder() {
+        return new ProcessConfigBuilder();
     }
 
     public List<String> command() {
@@ -34,7 +39,7 @@ public class ProcessConfig {
         return timeout;
     }
 
-    public File directory() {
+    public Path directory() {
         return directory;
     }
 
@@ -46,14 +51,10 @@ public class ProcessConfig {
         return logLevelStderr;
     }
 
-    public static ProcessConfigBuilder builder() {
-        return new ProcessConfigBuilder();
-    }
-
     public static class ProcessConfigBuilder {
         private List<String> command;
         private Duration timeout;
-        private File directory;
+        private Path directory;
         private Level logLevelStdout;
         private Level logLevelStderr;
 
@@ -73,7 +74,7 @@ public class ProcessConfig {
             return this;
         }
 
-        public ProcessConfigBuilder directory(final File directory) {
+        public ProcessConfigBuilder directory(final Path directory) {
             this.directory = directory;
             return this;
         }
