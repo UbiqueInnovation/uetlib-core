@@ -1,8 +1,8 @@
 package ch.ubique.backend.core.process;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.event.Level;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.List;
@@ -95,7 +95,7 @@ public class ProcessConfig {
          * @throws IllegalStateException if the command has not been set
          */
         public ProcessConfig build() throws IllegalStateException {
-            if (command == null) {
+            if (CollectionUtils.isEmpty(command)) {
                 throw new IllegalStateException("command must not be null");
             }
             return new ProcessConfig(command, timeout, directory, logLevelStdout, logLevelStderr);

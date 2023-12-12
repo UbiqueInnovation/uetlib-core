@@ -12,6 +12,7 @@ import org.slf4j.event.Level;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -23,6 +24,10 @@ public class ProcessUtils {
     private static final Logger logger = LoggerFactory.getLogger(ProcessUtils.class);
 
     private ProcessUtils() {
+    }
+
+    public static ProcessResult executeProcess(final List<String> command) throws IOException {
+        return executeProcess(ProcessConfig.builder().command(command).build());
     }
 
     /**
