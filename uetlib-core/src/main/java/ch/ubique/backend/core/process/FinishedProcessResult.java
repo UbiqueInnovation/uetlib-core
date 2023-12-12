@@ -8,4 +8,9 @@ public record FinishedProcessResult(int exitCode, List<String> stdout, List<Stri
     public boolean didFinish() {
         return true;
     }
+
+    @Override
+    public boolean success() {
+        return exitCode == 0;
+    }
 }
