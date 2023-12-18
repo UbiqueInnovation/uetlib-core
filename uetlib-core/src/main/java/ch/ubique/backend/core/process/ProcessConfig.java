@@ -96,7 +96,7 @@ public class ProcessConfig {
          */
         public ProcessConfig build() throws IllegalStateException {
             if (CollectionUtils.isEmpty(command)) {
-                throw new IllegalStateException("command must not be null");
+                throw new IllegalStateException("command must not be null or empty");
             }
             return new ProcessConfig(command, timeout, directory, logLevelStdout, logLevelStderr);
         }
