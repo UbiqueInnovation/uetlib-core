@@ -4,8 +4,11 @@ import ch.ubique.backend.core.process.FinishedProcessResult;
 import ch.ubique.backend.core.process.ProcessConfig;
 import ch.ubique.backend.core.process.ProcessResult;
 import ch.ubique.backend.core.process.UnfinishedProcessResult;
+
 import com.pivovarit.function.exception.WrappedException;
+
 import jakarta.validation.constraints.NotNull;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
@@ -23,8 +26,7 @@ public class ProcessUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(ProcessUtils.class);
 
-    private ProcessUtils() {
-    }
+    private ProcessUtils() {}
 
     public static ProcessResult executeProcess(final List<String> command) throws IOException {
         return executeProcess(ProcessConfig.builder().command(command).build());
@@ -35,6 +37,7 @@ public class ProcessUtils {
      *
      * @throws IOException If the process could not be started
      */
+    @SuppressWarnings("java:S2095")
     public static ProcessResult executeProcess(final ProcessConfig config) throws IOException {
         try {
             logger.debug("Running command: {}", config.command());
@@ -85,17 +88,13 @@ public class ProcessUtils {
             final Supplier<BufferedReader> readerSupplier,
             final Level config,
             final String outputStreamName) {
-        try (final var reader = readerSupplier.get()) {
-            //noinspection SimplifyStreamApiCallChains
-            return reader.lines()
-                    .map(
-                            line -> {
-                                logger.atLevel(config).log("{}: {}", outputStreamName, line);
-                                return line;
-                            });
-        } catch (final IOException e) {
-            logger.warn("Error reading {}", outputStreamName, e);
-        }
-        return Stream.of();
+        final var reader = readerSupplier.get();
+        //noinspection SimplifyStreamApiCallChains
+        return reader.lines()
+                .map(
+                        line -> {
+                            logger.atLevel(config).log("{}: {}", outputStreamName, line);
+                            return line;
+                        });
     }
 }
