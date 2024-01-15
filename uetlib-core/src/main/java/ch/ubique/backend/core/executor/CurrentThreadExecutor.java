@@ -19,10 +19,12 @@ public class CurrentThreadExecutor implements ExecutorService {
     }
 
     @Override
-    public void shutdown() {}
+    public void shutdown() {
+        // empty on purpose
+    }
 
     @Override
-    public List<Runnable> shutdownNow() {
+    public @NotNull List<Runnable> shutdownNow() {
         return Collections.emptyList();
     }
 
@@ -42,33 +44,33 @@ public class CurrentThreadExecutor implements ExecutorService {
     }
 
     @Override
-    public <T> Future<T> submit(@NotNull final Callable<T> task) {
+    public <T> @NotNull Future<T> submit(@NotNull final Callable<T> task) {
         final var f = new FutureTask<>(task);
         f.run();
         return f;
     }
 
     @Override
-    public <T> Future<T> submit(@NotNull final Runnable task, final T result) {
+    public <T> @NotNull Future<T> submit(@NotNull final Runnable task, final T result) {
         final var f = new FutureTask<>(task, result);
         f.run();
         return f;
     }
 
     @Override
-    public Future<?> submit(@NotNull final Runnable task) {
+    public @NotNull Future<?> submit(@NotNull final Runnable task) {
         final FutureTask<?> f = new FutureTask<>(task, null);
         f.run();
         return f;
     }
 
     @Override
-    public <T> List<Future<T>> invokeAll(final Collection<? extends Callable<T>> tasks) {
+    public <T> @NotNull List<Future<T>> invokeAll(final Collection<? extends Callable<T>> tasks) {
         return tasks.stream().map(this::submit).toList();
     }
 
     @Override
-    public <T> List<Future<T>> invokeAll(
+    public <T> @NotNull List<Future<T>> invokeAll(
             final Collection<? extends Callable<T>> tasks,
             final long timeout,
             @NotNull final TimeUnit unit) {
@@ -76,7 +78,7 @@ public class CurrentThreadExecutor implements ExecutorService {
     }
 
     @Override
-    public <T> T invokeAny(final Collection<? extends Callable<T>> tasks)
+    public <T> @NotNull T invokeAny(final Collection<? extends Callable<T>> tasks)
             throws InterruptedException, ExecutionException {
         return tasks.stream().map(this::submit).findFirst().orElseThrow().get();
     }

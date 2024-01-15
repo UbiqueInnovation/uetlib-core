@@ -15,7 +15,9 @@ import org.slf4j.event.Level;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -40,11 +42,11 @@ public class ProcessUtils {
     @SuppressWarnings("java:S2095")
     public static ProcessResult executeProcess(final ProcessConfig config) throws IOException {
         try {
-            logger.debug("Running command: {}", config.command());
-            final var builder = new ProcessBuilder(config.command());
-            if (config.directory() != null) {
-                builder.directory(config.directory().toFile());
+            if (logger.isDebugEnabled()) {
+                logger.debug("Running command '{}'", String.join(" ", config.command()));
             }
+            final var builder = new ProcessBuilder(config.command());
+            Optional.ofNullable(config.directory()).map(Path::toFile).ifPresent(builder::directory);
             final var process = builder.start();
             final var stdoutFuture =
                     Executors.newSingleThreadExecutor()
@@ -73,8 +75,7 @@ public class ProcessUtils {
             }
             final var exitValue = process.exitValue();
             logger.debug("Process finished with exit value {}", exitValue);
-            return new FinishedProcessResult(
-                    exitValue, stdout.stream().toList(), stderr.stream().toList());
+            return new FinishedProcessResult(exitValue, stdout, stderr);
         } catch (final InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new WrappedException(e);
@@ -86,14 +87,14 @@ public class ProcessUtils {
     @NotNull
     private static Stream<?> processOutputLines(
             final Supplier<BufferedReader> readerSupplier,
-            final Level config,
+            final Level level,
             final String outputStreamName) {
         final var reader = readerSupplier.get();
         //noinspection SimplifyStreamApiCallChains
         return reader.lines()
                 .map(
                         line -> {
-                            logger.atLevel(config).log("{}: {}", outputStreamName, line);
+                            logger.atLevel(level).log("{}: {}", outputStreamName, line);
                             return line;
                         });
     }
