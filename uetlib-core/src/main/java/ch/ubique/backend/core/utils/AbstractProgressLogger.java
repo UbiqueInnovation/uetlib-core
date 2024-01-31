@@ -21,7 +21,7 @@ public abstract sealed class AbstractProgressLogger
     @Positive private final long stepSize;
 
     private final AtomicLong count;
-    protected final long startTime;
+    private long lastTime;
 
     private final Map<String, String> mdcContextMap;
 
@@ -35,7 +35,7 @@ public abstract sealed class AbstractProgressLogger
         this.mdcContextMap = mdcContextMap;
 
         this.count = new AtomicLong();
-        this.startTime = System.currentTimeMillis();
+        this.lastTime = System.currentTimeMillis();
     }
 
     public <T, R> Function<T, R> watch(final Function<T, R> function) {
@@ -51,11 +51,19 @@ public abstract sealed class AbstractProgressLogger
     public void step() {
         final var currentCount = count.incrementAndGet();
         if (currentCount % stepSize == 0) {
-            logProgress(currentCount);
+            final var currentTime = System.currentTimeMillis();
+            final var deltaMillis = currentTime - lastTime;
+            final var elementsPerSecond = 1000.0 * stepSize / deltaMillis;
+            lastTime = currentTime;
+
+            logProgress(currentCount, elementsPerSecond);
         }
+        onCount(currentCount);
     }
 
-    protected abstract void logProgress(final long currentCount);
+    protected void onCount(final long currentCount) {}
+
+    protected abstract void logProgress(final long currentCount, double elementsPerSecond);
 
     public <T> Consumer<T> watch(final Consumer<T> consumer) {
         return MdcUtils.runWithContext(

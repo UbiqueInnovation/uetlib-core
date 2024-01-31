@@ -21,9 +21,7 @@ public final class IndeterminateProgressLogger extends AbstractProgressLogger {
     }
 
     @Override
-    protected void logProgress(final long currentCount) {
-        final var currentTime = System.currentTimeMillis();
-        final var elementsPerSecond = 1000.0 * currentCount / (currentTime - startTime);
+    protected void logProgress(final long currentCount, final double elementsPerSecond) {
         logger.info(
                 "{}Processed {} elements ({} elements per second)",
                 prefix,
