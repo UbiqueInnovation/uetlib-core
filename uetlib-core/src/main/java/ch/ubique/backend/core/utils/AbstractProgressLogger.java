@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -21,9 +22,8 @@ public abstract sealed class AbstractProgressLogger
     @Positive private final long stepSize;
 
     private final AtomicLong count;
-    private long lastTime;
-
     private final Map<String, String> mdcContextMap;
+    private long lastTime;
 
     protected AbstractProgressLogger(
             final String prefix,
@@ -36,16 +36,6 @@ public abstract sealed class AbstractProgressLogger
 
         this.count = new AtomicLong();
         this.lastTime = System.currentTimeMillis();
-    }
-
-    public <T, R> Function<T, R> watch(final Function<T, R> function) {
-        return MdcUtils.runWithContext(
-                t -> {
-                    final var result = function.apply(t);
-                    step();
-                    return result;
-                },
-                mdcContextMap);
     }
 
     public void step() {
@@ -65,11 +55,39 @@ public abstract sealed class AbstractProgressLogger
 
     protected abstract void logProgress(final long currentCount, double elementsPerSecond);
 
+    public void watch(final Runnable runnable) {
+        MdcUtils.runWithContext(
+                () -> {
+                    runnable.run();
+                    step();
+                },
+                mdcContextMap);
+    }
+
     public <T> Consumer<T> watch(final Consumer<T> consumer) {
         return MdcUtils.runWithContext(
                 t -> {
                     consumer.accept(t);
                     step();
+                },
+                mdcContextMap);
+    }
+
+    public <T, U> BiConsumer<T, U> watch(final BiConsumer<T, U> consumer) {
+        return MdcUtils.runWithContext(
+                (t, u) -> {
+                    consumer.accept(t, u);
+                    step();
+                },
+                mdcContextMap);
+    }
+
+    public <T, R> Function<T, R> watch(final Function<T, R> function) {
+        return MdcUtils.runWithContext(
+                t -> {
+                    final var result = function.apply(t);
+                    step();
+                    return result;
                 },
                 mdcContextMap);
     }
