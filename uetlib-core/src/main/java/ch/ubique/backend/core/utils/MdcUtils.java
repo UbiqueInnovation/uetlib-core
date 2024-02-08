@@ -3,6 +3,7 @@ package ch.ubique.backend.core.utils;
 import org.slf4j.MDC;
 
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -37,6 +38,24 @@ public final class MdcUtils {
             final var previous = MDC.getCopyOfContextMap();
             MDC.setContextMap(context);
             consumer.accept(input);
+            MDC.clear();
+            if (previous != null) {
+                MDC.setContextMap(previous);
+            }
+        };
+    }
+
+    public static <T, U> BiConsumer<T, U> runWithContext(
+            final BiConsumer<T, U> consumer, final Map<String, String> context) {
+        return (input1, input2) -> {
+            if (context == null) {
+                consumer.accept(input1, input2);
+                return;
+            }
+
+            final var previous = MDC.getCopyOfContextMap();
+            MDC.setContextMap(context);
+            consumer.accept(input1, input2);
             MDC.clear();
             if (previous != null) {
                 MDC.setContextMap(previous);
