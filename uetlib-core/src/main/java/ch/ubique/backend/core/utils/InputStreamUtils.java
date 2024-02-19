@@ -17,7 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.net.URL;
+import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.function.Function;
@@ -34,7 +34,7 @@ public final class InputStreamUtils {
     private InputStreamUtils() {}
 
     public static InputStream openStreamFromUrl(final String url) throws IOException {
-        return new URL(url).openStream();
+        return URI.create(url).toURL().openStream();
     }
 
     public static <R> R consumeAndClose(
