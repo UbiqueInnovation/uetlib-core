@@ -1,19 +1,12 @@
 package ch.ubique.backend.core.utils;
 
-
 import org.apache.commons.collections4.CollectionUtils;
 
-import java.io.*;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
+import java.util.stream.*;
 
 @SuppressWarnings("unused")
 public final class StreamUtils {
@@ -97,9 +90,41 @@ public final class StreamUtils {
 
     /**
      * Returns a {@link Stream<T>} containing the elements from {@code collection}, or an empty
-     * {@link Stream<T>} none if {@code collection} is empty or {@code null}
+     * {@link Stream<T>} if {@code collection} is empty or {@code null}
      */
     public static <T> Stream<T> emptyIfNull(final Collection<T> collection) {
         return CollectionUtils.emptyIfNull(collection).stream();
+    }
+
+    /**
+     * Returns a {@link Stream<T>} containing the elements from {@code array}, or an empty {@link
+     * Stream<T>} if {@code array} is empty or {@code null}
+     */
+    public static <T> Stream<T> emptyIfNull(final T[] array) {
+        return array == null ? Stream.empty() : Arrays.stream(array);
+    }
+
+    /**
+     * Returns a {@link IntStream} containing the elements from {@code array}, or an empty {@link
+     * IntStream} if {@code array} is empty or {@code null}
+     */
+    public static IntStream emptyIfNull(final int[] array) {
+        return array == null ? IntStream.empty() : Arrays.stream(array);
+    }
+
+    /**
+     * Returns a {@link LongStream} containing the elements from {@code array}, or an empty {@link
+     * LongStream} if {@code array} is empty or {@code null}
+     */
+    public static LongStream emptyIfNull(final long[] array) {
+        return array == null ? LongStream.empty() : Arrays.stream(array);
+    }
+
+    /**
+     * Returns a {@link DoubleStream} containing the elements from {@code array}, or an empty {@link
+     * DoubleStream} if {@code array} is empty or {@code null}
+     */
+    public static DoubleStream emptyIfNull(final double[] array) {
+        return array == null ? DoubleStream.empty() : Arrays.stream(array);
     }
 }
