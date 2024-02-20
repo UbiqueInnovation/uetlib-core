@@ -21,11 +21,17 @@ public final class IndeterminateProgressLogger extends AbstractProgressLogger {
     }
 
     @Override
-    protected void logProgress(final long currentCount, final double elementsPerSecond) {
-        logger.info(
-                "{}Processed {} elements ({} elements per second)",
-                prefix,
-                currentCount,
-                elementsPerSecond);
+    protected void logProgress(
+            final long currentCount,
+            final double elementsPerSecond,
+            final double overallElementsPerSecond) {
+        if (logger.isInfoEnabled()) {
+            logger.info(
+                    "{}Processed {} elements (current {} elements per second, overall {} elements per second)",
+                    prefix,
+                    currentCount,
+                    elementsPerSecond,
+                    overallElementsPerSecond);
+        }
     }
 }
