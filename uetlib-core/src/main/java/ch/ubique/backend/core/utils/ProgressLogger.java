@@ -34,16 +34,26 @@ public final class ProgressLogger extends AbstractProgressLogger {
     }
 
     @Override
-    protected void logProgress(final long currentCount, final double elementsPerSecond) {
-        final var percent = 100 * currentCount / total;
-        logger.info(
-                "{}Processed {}% ({} elements per second, {} of {})",
-                prefix, percent, elementsPerSecond, currentCount, total);
+    protected void logProgress(
+            final long currentCount,
+            final double elementsPerSecond,
+            final double overallElementsPerSecond) {
+        final var percentage = (long) (100 * (double) currentCount / total);
+        if (logger.isInfoEnabled()) {
+            logger.info(
+                    "{}Processed {}% (current {} elements per second, overall {} elements per second, {} of {})",
+                    prefix,
+                    percentage,
+                    elementsPerSecond,
+                    overallElementsPerSecond,
+                    currentCount,
+                    total);
+        }
     }
 
     @Override
     protected void onCount(final long currentCount) {
-        if (currentCount == total) {
+        if (logger.isInfoEnabled() && currentCount == total) {
             logger.info("{}Done. Processed all {} elements.", prefix, total);
         }
     }
