@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -56,12 +57,26 @@ class StreamUtilsTest {
 
     @Test
     void emptyIfNull() {
-        assertEquals(List.of(), StreamUtils.emptyIfNull(null).toList());
-
+        assertEquals(List.of(), StreamUtils.emptyIfNull((Collection<Object>) null).toList());
         assertEquals(List.of(), StreamUtils.emptyIfNull(List.of()).toList());
         assertEquals(List.of(), StreamUtils.emptyIfNull(Set.of()).toList());
-
         assertEquals(List.of(1), StreamUtils.emptyIfNull(List.of(1)).toList());
         assertEquals(List.of(1), StreamUtils.emptyIfNull(Set.of(1)).toList());
+
+        assertEquals(List.of(), StreamUtils.emptyIfNull((Object[]) null).toList());
+        assertEquals(List.of(), StreamUtils.emptyIfNull(new Object[] {}).toList());
+        assertEquals(List.of(1), StreamUtils.emptyIfNull(new Object[] {1}).toList());
+
+        assertEquals(List.of(), StreamUtils.emptyIfNull((int[]) null).boxed().toList());
+        assertEquals(List.of(), StreamUtils.emptyIfNull(new int[] {}).boxed().toList());
+        assertEquals(List.of(1), StreamUtils.emptyIfNull(new int[] {1}).boxed().toList());
+
+        assertEquals(List.of(), StreamUtils.emptyIfNull((long[]) null).boxed().toList());
+        assertEquals(List.of(), StreamUtils.emptyIfNull(new long[] {}).boxed().toList());
+        assertEquals(List.of(1L), StreamUtils.emptyIfNull(new long[] {1L}).boxed().toList());
+
+        assertEquals(List.of(), StreamUtils.emptyIfNull((double[]) null).boxed().toList());
+        assertEquals(List.of(), StreamUtils.emptyIfNull(new double[] {}).boxed().toList());
+        assertEquals(List.of(1.0), StreamUtils.emptyIfNull(new double[] {1.0}).boxed().toList());
     }
 }
