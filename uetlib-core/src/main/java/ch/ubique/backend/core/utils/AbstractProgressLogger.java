@@ -49,7 +49,7 @@ public abstract sealed class AbstractProgressLogger
             lastTime = currentTime;
 
             final var overallDeltaMillis = currentTime - startTime;
-            final var overallElementsPerSecond = 1000.0 * stepSize / overallDeltaMillis;
+            final var overallElementsPerSecond = 1000.0 * currentCount / overallDeltaMillis;
 
             logProgress(currentCount, elementsPerSecond, overallElementsPerSecond);
         }
