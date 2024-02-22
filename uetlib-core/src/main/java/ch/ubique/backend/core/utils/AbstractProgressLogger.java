@@ -103,7 +103,8 @@ public abstract sealed class AbstractProgressLogger
                 mdcContextMap);
     }
 
-    public <E extends Exception> ThrowingRunnable<E> watch(final ThrowingRunnable<E> runnable) {
+    public <E extends Exception> ThrowingRunnable<E> watchThrowing(
+            final ThrowingRunnable<E> runnable) {
         return MdcUtils.runThrowingWithContext(
                 () -> {
                     runnable.run();
@@ -112,7 +113,7 @@ public abstract sealed class AbstractProgressLogger
                 mdcContextMap);
     }
 
-    public <T, E extends Exception> ThrowingConsumer<T, E> watch(
+    public <T, E extends Exception> ThrowingConsumer<T, E> watchThrowing(
             final ThrowingConsumer<T, E> consumer) {
         return MdcUtils.runThrowingWithContext(
                 t -> {
@@ -122,7 +123,7 @@ public abstract sealed class AbstractProgressLogger
                 mdcContextMap);
     }
 
-    public <T, U, E extends Exception> ThrowingBiConsumer<T, U, E> watch(
+    public <T, U, E extends Exception> ThrowingBiConsumer<T, U, E> watchThrowing(
             final ThrowingBiConsumer<T, U, E> consumer) {
         return MdcUtils.runThrowingWithContext(
                 (t, u) -> {
@@ -132,7 +133,7 @@ public abstract sealed class AbstractProgressLogger
                 mdcContextMap);
     }
 
-    public <T, R, E extends Exception> ThrowingFunction<T, R, E> watch(
+    public <T, R, E extends Exception> ThrowingFunction<T, R, E> watchThrowing(
             final ThrowingFunction<T, R, E> function) {
         return MdcUtils.runThrowingWithContext(
                 t -> {
