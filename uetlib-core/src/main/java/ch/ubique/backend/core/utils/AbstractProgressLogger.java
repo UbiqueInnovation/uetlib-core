@@ -1,5 +1,10 @@
 package ch.ubique.backend.core.utils;
 
+import com.pivovarit.function.ThrowingBiConsumer;
+import com.pivovarit.function.ThrowingConsumer;
+import com.pivovarit.function.ThrowingFunction;
+import com.pivovarit.function.ThrowingRunnable;
+
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Positive;
 
@@ -90,6 +95,46 @@ public abstract sealed class AbstractProgressLogger
 
     public <T, R> Function<T, R> watch(final Function<T, R> function) {
         return MdcUtils.runWithContext(
+                t -> {
+                    final var result = function.apply(t);
+                    step();
+                    return result;
+                },
+                mdcContextMap);
+    }
+
+    public <E extends Exception> ThrowingRunnable<E> watch(final ThrowingRunnable<E> runnable) {
+        return MdcUtils.runThrowingWithContext(
+                () -> {
+                    runnable.run();
+                    step();
+                },
+                mdcContextMap);
+    }
+
+    public <T, E extends Exception> ThrowingConsumer<T, E> watch(
+            final ThrowingConsumer<T, E> consumer) {
+        return MdcUtils.runThrowingWithContext(
+                t -> {
+                    consumer.accept(t);
+                    step();
+                },
+                mdcContextMap);
+    }
+
+    public <T, U, E extends Exception> ThrowingBiConsumer<T, U, E> watch(
+            final ThrowingBiConsumer<T, U, E> consumer) {
+        return MdcUtils.runThrowingWithContext(
+                (t, u) -> {
+                    consumer.accept(t, u);
+                    step();
+                },
+                mdcContextMap);
+    }
+
+    public <T, R, E extends Exception> ThrowingFunction<T, R, E> watch(
+            final ThrowingFunction<T, R, E> function) {
+        return MdcUtils.runThrowingWithContext(
                 t -> {
                     final var result = function.apply(t);
                     step();
