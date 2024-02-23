@@ -11,13 +11,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardWatchEventKinds;
+import java.time.Duration;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Disabled("does not work on mac")
 class WatchManagerTest {
 
     @Test
-    void test() throws IOException, InterruptedException {
+    @SuppressWarnings("java:S2925")
+    void testWatchManager() throws IOException, InterruptedException {
         final var testDir = "/tmp/watchtest";
         final var testDirPath = Paths.get(testDir);
         Files.createDirectories(testDirPath);
@@ -61,17 +63,17 @@ class WatchManagerTest {
 
         assertFalse(created.get());
         Files.createFile(testFilePath);
-        Thread.sleep(100L);
+        Thread.sleep(Duration.ofMillis(100));
         assertTrue(created.get());
 
         assertFalse(modified.get());
         Files.writeString(testFilePath, "This is a test string for a test file");
-        Thread.sleep(100L);
+        Thread.sleep(Duration.ofMillis(100));
         assertTrue(modified.get());
 
         assertFalse(deleted.get());
         Files.delete(testFilePath);
-        Thread.sleep(100L);
+        Thread.sleep(Duration.ofMillis(100));
         assertTrue(deleted.get());
 
         wm.destroy();
