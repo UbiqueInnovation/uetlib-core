@@ -1,7 +1,9 @@
 package ch.ubique.backend.core.localized;
 
- import static ch.ubique.backend.test.assertion.AssertionUtils.assertThrowsWithMessage;
+import static ch.ubique.backend.test.assertion.AssertionUtils.assertThrowsWithMessage;
 
+import static java.util.Map.entry;
+import static java.util.Map.ofEntries;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -474,12 +476,12 @@ class LocalizedValueTest {
 
         final var localizedString =
                 LocalizedValue.fromStringMap(
-                        Map.ofEntries(
-                                Map.entry("de", "de"),
-                                Map.entry("en", "en"),
-                                Map.entry("fr", "fr"),
-                                Map.entry("rm", "rm"),
-                                Map.entry("it", "it")));
+                        ofEntries(
+                                entry("de", "de"),
+                                entry("en", "en"),
+                                entry("fr", "fr"),
+                                entry("rm", "rm"),
+                                entry("it", "it")));
 
         assertEquals("en", localizedString.en());
         assertEquals("fr", localizedString.fr());
