@@ -16,34 +16,35 @@ public final class MdcUtils {
 
     private MdcUtils() {}
 
-    public static void runWithContext(final Runnable runnable, final Map<String, String> context) {
-        final var previous = startMdcSection(context);
+    public static void runWithContext(
+            final Runnable runnable, final Map<String, String> mdcContext) {
+        final var previous = startMdcSection(mdcContext);
         runnable.run();
         endMdcSection(previous);
     }
 
     public static <T> Consumer<T> runWithContext(
-            final Consumer<T> consumer, final Map<String, String> context) {
+            final Consumer<T> consumer, final Map<String, String> mdcContext) {
         return input -> {
-            final var previous = startMdcSection(context);
+            final var previous = startMdcSection(mdcContext);
             consumer.accept(input);
             endMdcSection(previous);
         };
     }
 
     public static <T, U> BiConsumer<T, U> runWithContext(
-            final BiConsumer<T, U> consumer, final Map<String, String> context) {
+            final BiConsumer<T, U> consumer, final Map<String, String> mdcContext) {
         return (input1, input2) -> {
-            final var previous = startMdcSection(context);
+            final var previous = startMdcSection(mdcContext);
             consumer.accept(input1, input2);
             endMdcSection(previous);
         };
     }
 
     public static <T> Supplier<T> runWithContext(
-            final Supplier<T> supplier, final Map<String, String> context) {
+            final Supplier<T> supplier, final Map<String, String> mdcContext) {
         return () -> {
-            final var previous = startMdcSection(context);
+            final var previous = startMdcSection(mdcContext);
             final var result = supplier.get();
             endMdcSection(previous);
             return result;
@@ -51,9 +52,9 @@ public final class MdcUtils {
     }
 
     public static <T, R> Function<T, R> runWithContext(
-            final Function<T, R> function, final Map<String, String> context) {
+            final Function<T, R> function, final Map<String, String> mdcContext) {
         return input -> {
-            final var previous = startMdcSection(context);
+            final var previous = startMdcSection(mdcContext);
             final var result = function.apply(input);
             endMdcSection(previous);
             return result;
@@ -61,36 +62,36 @@ public final class MdcUtils {
     }
 
     public static <E extends Exception> ThrowingRunnable<E> runThrowingWithContext(
-            final ThrowingRunnable<E> runnable, final Map<String, String> context) {
+            final ThrowingRunnable<E> runnable, final Map<String, String> mdcContext) {
         return () -> {
-            final var previous = startMdcSection(context);
+            final var previous = startMdcSection(mdcContext);
             runnable.run();
             endMdcSection(previous);
         };
     }
 
     public static <T, E extends Exception> ThrowingConsumer<T, E> runThrowingWithContext(
-            final ThrowingConsumer<T, E> consumer, final Map<String, String> context) {
+            final ThrowingConsumer<T, E> consumer, final Map<String, String> mdcContext) {
         return (t) -> {
-            final var previous = startMdcSection(context);
+            final var previous = startMdcSection(mdcContext);
             consumer.accept(t);
             endMdcSection(previous);
         };
     }
 
     public static <T, U, E extends Exception> ThrowingBiConsumer<T, U, E> runThrowingWithContext(
-            final ThrowingBiConsumer<T, U, E> biConsumer, final Map<String, String> context) {
+            final ThrowingBiConsumer<T, U, E> biConsumer, final Map<String, String> mdcContext) {
         return (t, u) -> {
-            final var previous = startMdcSection(context);
+            final var previous = startMdcSection(mdcContext);
             biConsumer.accept(t, u);
             endMdcSection(previous);
         };
     }
 
     public static <T, R, E extends Exception> ThrowingFunction<T, R, E> runThrowingWithContext(
-            final ThrowingFunction<T, R, E> function, final Map<String, String> context) {
+            final ThrowingFunction<T, R, E> function, final Map<String, String> mdcContext) {
         return input -> {
-            final var previous = startMdcSection(context);
+            final var previous = startMdcSection(mdcContext);
             final var result = function.apply(input);
             endMdcSection(previous);
             return result;
@@ -100,27 +101,27 @@ public final class MdcUtils {
     public static <T, U, R, E extends Exception>
             ThrowingBiFunction<T, U, R, E> runThrowingWithContext(
                     final ThrowingBiFunction<T, U, R, E> function,
-                    final Map<String, String> context) {
+                    final Map<String, String> mdcContext) {
         return (t, u) -> {
-            final var previous = startMdcSection(context);
+            final var previous = startMdcSection(mdcContext);
             final var result = function.apply(t, u);
             endMdcSection(previous);
             return result;
         };
     }
 
-    private static Map<String, String> startMdcSection(final Map<String, String> context) {
+    private static Map<String, String> startMdcSection(final Map<String, String> mdcContext) {
         final var previous = MDC.getCopyOfContextMap();
-        if (context != null) {
-            MDC.setContextMap(context);
+        if (mdcContext != null) {
+            MDC.setContextMap(mdcContext);
         }
         return previous;
     }
 
-    private static void endMdcSection(@Nullable final Map<String, String> previous) {
+    private static void endMdcSection(@Nullable final Map<String, String> previousMdcContext) {
         MDC.clear();
-        if (previous != null) {
-            MDC.setContextMap(previous);
+        if (previousMdcContext != null) {
+            MDC.setContextMap(previousMdcContext);
         }
     }
 }
