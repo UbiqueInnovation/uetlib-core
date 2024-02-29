@@ -2,6 +2,9 @@ package ch.ubique.backend.core.utils;
 
 import static ch.ubique.backend.core.utils.TimeUtils.*;
 
+import static java.util.Map.entry;
+import static java.util.Map.ofEntries;
+
 import jakarta.validation.constraints.NotNull;
 
 import org.jetbrains.annotations.Contract;
@@ -20,10 +23,10 @@ public final class TimeFormatUtils {
 
     private static final Map<ZoneId, TimeFormatUtils> INSTANCES =
             new HashMap<>(
-                    Map.ofEntries(
-                            Map.entry(ZONE_ID_UTC, TIME_FORMAT_UTILS_UTC),
-                            Map.entry(ZONE_ID_EUROPE_ZURICH, TIME_FORMAT_UTILS_EUROPE_ZURICH),
-                            Map.entry(ZONE_ID_EUROPE_BERLIN, TIME_FORMAT_UTILS_EUROPE_BERLIN)));
+                    ofEntries(
+                            entry(ZONE_ID_UTC, TIME_FORMAT_UTILS_UTC),
+                            entry(ZONE_ID_EUROPE_ZURICH, TIME_FORMAT_UTILS_EUROPE_ZURICH),
+                            entry(ZONE_ID_EUROPE_BERLIN, TIME_FORMAT_UTILS_EUROPE_BERLIN)));
 
     private static final DateTimeFormatter LOCAL_DATE_FORMATTER =
             DateTimeFormatter.ofPattern("dd.MM.yyyy");

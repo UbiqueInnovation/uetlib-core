@@ -1,5 +1,7 @@
 package ch.ubique.backend.core.utils;
 
+import static java.util.Map.entry;
+
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 
@@ -104,6 +106,6 @@ public final class LocaleHelper {
                 .skip(1)
                 .findFirst() // get first part after first separator
                 .flatMap(LocaleHelper::getLocale)
-                .map(locale -> Map.entry(locale, value.toString()));
+                .map(locale -> entry(locale, value.toString()));
     }
 }
