@@ -1,0 +1,169 @@
+package ch.ubique.backend.core.regex;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.validation.constraints.NotNull;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.util.List;
+import java.util.Map;
+import java.util.regex.MatchResult;
+import java.util.stream.Collectors;
+
+public final class SerializableMatchResult implements MatchResult {
+    private final int first;
+    private final int last;
+    private final int groupCount;
+    private final int[] groupIndices;
+    private final String text;
+    @NotNull private final Map<String, Integer> namedGroups;
+    @NotNull private final List<String> groups;
+
+    public SerializableMatchResult(
+            final int first,
+            final int last,
+            final int groupCount,
+            final @NotNull List<String> groups,
+            final int[] groupIndices,
+            final String text,
+            final @NotNull Map<String, Integer> namedGroups) {
+        this.first = first;
+        this.last = last;
+        this.groupCount = groupCount;
+        this.groups = groups;
+        this.groupIndices = groupIndices;
+        this.text = text;
+        this.namedGroups = namedGroups;
+    }
+
+    @Override
+    public int start() {
+        checkMatch();
+        return first;
+    }
+
+    @Override
+    public int start(final int group) {
+        checkMatch();
+        checkGroup(group);
+        return groupIndices[group * 2];
+    }
+
+    @Override
+    public int end() {
+        checkMatch();
+        return last;
+    }
+
+    @Override
+    public int end(final int group) {
+        checkMatch();
+        checkGroup(group);
+        return groupIndices[group * 2 + 1];
+    }
+
+    @Override
+    public int groupCount() {
+        return groupCount;
+    }
+
+    public List<String> groups() {
+        return groups;
+    }
+
+    @Override
+    public String group() {
+        checkMatch();
+        return group(0);
+    }
+
+    @Override
+    public String group(final int group) {
+        checkMatch();
+        checkGroup(group);
+        if ((groupIndices[group * 2] == -1) || (groupIndices[group * 2 + 1] == -1)) {
+            return null;
+        }
+        return text.substring(groupIndices[group * 2] - first, groupIndices[group * 2 + 1] - first);
+    }
+
+    @Override
+    public Map<String, Integer> namedGroups() {
+        return namedGroups;
+    }
+
+    @Override
+    public boolean hasMatch() {
+        return first >= 0;
+    }
+
+    private void checkGroup(final int group) {
+        if (group < 0 || group > groupCount) {
+            throw new IndexOutOfBoundsException("No group " + group);
+        }
+    }
+
+    private void checkMatch() {
+        if (!hasMatch()) {
+            throw new IllegalStateException("No match found");
+        }
+    }
+
+    @JsonIgnore
+    public Map<String, String> namedGroupValues() {
+        //noinspection DataFlowIssue
+        return namedGroups().entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> group(e.getValue())));
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (!(o instanceof final SerializableMatchResult that)) {
+            return false;
+        }
+
+        return new EqualsBuilder()
+                .append(first, that.first)
+                .append(last, that.last)
+                .append(groupCount, that.groupCount)
+                .append(groups, that.groups)
+                .append(groupIndices, that.groupIndices)
+                .append(text, that.text)
+                .append(namedGroups, that.namedGroups)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(first)
+                .append(last)
+                .append(groupCount)
+                .append(groups)
+                .append(groupIndices)
+                .append(text)
+                .append(namedGroups)
+                .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("first", first)
+                .append("last", last)
+                .append("groupCount", groupCount)
+                .append("groups", groups)
+                .append("groupIndices", groupIndices)
+                .append("text", text)
+                .append("namedGroups", namedGroups)
+                .toString();
+    }
+}
