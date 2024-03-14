@@ -4,8 +4,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import static java.util.Map.entry;
 
+import ch.ubique.backend.core.jackson.ObjectMapperUtils;
 import ch.ubique.backend.core.regex.SerializableMatchResult;
 import ch.ubique.backend.test.assertion.AssertionUtils;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -24,6 +28,8 @@ class RegexUtilTest {
     private static MatchResult matchResult;
     private static SerializableMatchResult serializableMatchResult;
 
+    private final ObjectMapper objectMapper = ObjectMapperUtils.objectMapper();
+
     @BeforeAll
     static void beforeAll() {
         matcher = TEST_PATTERN.matcher("AAAA-BBBB-CCCC-DDDD");
@@ -32,6 +38,13 @@ class RegexUtilTest {
         matchResult = matcher.toMatchResult();
         serializableMatchResult =
                 (SerializableMatchResult) RegexUtil.toSerializableMatchResult(matcher);
+    }
+
+    @Test
+    void testSerializableMatchResultJackson() throws JsonProcessingException {
+        final var serialized = objectMapper.writeValueAsString(serializableMatchResult);
+        final var deserialized = objectMapper.readValue(serialized, SerializableMatchResult.class);
+        assertEquals(serializableMatchResult, deserialized);
     }
 
     @Test
