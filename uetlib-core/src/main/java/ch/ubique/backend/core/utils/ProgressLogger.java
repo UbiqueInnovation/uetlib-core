@@ -41,7 +41,8 @@ public final class ProgressLogger extends AbstractProgressLogger {
         final var percentage = (long) (100 * (double) currentCount / total);
         if (logger.isInfoEnabled()) {
             logger.info(
-                    "{}Processed {}% (current {} elements per second, overall {} elements per second, {} of {})",
+                    "{}Processed {}% (current {} elements per second, overall {} elements per"
+                        + " second, {} of {})",
                     prefix,
                     percentage,
                     elementsPerSecond,

@@ -141,7 +141,8 @@ public final class InputStreamUtils {
         final var contentInfo = contentType(inputStream);
         if (contentInfo == null) {
             logger.debug(
-                    "no content type found for input stream, will fallback to uncompressing by content encoding header or file extension.");
+                    "no content type found for input stream, will fallback to uncompressing by"
+                        + " content encoding header or file extension.");
             return uncompressByContentEncoding(inputStream, contentEncoding);
         }
 
@@ -171,7 +172,8 @@ public final class InputStreamUtils {
             case "zip" -> new ZipInputStream(inputStream);
             default -> {
                 logger.info(
-                        "content encoding {} not yet handled specifically, returning the stream as-is",
+                        "content encoding {} not yet handled specifically, returning the stream"
+                            + " as-is",
                         contentEncoding);
                 yield inputStream;
             }
@@ -187,7 +189,8 @@ public final class InputStreamUtils {
 
         if (!contentInfoInputStreamWrapper.markSupported()) {
             logger.debug(
-                    "Cannot search the given input stream for its content type. 'inputStream.markSupported()' returned false.");
+                    "Cannot search the given input stream for its content type."
+                        + " 'inputStream.markSupported()' returned false.");
             return null;
         }
 
