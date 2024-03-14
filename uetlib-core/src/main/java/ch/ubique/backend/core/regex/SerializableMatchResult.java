@@ -1,6 +1,8 @@
 package ch.ubique.backend.core.regex;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.validation.constraints.NotNull;
 
@@ -15,14 +17,15 @@ import java.util.regex.MatchResult;
 import java.util.stream.Collectors;
 
 public final class SerializableMatchResult implements MatchResult {
-    private final int first;
-    private final int last;
-    private final int groupCount;
-    private final int[] groupIndices;
-    private final String text;
-    @NotNull private final Map<String, Integer> namedGroups;
-    @NotNull private final List<String> groups;
+    @JsonProperty private final int first;
+    @JsonProperty private final int last;
+    @JsonProperty private final int groupCount;
+    @JsonProperty private final int[] groupIndices;
+    @JsonProperty private final String text;
+    @JsonProperty @NotNull private final Map<String, Integer> namedGroups;
+    @JsonProperty @NotNull private final List<String> groups;
 
+    @JsonCreator
     public SerializableMatchResult(
             final int first,
             final int last,

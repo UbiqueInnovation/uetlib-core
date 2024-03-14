@@ -3,14 +3,13 @@ package ch.ubique.backend.core.utils;
 import ch.ubique.backend.core.regex.SerializableMatchResult;
 
 import java.util.List;
-import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.stream.IntStream;
 
 public final class RegexUtil {
     private RegexUtil() {}
 
-    public static MatchResult toSerializableMatchResult(final Matcher matcher) {
+    public static SerializableMatchResult toSerializableMatchResult(final Matcher matcher) {
         final var matchResult = matcher.toMatchResult();
         final var first = matchResult.start();
         final var last = matchResult.end();
