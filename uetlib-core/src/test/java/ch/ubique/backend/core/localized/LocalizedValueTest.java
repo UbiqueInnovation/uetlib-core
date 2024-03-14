@@ -142,7 +142,7 @@ class LocalizedValueTest {
         assertThrows(NoSuchElementException.class, () -> lv1.get("en"));
         assertEquals("Literal", lv1.get(Locale.CHINESE));
         assertEquals("Literal", lv1.get(Locale.CHINA));
-        assertEquals("Literal", lv1.get(new Locale("zh", "CN", "XX")));
+        assertEquals("Literal", lv1.get(Locale.of("zh", "CN", "XX")));
 
         final var lv2 =
                 LocalizedValue.stringBuilder().fullLocale().add("Literal", Locale.CHINA).build();
@@ -153,12 +153,12 @@ class LocalizedValueTest {
         assertThrows(NoSuchElementException.class, () -> lv2.get(Locale.CHINESE));
         assertThrows(NoSuchElementException.class, () -> lv2.get("zh"));
         assertEquals("Literal", lv2.get(Locale.CHINA));
-        assertEquals("Literal", lv2.get(new Locale("zh", "CN", "XX")));
+        assertEquals("Literal", lv2.get(Locale.of("zh", "CN", "XX")));
 
         final var lv3 =
                 LocalizedValue.stringBuilder()
                         .fullLocale()
-                        .add("Literal", new Locale("zh", "CN", "XX"))
+                        .add("Literal", Locale.of("zh", "CN", "XX"))
                         .build();
 
         assertThrows(NoSuchElementException.class, () -> lv3.get((Locale) null));
@@ -170,7 +170,7 @@ class LocalizedValueTest {
         assertThrows(NoSuchElementException.class, () -> lv3.get(Locale.CHINA));
         assertThrows(NoSuchElementException.class, () -> lv3.get("zh-CN"));
         assertThrows(NoSuchElementException.class, () -> lv3.get("zh_CN"));
-        assertEquals("Literal", lv3.get(new Locale("zh", "CN", "XX")));
+        assertEquals("Literal", lv3.get(Locale.of("zh", "CN", "XX")));
     }
 
     @Test
@@ -182,7 +182,7 @@ class LocalizedValueTest {
         assertNull(lv1.getNullable("en"));
         assertEquals("Literal", lv1.getNullable(Locale.CHINESE));
         assertEquals("Literal", lv1.getNullable(Locale.CHINA));
-        assertEquals("Literal", lv1.getNullable(new Locale("zh", "CN", "XX")));
+        assertEquals("Literal", lv1.getNullable(Locale.of("zh", "CN", "XX")));
 
         final var lv2 =
                 LocalizedValue.stringBuilder().fullLocale().add("Literal", Locale.CHINA).build();
@@ -194,12 +194,12 @@ class LocalizedValueTest {
         assertNull(lv2.getNullable(Locale.CHINESE));
         assertNull(lv2.getNullable("zh"));
         assertEquals("Literal", lv2.getNullable(Locale.CHINA));
-        assertEquals("Literal", lv2.getNullable(new Locale("zh", "CN", "XX")));
+        assertEquals("Literal", lv2.getNullable(Locale.of("zh", "CN", "XX")));
 
         final var lv3 =
                 LocalizedValue.stringBuilder()
                         .fullLocale()
-                        .add("Literal", new Locale("zh", "CN", "XX"))
+                        .add("Literal", Locale.of("zh", "CN", "XX"))
                         .build();
 
         assertNull(lv3.getNullable((Locale) null));
@@ -211,7 +211,7 @@ class LocalizedValueTest {
         assertNull(lv3.getNullable(Locale.CHINA));
         assertNull(lv3.getNullable("zh-CN"));
         assertNull(lv3.getNullable("zh_CN"));
-        assertEquals("Literal", lv3.getNullable(new Locale("zh", "CN", "XX")));
+        assertEquals("Literal", lv3.getNullable(Locale.of("zh", "CN", "XX")));
     }
 
     @Test
@@ -223,7 +223,7 @@ class LocalizedValueTest {
         assertEquals(Optional.empty(), lv1.getOptional("en"));
         assertEquals(Optional.of("Literal"), lv1.getOptional(Locale.CHINESE));
         assertEquals(Optional.of("Literal"), lv1.getOptional(Locale.CHINA));
-        assertEquals(Optional.of("Literal"), lv1.getOptional(new Locale("zh", "CN", "XX")));
+        assertEquals(Optional.of("Literal"), lv1.getOptional(Locale.of("zh", "CN", "XX")));
 
         final var lv2 =
                 LocalizedValue.stringBuilder().fullLocale().add("Literal", Locale.CHINA).build();
@@ -234,12 +234,12 @@ class LocalizedValueTest {
         assertEquals(Optional.empty(), lv2.getOptional(Locale.CHINESE));
         assertEquals(Optional.empty(), lv2.getOptional("zh"));
         assertEquals(Optional.of("Literal"), lv2.getOptional(Locale.CHINA));
-        assertEquals(Optional.of("Literal"), lv2.getOptional(new Locale("zh", "CN", "XX")));
+        assertEquals(Optional.of("Literal"), lv2.getOptional(Locale.of("zh", "CN", "XX")));
 
         final var lv3 =
                 LocalizedValue.stringBuilder()
                         .fullLocale()
-                        .add("Literal", new Locale("zh", "CN", "XX"))
+                        .add("Literal", Locale.of("zh", "CN", "XX"))
                         .build();
         assertEquals(Optional.empty(), lv3.getOptional((Locale) null));
         assertEquals(Optional.empty(), lv3.getOptional((String) null));
@@ -251,7 +251,7 @@ class LocalizedValueTest {
         assertEquals(Optional.empty(), lv3.getOptional("zh-CN"));
         assertEquals(Optional.empty(), lv3.getOptional("zh_CN"));
 
-        assertEquals(Optional.of("Literal"), lv3.getOptional(new Locale("zh", "CN", "XX")));
+        assertEquals(Optional.of("Literal"), lv3.getOptional(Locale.of("zh", "CN", "XX")));
     }
 
     @Test
