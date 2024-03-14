@@ -9,5 +9,6 @@ public class AdditionalLocales {
     public static final Locale FRENCH_SWITZERLAND = new Locale("fr", "CH");
     public static final Locale ITALIAN_SWITZERLAND = new Locale("it", "CH");
     public static final Locale ENGLISH_SWITZERLAND = new Locale("en", "CH");
+
     private AdditionalLocales() {}
 }

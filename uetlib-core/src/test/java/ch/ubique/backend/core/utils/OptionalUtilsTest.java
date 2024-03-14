@@ -60,7 +60,7 @@ class OptionalUtilsTest {
                                 },
                                 RuntimeException.class),
                 "Only RuntimeException is allowed, but Exception is thrown. Expected to rethrow"
-                    + " exception");
+                        + " exception");
     }
 
     @Test

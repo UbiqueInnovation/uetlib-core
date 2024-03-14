@@ -2,10 +2,11 @@ package ch.ubique.backend.core.localized;
 
 import static ch.ubique.backend.test.assertion.AssertionUtils.assertThrowsWithMessage;
 
-import static java.util.Map.entry;
-import static java.util.Map.ofEntries;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import static java.util.Map.entry;
+import static java.util.Map.ofEntries;
 
 import ch.ubique.backend.core.localized.annotation.JsonUnwrappedLocalizedValueSerializer;
 
