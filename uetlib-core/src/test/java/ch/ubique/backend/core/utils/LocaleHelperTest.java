@@ -22,8 +22,8 @@ class LocaleHelperTest {
         assertEquals(LocaleHelper.EMPTY, LocaleHelper.fromLanguageTagThenPosix(""));
 
         assertEquals(Locale.GERMAN, LocaleHelper.fromLanguageTagThenPosix("de"));
-        assertEquals(new Locale("de", "CH"), LocaleHelper.fromLanguageTagThenPosix("de-CH"));
-        assertEquals(new Locale("de", "CH"), LocaleHelper.fromLanguageTagThenPosix("de_CH"));
+        assertEquals(Locale.of("de", "CH"), LocaleHelper.fromLanguageTagThenPosix("de-CH"));
+        assertEquals(Locale.of("de", "CH"), LocaleHelper.fromLanguageTagThenPosix("de_CH"));
 
         assertEquals(LocaleHelper.EMPTY, Locale.forLanguageTag(" "));
         assertThrows(IllegalArgumentException.class, () -> LocaleUtils.toLocale(" "));
@@ -33,7 +33,7 @@ class LocaleHelperTest {
 
     @Test
     void findBestMatchLocale() {
-        final var deGermanyXX = new Locale("de", "DE", "XX");
+        final var deGermanyXX = Locale.of("de", "DE", "XX");
 
         assertEquals(
                 deGermanyXX,
@@ -72,7 +72,7 @@ class LocaleHelperTest {
 
     @Test
     void findBestMatchLocaleString() {
-        final var deGermanyXX = new Locale("de", "DE", "XX");
+        final var deGermanyXX = Locale.of("de", "DE", "XX");
         final var deGermanyXXString = deGermanyXX.toLanguageTag();
         final var deGermanyString = Locale.GERMANY.toLanguageTag();
         final var deString = Locale.GERMAN.toLanguageTag();

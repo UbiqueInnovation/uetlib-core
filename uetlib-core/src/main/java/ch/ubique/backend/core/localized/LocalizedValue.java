@@ -402,7 +402,7 @@ public class LocalizedValue<T extends Serializable> {
     /**
      * default serialization method using IETF BCP 47 Language Tag.
      *
-     * <p>{@code new Locale("de", "CH")} would be serialized to {@code "de-CH"}
+     * <p>{@code Locale.of("de", "CH")} would be serialized to {@code "de-CH"}
      */
     @JsonValue
     @NotEmpty
@@ -416,7 +416,7 @@ public class LocalizedValue<T extends Serializable> {
     /**
      * alternative serialization method using Posix Locales.
      *
-     * <p>{@code new Locale("de", "CH")} would be serialized to {@code "de_CH"}
+     * <p>{@code Locale.of("de", "CH")} would be serialized to {@code "de_CH"}
      */
     @NotEmpty
     public Map<String, T> toMapWithPosixLocaleKeys() {
@@ -427,7 +427,7 @@ public class LocalizedValue<T extends Serializable> {
     /**
      * alternative serialization method using upper case keys.
      *
-     * <p>{@code new Locale("de", "CH")} would be serialized to {@code "DE-CH"}
+     * <p>{@code Locale.of("de", "CH")} would be serialized to {@code "DE-CH"}
      */
     @NotEmpty
     public Map<String, T> toMapWithUppercaseKeys() {
