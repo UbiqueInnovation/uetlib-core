@@ -2,9 +2,11 @@ package ch.ubique.backend.core.utils;
 
 import static ch.ubique.backend.core.utils.ArrayUtils.lastElement;
 import static ch.ubique.backend.core.utils.ArrayUtils.singletonOrNull;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import ch.ubique.backend.test.assertion.AssertionUtils;
+
 import org.junit.jupiter.api.Test;
 
 class ArrayUtilsTest {

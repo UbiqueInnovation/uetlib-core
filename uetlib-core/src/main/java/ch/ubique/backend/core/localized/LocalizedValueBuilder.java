@@ -119,7 +119,7 @@ public final class LocalizedValueBuilder<T extends Serializable> {
 
     private Locale finalLocale(final Entry<Locale, ?> entry) {
         final var locale = entry.getKey();
-        return keepLanguageOnly ? new Locale(locale.getLanguage()) : locale;
+        return keepLanguageOnly ? Locale.of(locale.getLanguage()) : locale;
     }
 
     @Nullable
