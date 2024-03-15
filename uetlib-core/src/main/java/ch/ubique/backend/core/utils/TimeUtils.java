@@ -1,5 +1,8 @@
 package ch.ubique.backend.core.utils;
 
+import static java.util.Map.entry;
+import static java.util.Map.ofEntries;
+
 import jakarta.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.ObjectUtils;
@@ -32,10 +35,10 @@ public final class TimeUtils {
 
     private static final Map<ZoneId, TimeUtils> INSTANCES =
             new HashMap<>(
-                    Map.ofEntries(
-                            Map.entry(ZONE_ID_UTC, TIME_UTILS_UTC),
-                            Map.entry(ZONE_ID_EUROPE_ZURICH, TIME_UTILS_EUROPE_ZURICH),
-                            Map.entry(ZONE_ID_EUROPE_BERLIN, TIME_UTILS_EUROPE_BERLIN)));
+                    ofEntries(
+                            entry(ZONE_ID_UTC, TIME_UTILS_UTC),
+                            entry(ZONE_ID_EUROPE_ZURICH, TIME_UTILS_EUROPE_ZURICH),
+                            entry(ZONE_ID_EUROPE_BERLIN, TIME_UTILS_EUROPE_BERLIN)));
 
     @NotNull private final ZoneId zoneId;
 

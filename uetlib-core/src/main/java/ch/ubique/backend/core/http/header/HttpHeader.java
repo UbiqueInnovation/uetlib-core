@@ -2,8 +2,6 @@ package ch.ubique.backend.core.http.header;
 
 /** dashes are stripped for Azure headers for custom headers, as they do not support them. */
 public enum HttpHeader {
-    MAX_AGE("max-age"),
-    S_MAX_AGE("s-maxage"),
     NEXT_REFRESH("next-refresh"),
     BEST_BEFORE("best-before"),
     BACKOFF("backoff"),
@@ -37,6 +35,4 @@ public enum HttpHeader {
     public String withAmazonPrefix() {
         return withAmazonPrefix;
     }
-
-
 }

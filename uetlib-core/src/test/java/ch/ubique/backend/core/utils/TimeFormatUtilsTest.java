@@ -241,7 +241,8 @@ class TimeFormatUtilsTest {
         assertThrowsWithMessage(
                 DateTimeParseException.class,
                 () -> TimeFormatUtils.parseLocalDate("32.09.2023"),
-                "Text '32.09.2023' could not be parsed: Invalid value for DayOfMonth (valid values 1 - 28/31): 32");
+                "Text '32.09.2023' could not be parsed: Invalid value for DayOfMonth (valid values"
+                    + " 1 - 28/31): 32");
     }
 
     @Test
@@ -265,7 +266,8 @@ class TimeFormatUtilsTest {
         assertThrowsWithMessage(
                 DateTimeParseException.class,
                 () -> TimeFormatUtils.parseLocalTime("24:06"),
-                "Text '24:06' could not be parsed: Invalid value for HourOfDay (valid values 0 - 23): 24");
+                "Text '24:06' could not be parsed: Invalid value for HourOfDay (valid values 0 -"
+                    + " 23): 24");
     }
 
     @Test
@@ -291,7 +293,8 @@ class TimeFormatUtilsTest {
         assertThrowsWithMessage(
                 DateTimeParseException.class,
                 () -> TimeFormatUtils.parseLocalDateTime("32.09.2023 08:06"),
-                "Text '32.09.2023 08:06' could not be parsed: Invalid value for DayOfMonth (valid values 1 - 28/31): 32");
+                "Text '32.09.2023 08:06' could not be parsed: Invalid value for DayOfMonth (valid"
+                    + " values 1 - 28/31): 32");
         assertThrowsWithMessage(
                 DateTimeParseException.class,
                 () -> TimeFormatUtils.parseLocalDateTime("26.09.2023 08:6"),
