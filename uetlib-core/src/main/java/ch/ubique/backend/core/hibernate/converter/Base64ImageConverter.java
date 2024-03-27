@@ -4,6 +4,7 @@ import jakarta.persistence.AttributeConverter;
 
 import java.util.Base64;
 
+@SuppressWarnings("com.haulmont.jpb.ConverterNotAnnotatedInspection")
 public class Base64ImageConverter implements AttributeConverter<String, byte[]> {
 
     @Override
