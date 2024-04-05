@@ -5,6 +5,8 @@ import ch.ubique.backend.core.file.ByteFile;
 import com.j256.simplemagic.ContentInfo;
 import com.j256.simplemagic.ContentInfoInputStreamWrapper;
 import com.j256.simplemagic.ContentInfoUtil;
+import com.pivovarit.function.ThrowingConsumer;
+import com.pivovarit.function.ThrowingFunction;
 import com.pivovarit.function.exception.WrappedException;
 
 import jakarta.validation.constraints.NotNull;
@@ -12,6 +14,7 @@ import jakarta.validation.constraints.NotNull;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.input.BOMInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +23,7 @@ import java.io.*;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
@@ -142,7 +146,7 @@ public final class InputStreamUtils {
         if (contentInfo == null) {
             logger.debug(
                     "no content type found for input stream, will fallback to uncompressing by"
-                        + " content encoding header or file extension.");
+                            + " content encoding header or file extension.");
             return uncompressByContentEncoding(inputStream, contentEncoding);
         }
 
@@ -173,7 +177,7 @@ public final class InputStreamUtils {
             default -> {
                 logger.info(
                         "content encoding {} not yet handled specifically, returning the stream"
-                            + " as-is",
+                                + " as-is",
                         contentEncoding);
                 yield inputStream;
             }
@@ -190,7 +194,7 @@ public final class InputStreamUtils {
         if (!contentInfoInputStreamWrapper.markSupported()) {
             logger.debug(
                     "Cannot search the given input stream for its content type."
-                        + " 'inputStream.markSupported()' returned false.");
+                            + " 'inputStream.markSupported()' returned false.");
             return null;
         }
 
@@ -201,5 +205,47 @@ public final class InputStreamUtils {
         contentInfoInputStreamWrapper.reset();
 
         return match;
+    }
+
+    /**
+     * Some external libraries are not compatible with InputStreams. This function:
+     * <li>Creates a temporary file form the given input stream
+     * <li>Runs function with the created file as input
+     * <li>Deletes temporary file
+     */
+    public static <T, E extends Exception> T inputStreamFileFunction(
+            final InputStream inputStream, final ThrowingFunction<File, T, E> fileFunction)
+            throws IOException, E {
+
+        final var path = Files.createTempFile("InputStream", ".tmp");
+        final var file = path.toFile();
+
+        logger.info("Saving input to temporary file {}.", path);
+        FileUtils.copyToFile(inputStream, file);
+
+        final var result = fileFunction.apply(file);
+
+        logger.info("Deleted temporary file.");
+        Files.delete(path);
+
+        return result;
+    }
+
+    /**
+     * Some external libraries are not compatible with InputStreams. This function:
+     * <li>Creates a temporary file form the given input stream
+     * <li>Runs function with the created file as input
+     * <li>Deletes temporary file
+     */
+    public static <E extends Exception> void inputStreamFileConsumer(
+            final InputStream inputStream, final ThrowingConsumer<File, E> fileConsumer)
+            throws IOException, E {
+
+        inputStreamFileFunction(
+                inputStream,
+                file -> {
+                    fileConsumer.accept(file);
+                    return null;
+                });
     }
 }
