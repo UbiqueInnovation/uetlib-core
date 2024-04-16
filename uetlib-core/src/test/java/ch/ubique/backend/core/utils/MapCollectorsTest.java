@@ -52,4 +52,10 @@ class MapCollectorsTest {
                 expected,
                 pairs.stream().collect(MapCollectors.entriesToInvertedMap(String::concat)));
     }
+
+    @Test
+    void toMap() {
+        final var map = Map.ofEntries(Map.entry(1, Pair.of(1, "a")), Map.entry(2, Pair.of(2, "b")));
+        assertEquals(map, map.values().stream().collect(MapCollectors.toMap(Pair::getLeft)));
+    }
 }

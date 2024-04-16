@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.Map;
 import java.util.function.BinaryOperator;
+import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -32,5 +33,11 @@ public class MapCollectors {
     public static <K, V, T extends Map.Entry<K, V>> Collector<T, ?, Map<V, K>> entriesToInvertedMap(
             @NotNull final BinaryOperator<K> mergeFunction) {
         return Collectors.toUnmodifiableMap(Map.Entry::getValue, Map.Entry::getKey, mergeFunction);
+    }
+
+    @NotNull
+    public static <K, T> Collector<T, ?, Map<K, T>> toMap(
+            @NotNull final Function<T, K> keyExtractor) {
+        return Collectors.toUnmodifiableMap(keyExtractor, Function.identity());
     }
 }
