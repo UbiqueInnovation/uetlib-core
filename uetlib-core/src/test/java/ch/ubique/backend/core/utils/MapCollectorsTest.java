@@ -3,6 +3,7 @@ package ch.ubique.backend.core.utils;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.collections4.SetUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
 
@@ -42,15 +43,20 @@ class MapCollectorsTest {
 
     @Test
     void entriesToInvertedMapWithMerge() {
-        final var entries = Set.of(Map.entry("a", 1), Map.entry("b", 1), Map.entry("c", 2));
-        final var expected = Map.ofEntries(Map.entry(1, "ab"), Map.entry(2, "c"));
+        final var entries =
+                Set.of(
+                        Map.entry(Set.of("a"), 1),
+                        Map.entry(Set.of("b"), 1),
+                        Map.entry(Set.of("c"), 2));
+        final var expected =
+                Map.ofEntries(Map.entry(1, Set.of("a", "b")), Map.entry(2, Set.of("c")));
         final var pairs = entries.stream().map(Pair::of).toList();
         assertEquals(
                 expected,
-                entries.stream().collect(MapCollectors.entriesToInvertedMap(String::concat)));
+                entries.stream().collect(MapCollectors.entriesToInvertedMap(SetUtils::union)));
         assertEquals(
                 expected,
-                pairs.stream().collect(MapCollectors.entriesToInvertedMap(String::concat)));
+                pairs.stream().collect(MapCollectors.entriesToInvertedMap(SetUtils::union)));
     }
 
     @Test
