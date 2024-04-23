@@ -43,6 +43,11 @@ public class OptionalUtils {
         return Stream.of(args).filter(Objects::nonNull).findFirst();
     }
 
+    @SafeVarargs
+    public static <T> Optional<T> coalesce(final @NotNull Supplier<T>... suppliers) {
+        return Stream.of(suppliers).map(Supplier::get).filter(Objects::nonNull).findFirst();
+    }
+
     @NotNull
     public static <T> Stream<T> generateAsLongAsPresent(
             final Supplier<Optional<T>> optionalSupplier) {
