@@ -33,11 +33,23 @@ public class VirtualThreadUtils {
         mapAll(tasks);
     }
 
+    /**
+     * Calls a throwing consumer for every input element.
+     *
+     * <p>If an exception is thrown inside a virtual, it is rethrown on the calling thread. Any
+     * computations are skipped after the first exception has been thrown.
+     */
     public static <T, E extends Exception> void throwingForEach(
             final ThrowingConsumer<T, E> throwingConsumer, final Stream<T> inputs) throws E {
         throwingMapAll(throwingConsumer.asFunction(), inputs.toList());
     }
 
+    /**
+     * Calls a throwing consumer for every input element.
+     *
+     * <p>If an exception is thrown inside a virtual, it is rethrown on the calling thread. Any
+     * computations are skipped after the first exception has been thrown.
+     */
     public static <T, E extends Exception> void throwingForEach(
             final ThrowingConsumer<T, E> throwingConsumer, final Iterable<T> inputs) throws E {
         throwingForEach(throwingConsumer, Streams.of(inputs));
@@ -57,6 +69,13 @@ public class VirtualThreadUtils {
         }
     }
 
+    /**
+     * Calls a throwing function for every element in inputs and returns a collection of all
+     * results.
+     *
+     * <p>If an exception is thrown inside a virtual, it is rethrown on the calling thread. Any
+     * computations are skipped after the first exception has been thrown.
+     */
     public static <T, V, E extends Exception> Collection<V> throwingMapAll(
             final ThrowingFunction<T, V, E> throwingMapper, final Iterable<T> inputs) throws E {
         final var exceptions = new ConcurrentLinkedDeque<E>();
