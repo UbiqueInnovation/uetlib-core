@@ -9,10 +9,17 @@ import com.pivovarit.function.exception.WrappedException;
 
 import jakarta.persistence.AttributeConverter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 
 @SuppressWarnings("com.haulmont.jpb.ConverterNotAnnotatedInspection")
 public class ObjectMapperToStringConverter<T> implements AttributeConverter<T, String> {
+
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(ObjectMapperToStringConverter.class);
+
     private final ObjectMapper objectMapper = ObjectMapperUtils.objectMapper();
 
     private final TypeReference<T> typeReference;
@@ -23,6 +30,9 @@ public class ObjectMapperToStringConverter<T> implements AttributeConverter<T, S
 
     @Override
     public String convertToDatabaseColumn(final T attributes) {
+        if (attributes == null) {
+            return null;
+        }
         try {
             return objectMapper.writeValueAsString(attributes);
         } catch (final JsonProcessingException e) {
@@ -38,7 +48,8 @@ public class ObjectMapperToStringConverter<T> implements AttributeConverter<T, S
         try {
             return objectMapper.readValue(dbData, typeReference);
         } catch (final IOException e) {
-            throw new WrappedException(e);
+            LOGGER.info("Could not deserialize {} as {}.", dbData, typeReference, e);
+            return null;
         }
     }
 }
