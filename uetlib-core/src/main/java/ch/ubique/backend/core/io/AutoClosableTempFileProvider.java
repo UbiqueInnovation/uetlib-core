@@ -10,7 +10,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class AutoClosableTempFileProvider implements AutoCloseable {
+public class AutoClosableTempFileProvider implements FileProvider {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -19,6 +19,11 @@ public class AutoClosableTempFileProvider implements AutoCloseable {
 
     public AutoClosableTempFileProvider(final InputStream inputStream) {
         this.inputStream = inputStream;
+    }
+
+    @Override
+    public File file() throws IOException {
+        return getFile();
     }
 
     public File getFile() throws IOException {
@@ -41,5 +46,6 @@ public class AutoClosableTempFileProvider implements AutoCloseable {
         if (filePath != null) {
             Files.delete(filePath);
         }
+        inputStream.close();
     }
 }
