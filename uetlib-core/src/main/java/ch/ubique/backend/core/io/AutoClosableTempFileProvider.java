@@ -1,51 +1,33 @@
 package ch.ubique.backend.core.io;
 
-import org.apache.commons.io.FileUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class AutoClosableTempFileProvider implements FileProvider {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
-
-    private final InputStream inputStream;
-    private Path filePath;
+    private final InputStreamSupplierFileProvider fileProvider;
 
     public AutoClosableTempFileProvider(final InputStream inputStream) {
-        this.inputStream = inputStream;
+        this.fileProvider = new InputStreamSupplierFileProvider(() -> inputStream);
     }
 
     @Override
     public File file() throws IOException {
-        return getFile();
+        return fileProvider.file();
     }
 
     public File getFile() throws IOException {
-        return getFilePath().toFile();
+        return fileProvider.file();
     }
 
     public synchronized Path getFilePath() throws IOException {
-        if (filePath == null) {
-            filePath = Files.createTempFile(getClass().getSimpleName(), ".tmp");
-            logger.info("Saving input to temporary file {}.", filePath);
-            FileUtils.copyToFile(inputStream, filePath.toFile());
-            final var fileSize = FileUtils.byteCountToDisplaySize(Files.size(filePath));
-            logger.info("Transferred {} from input stream to file", fileSize);
-        }
-        return filePath;
+        return fileProvider.path();
     }
 
     @Override
     public void close() throws IOException {
-        if (filePath != null) {
-            Files.delete(filePath);
-        }
-        inputStream.close();
+        fileProvider.close();
     }
 }

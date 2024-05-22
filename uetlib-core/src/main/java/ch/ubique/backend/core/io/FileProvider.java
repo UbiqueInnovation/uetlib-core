@@ -1,5 +1,7 @@
 package ch.ubique.backend.core.io;
 
+import com.pivovarit.function.ThrowingSupplier;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -22,10 +24,15 @@ public interface FileProvider extends AutoCloseable {
     }
 
     static AutoClosableTempFileProvider of(final byte[] bytes) {
-        return new AutoClosableTempFileProvider(new ByteArrayInputStream(bytes));
+        return of(new ByteArrayInputStream(bytes));
     }
 
     static AutoClosableTempFileProvider of(final InputStream inputStream) {
         return new AutoClosableTempFileProvider(inputStream);
+    }
+
+    static InputStreamSupplierFileProvider of(
+            final ThrowingSupplier<InputStream, IOException> inputStreamSupplier) {
+        return new InputStreamSupplierFileProvider(inputStreamSupplier);
     }
 }
