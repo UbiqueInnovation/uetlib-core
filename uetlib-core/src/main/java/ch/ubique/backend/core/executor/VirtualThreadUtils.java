@@ -10,6 +10,7 @@ import org.apache.commons.lang3.stream.Streams;
 import org.slf4j.MDC;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -22,8 +23,7 @@ import java.util.stream.Stream;
 public class VirtualThreadUtils {
     private VirtualThreadUtils() {}
 
-    public static <T, V> Collection<V> mapAll(
-            final Function<T, V> mapper, final Iterable<T> inputs) {
+    public static <T, V> List<V> mapAll(final Function<T, V> mapper, final Iterable<T> inputs) {
         return mapAll(mapper, Streams.of(inputs)).toList();
     }
 
@@ -76,7 +76,7 @@ public class VirtualThreadUtils {
      * <p>If an exception is thrown inside a virtual, it is rethrown on the calling thread. Any
      * computations are skipped after the first exception has been thrown.
      */
-    public static <T, V, E extends Exception> Collection<V> throwingMapAll(
+    public static <T, V, E extends Exception> List<V> throwingMapAll(
             final ThrowingFunction<T, V, E> throwingMapper, final Iterable<T> inputs) throws E {
         final var exceptions = new ConcurrentLinkedDeque<E>();
         final var results =

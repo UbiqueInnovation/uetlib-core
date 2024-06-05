@@ -1,5 +1,6 @@
 package ch.ubique.backend.core.process;
 
+import java.io.IOException;
 import java.util.List;
 
 public sealed interface ProcessResult permits FinishedProcessResult, UnfinishedProcessResult {
@@ -10,4 +11,6 @@ public sealed interface ProcessResult permits FinishedProcessResult, UnfinishedP
     List<String> stderr();
 
     boolean success();
+
+    void throwIfNotSuccessful() throws IOException;
 }
