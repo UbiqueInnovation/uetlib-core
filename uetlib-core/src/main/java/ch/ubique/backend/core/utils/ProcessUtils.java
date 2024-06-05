@@ -71,11 +71,11 @@ public class ProcessUtils {
             final var stderr = stderrFuture.get().map(String.class::cast).toList();
 
             if (!didProcessFinish) {
-                return new UnfinishedProcessResult(stdout, stderr);
+                return new UnfinishedProcessResult(config.command(), stdout, stderr);
             }
             final var exitValue = process.exitValue();
             logger.debug("Process finished with exit value {}", exitValue);
-            return new FinishedProcessResult(exitValue, stdout, stderr);
+            return new FinishedProcessResult(exitValue, config.command(), stdout, stderr);
         } catch (final InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new WrappedException(e);
