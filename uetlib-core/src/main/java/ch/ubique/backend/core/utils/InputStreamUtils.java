@@ -147,6 +147,11 @@ public final class InputStreamUtils {
     }
 
     public static InputStream uncompress(
+            final InputStream inputStream, final String contentEncoding) throws IOException {
+        return uncompress(inputStream, contentEncoding, null);
+    }
+
+    public static InputStream uncompress(
             final InputStream inputStream, final String contentEncoding, final String path)
             throws IOException {
 
@@ -166,7 +171,7 @@ public final class InputStreamUtils {
         }
 
         return switch (compressionAlgorithm.get()) {
-            case BZIP -> new BZip2CompressorInputStream(inputStream);
+            case BZIP2 -> new BZip2CompressorInputStream(inputStream);
             case GZIP -> new GZIPInputStream(inputStream);
             case ZIP -> new ZipInputStream(inputStream);
             case COMPRESS_LZW -> new ZCompressorInputStream(inputStream);
@@ -184,7 +189,7 @@ public final class InputStreamUtils {
         }
         final var contentType = contentInfo.getContentType();
         return switch (contentType) {
-            case BZIP2 -> CompressionAlgorithm.BZIP;
+            case BZIP2 -> CompressionAlgorithm.BZIP2;
             case GZIP -> CompressionAlgorithm.GZIP;
             case ZIP -> CompressionAlgorithm.ZIP;
             default -> {
@@ -196,11 +201,12 @@ public final class InputStreamUtils {
 
     public static CompressionAlgorithm findCompressionByContentEncoding(
             final String contentEncoding) {
-        if (contentEncoding == null) {
+        if (StringUtils.isBlank(contentEncoding)) {
+            logger.debug("Content encoding is not set.");
             return null;
         }
         return switch (contentEncoding) {
-            case "bzip2", "bz2" -> CompressionAlgorithm.BZIP;
+            case "bzip2", "bz2" -> CompressionAlgorithm.BZIP2;
             case "gzip", "gz" -> CompressionAlgorithm.GZIP;
             case "zip" -> CompressionAlgorithm.ZIP;
             case "deflate" -> CompressionAlgorithm.DEFLATE;
@@ -219,10 +225,11 @@ public final class InputStreamUtils {
     public static CompressionAlgorithm findCompressionByFilePath(final String filePath) {
         final var extension = FilenameUtils.getExtension(filePath);
         if (StringUtils.isBlank(extension)) {
+            logger.debug("No file extension found for path {}", filePath);
             return null;
         }
         return switch (extension) {
-            case "bzip2", "bz2" -> CompressionAlgorithm.BZIP;
+            case "bzip2", "bz2" -> CompressionAlgorithm.BZIP2;
             case "gzip", "gz" -> CompressionAlgorithm.GZIP;
             case "zip" -> CompressionAlgorithm.ZIP;
             default -> {
