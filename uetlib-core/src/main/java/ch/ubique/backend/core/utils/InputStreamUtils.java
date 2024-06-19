@@ -166,7 +166,7 @@ public final class InputStreamUtils {
                         .findFirst();
 
         if (compressionAlgorithm.isEmpty()) {
-            logger.info("Could not find compression algorithm. Returning stream as-is");
+            logger.debug("Could not find compression algorithm. Returning stream as-is");
             return inputStream;
         }
 
