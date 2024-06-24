@@ -2,10 +2,7 @@ package ch.ubique.backend.core.io;
 
 import com.pivovarit.function.ThrowingSupplier;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Path;
 
 public interface FileProvider extends AutoCloseable, InputStreamProvider {
@@ -31,6 +28,11 @@ public interface FileProvider extends AutoCloseable, InputStreamProvider {
 
     @Override
     void close() throws IOException;
+
+    @Override
+    default InputStream inputStream() throws IOException {
+        return new FileInputStream(file());
+    }
 
     default Path path() throws IOException {
         return file().toPath();

@@ -28,11 +28,6 @@ public class AutoClosableTempFileProvider implements FileProvider {
     }
 
     @Override
-    public InputStream inputStream() throws IOException {
-        return fileProvider.inputStream();
-    }
-
-    @Override
     public void close() throws IOException {
         fileProvider.close();
     }

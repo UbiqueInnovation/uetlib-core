@@ -13,9 +13,4 @@ public record InputStreamSupplierProvider(
     public InputStream inputStream() throws IOException {
         return inputStreamThrowingSupplier.get();
     }
-
-    @Override
-    public void close() throws IOException {
-        inputStreamThrowingSupplier.get().close();
-    }
 }
