@@ -12,7 +12,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class InputStreamSupplierFileProvider implements FileProvider {
+public class InputStreamSupplierFileProvider implements FileProvider, InputStreamProvider {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -36,6 +36,11 @@ public class InputStreamSupplierFileProvider implements FileProvider {
             logger.info("Transferred {} from input stream to file", fileSize);
         }
         return filePath.toFile();
+    }
+
+    @Override
+    public InputStream inputStream() throws IOException {
+        return inputStreamSupplier.get();
     }
 
     @Override
