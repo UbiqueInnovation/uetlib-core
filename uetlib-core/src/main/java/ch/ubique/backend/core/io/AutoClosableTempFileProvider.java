@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 
+/** The InputStream passed as an argument can only be consumed once. */
 public class AutoClosableTempFileProvider implements FileProvider {
 
     private final InputStreamSupplierFileProvider fileProvider;
@@ -24,6 +25,11 @@ public class AutoClosableTempFileProvider implements FileProvider {
 
     public synchronized Path getFilePath() throws IOException {
         return fileProvider.path();
+    }
+
+    @Override
+    public InputStream inputStream() throws IOException {
+        return fileProvider.inputStream();
     }
 
     @Override

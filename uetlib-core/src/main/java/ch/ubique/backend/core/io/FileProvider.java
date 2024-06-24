@@ -8,16 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 
-public interface FileProvider extends AutoCloseable {
-
-    File file() throws IOException;
-
-    @Override
-    void close() throws IOException;
-
-    default Path path() throws IOException {
-        return file().toPath();
-    }
+public interface FileProvider extends AutoCloseable, InputStreamProvider {
 
     static DirectFileProvider of(final File file) {
         return new DirectFileProvider(file);
@@ -34,5 +25,14 @@ public interface FileProvider extends AutoCloseable {
     static InputStreamSupplierFileProvider of(
             final ThrowingSupplier<InputStream, IOException> inputStreamSupplier) {
         return new InputStreamSupplierFileProvider(inputStreamSupplier);
+    }
+
+    File file() throws IOException;
+
+    @Override
+    void close() throws IOException;
+
+    default Path path() throws IOException {
+        return file().toPath();
     }
 }

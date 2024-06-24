@@ -17,13 +17,12 @@ public interface InputStreamProvider extends AutoCloseable {
         return new DirectInputStreamProvider(inputStream);
     }
 
-    static <E extends Exception> InputStreamSupplierInputStreamProvider<E> of(
-            final ThrowingSupplier<InputStream, E> inputStreamSupplier) {
-        return new InputStreamSupplierInputStreamProvider<>(inputStreamSupplier);
+    static InputStreamSupplierProvider of(
+            final ThrowingSupplier<InputStream, IOException> inputStreamSupplier) {
+        return new InputStreamSupplierProvider(inputStreamSupplier);
     }
 
-    @SuppressWarnings("java:S112")
-    InputStream inputStream() throws Exception;
+    InputStream inputStream() throws IOException;
 
     @Override
     void close() throws IOException;
