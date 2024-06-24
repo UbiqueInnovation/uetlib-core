@@ -8,7 +8,7 @@ import java.util.Map;
 public class MapUtils {
     private MapUtils() {}
 
-    protected static @NotNull <T, K extends Comparable<? super K>> List<T> sortMapByKeys(
+    public static @NotNull <T, K extends Comparable<? super K>> List<T> sortMapByKeys(
             final Map<K, T> values) {
         return values.entrySet().stream()
                 .sorted(Map.Entry.comparingByKey())
