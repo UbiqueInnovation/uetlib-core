@@ -4,7 +4,7 @@ import com.pivovarit.function.ThrowingSupplier;
 
 import java.io.*;
 
-public interface InputStreamProvider extends AutoCloseable {
+public interface InputStreamProvider {
     static DirectInputStreamProvider of(final File file) throws FileNotFoundException {
         return new DirectInputStreamProvider(new FileInputStream(file));
     }
@@ -23,7 +23,4 @@ public interface InputStreamProvider extends AutoCloseable {
     }
 
     InputStream inputStream() throws IOException;
-
-    @Override
-    void close() throws IOException;
 }
