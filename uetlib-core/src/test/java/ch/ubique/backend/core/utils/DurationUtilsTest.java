@@ -132,27 +132,25 @@ class DurationUtilsTest {
 
     @Test
     void floorToDuration() {
-        final var input = Duration.ofSeconds(2100);
+        final var input = Duration.ofSeconds(2101);
         assertEquals(
-                Duration.ofSeconds(2000), DurationUtils.floorTo(input, ChronoUnit.SECONDS, 1000));
+                Duration.ofSeconds(1800), DurationUtils.floorTo(input, ChronoUnit.SECONDS, 900));
         assertEquals(
-                Duration.ofSeconds(2100),
-                DurationUtils.floorTo(input, ChronoUnit.SECONDS, 15 * 140));
-        assertEquals(
-                Duration.ofSeconds(2096),
-                DurationUtils.floorTo(input, ChronoUnit.SECONDS, 8 * 262));
+                Duration.ofSeconds(2100), DurationUtils.floorTo(input, ChronoUnit.SECONDS, 15));
+        assertEquals(Duration.ofSeconds(0), DurationUtils.floorTo(input, ChronoUnit.SECONDS, 2400));
     }
 
     @Test
     void ceilToDuration() {
-        final var input = Duration.ofSeconds(2100);
+        final var input = Duration.ofSeconds(2101);
         assertEquals(
-                Duration.ofSeconds(3000), DurationUtils.ceilTo(input, ChronoUnit.SECONDS, 1000));
+                Duration.ofSeconds(2700), DurationUtils.ceilTo(input, ChronoUnit.SECONDS, 900));
+        assertEquals(Duration.ofSeconds(2115), DurationUtils.ceilTo(input, ChronoUnit.SECONDS, 15));
         assertEquals(
-                Duration.ofSeconds(2100),
-                DurationUtils.ceilTo(input, ChronoUnit.SECONDS, 15 * 140));
+                Duration.ofSeconds(2400), DurationUtils.ceilTo(input, ChronoUnit.SECONDS, 2400));
         assertEquals(
-                Duration.ofSeconds(4192), DurationUtils.ceilTo(input, ChronoUnit.SECONDS, 8 * 262));
+                Duration.ofSeconds(4800),
+                DurationUtils.ceilTo(Duration.ofSeconds(2505), ChronoUnit.SECONDS, 2400));
     }
 
     @Test
