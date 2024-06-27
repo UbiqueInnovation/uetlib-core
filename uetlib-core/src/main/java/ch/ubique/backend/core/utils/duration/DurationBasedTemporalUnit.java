@@ -5,7 +5,7 @@ import java.time.temporal.Temporal;
 import java.time.temporal.TemporalUnit;
 import java.util.Objects;
 
-public final class DurationUnit implements TemporalUnit {
+public final class DurationBasedTemporalUnit implements TemporalUnit {
 
     private static final int SECONDS_PER_DAY = 86400;
     private static final long NANOS_PER_SECOND = 1000_000_000L;
@@ -13,39 +13,39 @@ public final class DurationUnit implements TemporalUnit {
 
     private final Duration duration;
 
-    private DurationUnit(final Duration duration) {
+    private DurationBasedTemporalUnit(final Duration duration) {
         if (duration.isZero() || duration.isNegative())
             throw new IllegalArgumentException(
                     "Duration unit may not have a zero or negative duration.");
         this.duration = duration;
     }
 
-    public static DurationUnit of(final Duration duration) {
-        return new DurationUnit(duration);
+    public static DurationBasedTemporalUnit of(final Duration duration) {
+        return new DurationBasedTemporalUnit(duration);
     }
 
-    public static DurationUnit ofDays(final long days) {
-        return new DurationUnit(Duration.ofDays(days));
+    public static DurationBasedTemporalUnit ofDays(final long days) {
+        return new DurationBasedTemporalUnit(Duration.ofDays(days));
     }
 
-    public static DurationUnit ofHours(final long hours) {
-        return new DurationUnit(Duration.ofHours(hours));
+    public static DurationBasedTemporalUnit ofHours(final long hours) {
+        return new DurationBasedTemporalUnit(Duration.ofHours(hours));
     }
 
-    public static DurationUnit ofMinutes(final long minutes) {
-        return new DurationUnit(Duration.ofMinutes(minutes));
+    public static DurationBasedTemporalUnit ofMinutes(final long minutes) {
+        return new DurationBasedTemporalUnit(Duration.ofMinutes(minutes));
     }
 
-    public static DurationUnit ofSeconds(final long seconds) {
-        return new DurationUnit(Duration.ofSeconds(seconds));
+    public static DurationBasedTemporalUnit ofSeconds(final long seconds) {
+        return new DurationBasedTemporalUnit(Duration.ofSeconds(seconds));
     }
 
-    public static DurationUnit ofMillis(final long millis) {
-        return new DurationUnit(Duration.ofMillis(millis));
+    public static DurationBasedTemporalUnit ofMillis(final long millis) {
+        return new DurationBasedTemporalUnit(Duration.ofMillis(millis));
     }
 
-    public static DurationUnit ofNanos(final long nanos) {
-        return new DurationUnit(Duration.ofNanos(nanos));
+    public static DurationBasedTemporalUnit ofNanos(final long nanos) {
+        return new DurationBasedTemporalUnit(Duration.ofNanos(nanos));
     }
 
     @Override
@@ -87,7 +87,7 @@ public final class DurationUnit implements TemporalUnit {
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
-        if (!(o instanceof final DurationUnit that)) {
+        if (!(o instanceof final DurationBasedTemporalUnit that)) {
             return false;
         }
         return Objects.equals(duration, that.duration);
