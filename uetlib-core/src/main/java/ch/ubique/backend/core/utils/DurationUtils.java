@@ -1,12 +1,87 @@
 package ch.ubique.backend.core.utils;
 
+import ch.ubique.backend.core.utils.duration.DurationBasedTemporalUnit;
+
 import java.time.Duration;
+import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 
 public final class DurationUtils {
 
+
+    public static final DurationBasedTemporalUnit FIVE_MINUTES =
+            DurationBasedTemporalUnit.ofMinutes(5);
+    public static final DurationBasedTemporalUnit FIFTEEN_MINUTES =
+            DurationBasedTemporalUnit.ofMinutes(15);
+    public static final DurationBasedTemporalUnit QUARTER_HOUR = FIFTEEN_MINUTES;
+    public static final DurationBasedTemporalUnit THIRTY_MINUTES =
+            DurationBasedTemporalUnit.ofMinutes(30);
+    public static final DurationBasedTemporalUnit HALF_HOUR = THIRTY_MINUTES;
+    public static final DurationBasedTemporalUnit FORTY_FIVE_MINUTES =
+            DurationBasedTemporalUnit.ofMinutes(45);
+    public static final DurationBasedTemporalUnit THREE_QUARTER_HOUR = FORTY_FIVE_MINUTES;
+    /**
+     * Hours per day.
+     */
+    static final int HOURS_PER_DAY = 24;
+    /**
+     * Minutes per hour.
+     */
+    static final int MINUTES_PER_HOUR = 60;
+    /**
+     * Minutes per day.
+     */
+    static final int MINUTES_PER_DAY = MINUTES_PER_HOUR * HOURS_PER_DAY;
+    /**
+     * Seconds per minute.
+     */
+    static final int SECONDS_PER_MINUTE = 60;
+    /**
+     * Seconds per hour.
+     */
+    static final int SECONDS_PER_HOUR = SECONDS_PER_MINUTE * MINUTES_PER_HOUR;
+    /**
+     * Seconds per day.
+     */
+    static final int SECONDS_PER_DAY = SECONDS_PER_HOUR * HOURS_PER_DAY;
+    /**
+     * Milliseconds per second.
+     */
+    static final long MILLIS_PER_SECOND = 1000L;
+    /**
+     * Milliseconds per day.
+     */
+    static final long MILLIS_PER_DAY = MILLIS_PER_SECOND * SECONDS_PER_DAY;
+    /**
+     * Microseconds per second.
+     */
+    static final long MICROS_PER_SECOND = 1000_000L;
+    /**
+     * Microseconds per day.
+     */
+    static final long MICROS_PER_DAY = MICROS_PER_SECOND * SECONDS_PER_DAY;
+    /**
+     * Nanos per millisecond.
+     */
+    static final long NANOS_PER_MILLI = 1000_000L;
+    /**
+     * Nanos per second.
+     */
+    static final long NANOS_PER_SECOND =  1000_000_000L;
+    /**
+     * Nanos per minute.
+     */
+    static final long NANOS_PER_MINUTE = NANOS_PER_SECOND * SECONDS_PER_MINUTE;
+    /**
+     * Nanos per hour.
+     */
+    static final long NANOS_PER_HOUR = NANOS_PER_MINUTE * MINUTES_PER_HOUR;
+    /**
+     * Nanos per day.
+     */
+    static final long NANOS_PER_DAY = NANOS_PER_HOUR * HOURS_PER_DAY;
     private static final long SECOND_TO_NANOS = Duration.ofSeconds(1).toNanos();
     private static final long HOURS_TO_MILLIS = Duration.ofHours(1).toMillis();
 
@@ -40,16 +115,15 @@ public final class DurationUtils {
      * @param floorTo field to floor to
      * @param roundIncrement floor to multiples of this value in the given field
      * @return a copy representing the floored value
+     * @deprecated In favor of {@link DurationBasedTemporalUnit}, use with {@link
+     *     Instant#truncatedTo} with an instance of the custom unit.
      */
+    @Deprecated(since = "2.4.0")
     public static Duration floorTo(
             final Duration input, final TemporalUnit floorTo, final int roundIncrement) {
-        /* Extract the field being floored. */
-        final var field = input.get(floorTo);
-
-        /* Distance from previous floor. */
-        final var remainder = field % roundIncrement;
-
-        return floor(input, floorTo, remainder);
+        final var durationBasedUnit =
+                DurationBasedTemporalUnit.of(Duration.of(roundIncrement, floorTo));
+        return input.truncatedTo(durationBasedUnit);
     }
 
     /**
@@ -60,49 +134,39 @@ public final class DurationUtils {
      * @param ceilTo field to ceil to
      * @param roundIncrement ceil to multiples of this value in the given field
      * @return a copy representing the ceiled value
+     * @deprecated Use the {@link #ceilTo(Duration, TemporalUnit)} with custom temporal unit instead
      */
+    @Deprecated(since = "2.4.0")
     public static Duration ceilTo(
             final Duration input, final TemporalUnit ceilTo, final int roundIncrement) {
-        /* Extract the field being rounded. */
-        final var field = input.get(ceilTo);
-
-        /* Distance from previous floor. */
-        final var remainder = field % roundIncrement;
-
-        final var floor = floor(input, ceilTo, remainder);
-        return input.equals(floor) ? floor : ceil(input, ceilTo, roundIncrement, remainder);
-    }
-
-    private static Duration floor(
-            final Duration input, final TemporalUnit floorTo, final long remainder) {
-        return input.plus(-remainder, floorTo).truncatedTo(floorTo);
+        final var durationBasedUnit =
+                DurationBasedTemporalUnit.of(Duration.of(roundIncrement, ceilTo));
+        return ceilTo(input, durationBasedUnit);
     }
 
     /**
-     * helper function for floorTo/ceilTo. This function ALWAYS ceils, even if input = floor(input)
+     * @param input the duration to ceil
+     * @param unit the temporal unit to round to. The unit must divide into a standard day without remainder!
      */
-    private static Duration ceil(
-            final Duration input,
-            final TemporalUnit ceilTo,
-            final int roundIncrement,
-            final long remainder) {
-        return input.plus(roundIncrement - remainder, ceilTo).truncatedTo(ceilTo);
+    public static Duration ceilTo(final Duration input, final TemporalUnit unit) {
+        final var floor = input.truncatedTo(unit);
+        return input.equals(floor) ? floor : floor.plus(1, unit);
     }
 
     public static Duration floorToQuarterHours(final Duration input) {
-        return floorTo(input, ChronoUnit.SECONDS, 15 * 60);
+        return input.truncatedTo(QUARTER_HOUR);
     }
 
     public static Duration ceilToQuarterHours(final Duration input) {
-        return ceilTo(input, ChronoUnit.SECONDS, 15 * 60);
+        return ceilTo(input, QUARTER_HOUR);
     }
 
     public static Duration ceilToHours(final Duration input) {
-        return ceilTo(input, ChronoUnit.SECONDS, 60 * 60);
+        return ceilTo(input, ChronoUnit.HOURS);
     }
 
     public static Duration floorToHours(final Duration input) {
-        return floorTo(input, ChronoUnit.SECONDS, 60 * 60);
+        return input.truncatedTo(ChronoUnit.HOURS);
     }
 
     public static Duration ceilToHours(final ZonedDateTime startAt, final ZonedDateTime endAt) {
