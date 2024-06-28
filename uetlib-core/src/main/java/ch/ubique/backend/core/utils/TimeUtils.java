@@ -239,9 +239,74 @@ public final class TimeUtils {
      * @return true <=> start <= time < end <=> time \in [start, end)
      */
     public static boolean isBetween(
+            @NotNull final Instant time,
+            @NotNull final Instant start,
+            @NotNull final Instant end) {
+        return !time.isBefore(start) && time.isBefore(end);
+    }
+
+    /**
+     * @param time the time to check
+     * @param start of the valid interval [start, end)
+     * @param end of the valid interval [start, end)
+     * @return true <=> start <= time < end <=> time \in [start, end)
+     */
+    public static boolean isBetween(
             @NotNull final ZonedDateTime time,
             @NotNull final ZonedDateTime start,
             @NotNull final ZonedDateTime end) {
+        return !time.isBefore(start) && time.isBefore(end);
+    }
+
+    /**
+     * @param time the time to check
+     * @param start of the valid interval [start, end)
+     * @param end of the valid interval [start, end)
+     * @return true <=> start <= time < end <=> time \in [start, end)
+     */
+    public static boolean isBetween(
+            @NotNull final OffsetDateTime time,
+            @NotNull final OffsetDateTime start,
+            @NotNull final OffsetDateTime end) {
+        return !time.isBefore(start) && time.isBefore(end);
+    }
+
+    /**
+     * @param time the time to check
+     * @param start of the valid interval [start, end)
+     * @param end of the valid interval [start, end)
+     * @return true <=> start <= time < end <=> time \in [start, end)
+     */
+    public static boolean isBetween(
+            @NotNull final LocalDateTime time,
+            @NotNull final LocalDateTime start,
+            @NotNull final LocalDateTime end) {
+        return !time.isBefore(start) && time.isBefore(end);
+    }
+
+    /**
+     * @param time the time to check
+     * @param start of the valid interval [start, end)
+     * @param end of the valid interval [start, end)
+     * @return true <=> start <= time < end <=> time \in [start, end)
+     */
+    public static boolean isBetween(
+            @NotNull final LocalDate time,
+            @NotNull final LocalDate start,
+            @NotNull final LocalDate end) {
+        return !time.isBefore(start) && time.isBefore(end);
+    }
+
+    /**
+     * @param time the time to check
+     * @param start of the valid interval [start, end)
+     * @param end of the valid interval [start, end)
+     * @return true <=> start <= time < end <=> time \in [start, end)
+     */
+    public static boolean isBetween(
+            @NotNull final LocalTime time,
+            @NotNull final LocalTime start,
+            @NotNull final LocalTime end) {
         return !time.isBefore(start) && time.isBefore(end);
     }
 
