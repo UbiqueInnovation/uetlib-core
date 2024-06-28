@@ -12,12 +12,14 @@ public enum HttpHeader {
     private final String noDashesAzure;
     private final String withMicrosoftPrefix;
     private final String withAmazonPrefix;
+    private final String withXPrefix;
 
     HttpHeader(final String value) {
         this.value = value;
         this.noDashesAzure = value.replace("-", "");
         this.withMicrosoftPrefix = "x-ms-meta-" + noDashesAzure;
-        this.withAmazonPrefix = "x-amz-meta-" + value;
+        this.withXPrefix = value.startsWith("x-") ? value : ("x-" + value);
+        this.withAmazonPrefix = value.startsWith("x-amz") ? value : ("x-amz-meta-" + value);
     }
 
     public String value() {
@@ -34,5 +36,9 @@ public enum HttpHeader {
 
     public String withAmazonPrefix() {
         return withAmazonPrefix;
+    }
+
+    public String withXPrefix() {
+        return withXPrefix;
     }
 }
