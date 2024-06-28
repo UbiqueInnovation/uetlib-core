@@ -350,295 +350,291 @@ class TimeUtilsTest {
 
     @Test
     void isAfterOrEqualInstant() {
-        final var instant1 = Instant.ofEpochSecond(1651220354, 547000000);
-        final var instant2 = Instant.ofEpochSecond(1651220354, 547000001);
-        final var instant3 = Instant.ofEpochSecond(1682756354, 547000000);
+        final var time1 = Instant.ofEpochSecond(1651220354, 547000000);
+        final var time2 = Instant.ofEpochSecond(1651220354, 547000001);
+        final var time3 = Instant.ofEpochSecond(1682756354, 547000000);
 
-        assertTrue(isAfterOrEqual(instant3, instant1));
-        assertTrue(isAfterOrEqual(instant2, instant1));
-        assertTrue(isAfterOrEqual(instant1, instant1));
-        assertFalse(isAfterOrEqual(instant1, instant3));
-        assertFalse(isAfterOrEqual(instant1, instant2));
+        assertTrue(isAfterOrEqual(time3, time1));
+        assertTrue(isAfterOrEqual(time2, time1));
+        assertTrue(isAfterOrEqual(time1, time1));
+        assertFalse(isAfterOrEqual(time1, time3));
+        assertFalse(isAfterOrEqual(time1, time2));
 
         assertThrowsWithMessage(
                 NullPointerException.class,
-                () -> isAfterOrEqual(instant1, null),
+                () -> isAfterOrEqual(time1, null),
                 "Cannot read field \"seconds\" because \"otherInstant\" is null");
         assertThrowsWithMessage(
                 NullPointerException.class,
-                () -> isAfterOrEqual(null, instant1),
+                () -> isAfterOrEqual(null, time1),
                 "Cannot invoke \"java.time.Instant.isBefore(java.time.Instant)\" because"
                         + " \"temporal1\" is null");
     }
 
     @Test
     void isAfterOrEqualZonedDateTime() {
-        final var zonedDateTime1 = ZonedDateTime.of(2022, 4, 29, 8, 19, 14, 547000000, ZONE_ID_UTC);
-        final var zonedDateTime2 = ZonedDateTime.of(2022, 4, 29, 8, 19, 14, 547000001, ZONE_ID_UTC);
-        final var zonedDateTime3 = ZonedDateTime.of(2023, 4, 29, 8, 19, 14, 547000000, ZONE_ID_UTC);
+        final var time1 = ZonedDateTime.of(2022, 4, 29, 8, 19, 14, 547000000, ZONE_ID_UTC);
+        final var time2 = ZonedDateTime.of(2022, 4, 29, 8, 19, 14, 547000001, ZONE_ID_UTC);
+        final var time3 = ZonedDateTime.of(2023, 4, 29, 8, 19, 14, 547000000, ZONE_ID_UTC);
 
-        assertTrue(isAfterOrEqual(zonedDateTime3, zonedDateTime1));
-        assertTrue(isAfterOrEqual(zonedDateTime2, zonedDateTime1));
-        assertTrue(isAfterOrEqual(zonedDateTime1, zonedDateTime1));
-        assertFalse(isAfterOrEqual(zonedDateTime1, zonedDateTime3));
-        assertFalse(isAfterOrEqual(zonedDateTime1, zonedDateTime2));
+        assertTrue(isAfterOrEqual(time3, time1));
+        assertTrue(isAfterOrEqual(time2, time1));
+        assertTrue(isAfterOrEqual(time1, time1));
+        assertFalse(isAfterOrEqual(time1, time3));
+        assertFalse(isAfterOrEqual(time1, time2));
 
         assertThrowsWithMessage(
                 NullPointerException.class,
-                () -> isAfterOrEqual(zonedDateTime1, null),
+                () -> isAfterOrEqual(time1, null),
                 "Cannot invoke \"java.time.chrono.ChronoZonedDateTime.toEpochSecond()\" because"
                         + " \"other\" is null");
         assertThrowsWithMessage(
                 NullPointerException.class,
-                () -> isAfterOrEqual(null, zonedDateTime1),
+                () -> isAfterOrEqual(null, time1),
                 "Cannot invoke"
-                    + " \"java.time.ZonedDateTime.isBefore(java.time.chrono.ChronoZonedDateTime)\""
-                    + " because \"temporal1\" is null");
+                        + " \"java.time.ZonedDateTime.isBefore(java.time.chrono.ChronoZonedDateTime)\""
+                        + " because \"temporal1\" is null");
     }
 
     @Test
     void isAfterOrEqualOffsetDateTime() {
-        final var offsetDateTime1 =
-                OffsetDateTime.of(2022, 4, 29, 8, 19, 14, 547000000, ZoneOffset.UTC);
-        final var offsetDateTime2 =
-                OffsetDateTime.of(2022, 4, 29, 8, 19, 14, 547000001, ZoneOffset.UTC);
-        final var offsetDateTime3 =
-                OffsetDateTime.of(2023, 4, 29, 8, 19, 14, 547000000, ZoneOffset.UTC);
+        final var time1 = OffsetDateTime.of(2022, 4, 29, 8, 19, 14, 547000000, ZoneOffset.UTC);
+        final var time2 = OffsetDateTime.of(2022, 4, 29, 8, 19, 14, 547000001, ZoneOffset.UTC);
+        final var time3 = OffsetDateTime.of(2023, 4, 29, 8, 19, 14, 547000000, ZoneOffset.UTC);
 
-        assertTrue(isAfterOrEqual(offsetDateTime3, offsetDateTime1));
-        assertTrue(isAfterOrEqual(offsetDateTime2, offsetDateTime1));
-        assertTrue(isAfterOrEqual(offsetDateTime1, offsetDateTime1));
-        assertFalse(isAfterOrEqual(offsetDateTime1, offsetDateTime3));
-        assertFalse(isAfterOrEqual(offsetDateTime1, offsetDateTime2));
+        assertTrue(isAfterOrEqual(time3, time1));
+        assertTrue(isAfterOrEqual(time2, time1));
+        assertTrue(isAfterOrEqual(time1, time1));
+        assertFalse(isAfterOrEqual(time1, time3));
+        assertFalse(isAfterOrEqual(time1, time2));
 
         assertThrowsWithMessage(
                 NullPointerException.class,
-                () -> isAfterOrEqual(offsetDateTime1, null),
+                () -> isAfterOrEqual(time1, null),
                 "Cannot invoke \"java.time.OffsetDateTime.toEpochSecond()\" because \"other\" is"
                         + " null");
         assertThrowsWithMessage(
                 NullPointerException.class,
-                () -> isAfterOrEqual(null, offsetDateTime1),
+                () -> isAfterOrEqual(null, time1),
                 "Cannot invoke \"java.time.OffsetDateTime.isBefore(java.time.OffsetDateTime)\""
                         + " because \"temporal1\" is null");
     }
 
     @Test
     void isAfterOrEqualLocalDateTime() {
-        final var localDateTime1 = LocalDateTime.of(2022, 4, 29, 8, 19, 14, 547000000);
-        final var localDateTime2 = LocalDateTime.of(2022, 4, 29, 8, 19, 14, 547000001);
-        final var localDateTime3 = LocalDateTime.of(2023, 4, 29, 8, 19, 14, 547000000);
+        final var time1 = LocalDateTime.of(2022, 4, 29, 8, 19, 14, 547000000);
+        final var time2 = LocalDateTime.of(2022, 4, 29, 8, 19, 14, 547000001);
+        final var time3 = LocalDateTime.of(2023, 4, 29, 8, 19, 14, 547000000);
 
-        assertTrue(isAfterOrEqual(localDateTime3, localDateTime1));
-        assertTrue(isAfterOrEqual(localDateTime2, localDateTime1));
-        assertTrue(isAfterOrEqual(localDateTime1, localDateTime1));
-        assertFalse(isAfterOrEqual(localDateTime1, localDateTime3));
-        assertFalse(isAfterOrEqual(localDateTime1, localDateTime2));
+        assertTrue(isAfterOrEqual(time3, time1));
+        assertTrue(isAfterOrEqual(time2, time1));
+        assertTrue(isAfterOrEqual(time1, time1));
+        assertFalse(isAfterOrEqual(time1, time3));
+        assertFalse(isAfterOrEqual(time1, time2));
 
         assertThrowsWithMessage(
                 NullPointerException.class,
-                () -> isAfterOrEqual(localDateTime1, null),
+                () -> isAfterOrEqual(time1, null),
                 "Cannot invoke \"java.time.chrono.ChronoLocalDateTime.toLocalDate()\" because"
                         + " \"other\" is null");
         assertThrowsWithMessage(
                 NullPointerException.class,
-                () -> isAfterOrEqual(null, localDateTime1),
+                () -> isAfterOrEqual(null, time1),
                 "Cannot invoke"
-                    + " \"java.time.LocalDateTime.isBefore(java.time.chrono.ChronoLocalDateTime)\""
-                    + " because \"temporal1\" is null");
+                        + " \"java.time.LocalDateTime.isBefore(java.time.chrono.ChronoLocalDateTime)\""
+                        + " because \"temporal1\" is null");
     }
 
     @Test
     void isAfterOrEqualLocalDate() {
-        final var localDate1 = LocalDate.of(2022, 4, 29);
-        final var localDate2 = LocalDate.of(2022, 4, 30);
-        final var localDate3 = LocalDate.of(2023, 4, 29);
+        final var time1 = LocalDate.of(2022, 4, 29);
+        final var time2 = LocalDate.of(2022, 4, 30);
+        final var time3 = LocalDate.of(2023, 4, 29);
 
-        assertTrue(isAfterOrEqual(localDate3, localDate1));
-        assertTrue(isAfterOrEqual(localDate2, localDate1));
-        assertTrue(isAfterOrEqual(localDate1, localDate1));
-        assertFalse(isAfterOrEqual(localDate1, localDate3));
-        assertFalse(isAfterOrEqual(localDate1, localDate2));
+        assertTrue(isAfterOrEqual(time3, time1));
+        assertTrue(isAfterOrEqual(time2, time1));
+        assertTrue(isAfterOrEqual(time1, time1));
+        assertFalse(isAfterOrEqual(time1, time3));
+        assertFalse(isAfterOrEqual(time1, time2));
 
         assertThrowsWithMessage(
                 NullPointerException.class,
-                () -> isAfterOrEqual(localDate1, null),
+                () -> isAfterOrEqual(time1, null),
                 "Cannot invoke \"java.time.chrono.ChronoLocalDate.toEpochDay()\" because \"other\""
                         + " is null");
         assertThrowsWithMessage(
                 NullPointerException.class,
-                () -> isAfterOrEqual(null, localDate1),
+                () -> isAfterOrEqual(null, time1),
                 "Cannot invoke \"java.time.LocalDate.isBefore(java.time.chrono.ChronoLocalDate)\""
                         + " because \"temporal1\" is null");
     }
 
     @Test
     void isAfterOrEqualLocalTime() {
+        final var time1 = LocalTime.of(8, 19, 14, 547000000);
+        final var time2 = LocalTime.of(8, 19, 14, 547000001);
+        final var time3 = LocalTime.of(9, 19, 14, 547000000);
 
-        final var localTime1 = LocalTime.of(7, 19, 14, 547000000);
-        final var localTime2 = LocalTime.of(8, 19, 14, 547000001);
-        final var localTime3 = LocalTime.of(8, 19, 14, 547000000);
-
-        assertTrue(isAfterOrEqual(localTime3, localTime1));
-        assertTrue(isAfterOrEqual(localTime2, localTime1));
-        assertTrue(isAfterOrEqual(localTime1, localTime1));
-        assertFalse(isAfterOrEqual(localTime1, localTime3));
-        assertFalse(isAfterOrEqual(localTime1, localTime2));
+        assertTrue(isAfterOrEqual(time3, time1));
+        assertTrue(isAfterOrEqual(time2, time1));
+        assertTrue(isAfterOrEqual(time1, time1));
+        assertFalse(isAfterOrEqual(time1, time3));
+        assertFalse(isAfterOrEqual(time1, time2));
 
         assertThrowsWithMessage(
                 NullPointerException.class,
-                () -> isAfterOrEqual(localTime1, null),
+                () -> isAfterOrEqual(time1, null),
                 "Cannot read field \"hour\" because \"other\" is null");
         assertThrowsWithMessage(
                 NullPointerException.class,
-                () -> isAfterOrEqual(null, localTime1),
+                () -> isAfterOrEqual(null, time1),
                 "Cannot invoke \"java.time.LocalTime.isBefore(java.time.LocalTime)\" because"
                         + " \"temporal1\" is null");
     }
 
     @Test
     void isBeforeOrEqualInstant() {
-        final var instant1 = Instant.ofEpochSecond(1651220354, 547000000);
-        final var instant2 = Instant.ofEpochSecond(1651220354, 547000001);
-        final var instant3 = Instant.ofEpochSecond(1682756354, 547000000);
+        final var time1 =
+                ZonedDateTime.of(2022, 4, 29, 8, 19, 14, 547000000, ZONE_ID_UTC).toInstant();
+        final var time2 =
+                ZonedDateTime.of(2022, 4, 29, 8, 19, 14, 547000001, ZONE_ID_UTC).toInstant();
+        final var time3 =
+                ZonedDateTime.of(2023, 4, 29, 8, 19, 14, 547000000, ZONE_ID_UTC).toInstant();
 
-        assertTrue(isBeforeOrEqual(instant1, instant3));
-        assertTrue(isBeforeOrEqual(instant1, instant2));
-        assertTrue(isBeforeOrEqual(instant1, instant1));
-        assertFalse(isBeforeOrEqual(instant3, instant1));
-        assertFalse(isBeforeOrEqual(instant2, instant1));
+        assertTrue(isBeforeOrEqual(time1, time3));
+        assertTrue(isBeforeOrEqual(time1, time2));
+        assertTrue(isBeforeOrEqual(time1, time1));
+        assertFalse(isBeforeOrEqual(time3, time1));
+        assertFalse(isBeforeOrEqual(time2, time1));
 
         assertThrowsWithMessage(
                 NullPointerException.class,
-                () -> isBeforeOrEqual(instant1, null),
+                () -> isBeforeOrEqual(time1, null),
                 "Cannot read field \"seconds\" because \"otherInstant\" is null");
         assertThrowsWithMessage(
                 NullPointerException.class,
-                () -> isBeforeOrEqual(null, instant1),
+                () -> isBeforeOrEqual(null, time1),
                 "Cannot invoke \"java.time.Instant.isAfter(java.time.Instant)\" because"
                         + " \"temporal1\" is null");
     }
 
     @Test
     void isBeforeOrEqualZonedDateTime() {
-        final var zonedDateTime1 = ZonedDateTime.of(2022, 4, 29, 8, 19, 14, 547000000, ZONE_ID_UTC);
-        final var zonedDateTime2 = ZonedDateTime.of(2022, 4, 29, 8, 19, 14, 547000001, ZONE_ID_UTC);
-        final var zonedDateTime3 = ZonedDateTime.of(2023, 4, 29, 8, 19, 14, 547000000, ZONE_ID_UTC);
+        final var time1 = ZonedDateTime.of(2022, 4, 29, 8, 19, 14, 547000000, ZONE_ID_UTC);
+        final var time2 = ZonedDateTime.of(2022, 4, 29, 8, 19, 14, 547000001, ZONE_ID_UTC);
+        final var time3 = ZonedDateTime.of(2023, 4, 29, 8, 19, 14, 547000000, ZONE_ID_UTC);
 
-        assertTrue(isBeforeOrEqual(zonedDateTime1, zonedDateTime3));
-        assertTrue(isBeforeOrEqual(zonedDateTime1, zonedDateTime2));
-        assertTrue(isBeforeOrEqual(zonedDateTime1, zonedDateTime1));
-        assertFalse(isBeforeOrEqual(zonedDateTime3, zonedDateTime1));
-        assertFalse(isBeforeOrEqual(zonedDateTime2, zonedDateTime1));
+        assertTrue(isBeforeOrEqual(time1, time3));
+        assertTrue(isBeforeOrEqual(time1, time2));
+        assertTrue(isBeforeOrEqual(time1, time1));
+        assertFalse(isBeforeOrEqual(time3, time1));
+        assertFalse(isBeforeOrEqual(time2, time1));
 
         assertThrowsWithMessage(
                 NullPointerException.class,
-                () -> isBeforeOrEqual(zonedDateTime1, null),
+                () -> isBeforeOrEqual(time1, null),
                 "Cannot invoke \"java.time.chrono.ChronoZonedDateTime.toEpochSecond()\" because"
                         + " \"other\" is null");
         assertThrowsWithMessage(
                 NullPointerException.class,
-                () -> isBeforeOrEqual(null, zonedDateTime1),
+                () -> isBeforeOrEqual(null, time1),
                 "Cannot invoke"
-                    + " \"java.time.ZonedDateTime.isAfter(java.time.chrono.ChronoZonedDateTime)\""
-                    + " because \"temporal1\" is null");
+                        + " \"java.time.ZonedDateTime.isAfter(java.time.chrono.ChronoZonedDateTime)\""
+                        + " because \"temporal1\" is null");
     }
 
     @Test
     void isBeforeOrEqualOffsetDateTime() {
-        final var offsetDateTime1 =
-                OffsetDateTime.of(2022, 4, 29, 8, 19, 14, 547000000, ZoneOffset.UTC);
-        final var offsetDateTime2 =
-                OffsetDateTime.of(2022, 4, 29, 8, 19, 14, 547000001, ZoneOffset.UTC);
-        final var offsetDateTime3 =
-                OffsetDateTime.of(2023, 4, 29, 8, 19, 14, 547000000, ZoneOffset.UTC);
+        final var time1 = OffsetDateTime.of(2022, 4, 29, 8, 19, 14, 547000000, ZoneOffset.UTC);
+        final var time2 = OffsetDateTime.of(2022, 4, 29, 8, 19, 14, 547000001, ZoneOffset.UTC);
+        final var time3 = OffsetDateTime.of(2023, 4, 29, 8, 19, 14, 547000000, ZoneOffset.UTC);
 
-        assertTrue(isBeforeOrEqual(offsetDateTime1, offsetDateTime3));
-        assertTrue(isBeforeOrEqual(offsetDateTime1, offsetDateTime2));
-        assertTrue(isBeforeOrEqual(offsetDateTime1, offsetDateTime1));
-        assertFalse(isBeforeOrEqual(offsetDateTime3, offsetDateTime1));
-        assertFalse(isBeforeOrEqual(offsetDateTime2, offsetDateTime1));
+        assertTrue(isBeforeOrEqual(time1, time3));
+        assertTrue(isBeforeOrEqual(time1, time2));
+        assertTrue(isBeforeOrEqual(time1, time1));
+        assertFalse(isBeforeOrEqual(time3, time1));
+        assertFalse(isBeforeOrEqual(time2, time1));
 
         assertThrowsWithMessage(
                 NullPointerException.class,
-                () -> isBeforeOrEqual(offsetDateTime1, null),
+                () -> isBeforeOrEqual(time1, null),
                 "Cannot invoke \"java.time.OffsetDateTime.toEpochSecond()\" because \"other\" is"
                         + " null");
         assertThrowsWithMessage(
                 NullPointerException.class,
-                () -> isBeforeOrEqual(null, offsetDateTime1),
+                () -> isBeforeOrEqual(null, time1),
                 "Cannot invoke \"java.time.OffsetDateTime.isAfter(java.time.OffsetDateTime)\""
                         + " because \"temporal1\" is null");
     }
 
     @Test
     void isBeforeOrEqualLocalDateTime() {
-        final var localDateTime1 = LocalDateTime.of(2022, 4, 29, 8, 19, 14, 547000000);
-        final var localDateTime2 = LocalDateTime.of(2022, 4, 29, 8, 19, 14, 547000001);
-        final var localDateTime3 = LocalDateTime.of(2023, 4, 29, 8, 19, 14, 547000000);
+        final var time1 = LocalDateTime.of(2022, 4, 29, 8, 19, 14, 547000000);
+        final var time2 = LocalDateTime.of(2022, 4, 29, 8, 19, 14, 547000001);
+        final var time3 = LocalDateTime.of(2023, 4, 29, 8, 19, 14, 547000000);
 
-        assertTrue(isBeforeOrEqual(localDateTime1, localDateTime3));
-        assertTrue(isBeforeOrEqual(localDateTime1, localDateTime2));
-        assertTrue(isBeforeOrEqual(localDateTime1, localDateTime1));
-        assertFalse(isBeforeOrEqual(localDateTime3, localDateTime1));
-        assertFalse(isBeforeOrEqual(localDateTime2, localDateTime1));
+        assertTrue(isBeforeOrEqual(time1, time3));
+        assertTrue(isBeforeOrEqual(time1, time2));
+        assertTrue(isBeforeOrEqual(time1, time1));
+        assertFalse(isBeforeOrEqual(time3, time1));
+        assertFalse(isBeforeOrEqual(time2, time1));
 
         assertThrowsWithMessage(
                 NullPointerException.class,
-                () -> isBeforeOrEqual(localDateTime1, null),
+                () -> isBeforeOrEqual(time1, null),
                 "Cannot invoke \"java.time.chrono.ChronoLocalDateTime.toLocalDate()\" because"
                         + " \"other\" is null");
         assertThrowsWithMessage(
                 NullPointerException.class,
-                () -> isBeforeOrEqual(null, localDateTime1),
+                () -> isBeforeOrEqual(null, time1),
                 "Cannot invoke"
-                    + " \"java.time.LocalDateTime.isAfter(java.time.chrono.ChronoLocalDateTime)\""
-                    + " because \"temporal1\" is null");
+                        + " \"java.time.LocalDateTime.isAfter(java.time.chrono.ChronoLocalDateTime)\""
+                        + " because \"temporal1\" is null");
     }
 
     @Test
     void isBeforeOrEqualLocalDate() {
-        final var localDate1 = LocalDate.of(2022, 4, 29);
-        final var localDate2 = LocalDate.of(2022, 4, 30);
-        final var localDate3 = LocalDate.of(2023, 4, 29);
+        final var time1 = LocalDate.of(2022, 4, 29);
+        final var time2 = LocalDate.of(2022, 4, 30);
+        final var time3 = LocalDate.of(2023, 4, 29);
 
-        assertTrue(isBeforeOrEqual(localDate1, localDate3));
-        assertTrue(isBeforeOrEqual(localDate1, localDate2));
-        assertTrue(isBeforeOrEqual(localDate1, localDate1));
-        assertFalse(isBeforeOrEqual(localDate3, localDate1));
-        assertFalse(isBeforeOrEqual(localDate2, localDate1));
+        assertTrue(isBeforeOrEqual(time1, time3));
+        assertTrue(isBeforeOrEqual(time1, time2));
+        assertTrue(isBeforeOrEqual(time1, time1));
+        assertFalse(isBeforeOrEqual(time3, time1));
+        assertFalse(isBeforeOrEqual(time2, time1));
 
         assertThrowsWithMessage(
                 NullPointerException.class,
-                () -> isBeforeOrEqual(localDate1, null),
+                () -> isBeforeOrEqual(time1, null),
                 "Cannot invoke \"java.time.chrono.ChronoLocalDate.toEpochDay()\" because \"other\""
                         + " is null");
         assertThrowsWithMessage(
                 NullPointerException.class,
-                () -> isBeforeOrEqual(null, localDate1),
+                () -> isBeforeOrEqual(null, time1),
                 "Cannot invoke \"java.time.LocalDate.isAfter(java.time.chrono.ChronoLocalDate)\""
                         + " because \"temporal1\" is null");
     }
 
     @Test
     void isBeforeOrEqualLocalTime() {
-        final var localTime1 = LocalTime.of(7, 19, 14, 547000000);
-        final var localTime2 = LocalTime.of(8, 19, 14, 547000001);
-        final var localTime3 = LocalTime.of(8, 19, 14, 547000000);
+        final var time1 = LocalTime.of(8, 19, 14, 547000000);
+        final var time2 = LocalTime.of(8, 19, 14, 547000001);
+        final var time3 = LocalTime.of(9, 19, 14, 547000000);
 
-        assertTrue(isBeforeOrEqual(localTime1, localTime3));
-        assertTrue(isBeforeOrEqual(localTime1, localTime2));
-        assertTrue(isBeforeOrEqual(localTime1, localTime1));
-        assertFalse(isBeforeOrEqual(localTime3, localTime1));
-        assertFalse(isBeforeOrEqual(localTime2, localTime1));
+        assertTrue(isBeforeOrEqual(time1, time3));
+        assertTrue(isBeforeOrEqual(time1, time2));
+        assertTrue(isBeforeOrEqual(time1, time1));
+        assertFalse(isBeforeOrEqual(time3, time1));
+        assertFalse(isBeforeOrEqual(time2, time1));
 
         assertThrowsWithMessage(
                 NullPointerException.class,
-                () -> isBeforeOrEqual(localTime1, null),
+                () -> isBeforeOrEqual(time1, null),
                 "Cannot read field \"hour\" because \"other\" is null");
         assertThrowsWithMessage(
                 NullPointerException.class,
-                () -> isBeforeOrEqual(null, localTime1),
+                () -> isBeforeOrEqual(null, time1),
                 "Cannot invoke \"java.time.LocalTime.isAfter(java.time.LocalTime)\" because"
                         + " \"temporal1\" is null");
     }
@@ -756,34 +752,184 @@ class TimeUtilsTest {
     }
 
     @Test
-    void isBetween() {
+    void isBetweenInstant() {
+        final var time1 =
+                ZonedDateTime.of(2022, 4, 29, 8, 19, 14, 547000000, ZONE_ID_UTC).toInstant();
+        final var time2 =
+                ZonedDateTime.of(2022, 4, 29, 8, 19, 14, 547000001, ZONE_ID_UTC).toInstant();
+        final var time3 =
+                ZonedDateTime.of(2023, 4, 29, 8, 19, 14, 547000000, ZONE_ID_UTC).toInstant();
+
+        assertTrue(isBetween(time2, time1, time3));
+        assertTrue(isBetween(time1, time1, time2));
+        assertFalse(isBetween(time3, time1, time3));
+        assertFalse(isBetween(time1, time1, time1));
+
+        // does not throw as the first check to compare time1 and time3 already returns false
+        assertDoesNotThrow(() -> isBetween(time1, time3, null));
+        assertThrowsWithMessage(
+                NullPointerException.class,
+                () -> isBetween(time3, time1, null),
+                "Cannot read field \"seconds\" because \"otherInstant\" is null");
+        assertThrowsWithMessage(
+                NullPointerException.class,
+                () -> isBetween(time1, null, time3),
+                "Cannot read field \"seconds\" because \"otherInstant\" is null");
+        assertThrowsWithMessage(
+                NullPointerException.class,
+                () -> isBetween(null, time1, time3),
+                "Cannot invoke \"java.time.Instant.isBefore(java.time.Instant)\" because \"time\" is null");
+    }
+
+    @Test
+    void isBetweenZonedDateTime() {
         final var time1 = ZonedDateTime.of(2022, 4, 29, 8, 19, 14, 547000000, ZONE_ID_UTC);
         final var time2 = ZonedDateTime.of(2022, 4, 29, 8, 19, 14, 547000001, ZONE_ID_UTC);
         final var time3 = ZonedDateTime.of(2023, 4, 29, 8, 19, 14, 547000000, ZONE_ID_UTC);
 
-        assertTrue(TimeUtils.isBetween(time2, time1, time3));
-        assertTrue(TimeUtils.isBetween(time1, time1, time2));
-        assertFalse(TimeUtils.isBetween(time3, time1, time3));
-        assertFalse(TimeUtils.isBetween(time1, time1, time1));
+        assertTrue(isBetween(time2, time1, time3));
+        assertTrue(isBetween(time1, time1, time2));
+        assertFalse(isBetween(time3, time1, time3));
+        assertFalse(isBetween(time1, time1, time1));
 
         // does not throw as the first check to compare time1 and time3 already returns false
-        assertDoesNotThrow(() -> TimeUtils.isBetween(time1, time3, null));
+        assertDoesNotThrow(() -> isBetween(time1, time3, null));
         assertThrowsWithMessage(
                 NullPointerException.class,
-                () -> TimeUtils.isBetween(time3, time1, null),
+                () -> isBetween(time3, time1, null),
                 "Cannot invoke \"java.time.chrono.ChronoZonedDateTime.toEpochSecond()\" because"
                         + " \"other\" is null");
         assertThrowsWithMessage(
                 NullPointerException.class,
-                () -> TimeUtils.isBetween(time1, null, time3),
+                () -> isBetween(time1, null, time3),
                 "Cannot invoke \"java.time.chrono.ChronoZonedDateTime.toEpochSecond()\" because"
                         + " \"other\" is null");
         assertThrowsWithMessage(
                 NullPointerException.class,
-                () -> TimeUtils.isBetween(null, time1, time3),
+                () -> isBetween(null, time1, time3),
                 "Cannot invoke"
-                    + " \"java.time.ZonedDateTime.isBefore(java.time.chrono.ChronoZonedDateTime)\""
-                    + " because \"time\" is null");
+                        + " \"java.time.ZonedDateTime.isBefore(java.time.chrono.ChronoZonedDateTime)\""
+                        + " because \"time\" is null");
+    }
+
+    @Test
+    void isBetweenOffsetDateTime() {
+        final var time1 = OffsetDateTime.of(2022, 4, 29, 8, 19, 14, 547000000, ZoneOffset.UTC);
+        final var time2 = OffsetDateTime.of(2022, 4, 29, 8, 19, 14, 547000001, ZoneOffset.UTC);
+        final var time3 = OffsetDateTime.of(2023, 4, 29, 8, 19, 14, 547000000, ZoneOffset.UTC);
+
+        assertTrue(isBetween(time2, time1, time3));
+        assertTrue(isBetween(time1, time1, time2));
+        assertFalse(isBetween(time3, time1, time3));
+        assertFalse(isBetween(time1, time1, time1));
+
+        // does not throw as the first check to compare time1 and time3 already returns false
+        assertDoesNotThrow(() -> isBetween(time1, time3, null));
+        assertThrowsWithMessage(
+                NullPointerException.class,
+                () -> isBetween(time3, time1, null),
+                "Cannot invoke \"java.time.OffsetDateTime.toEpochSecond()\" because"
+                        + " \"other\" is null");
+        assertThrowsWithMessage(
+                NullPointerException.class,
+                () -> isBetween(time1, null, time3),
+                "Cannot invoke \"java.time.OffsetDateTime.toEpochSecond()\" because"
+                        + " \"other\" is null");
+        assertThrowsWithMessage(
+                NullPointerException.class,
+                () -> isBetween(null, time1, time3),
+                "Cannot invoke"
+                        + " \"java.time.OffsetDateTime.isBefore(java.time.OffsetDateTime)\""
+                        + " because \"time\" is null");
+    }
+
+    @Test
+    void isBetweenLocalDateTime() {
+        final var time1 = LocalDateTime.of(2022, 4, 29, 8, 19, 14, 547000000);
+        final var time2 = LocalDateTime.of(2022, 4, 29, 8, 19, 14, 547000001);
+        final var time3 = LocalDateTime.of(2023, 4, 29, 8, 19, 14, 547000000);
+
+        assertTrue(isBetween(time2, time1, time3));
+        assertTrue(isBetween(time1, time1, time2));
+        assertFalse(isBetween(time3, time1, time3));
+        assertFalse(isBetween(time1, time1, time1));
+
+        // does not throw as the first check to compare time1 and time3 already returns false
+        assertDoesNotThrow(() -> isBetween(time1, time3, null));
+        assertThrowsWithMessage(
+                NullPointerException.class,
+                () -> isBetween(time3, time1, null),
+                "Cannot invoke \"java.time.chrono.ChronoLocalDateTime.toLocalDate()\" because"
+                        + " \"other\" is null");
+        assertThrowsWithMessage(
+                NullPointerException.class,
+                () -> isBetween(time1, null, time3),
+                "Cannot invoke \"java.time.chrono.ChronoLocalDateTime.toLocalDate()\" because"
+                        + " \"other\" is null");
+        assertThrowsWithMessage(
+                NullPointerException.class,
+                () -> isBetween(null, time1, time3),
+                "Cannot invoke"
+                        + " \"java.time.LocalDateTime.isBefore(java.time.chrono.ChronoLocalDateTime)\""
+                        + " because \"time\" is null");
+    }
+
+    @Test
+    void isBetweenLocalDate() {
+        final var time1 = LocalDate.of(2022, 4, 29);
+        final var time2 = LocalDate.of(2022, 4, 30);
+        final var time3 = LocalDate.of(2023, 4, 29);
+
+        assertTrue(isBetween(time2, time1, time3));
+        assertTrue(isBetween(time1, time1, time2));
+        assertFalse(isBetween(time3, time1, time3));
+        assertFalse(isBetween(time1, time1, time1));
+
+        // does not throw as the first check to compare time1 and time3 already returns false
+        assertDoesNotThrow(() -> isBetween(time1, time3, null));
+        assertThrowsWithMessage(
+                NullPointerException.class,
+                () -> isBetween(time3, time1, null),
+                "Cannot invoke \"java.time.chrono.ChronoLocalDate.toEpochDay()\" because"
+                        + " \"other\" is null");
+        assertThrowsWithMessage(
+                NullPointerException.class,
+                () -> isBetween(time1, null, time3),
+                "Cannot invoke \"java.time.chrono.ChronoLocalDate.toEpochDay()\" because"
+                        + " \"other\" is null");
+        assertThrowsWithMessage(
+                NullPointerException.class,
+                () -> isBetween(null, time1, time3),
+                "Cannot invoke"
+                        + " \"java.time.LocalDate.isBefore(java.time.chrono.ChronoLocalDate)\""
+                        + " because \"time\" is null");
+    }
+
+    @Test
+    void isBetweenLocalTime() {
+        final var time1 = LocalTime.of(8, 19, 14, 547000000);
+        final var time2 = LocalTime.of(8, 19, 14, 547000001);
+        final var time3 = LocalTime.of(9, 19, 14, 547000000);
+
+        assertTrue(isBetween(time2, time1, time3));
+        assertTrue(isBetween(time1, time1, time2));
+        assertFalse(isBetween(time3, time1, time3));
+        assertFalse(isBetween(time1, time1, time1));
+
+        // does not throw as the first check to compare time1 and time3 already returns false
+        assertDoesNotThrow(() -> isBetween(time1, time3, null));
+        assertThrowsWithMessage(
+                NullPointerException.class,
+                () -> isBetween(time3, time1, null),
+                "Cannot read field \"hour\" because \"other\" is null");
+        assertThrowsWithMessage(
+                NullPointerException.class,
+                () -> isBetween(time1, null, time3),
+                "Cannot read field \"hour\" because \"other\" is null");
+        assertThrowsWithMessage(
+                NullPointerException.class,
+                () -> isBetween(null, time1, time3),
+                "Cannot invoke \"java.time.LocalTime.isBefore(java.time.LocalTime)\" because \"time\" is null");
     }
 
     @Test
