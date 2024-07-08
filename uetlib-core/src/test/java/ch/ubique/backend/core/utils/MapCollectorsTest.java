@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 class MapCollectorsTest {
 
@@ -63,5 +64,14 @@ class MapCollectorsTest {
     void toMap() {
         final var map = Map.ofEntries(Map.entry(1, Pair.of(1, "a")), Map.entry(2, Pair.of(2, "b")));
         assertEquals(map, map.values().stream().collect(MapCollectors.toMap(Pair::getLeft)));
+    }
+
+    @Test
+    void valueToMap() {
+        final var map = Map.of(1, 1, 2, 2, 3, 3);
+        assertEquals(
+                map,
+                map.keySet().stream()
+                        .collect(MapCollectors.toMapWithValueMapper(Function.identity())));
     }
 }

@@ -55,4 +55,10 @@ public class MapCollectors {
             @NotNull final Function<T, K> keyExtractor) {
         return Collectors.toUnmodifiableMap(keyExtractor, Function.identity());
     }
+
+    @NotNull
+    public static <V, T> Collector<T, ?, Map<T, V>> toMapWithValueMapper(
+            @NotNull final Function<T, V> valueExtractor) {
+        return Collectors.toUnmodifiableMap(Function.identity(), valueExtractor);
+    }
 }
