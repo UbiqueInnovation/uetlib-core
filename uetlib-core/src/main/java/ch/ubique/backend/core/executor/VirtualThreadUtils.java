@@ -27,6 +27,10 @@ public class VirtualThreadUtils {
         return mapAll(mapper, Streams.of(inputs)).toList();
     }
 
+    public static <T> void forEach(final Consumer<T> consumer, final Iterable<T> inputs) {
+        forEach(consumer, Streams.of(inputs));
+    }
+
     public static <T> void forEach(final Consumer<T> consumer, final Stream<T> inputs) {
         final var context = MDC.getCopyOfContextMap();
         final var tasks = inputs.map(callable(consumer, context)).toList();
