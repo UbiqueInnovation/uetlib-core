@@ -5,6 +5,7 @@ import ch.ubique.backend.core.process.ProcessConfig;
 import ch.ubique.backend.core.process.ProcessResult;
 import ch.ubique.backend.core.process.UnfinishedProcessResult;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.pivovarit.function.exception.WrappedException;
 
 import jakarta.validation.constraints.NotNull;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -49,7 +51,7 @@ public class ProcessUtils {
             Optional.ofNullable(config.directory()).map(Path::toFile).ifPresent(builder::directory);
             final var process = builder.start();
             final var stdoutFuture =
-                    Executors.newSingleThreadExecutor()
+                    Executors.newSingleThreadExecutor(threadFactory("process-stdout"))
                             .submit(
                                     () ->
                                             processOutputLines(
@@ -57,7 +59,7 @@ public class ProcessUtils {
                                                     config.logLevelStdout(),
                                                     "stdout"));
             final var stderrFuture =
-                    Executors.newSingleThreadExecutor()
+                    Executors.newSingleThreadExecutor(threadFactory("process-stderr"))
                             .submit(
                                     () ->
                                             processOutputLines(
@@ -97,5 +99,9 @@ public class ProcessUtils {
                             logger.atLevel(level).log("{}: {}", outputStreamName, line);
                             return line;
                         });
+    }
+
+    private static @NotNull ThreadFactory threadFactory(final String name) {
+        return new ThreadFactoryBuilder().setNameFormat(name).build();
     }
 }
