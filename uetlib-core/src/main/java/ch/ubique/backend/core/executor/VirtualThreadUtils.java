@@ -6,16 +6,19 @@ import com.pivovarit.function.ThrowingConsumer;
 import com.pivovarit.function.ThrowingFunction;
 import com.pivovarit.function.exception.WrappedException;
 
+import org.apache.commons.lang3.exception.UncheckedException;
+import org.apache.commons.lang3.exception.UncheckedInterruptedException;
 import org.apache.commons.lang3.stream.Streams;
 import org.slf4j.MDC;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -66,10 +69,40 @@ public class VirtualThreadUtils {
 
     public static <R> Stream<R> mapAll(final Collection<Callable<R>> tasks) {
         try (final var executor = Executors.newVirtualThreadPerTaskExecutor()) {
-            return executor.invokeAll(tasks).stream().map(getFuture());
-        } catch (final InterruptedException e) {
+            final var futures = executor.invokeAll(tasks);
+            final var results = new ArrayList<R>();
+            for (final var future : futures) {
+                results.add(future.get());
+            }
+            return results.stream();
+        }
+        // This thread got interrupted while waiting for tasks to finish
+        catch (final InterruptedException e) {
+            // Set interrupt status again. This way the interrupt bubbles up and is not lost.
             Thread.currentThread().interrupt();
-            throw new RuntimeException(e);
+            throw new UncheckedInterruptedException(e);
+        }
+        // Some task threw an error
+        catch (final ExecutionException e) {
+
+            // Unwrap the ExecutionException. We want to get the exception that the task threw
+            final var cause = e.getCause();
+
+            // Errors should never be caught
+            if (cause instanceof final Error error) {
+                throw error;
+            }
+
+            // Easy case, just rethrow runtime exceptions
+            if (cause instanceof final RuntimeException runtimeException) {
+                throw runtimeException;
+            }
+
+            // Since the method signature does not have any checked exceptions, we have to rethrow
+            // the cause as an unchecked exception.
+            // This does not happen normally since the Callable<R> does not declare any check
+            // exceptions. But it might still happen due to sneaky throws within the callable.
+            throw new UncheckedException(e);
         }
     }
 
@@ -124,9 +157,5 @@ public class VirtualThreadUtils {
     private static <T, V> Callable<V> callable(final Function<T, V> mapper, final T input) {
         final var context = MDC.getCopyOfContextMap();
         return () -> MdcUtils.runWithContext(() -> mapper.apply(input), context).get();
-    }
-
-    private static <V> Function<Future<V>, V> getFuture() {
-        return ThrowingFunction.unchecked(Future::get);
     }
 }
