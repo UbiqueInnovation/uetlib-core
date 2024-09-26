@@ -61,6 +61,11 @@ public final class MdcUtils {
         };
     }
 
+    public static Runnable runnableWithContext(
+            final Runnable runnable, final Map<String, String> mdcContext) {
+        return () -> runWithContext(runnable, mdcContext);
+    }
+
     public static <E extends Exception> ThrowingRunnable<E> runThrowingWithContext(
             final ThrowingRunnable<E> runnable, final Map<String, String> mdcContext) {
         return () -> {

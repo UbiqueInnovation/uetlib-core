@@ -45,7 +45,7 @@ public abstract sealed class AbstractProgressLogger
         this.lastTime = startTime;
     }
 
-    public void step() {
+    private void stepInternal() {
         final var currentCount = count.incrementAndGet();
         if (currentCount % stepSize == 0) {
             final var currentTime = System.currentTimeMillis();
@@ -66,11 +66,24 @@ public abstract sealed class AbstractProgressLogger
     protected abstract void logProgress(
             final long currentCount, double elementsPerSecond, double overallElementsPerSecond);
 
+    public void step() {
+        MdcUtils.runWithContext(this::stepInternal, mdcContextMap);
+    }
+
     public void watch(final Runnable runnable) {
         MdcUtils.runWithContext(
                 () -> {
                     runnable.run();
-                    step();
+                    stepInternal();
+                },
+                mdcContextMap);
+    }
+
+    public Runnable watchRunnable(final Runnable runnable) {
+        return MdcUtils.runnableWithContext(
+                () -> {
+                    runnable.run();
+                    stepInternal();
                 },
                 mdcContextMap);
     }
@@ -79,7 +92,7 @@ public abstract sealed class AbstractProgressLogger
         return MdcUtils.runWithContext(
                 t -> {
                     consumer.accept(t);
-                    step();
+                    stepInternal();
                 },
                 mdcContextMap);
     }
@@ -88,7 +101,7 @@ public abstract sealed class AbstractProgressLogger
         return MdcUtils.runWithContext(
                 (t, u) -> {
                     consumer.accept(t, u);
-                    step();
+                    stepInternal();
                 },
                 mdcContextMap);
     }
@@ -97,7 +110,7 @@ public abstract sealed class AbstractProgressLogger
         return MdcUtils.runWithContext(
                 t -> {
                     final var result = function.apply(t);
-                    step();
+                    stepInternal();
                     return result;
                 },
                 mdcContextMap);
@@ -108,7 +121,7 @@ public abstract sealed class AbstractProgressLogger
         return MdcUtils.runThrowingWithContext(
                 () -> {
                     runnable.run();
-                    step();
+                    stepInternal();
                 },
                 mdcContextMap);
     }
@@ -118,7 +131,7 @@ public abstract sealed class AbstractProgressLogger
         return MdcUtils.runThrowingWithContext(
                 t -> {
                     consumer.accept(t);
-                    step();
+                    stepInternal();
                 },
                 mdcContextMap);
     }
@@ -128,7 +141,7 @@ public abstract sealed class AbstractProgressLogger
         return MdcUtils.runThrowingWithContext(
                 (t, u) -> {
                     consumer.accept(t, u);
-                    step();
+                    stepInternal();
                 },
                 mdcContextMap);
     }
@@ -138,7 +151,7 @@ public abstract sealed class AbstractProgressLogger
         return MdcUtils.runThrowingWithContext(
                 t -> {
                     final var result = function.apply(t);
-                    step();
+                    stepInternal();
                     return result;
                 },
                 mdcContextMap);
