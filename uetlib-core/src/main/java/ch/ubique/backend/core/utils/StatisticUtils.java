@@ -16,7 +16,8 @@ import java.util.stream.Collectors;
  * This class provides utility methods for calculating statistics for a collection of numeric
  * values.
  */
-public class StatisticUtils {
+public final class StatisticUtils {
+
     private StatisticUtils() {}
 
     /**

@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public class ProcessUtils {
+public final class ProcessUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(ProcessUtils.class);
 

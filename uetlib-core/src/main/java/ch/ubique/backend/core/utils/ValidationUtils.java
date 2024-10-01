@@ -5,6 +5,7 @@ import jakarta.validation.*;
 import java.util.Set;
 
 public final class ValidationUtils {
+
     private static final Validator VALIDATOR =
             Validation.buildDefaultValidatorFactory().getValidator();
 
@@ -15,6 +16,7 @@ public final class ValidationUtils {
         return constraintViolations.isEmpty();
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public static <T> T requireIsValid(final T object) {
         final var constraintViolations = validate(object);
         if (constraintViolations.isEmpty()) {

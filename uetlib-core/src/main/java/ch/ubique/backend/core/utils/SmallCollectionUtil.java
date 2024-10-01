@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class SmallCollectionUtil {
+public final class SmallCollectionUtil {
 
     private SmallCollectionUtil() {}
 
