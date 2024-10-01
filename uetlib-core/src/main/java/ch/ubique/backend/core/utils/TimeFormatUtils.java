@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class TimeFormatUtils {
+
     public static final TimeFormatUtils TIME_FORMAT_UTILS_UTC = new TimeFormatUtils(TIME_UTILS_UTC);
     public static final TimeFormatUtils TIME_FORMAT_UTILS_EUROPE_ZURICH =
             new TimeFormatUtils(TIME_UTILS_EUROPE_ZURICH);

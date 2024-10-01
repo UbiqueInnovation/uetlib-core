@@ -4,6 +4,7 @@ import static org.apache.commons.lang3.ArrayUtils.isEmpty;
 
 @SuppressWarnings("java:S1192")
 public final class ArrayUtils {
+
     private ArrayUtils() {}
 
     public static char lastElement(final char[] array) {
