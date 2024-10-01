@@ -11,7 +11,7 @@ public final class ValidationUtils {
 
     private ValidationUtils() {}
 
-    public static boolean isValid(final Object object) {
+    public static <T> boolean isValid(final T object) {
         final var constraintViolations = validate(object);
         return constraintViolations.isEmpty();
     }
