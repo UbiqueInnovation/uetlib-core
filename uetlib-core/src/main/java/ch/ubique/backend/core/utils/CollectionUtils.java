@@ -12,7 +12,8 @@ import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
-public class CollectionUtils {
+public final class CollectionUtils {
+
     private CollectionUtils() {}
 
     /**

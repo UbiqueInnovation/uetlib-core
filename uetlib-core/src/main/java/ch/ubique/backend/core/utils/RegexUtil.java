@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.stream.IntStream;
 
 public final class RegexUtil {
+
     private RegexUtil() {}
 
     public static SerializableMatchResult toSerializableMatchResult(final Matcher matcher) {

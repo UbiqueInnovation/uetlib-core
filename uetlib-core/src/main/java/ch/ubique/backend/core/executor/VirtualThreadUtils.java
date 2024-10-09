@@ -23,7 +23,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public class VirtualThreadUtils {
+public final class VirtualThreadUtils {
+
     private VirtualThreadUtils() {}
 
     public static <T, V> List<V> mapAll(final Function<T, V> mapper, final Iterable<T> inputs) {

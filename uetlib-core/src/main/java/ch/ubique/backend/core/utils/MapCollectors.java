@@ -1,7 +1,11 @@
 package ch.ubique.backend.core.utils;
 
+import static java.util.stream.Collectors.mapping;
+import static java.util.stream.Collectors.toList;
+
 import jakarta.validation.constraints.NotNull;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
@@ -60,5 +64,32 @@ public class MapCollectors {
     public static <V, T> Collector<T, ?, Map<T, V>> toMapWithValueMapper(
             @NotNull final Function<T, V> valueExtractor) {
         return Collectors.toUnmodifiableMap(Function.identity(), valueExtractor);
+    }
+
+    /**
+     * Given a stream of {@link Map.Entry} elements, group them by the keys and map each group's
+     * elements to the value of the entry
+     *
+     * @param <K> key type of the resulting map
+     * @param <V> value type of the elements in the value list
+     */
+    @NotNull
+    public static <K, V> Collector<Map.Entry<K, V>, ?, Map<K, List<V>>> groupingEntriesByKey() {
+        return groupingByAndMapValues(Map.Entry::getKey, Map.Entry::getValue);
+    }
+
+    /**
+     * Given a stream of elements, group them by the {@param keyExtractor} and map each group's
+     * elements to the value resulting from the {@param valueExtractor}
+     *
+     * @param <T> element type of the stream to collect
+     * @param <K> key type of the resulting map
+     * @param <V> value type of the elements in the value list
+     */
+    @NotNull
+    public static <T, K, V> Collector<T, ?, Map<K, List<V>>> groupingByAndMapValues(
+            @NotNull final Function<T, K> keyExtractor,
+            @NotNull final Function<T, V> valueExtractor) {
+        return Collectors.groupingBy(keyExtractor, mapping(valueExtractor, toList()));
     }
 }
