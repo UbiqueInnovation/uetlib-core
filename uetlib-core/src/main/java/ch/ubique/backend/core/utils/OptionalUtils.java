@@ -11,7 +11,8 @@ import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public class OptionalUtils {
+public final class OptionalUtils {
+
     private OptionalUtils() {}
 
     @SafeVarargs

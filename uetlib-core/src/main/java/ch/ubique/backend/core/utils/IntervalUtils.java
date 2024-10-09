@@ -2,7 +2,7 @@ package ch.ubique.backend.core.utils;
 
 import java.util.stream.IntStream;
 
-public class IntervalUtils {
+public final class IntervalUtils {
 
     private IntervalUtils() {}
 

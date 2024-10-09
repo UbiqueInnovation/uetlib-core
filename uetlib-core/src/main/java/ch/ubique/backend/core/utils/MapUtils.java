@@ -5,7 +5,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Map;
 
-public class MapUtils {
+public final class MapUtils {
+
     private MapUtils() {}
 
     public static @NotNull <T, K extends Comparable<? super K>> List<T> sortMapByKeys(

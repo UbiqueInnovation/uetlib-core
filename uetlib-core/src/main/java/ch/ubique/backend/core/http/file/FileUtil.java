@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.zip.GZIPOutputStream;
 
 @SuppressWarnings("unused")
-public class FileUtil {
+public final class FileUtil {
 
     private FileUtil() {}
 
