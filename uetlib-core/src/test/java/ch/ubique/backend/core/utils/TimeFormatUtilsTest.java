@@ -1,6 +1,7 @@
 package ch.ubique.backend.core.utils;
 
 import static ch.ubique.backend.core.utils.TimeFormatUtils.TIME_FORMAT_UTILS_EUROPE_ZURICH;
+import static ch.ubique.backend.core.utils.TimeFormatUtils.TIME_FORMAT_UTILS_UTC;
 import static ch.ubique.backend.core.utils.TimeUtils.*;
 import static ch.ubique.backend.test.assertion.AssertionUtils.assertThrowsWithMessage;
 
@@ -308,6 +309,92 @@ class TimeFormatUtilsTest {
         assertThrowsWithMessage(
                 DateTimeParseException.class,
                 () -> TimeFormatUtils.parsePrettyLocalDateTime("26.09.2023 8:06"),
+                "Text '26.09.2023 8:06' could not be parsed at index 11");
+    }
+
+    @Test
+    void parsePrettyLocalDateLocalTimeAtZone() {
+        assertEquals(
+                ZonedDateTime.of(LocalDate.of(2023, 9, 26), LocalTime.of(8, 6), ZONE_ID_UTC),
+                TIME_FORMAT_UTILS_UTC.parsePrettyLocalDateLocalTimeAtZone("26.09.2023", "08:06"));
+        assertEquals(
+                ZonedDateTime.of(LocalDate.of(2023, 9, 30), LocalTime.of(8, 6), ZONE_ID_UTC),
+                TIME_FORMAT_UTILS_UTC.parsePrettyLocalDateLocalTimeAtZone(
+                        "31.09.2023", "08:06")); // somehow this is legal, lol
+
+        assertThrowsWithMessage(
+                NullPointerException.class,
+                () -> TIME_FORMAT_UTILS_UTC.parsePrettyLocalDateLocalTimeAtZone(null, null),
+                "text");
+        assertThrowsWithMessage(
+                DateTimeParseException.class,
+                () -> TIME_FORMAT_UTILS_UTC.parsePrettyLocalDateLocalTimeAtZone("", ""),
+                "Text '' could not be parsed at index 0");
+        assertThrowsWithMessage(
+                DateTimeParseException.class,
+                () ->
+                        TIME_FORMAT_UTILS_UTC.parsePrettyLocalDateLocalTimeAtZone(
+                                "26.9.2023", "08:06"),
+                "Text '26.9.2023' could not be parsed at index 3");
+        assertThrowsWithMessage(
+                DateTimeParseException.class,
+                () ->
+                        TIME_FORMAT_UTILS_UTC.parsePrettyLocalDateLocalTimeAtZone(
+                                "32.09.2023", "08:06"),
+                "Text '32.09.2023' could not be parsed: Invalid value for DayOfMonth (valid"
+                        + " values 1 - 28/31): 32");
+        assertThrowsWithMessage(
+                DateTimeParseException.class,
+                () ->
+                        TIME_FORMAT_UTILS_UTC.parsePrettyLocalDateLocalTimeAtZone(
+                                "26.09.2023", "08:6"),
+                "Text '08:6' could not be parsed at index 3");
+        assertThrowsWithMessage(
+                DateTimeParseException.class,
+                () ->
+                        TIME_FORMAT_UTILS_UTC.parsePrettyLocalDateLocalTimeAtZone(
+                                "26.09.2023", "8:06"),
+                "Text '8:06' could not be parsed at index 0");
+    }
+
+    @Test
+    void parsePrettyLocalDateTimeAtZone() {
+        assertEquals(
+                ZonedDateTime.of(
+                        LocalDateTime.of(LocalDate.of(2023, 9, 26), LocalTime.of(8, 6)),
+                        ZONE_ID_UTC),
+                TIME_FORMAT_UTILS_UTC.parsePrettyLocalDateTimeAtZone("26.09.2023 08:06"));
+        assertEquals(
+                ZonedDateTime.of(
+                        LocalDateTime.of(LocalDate.of(2023, 9, 30), LocalTime.of(8, 6)),
+                        ZONE_ID_UTC),
+                TIME_FORMAT_UTILS_UTC.parsePrettyLocalDateTimeAtZone(
+                        "31.09.2023 08:06")); // somehow this is legal, lol
+
+        assertThrowsWithMessage(
+                NullPointerException.class,
+                () -> TIME_FORMAT_UTILS_UTC.parsePrettyLocalDateTimeAtZone(null),
+                "text");
+        assertThrowsWithMessage(
+                DateTimeParseException.class,
+                () -> TIME_FORMAT_UTILS_UTC.parsePrettyLocalDateTimeAtZone(""),
+                "Text '' could not be parsed at index 0");
+        assertThrowsWithMessage(
+                DateTimeParseException.class,
+                () -> TIME_FORMAT_UTILS_UTC.parsePrettyLocalDateTimeAtZone("26.9.2023 08:06"),
+                "Text '26.9.2023 08:06' could not be parsed at index 3");
+        assertThrowsWithMessage(
+                DateTimeParseException.class,
+                () -> TIME_FORMAT_UTILS_UTC.parsePrettyLocalDateTimeAtZone("32.09.2023 08:06"),
+                "Text '32.09.2023 08:06' could not be parsed: Invalid value for DayOfMonth (valid"
+                        + " values 1 - 28/31): 32");
+        assertThrowsWithMessage(
+                DateTimeParseException.class,
+                () -> TIME_FORMAT_UTILS_UTC.parsePrettyLocalDateTimeAtZone("26.09.2023 08:6"),
+                "Text '26.09.2023 08:6' could not be parsed at index 14");
+        assertThrowsWithMessage(
+                DateTimeParseException.class,
+                () -> TIME_FORMAT_UTILS_UTC.parsePrettyLocalDateTimeAtZone("26.09.2023 8:06"),
                 "Text '26.09.2023 8:06' could not be parsed at index 11");
     }
 }

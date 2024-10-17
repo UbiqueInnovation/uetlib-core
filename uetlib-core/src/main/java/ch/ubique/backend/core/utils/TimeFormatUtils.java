@@ -89,6 +89,15 @@ public final class TimeFormatUtils {
         return LocalDateTime.parse(localDateTime, PRETTY_LOCAL_DATE_TIME_FORMATTER);
     }
 
+    public @NotNull ZonedDateTime parsePrettyLocalDateLocalTimeAtZone(
+            final String localDate, final String localTime) {
+        return timeUtils.ofLocalDateLocalTime(parseLocalDate(localDate), parseLocalTime(localTime));
+    }
+
+    public @NotNull ZonedDateTime parsePrettyLocalDateTimeAtZone(final String localDateTime) {
+        return timeUtils.ofLocalDateTime(parseLocalDateTime(localDateTime));
+    }
+
     public String formatLocalDate(final ZonedDateTime temporal) {
         return PRETTY_LOCAL_DATE_FORMATTER.format(timeUtils.toLocalDate(temporal));
     }
