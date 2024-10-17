@@ -29,11 +29,11 @@ public final class TimeFormatUtils {
                             entry(ZONE_ID_EUROPE_ZURICH, TIME_FORMAT_UTILS_EUROPE_ZURICH),
                             entry(ZONE_ID_EUROPE_BERLIN, TIME_FORMAT_UTILS_EUROPE_BERLIN)));
 
-    private static final DateTimeFormatter LOCAL_DATE_FORMATTER =
+    private static final DateTimeFormatter PRETTY_LOCAL_DATE_FORMATTER =
             DateTimeFormatter.ofPattern("dd.MM.yyyy");
-    private static final DateTimeFormatter LOCAL_TIME_FORMATTER =
+    private static final DateTimeFormatter PRETTY_LOCAL_TIME_FORMATTER =
             DateTimeFormatter.ofPattern("HH:mm");
-    private static final DateTimeFormatter LOCAL_DATE_TIME_FORMATTER =
+    private static final DateTimeFormatter PRETTY_LOCAL_DATE_TIME_FORMATTER =
             DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
     @NotNull private final TimeUtils timeUtils;
@@ -53,147 +53,179 @@ public final class TimeFormatUtils {
         return getInstance(ZoneId.of(zoneId));
     }
 
+    /**
+     * @deprecated since v2.5, use {@link #parsePrettyLocalDate(String)}
+     */
+    @Deprecated(since = "2.5")
     public static LocalDate parseLocalDate(final String localDate) {
-        return LocalDate.parse(localDate, LOCAL_DATE_FORMATTER);
+        return LocalDate.parse(localDate, PRETTY_LOCAL_DATE_FORMATTER);
     }
 
+    public static LocalDate parsePrettyLocalDate(final String localDate) {
+        return LocalDate.parse(localDate, PRETTY_LOCAL_DATE_FORMATTER);
+    }
+
+    /**
+     * @deprecated since v2.5, use {@link #parsePrettyLocalTime(String)}
+     */
+    @Deprecated(since = "2.5")
     public static LocalTime parseLocalTime(final String localTime) {
-        return LocalTime.parse(localTime, LOCAL_TIME_FORMATTER);
+        return LocalTime.parse(localTime, PRETTY_LOCAL_TIME_FORMATTER);
     }
 
+    public static LocalTime parsePrettyLocalTime(final String localTime) {
+        return LocalTime.parse(localTime, PRETTY_LOCAL_TIME_FORMATTER);
+    }
+
+    /**
+     * @deprecated since v2.5, use {@link #parsePrettyLocalDateTime(String)}
+     */
+    @Deprecated(since = "2.5")
     public static LocalDateTime parseLocalDateTime(final String localDateTime) {
-        return LocalDateTime.parse(localDateTime, LOCAL_DATE_TIME_FORMATTER);
+        return LocalDateTime.parse(localDateTime, PRETTY_LOCAL_DATE_TIME_FORMATTER);
+    }
+
+    public static LocalDateTime parsePrettyLocalDateTime(final String localDateTime) {
+        return LocalDateTime.parse(localDateTime, PRETTY_LOCAL_DATE_TIME_FORMATTER);
     }
 
     public String formatLocalDate(final ZonedDateTime temporal) {
-        return LOCAL_DATE_FORMATTER.format(timeUtils.toLocalDate(temporal));
+        return PRETTY_LOCAL_DATE_FORMATTER.format(timeUtils.toLocalDate(temporal));
     }
 
     public String formatLocalDate(final OffsetDateTime temporal) {
-        return LOCAL_DATE_FORMATTER.format(timeUtils.toLocalDate(temporal));
+        return PRETTY_LOCAL_DATE_FORMATTER.format(timeUtils.toLocalDate(temporal));
     }
 
     public String formatLocalDate(final Instant temporal) {
-        return LOCAL_DATE_FORMATTER.format(timeUtils.toLocalDate(temporal));
+        return PRETTY_LOCAL_DATE_FORMATTER.format(timeUtils.toLocalDate(temporal));
     }
 
     public String formatLocalDate(final LocalDateTime temporal) {
-        return LOCAL_DATE_FORMATTER.format(temporal);
+        return PRETTY_LOCAL_DATE_FORMATTER.format(temporal);
     }
 
     public String formatLocalDate(final LocalDate temporal) {
-        return LOCAL_DATE_FORMATTER.format(temporal);
+        return PRETTY_LOCAL_DATE_FORMATTER.format(temporal);
     }
 
     public String formatLocalTime(final ZonedDateTime temporal) {
-        return LOCAL_TIME_FORMATTER.format(timeUtils.toLocalTime(temporal));
+        return PRETTY_LOCAL_TIME_FORMATTER.format(timeUtils.toLocalTime(temporal));
     }
 
     public String formatLocalTime(final OffsetDateTime temporal) {
-        return LOCAL_TIME_FORMATTER.format(timeUtils.toLocalTime(temporal));
+        return PRETTY_LOCAL_TIME_FORMATTER.format(timeUtils.toLocalTime(temporal));
     }
 
     public String formatLocalTime(final Instant temporal) {
-        return LOCAL_TIME_FORMATTER.format(timeUtils.toLocalTime(temporal));
+        return PRETTY_LOCAL_TIME_FORMATTER.format(timeUtils.toLocalTime(temporal));
     }
 
     public String formatLocalTime(final LocalDateTime temporal) {
-        return LOCAL_TIME_FORMATTER.format(temporal);
+        return PRETTY_LOCAL_TIME_FORMATTER.format(temporal);
     }
 
     public String formatLocalTime(final LocalTime temporal) {
-        return LOCAL_TIME_FORMATTER.format(temporal);
+        return PRETTY_LOCAL_TIME_FORMATTER.format(temporal);
     }
 
     public String formatLocalDateTime(final ZonedDateTime temporal) {
-        return LOCAL_DATE_TIME_FORMATTER.format(timeUtils.toLocalDateTime(temporal));
+        return PRETTY_LOCAL_DATE_TIME_FORMATTER.format(timeUtils.toLocalDateTime(temporal));
     }
 
     public String formatLocalDateTime(final OffsetDateTime temporal) {
-        return LOCAL_DATE_TIME_FORMATTER.format(timeUtils.toLocalDateTime(temporal));
+        return PRETTY_LOCAL_DATE_TIME_FORMATTER.format(timeUtils.toLocalDateTime(temporal));
     }
 
     public String formatLocalDateTime(final Instant temporal) {
-        return LOCAL_DATE_TIME_FORMATTER.format(timeUtils.toLocalDateTime(temporal));
+        return PRETTY_LOCAL_DATE_TIME_FORMATTER.format(timeUtils.toLocalDateTime(temporal));
     }
 
     public String formatLocalDateTime(final LocalDateTime temporal) {
-        return LOCAL_DATE_TIME_FORMATTER.format(temporal);
+        return PRETTY_LOCAL_DATE_TIME_FORMATTER.format(temporal);
     }
 
     public String formatLocalTimeRange(final ZonedDateTime start, final ZonedDateTime end) {
-        return LOCAL_TIME_FORMATTER.format(timeUtils.toLocalTime(start))
+        return PRETTY_LOCAL_TIME_FORMATTER.format(timeUtils.toLocalTime(start))
                 + " – "
-                + LOCAL_TIME_FORMATTER.format(timeUtils.toLocalTime(end));
+                + PRETTY_LOCAL_TIME_FORMATTER.format(timeUtils.toLocalTime(end));
     }
 
     public String formatLocalTimeRange(final OffsetDateTime start, final OffsetDateTime end) {
-        return LOCAL_TIME_FORMATTER.format(timeUtils.toLocalTime(start))
+        return PRETTY_LOCAL_TIME_FORMATTER.format(timeUtils.toLocalTime(start))
                 + " – "
-                + LOCAL_TIME_FORMATTER.format(timeUtils.toLocalTime(end));
+                + PRETTY_LOCAL_TIME_FORMATTER.format(timeUtils.toLocalTime(end));
     }
 
     public String formatLocalTimeRange(final Instant start, final Instant end) {
-        return LOCAL_TIME_FORMATTER.format(timeUtils.toLocalTime(start))
+        return PRETTY_LOCAL_TIME_FORMATTER.format(timeUtils.toLocalTime(start))
                 + " – "
-                + LOCAL_TIME_FORMATTER.format(timeUtils.toLocalTime(end));
+                + PRETTY_LOCAL_TIME_FORMATTER.format(timeUtils.toLocalTime(end));
     }
 
     public String formatLocalTimeRange(final LocalDateTime start, final LocalDateTime end) {
-        return LOCAL_TIME_FORMATTER.format(start) + " – " + LOCAL_TIME_FORMATTER.format(end);
+        return PRETTY_LOCAL_TIME_FORMATTER.format(start)
+                + " – "
+                + PRETTY_LOCAL_TIME_FORMATTER.format(end);
     }
 
     public String formatLocalTimeRange(final LocalTime start, final LocalTime end) {
-        return LOCAL_TIME_FORMATTER.format(start) + " – " + LOCAL_TIME_FORMATTER.format(end);
+        return PRETTY_LOCAL_TIME_FORMATTER.format(start)
+                + " – "
+                + PRETTY_LOCAL_TIME_FORMATTER.format(end);
     }
 
     public String formatLocalDateRange(final ZonedDateTime start, final ZonedDateTime end) {
-        return LOCAL_DATE_FORMATTER.format(timeUtils.toLocalDate(start))
+        return PRETTY_LOCAL_DATE_FORMATTER.format(timeUtils.toLocalDate(start))
                 + " – "
-                + LOCAL_DATE_FORMATTER.format(timeUtils.toLocalDate(end));
+                + PRETTY_LOCAL_DATE_FORMATTER.format(timeUtils.toLocalDate(end));
     }
 
     public String formatLocalDateRange(final OffsetDateTime start, final OffsetDateTime end) {
-        return LOCAL_DATE_FORMATTER.format(timeUtils.toLocalDate(start))
+        return PRETTY_LOCAL_DATE_FORMATTER.format(timeUtils.toLocalDate(start))
                 + " – "
-                + LOCAL_DATE_FORMATTER.format(timeUtils.toLocalDate(end));
+                + PRETTY_LOCAL_DATE_FORMATTER.format(timeUtils.toLocalDate(end));
     }
 
     public String formatLocalDateRange(final Instant start, final Instant end) {
-        return LOCAL_DATE_FORMATTER.format(timeUtils.toLocalDate(start))
+        return PRETTY_LOCAL_DATE_FORMATTER.format(timeUtils.toLocalDate(start))
                 + " – "
-                + LOCAL_DATE_FORMATTER.format(timeUtils.toLocalDate(end));
+                + PRETTY_LOCAL_DATE_FORMATTER.format(timeUtils.toLocalDate(end));
     }
 
     public String formatLocalDateRange(final LocalDateTime start, final LocalDateTime end) {
-        return LOCAL_DATE_FORMATTER.format(start) + " – " + LOCAL_DATE_FORMATTER.format(end);
+        return PRETTY_LOCAL_DATE_FORMATTER.format(start)
+                + " – "
+                + PRETTY_LOCAL_DATE_FORMATTER.format(end);
     }
 
     public String formatLocalDateRange(final LocalDate start, final LocalDate end) {
-        return LOCAL_DATE_FORMATTER.format(start) + " – " + LOCAL_DATE_FORMATTER.format(end);
+        return PRETTY_LOCAL_DATE_FORMATTER.format(start)
+                + " – "
+                + PRETTY_LOCAL_DATE_FORMATTER.format(end);
     }
 
     public String formatLocalDateTimeRange(final ZonedDateTime start, final ZonedDateTime end) {
-        return LOCAL_DATE_TIME_FORMATTER.format(timeUtils.toLocalDateTime(start))
+        return PRETTY_LOCAL_DATE_TIME_FORMATTER.format(timeUtils.toLocalDateTime(start))
                 + " – "
-                + LOCAL_DATE_TIME_FORMATTER.format(timeUtils.toLocalDateTime(end));
+                + PRETTY_LOCAL_DATE_TIME_FORMATTER.format(timeUtils.toLocalDateTime(end));
     }
 
     public String formatLocalDateTimeRange(final OffsetDateTime start, final OffsetDateTime end) {
-        return LOCAL_DATE_TIME_FORMATTER.format(timeUtils.toLocalDateTime(start))
+        return PRETTY_LOCAL_DATE_TIME_FORMATTER.format(timeUtils.toLocalDateTime(start))
                 + " – "
-                + LOCAL_DATE_TIME_FORMATTER.format(timeUtils.toLocalDateTime(end));
+                + PRETTY_LOCAL_DATE_TIME_FORMATTER.format(timeUtils.toLocalDateTime(end));
     }
 
     public String formatLocalDateTimeRange(final Instant start, final Instant end) {
-        return LOCAL_DATE_TIME_FORMATTER.format(timeUtils.toLocalDateTime(start))
+        return PRETTY_LOCAL_DATE_TIME_FORMATTER.format(timeUtils.toLocalDateTime(start))
                 + " – "
-                + LOCAL_DATE_TIME_FORMATTER.format(timeUtils.toLocalDateTime(end));
+                + PRETTY_LOCAL_DATE_TIME_FORMATTER.format(timeUtils.toLocalDateTime(end));
     }
 
     public String formatLocalDateTimeRange(final LocalDateTime start, final LocalDateTime end) {
-        return LOCAL_DATE_TIME_FORMATTER.format(start)
+        return PRETTY_LOCAL_DATE_TIME_FORMATTER.format(start)
                 + " – "
-                + LOCAL_DATE_TIME_FORMATTER.format(end);
+                + PRETTY_LOCAL_DATE_TIME_FORMATTER.format(end);
     }
 }

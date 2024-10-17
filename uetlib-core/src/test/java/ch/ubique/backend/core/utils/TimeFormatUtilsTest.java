@@ -222,86 +222,92 @@ class TimeFormatUtilsTest {
     }
 
     @Test
-    void parseLocalDate() {
-        assertEquals(LocalDate.of(2023, 9, 26), TimeFormatUtils.parseLocalDate("26.09.2023"));
+    void parsePrettyLocalDate() {
+        assertEquals(LocalDate.of(2023, 9, 26), TimeFormatUtils.parsePrettyLocalDate("26.09.2023"));
         assertEquals(
                 LocalDate.of(2023, 9, 30),
-                TimeFormatUtils.parseLocalDate("31.09.2023")); // somehow this is legal, lol
+                TimeFormatUtils.parsePrettyLocalDate("31.09.2023")); // somehow this is legal, lol
 
         assertThrowsWithMessage(
-                NullPointerException.class, () -> TimeFormatUtils.parseLocalDate(null), "text");
+                NullPointerException.class,
+                () -> TimeFormatUtils.parsePrettyLocalDate(null),
+                "text");
         assertThrowsWithMessage(
                 DateTimeParseException.class,
-                () -> TimeFormatUtils.parseLocalDate(""),
+                () -> TimeFormatUtils.parsePrettyLocalDate(""),
                 "Text '' could not be parsed at index 0");
         assertThrowsWithMessage(
                 DateTimeParseException.class,
-                () -> TimeFormatUtils.parseLocalDate("26.9.2023"),
+                () -> TimeFormatUtils.parsePrettyLocalDate("26.9.2023"),
                 "Text '26.9.2023' could not be parsed at index 3");
         assertThrowsWithMessage(
                 DateTimeParseException.class,
-                () -> TimeFormatUtils.parseLocalDate("32.09.2023"),
+                () -> TimeFormatUtils.parsePrettyLocalDate("32.09.2023"),
                 "Text '32.09.2023' could not be parsed: Invalid value for DayOfMonth (valid values"
-                    + " 1 - 28/31): 32");
+                        + " 1 - 28/31): 32");
     }
 
     @Test
-    void parseLocalTime() {
-        assertEquals(LocalTime.of(8, 6), TimeFormatUtils.parseLocalTime("08:06"));
+    void parsePrettyLocalTime() {
+        assertEquals(LocalTime.of(8, 6), TimeFormatUtils.parsePrettyLocalTime("08:06"));
 
         assertThrowsWithMessage(
-                NullPointerException.class, () -> TimeFormatUtils.parseLocalTime(null), "text");
+                NullPointerException.class,
+                () -> TimeFormatUtils.parsePrettyLocalTime(null),
+                "text");
         assertThrowsWithMessage(
                 DateTimeParseException.class,
-                () -> TimeFormatUtils.parseLocalTime(""),
+                () -> TimeFormatUtils.parsePrettyLocalTime(""),
                 "Text '' could not be parsed at index 0");
         assertThrowsWithMessage(
                 DateTimeParseException.class,
-                () -> TimeFormatUtils.parseLocalTime("08:6"),
+                () -> TimeFormatUtils.parsePrettyLocalTime("08:6"),
                 "Text '08:6' could not be parsed at index 3");
         assertThrowsWithMessage(
                 DateTimeParseException.class,
-                () -> TimeFormatUtils.parseLocalTime("8:06"),
+                () -> TimeFormatUtils.parsePrettyLocalTime("8:06"),
                 "Text '8:06' could not be parsed at index 0");
         assertThrowsWithMessage(
                 DateTimeParseException.class,
-                () -> TimeFormatUtils.parseLocalTime("24:06"),
+                () -> TimeFormatUtils.parsePrettyLocalTime("24:06"),
                 "Text '24:06' could not be parsed: Invalid value for HourOfDay (valid values 0 -"
-                    + " 23): 24");
+                        + " 23): 24");
     }
 
     @Test
-    void parseLocalDateTime() {
+    void parsePrettyLocalDateTime() {
         assertEquals(
                 LocalDateTime.of(LocalDate.of(2023, 9, 26), LocalTime.of(8, 6)),
-                TimeFormatUtils.parseLocalDateTime("26.09.2023 08:06"));
+                TimeFormatUtils.parsePrettyLocalDateTime("26.09.2023 08:06"));
         assertEquals(
                 LocalDateTime.of(LocalDate.of(2023, 9, 30), LocalTime.of(8, 6)),
-                TimeFormatUtils.parseLocalDateTime(
+                TimeFormatUtils.parsePrettyLocalDateTime(
                         "31.09.2023 08:06")); // somehow this is legal, lol
 
         assertThrowsWithMessage(
-                NullPointerException.class, () -> TimeFormatUtils.parseLocalDateTime(null), "text");
+                NullPointerException.class,
+                () -> TimeFormatUtils.parsePrettyLocalDateTime(null),
+                "text");
         assertThrowsWithMessage(
                 DateTimeParseException.class,
-                () -> TimeFormatUtils.parseLocalDateTime(""),
+                () -> TimeFormatUtils.parsePrettyLocalDateTime(""),
                 "Text '' could not be parsed at index 0");
         assertThrowsWithMessage(
                 DateTimeParseException.class,
-                () -> TimeFormatUtils.parseLocalDateTime("26.9.2023 08:06"),
+                () -> TimeFormatUtils.parsePrettyLocalDateTime("26.9.2023 08:06"),
                 "Text '26.9.2023 08:06' could not be parsed at index 3");
         assertThrowsWithMessage(
                 DateTimeParseException.class,
-                () -> TimeFormatUtils.parseLocalDateTime("32.09.2023 08:06"),
+                () -> TimeFormatUtils.parsePrettyLocalDateTime("32.09.2023 08:06"),
                 "Text '32.09.2023 08:06' could not be parsed: Invalid value for DayOfMonth (valid"
-                    + " values 1 - 28/31): 32");
+                        + " values 1 - 28/31): 32");
         assertThrowsWithMessage(
                 DateTimeParseException.class,
-                () -> TimeFormatUtils.parseLocalDateTime("26.09.2023 08:6"),
+                () -> TimeFormatUtils.parsePrettyLocalDateTime("26.09.2023 08:6"),
                 "Text '26.09.2023 08:6' could not be parsed at index 14");
         assertThrowsWithMessage(
                 DateTimeParseException.class,
-                () -> TimeFormatUtils.parseLocalDateTime("26.09.2023 8:06"),
+                () -> TimeFormatUtils.parsePrettyLocalDateTime("26.09.2023 8:06"),
                 "Text '26.09.2023 8:06' could not be parsed at index 11");
     }
 }
