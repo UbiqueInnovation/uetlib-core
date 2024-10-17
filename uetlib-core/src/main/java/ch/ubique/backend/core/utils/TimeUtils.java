@@ -239,9 +239,7 @@ public final class TimeUtils {
      * @return true <=> start <= time < end <=> time \in [start, end)
      */
     public static boolean isBetween(
-            @NotNull final Instant time,
-            @NotNull final Instant start,
-            @NotNull final Instant end) {
+            @NotNull final Instant time, @NotNull final Instant start, @NotNull final Instant end) {
         return !time.isBefore(start) && time.isBefore(end);
     }
 
@@ -324,6 +322,11 @@ public final class TimeUtils {
     @Contract(pure = true)
     public static <T extends Comparable<? super T>> T max(final T... values) {
         return ObjectUtils.max(values);
+    }
+
+    @Contract(pure = true)
+    public @NotNull ZoneId zoneId() {
+        return zoneId;
     }
 
     @Contract(" -> new")
