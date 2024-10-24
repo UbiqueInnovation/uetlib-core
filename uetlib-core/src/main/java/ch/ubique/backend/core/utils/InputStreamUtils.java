@@ -1,6 +1,5 @@
 package ch.ubique.backend.core.utils;
 
-import ch.ubique.backend.core.file.ByteFile;
 import ch.ubique.backend.core.io.CompressionAlgorithm;
 
 import com.j256.simplemagic.ContentInfo;
@@ -53,16 +52,6 @@ public final class InputStreamUtils {
         try (inputStream) {
             return function.apply(inputStream);
         }
-    }
-
-    public static ByteFile byteFileFromStream(
-            final InputStream inputStream, final String fileName, final String contentType)
-            throws IOException {
-
-        return new ByteFile()
-                .setFileName(fileName)
-                .setBytes(readBytesAndClose(inputStream))
-                .setContentType(contentType);
     }
 
     public static byte[] readBytesAndClose(final InputStream inputStream) throws IOException {
