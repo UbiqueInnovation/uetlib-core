@@ -7,7 +7,7 @@
     <parent>
         <groupId>ch.ubique</groupId>
         <artifactId>uetlib-bom</artifactId>
-        <version>1.0.0-alpha.7</version>
+        <version>1.0.0-alpha.8</version>
     </parent>
 
     <artifactId>uetlib-core</artifactId>
@@ -131,6 +131,27 @@
             <artifactId>slf4j-nop</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>io.trbl</groupId>
+            <artifactId>blurhash</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.imgscalr</groupId>
+            <artifactId>imgscalr-lib</artifactId>
+        </dependency>
+
+        <!-- ImageIO plugins -->
+        <!-- JPEG plugin as ImageIO cannot read CMYK by itself -->
+        <dependency>
+            <groupId>com.twelvemonkeys.imageio</groupId>
+            <artifactId>imageio-jpeg</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.drewnoakes</groupId>
+            <artifactId>metadata-extractor</artifactId>
+        </dependency>
+
         <!-- Used to read maven artifact versions, i.e. the version of the backend lib used -->
         <dependency>
             <groupId>de.westemeyer</groupId>
@@ -146,7 +167,6 @@
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-core</artifactId>
-            <version>11.0.0</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -158,7 +178,6 @@
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-el</artifactId>
-            <version>11.0.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
