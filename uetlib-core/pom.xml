@@ -32,12 +32,6 @@
             <artifactId>simplemagic</artifactId>
         </dependency>
 
-        <!-- Swagger annotations for models -->
-        <dependency>
-            <groupId>io.swagger.core.v3</groupId>
-            <artifactId>swagger-annotations-jakarta</artifactId>
-        </dependency>
-
         <!-- Type 'Version' to represent semver strings -->
         <dependency>
             <groupId>com.github.zafarkhaja</groupId>
