@@ -1,14 +1,14 @@
 {
-    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "extends": [
-        "github>UbiqueInnovation/renovate-config-backend:base.json5"
+    $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+    extends: [
+        'github>UbiqueInnovation/renovate-config-backend:base.json5',
     ],
-    "packageRules": [
+    packageRules: [
         {
-            "matchPackagePrefixes": [
-                "ch.ubique.backend.core:uetlib"
+            enabled: false,
+            matchPackageNames: [
+                'ch.ubique.backend.core:uetlib{/,}**',
             ],
-            "enabled": false
-        }
-    ]
+        },
+    ],
 }
