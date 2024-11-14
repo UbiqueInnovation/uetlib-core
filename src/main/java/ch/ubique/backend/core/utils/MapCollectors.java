@@ -12,7 +12,7 @@ import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-public class MapCollectors {
+public final class MapCollectors {
 
     private MapCollectors() {}
 
@@ -27,6 +27,13 @@ public class MapCollectors {
             Collector<T, ?, Map<K, V>> entriesToMap(
                     @NotNull final BinaryOperator<V> mergeFunction) {
         return Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue, mergeFunction);
+    }
+
+    @NotNull
+    public static <K, V, T extends Map.Entry<? extends K, ? extends V>>
+            Collector<T, ?, Map<K, V>> entriesToMapWithValueMapper(
+                    @NotNull final Function<T, V> valueExtractor) {
+        return Collectors.toUnmodifiableMap(Map.Entry::getKey, valueExtractor);
     }
 
     @NotNull
