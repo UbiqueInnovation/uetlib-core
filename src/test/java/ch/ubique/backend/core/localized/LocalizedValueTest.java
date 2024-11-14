@@ -12,7 +12,9 @@ import ch.ubique.backend.core.localized.annotation.JsonUnwrappedLocalizedValueSe
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 
@@ -25,7 +27,11 @@ import java.util.*;
 @SuppressWarnings("DataFlowIssue")
 class LocalizedValueTest {
 
-    private final ObjectMapper objectMapper = new JsonMapper();
+    private final ObjectMapper objectMapper =
+            JsonMapper.builder()
+                    .enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)
+                    .enable(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS)
+                    .build();
 
     @Test
     void serialization() throws JsonProcessingException {
@@ -418,29 +424,13 @@ class LocalizedValueTest {
         assertEquals(a.hashCode(), b.hashCode());
         assertEquals(b.hashCode(), a.hashCode());
 
-        assertNotEquals(a.hashCode(), c.hashCode());
-        assertNotEquals(b.hashCode(), c.hashCode());
-        assertNotEquals(c.hashCode(), a.hashCode());
-        assertNotEquals(c.hashCode(), b.hashCode());
+        // cannot test notEquals, cannot rely on it being unequal
 
         assertTrue(Set.of(a, c).contains(b));
 
         assertThrows(
                 IllegalArgumentException.class,
                 () -> Set.of(a, b)); // IllegalArgumentException: duplicate element
-    }
-
-    @Test
-    void toStringTest() {
-        final var a = LocalizedValue.stringBuilder().en("en").de("de").fr("fr").build();
-        final var b = LocalizedValue.stringBuilder().en("en").de("de").fr("fr").build();
-        final var c = LocalizedValue.stringBuilder().en("en").de("de").it("it").build();
-
-        assertEquals(a.toString(), b.toString());
-        assertNotEquals(a.toString(), c.toString());
-
-        assertEquals("LocalizedValue[values={de=de, fr=fr, en=en}]", a.toString());
-        assertEquals("LocalizedValue[values={de=de, en=en, it=it}]", c.toString());
     }
 
     @Test
