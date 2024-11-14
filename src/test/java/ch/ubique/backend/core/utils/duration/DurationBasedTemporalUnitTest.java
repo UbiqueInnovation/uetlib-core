@@ -1,9 +1,7 @@
-package ch.ubique.backend.core.utils.duraiton;
+package ch.ubique.backend.core.utils.duration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-
-import ch.ubique.backend.core.utils.duration.DurationBasedTemporalUnit;
 
 import org.junit.jupiter.api.Test;
 
