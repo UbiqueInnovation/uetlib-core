@@ -2,6 +2,7 @@ package ch.ubique.backend.core.io;
 
 import com.pivovarit.function.ThrowingSupplier;
 
+import java.nio.file.NoSuchFileException;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +21,7 @@ public class InputStreamSupplierFileProvider implements FileProvider {
     private Path filePath;
 
     public InputStreamSupplierFileProvider(
-            final ThrowingSupplier<InputStream, IOException> inputStreamSupplier) {
+        final ThrowingSupplier<InputStream, IOException> inputStreamSupplier) {
         this.inputStreamSupplier = inputStreamSupplier;
     }
 
@@ -40,8 +41,12 @@ public class InputStreamSupplierFileProvider implements FileProvider {
 
     @Override
     public void close() throws IOException {
-        if (filePath != null) {
-            Files.delete(filePath);
+        try {
+            if (filePath != null) {
+                Files.delete(filePath);
+            }
+        } catch (final NoSuchFileException e) {
+            /* Do nothing, no file to delete */
         }
     }
 }
