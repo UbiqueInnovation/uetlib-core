@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface JsonLocalizedValue {
 
-    SerializationMethod serializationMethod() default SerializationMethod.DEFAULT;
+    SerializationMethod keySerialization() default SerializationMethod.DEFAULT;
 
     enum SerializationMethod {
         DEFAULT,
