@@ -1,5 +1,7 @@
 package ch.ubique.backend.core.localized;
 
+import static ch.ubique.backend.core.localized.AdditionalLocales.ENGLISH_SWITZERLAND;
+import static ch.ubique.backend.core.localized.AdditionalLocales.GERMAN_SWITZERLAND;
 import static ch.ubique.backend.test.assertion.AssertionUtils.assertThrowsWithMessage;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -8,7 +10,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static java.util.Map.entry;
 import static java.util.Map.ofEntries;
 
-import ch.ubique.backend.core.localized.annotation.JsonUnwrappedLocalizedValueSerializer;
+import ch.ubique.backend.core.localized.annotation.JsonLocalizedValue;
+import ch.ubique.backend.core.localized.serializer.JsonUnwrappedLocalizedValueSerializer;
+import ch.ubique.backend.core.localized.serializer.LocalizedValueSerializer;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -528,27 +532,79 @@ class LocalizedValueTest {
         assertEquals(
                 "{\"de\":\"value_de\",\"en\":\"value_en\"}",
                 objectMapper.writeValueAsString(wrapper1));
+
         final var wrapper2 =
                 new Wrapper2(LocalizedValue.stringBuilder().de("value_de").en("value_en").build());
         assertEquals(
                 "{\"pre:de\":\"value_de\",\"pre:en\":\"value_en\"}",
                 objectMapper.writeValueAsString(wrapper2));
+
         final var wrapper3 =
                 new Wrapper3(LocalizedValue.stringBuilder().de("value_de").en("value_en").build());
         assertEquals(
                 "{\"de:suf\":\"value_de\",\"en:suf\":\"value_en\"}",
                 objectMapper.writeValueAsString(wrapper3));
+
         final var wrapper4 =
                 new Wrapper4(LocalizedValue.stringBuilder().de("value_de").en("value_en").build());
         assertEquals(
                 "{\"pre:de:suf\":\"value_de\",\"pre:en:suf\":\"value_en\"}",
                 objectMapper.writeValueAsString(wrapper4));
+
         final var wrapper5 =
                 new Wrapper5(LocalizedValue.stringBuilder().de("value_de").en("value_en").build());
         assertThrowsWithMessage(
                 IllegalStateException.class,
                 () -> objectMapper.writeValueAsString(wrapper5),
-                "Annotation 'JsonUnwrapped' not found on field name");
+                "Annotation 'JsonUnwrapped' not found on field/method name");
+    }
+
+    @Test
+    void serializationMethod() throws JsonProcessingException {
+        final var wrapper6 =
+                new Wrapper6(
+                        LocalizedValue.stringBuilder()
+                                .add("value_de", GERMAN_SWITZERLAND)
+                                .add("value_en", ENGLISH_SWITZERLAND)
+                                .fullLocale()
+                                .build());
+        assertThrowsWithMessage(
+                IllegalStateException.class,
+                () -> objectMapper.writeValueAsString(wrapper6),
+                "Annotation 'JsonLocalizedValue' not found on field/method name");
+
+        final var wrapper7 =
+                new Wrapper7(
+                        LocalizedValue.stringBuilder()
+                                .add("value_de", GERMAN_SWITZERLAND)
+                                .add("value_en", ENGLISH_SWITZERLAND)
+                                .fullLocale()
+                                .build());
+        assertEquals(
+                "{\"name\":{\"de-CH\":\"value_de\",\"en-CH\":\"value_en\"}}",
+                objectMapper.writeValueAsString(wrapper7));
+
+        final var wrapper8 =
+                new Wrapper8(
+                        LocalizedValue.stringBuilder()
+                                .add("value_de", GERMAN_SWITZERLAND)
+                                .add("value_en", ENGLISH_SWITZERLAND)
+                                .fullLocale()
+                                .build());
+        assertEquals(
+                "{\"name\":{\"de_CH\":\"value_de\",\"en_CH\":\"value_en\"}}",
+                objectMapper.writeValueAsString(wrapper8));
+
+        final var wrapper9 =
+                new Wrapper9(
+                        LocalizedValue.stringBuilder()
+                                .add("value_de", GERMAN_SWITZERLAND)
+                                .add("value_en", ENGLISH_SWITZERLAND)
+                                .fullLocale()
+                                .build());
+        assertEquals(
+                "{\"name\":{\"DE-CH\":\"value_de\",\"EN-CH\":\"value_en\"}}",
+                objectMapper.writeValueAsString(wrapper9));
     }
 
     record Wrapper1(
@@ -572,5 +628,23 @@ class LocalizedValueTest {
 
     record Wrapper5(
             @JsonSerialize(using = JsonUnwrappedLocalizedValueSerializer.class)
+                    LocalizedValue<String> name) {}
+
+    record Wrapper6(
+            @JsonSerialize(using = LocalizedValueSerializer.class) LocalizedValue<String> name) {}
+
+    record Wrapper7(
+            @JsonLocalizedValue @JsonSerialize(using = LocalizedValueSerializer.class)
+                    LocalizedValue<String> name) {}
+
+    record Wrapper8(
+            @JsonLocalizedValue(serializationMethod = JsonLocalizedValue.SerializationMethod.POSIX)
+                    @JsonSerialize(using = LocalizedValueSerializer.class)
+                    LocalizedValue<String> name) {}
+
+    record Wrapper9(
+            @JsonLocalizedValue(
+                            serializationMethod = JsonLocalizedValue.SerializationMethod.UPPERCASE)
+                    @JsonSerialize(using = LocalizedValueSerializer.class)
                     LocalizedValue<String> name) {}
 }
