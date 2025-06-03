@@ -3,12 +3,14 @@ package ch.ubique.backend.core.localized;
 import static java.util.Map.Entry;
 import static java.util.stream.Collectors.*;
 
+import ch.ubique.backend.core.localized.serializer.LocalizedValueSerializer;
 import ch.ubique.backend.core.utils.CollectionUtils;
 import ch.ubique.backend.core.utils.LocaleHelper;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotEmpty;
@@ -25,11 +27,12 @@ import java.util.*;
 
 /**
  * A LocalizedValue object does always contain at least one entry in its internal map. All
- * methods/constructor ensure that does is always the case. The key of the internal map is always a
+ * methods/constructors ensure that does is always the case. The key of the internal map is always a
  * legal {@link Locale}.
  *
  * @param <T> the value type of the internal map
  */
+@JsonSerialize(using = LocalizedValueSerializer.class)
 public class LocalizedValue<T extends Serializable> {
 
     @NotEmpty private final Map<Locale, T> values;
