@@ -1,5 +1,8 @@
 package ch.ubique.backend.core.localized;
 
+import static java.util.Map.Entry;
+import static java.util.stream.Collectors.*;
+
 import ch.ubique.backend.core.utils.CollectionUtils;
 import ch.ubique.backend.core.utils.LocaleHelper;
 
@@ -19,7 +22,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * A LocalizedValue object does always contain at least one entry in its internal map. All
@@ -481,9 +483,7 @@ public class LocalizedValue<T extends Serializable> {
     @NotEmpty
     public Map<String, T> toMapWithLanguageTagKeys() {
         return values.entrySet().stream()
-                .collect(
-                        Collectors.toMap(
-                                entry -> entry.getKey().toLanguageTag(), Map.Entry::getValue));
+                .collect(toMap(entry -> entry.getKey().toLanguageTag(), Entry::getValue));
     }
 
     /**
@@ -494,7 +494,7 @@ public class LocalizedValue<T extends Serializable> {
     @NotEmpty
     public Map<String, T> toMapWithPosixLocaleKeys() {
         return values.entrySet().stream()
-                .collect(Collectors.toMap(entry -> entry.getKey().toString(), Map.Entry::getValue));
+                .collect(toMap(entry -> entry.getKey().toString(), Entry::getValue));
     }
 
     /**
@@ -506,9 +506,9 @@ public class LocalizedValue<T extends Serializable> {
     public Map<String, T> toMapWithUppercaseKeys() {
         return values.entrySet().stream()
                 .collect(
-                        Collectors.toMap(
+                        toMap(
                                 entry -> entry.getKey().toLanguageTag().toUpperCase(),
-                                Map.Entry::getValue));
+                                Entry::getValue));
     }
 
     @Override

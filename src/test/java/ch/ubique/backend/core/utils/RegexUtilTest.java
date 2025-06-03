@@ -2,7 +2,8 @@ package ch.ubique.backend.core.utils;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import static java.util.Map.entry;
+import static java.util.Map.*;
+import static java.util.stream.Collectors.*;
 
 import ch.ubique.backend.core.jackson.ObjectMapperUtils;
 import ch.ubique.backend.core.regex.SerializableMatchResult;
@@ -14,11 +15,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.Map;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 class RegexUtilTest {
 
@@ -137,7 +136,7 @@ class RegexUtilTest {
     @Test
     void testNamedGroups() {
         assertEquals(
-                Map.ofEntries(entry("blockB", 1), entry("blockC", 2)),
+                ofEntries(entry("blockB", 1), entry("blockC", 2)),
                 serializableMatchResult.namedGroups());
         assertEquals(matchResult.namedGroups(), serializableMatchResult.namedGroups());
     }
@@ -145,14 +144,12 @@ class RegexUtilTest {
     @Test
     void testNamedGroupValues() {
         assertEquals(
-                Map.ofEntries(entry("blockB", "BBBB"), entry("blockC", "CCCC")),
+                ofEntries(entry("blockB", "BBBB"), entry("blockC", "CCCC")),
                 serializableMatchResult.namedGroupValues());
         final var firstMatchResultNamedGroupValues =
                 matchResult.namedGroups().entrySet().stream()
                         .collect(
-                                Collectors.toMap(
-                                        Map.Entry::getKey,
-                                        entry -> matchResult.group(entry.getValue())));
+                                toMap(Entry::getKey, entry -> matchResult.group(entry.getValue())));
         assertEquals(firstMatchResultNamedGroupValues, serializableMatchResult.namedGroupValues());
     }
 }

@@ -1,6 +1,7 @@
 package ch.ubique.backend.core.utils;
 
 import static java.util.Map.entry;
+import static java.util.stream.Collectors.*;
 
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
@@ -11,7 +12,6 @@ import org.jetbrains.annotations.Contract;
 
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
 public final class LocaleHelper {
 
@@ -83,9 +83,7 @@ public final class LocaleHelper {
                 .map(entry -> tryToGetLocalizedString(entry, keyPrefix, separator))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .collect(
-                        Collectors.toMap(
-                                Entry::getKey, Entry::getValue, (existing, other) -> existing));
+                .collect(toMap(Entry::getKey, Entry::getValue, (existing, other) -> existing));
     }
 
     @NotNull

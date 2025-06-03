@@ -1,11 +1,12 @@
 package ch.ubique.backend.core.utils;
 
+import static java.util.function.Function.identity;
+
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
-import java.util.function.Function;
 
 class SetUtilsTest {
 
@@ -18,17 +19,17 @@ class SetUtilsTest {
     void removeAllIdentity() {
         Assertions.assertEquals(
                 org.apache.commons.collections4.SetUtils.difference(pairs1, pairs2),
-                SetUtils.difference(pairs1, pairs2, Function.identity()));
+                SetUtils.difference(pairs1, pairs2, identity()));
         Assertions.assertEquals(
-                SetUtils.difference(pairs1, pairs2, Function.identity()),
+                SetUtils.difference(pairs1, pairs2, identity()),
                 org.apache.commons.collections4.SetUtils.difference(pairs1, pairs2));
 
         Assertions.assertEquals(
                 Set.of(Pair.of("A", 2), Pair.of("C", 1)),
-                SetUtils.difference(pairs1, pairs2, Function.identity()));
+                SetUtils.difference(pairs1, pairs2, identity()));
 
         Assertions.assertEquals(
-                Set.of(Pair.of("A", 3)), SetUtils.difference(pairs2, pairs1, Function.identity()));
+                Set.of(Pair.of("A", 3)), SetUtils.difference(pairs2, pairs1, identity()));
     }
 
     @Test

@@ -1,5 +1,7 @@
 package ch.ubique.backend.core.localized;
 
+import static java.util.stream.Collectors.*;
+
 import ch.ubique.backend.core.utils.LocaleHelper;
 
 import jakarta.annotation.Nullable;
@@ -14,7 +16,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public final class LocalizedValueBuilder<T extends Serializable> {
 
@@ -99,7 +100,7 @@ public final class LocalizedValueBuilder<T extends Serializable> {
         final var cleanValues =
                 values.entrySet().stream()
                         .filter(this::isEntryValid)
-                        .collect(Collectors.toMap(this::finalLocale, Map.Entry::getValue));
+                        .collect(toMap(this::finalLocale, Entry::getValue));
 
         if (cleanValues.isEmpty()) {
             return Optional.empty();

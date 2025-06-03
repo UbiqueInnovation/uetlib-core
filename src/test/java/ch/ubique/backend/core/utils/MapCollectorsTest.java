@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 class MapCollectorsTest {
@@ -84,7 +85,7 @@ class MapCollectorsTest {
                 entries.stream()
                         .collect(
                                 MapCollectors.groupingByAndMapValues(
-                                        Map.Entry::getKey, Map.Entry::getValue)));
+                                        Entry::getKey, Entry::getValue)));
     }
 
     @Test
