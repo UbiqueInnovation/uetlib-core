@@ -1,4 +1,4 @@
-package ch.ubique.backend.core.localized.annotation;
+package ch.ubique.backend.core.localized.serializer;
 
 import ch.ubique.backend.core.localized.LocalizedValue;
 
@@ -21,6 +21,7 @@ public class JsonUnwrappedLocalizedValueSerializer
     private final String prefix;
     private final String suffix;
 
+    @SuppressWarnings("unused") // used by Jackson to instantiate the contextual serializer
     public JsonUnwrappedLocalizedValueSerializer() {
         this(null, null);
     }
@@ -54,7 +55,7 @@ public class JsonUnwrappedLocalizedValueSerializer
         final var jsonUnwrapped = property.getAnnotation(JsonUnwrapped.class);
         if (jsonUnwrapped == null) {
             throw new IllegalStateException(
-                    "Annotation 'JsonUnwrapped' not found on field " + property.getName());
+                    "Annotation 'JsonUnwrapped' not found on field/method " + property.getName());
         }
         return new JsonUnwrappedLocalizedValueSerializer(
                 jsonUnwrapped.prefix(), jsonUnwrapped.suffix());
