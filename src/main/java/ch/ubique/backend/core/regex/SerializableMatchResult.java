@@ -1,5 +1,8 @@
 package ch.ubique.backend.core.regex;
 
+import static java.util.Map.Entry;
+import static java.util.stream.Collectors.*;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,7 +17,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.MatchResult;
-import java.util.stream.Collectors;
 
 public final class SerializableMatchResult implements MatchResult {
     @JsonProperty private final int first;
@@ -120,7 +122,7 @@ public final class SerializableMatchResult implements MatchResult {
     public Map<String, String> namedGroupValues() {
         //noinspection DataFlowIssue
         return namedGroups().entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, e -> group(e.getValue())));
+                .collect(toMap(Entry::getKey, e -> group(e.getValue())));
     }
 
     @Override

@@ -1,5 +1,7 @@
 package ch.ubique.backend.core.utils;
 
+import static java.util.Map.Entry;
+import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.mapping;
 import static java.util.stream.Collectors.toList;
 
@@ -19,21 +21,21 @@ public final class MapCollectors {
     @NotNull
     public static <K, V, T extends Map.Entry<? extends K, ? extends V>>
             Collector<T, ?, Map<K, V>> entriesToMap() {
-        return Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue);
+        return Collectors.toUnmodifiableMap(Entry::getKey, Entry::getValue);
     }
 
     @NotNull
     public static <K, V, T extends Map.Entry<? extends K, ? extends V>>
             Collector<T, ?, Map<K, V>> entriesToMap(
                     @NotNull final BinaryOperator<V> mergeFunction) {
-        return Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue, mergeFunction);
+        return Collectors.toUnmodifiableMap(Entry::getKey, Entry::getValue, mergeFunction);
     }
 
     @NotNull
     public static <K, V, T extends Map.Entry<? extends K, ? extends V>>
             Collector<T, ?, Map<K, V>> entriesToMapWithValueMapper(
                     @NotNull final Function<T, V> valueExtractor) {
-        return Collectors.toUnmodifiableMap(Map.Entry::getKey, valueExtractor);
+        return Collectors.toUnmodifiableMap(Entry::getKey, valueExtractor);
     }
 
     @NotNull
@@ -45,14 +47,14 @@ public final class MapCollectors {
     @NotNull
     public static <K, V, T extends Map.Entry<? extends K, ? extends V>>
             Collector<T, ?, Map<V, K>> entriesToInvertedMap() {
-        return Collectors.toUnmodifiableMap(Map.Entry::getValue, Map.Entry::getKey);
+        return Collectors.toUnmodifiableMap(Entry::getValue, Entry::getKey);
     }
 
     @NotNull
     public static <K, V, T extends Map.Entry<? extends K, ? extends V>>
             Collector<T, ?, Map<V, K>> entriesToInvertedMap(
                     @NotNull final BinaryOperator<K> mergeFunction) {
-        return Collectors.toUnmodifiableMap(Map.Entry::getValue, Map.Entry::getKey, mergeFunction);
+        return Collectors.toUnmodifiableMap(Entry::getValue, Entry::getKey, mergeFunction);
     }
 
     @NotNull
@@ -64,17 +66,17 @@ public final class MapCollectors {
     @NotNull
     public static <K, T> Collector<T, ?, Map<K, T>> toMap(
             @NotNull final Function<T, K> keyExtractor) {
-        return Collectors.toUnmodifiableMap(keyExtractor, Function.identity());
+        return Collectors.toUnmodifiableMap(keyExtractor, identity());
     }
 
     @NotNull
     public static <V, T> Collector<T, ?, Map<T, V>> toMapWithValueMapper(
             @NotNull final Function<T, V> valueExtractor) {
-        return Collectors.toUnmodifiableMap(Function.identity(), valueExtractor);
+        return Collectors.toUnmodifiableMap(identity(), valueExtractor);
     }
 
     /**
-     * Given a stream of {@link Map.Entry} elements, group them by the keys and map each group's
+     * Given a stream of {@link Entry} elements, group them by the keys and map each group's
      * elements to the value of the entry
      *
      * @param <K> key type of the resulting map
@@ -82,7 +84,7 @@ public final class MapCollectors {
      */
     @NotNull
     public static <K, V> Collector<Map.Entry<K, V>, ?, Map<K, List<V>>> groupingEntriesByKey() {
-        return groupingByAndMapValues(Map.Entry::getKey, Map.Entry::getValue);
+        return groupingByAndMapValues(Entry::getKey, Entry::getValue);
     }
 
     /**

@@ -1,5 +1,8 @@
 package ch.ubique.backend.core.utils;
 
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.*;
+
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 
@@ -9,8 +12,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.util.*;
 import java.util.function.DoubleFunction;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * This class provides utility methods for calculating statistics for a collection of numeric
@@ -52,7 +53,7 @@ public final class StatisticUtils {
         final var percentiles = percentilesForSortedList(sortedList, List.of(1, 5, 25, 75, 95, 99));
 
         final var doubleSummaryStats =
-                collection.stream().collect(Collectors.summarizingDouble(Double::doubleValue));
+                collection.stream().collect(summarizingDouble(Double::doubleValue));
 
         return Optional.of(
                 new NumericCollectionStats(
@@ -119,8 +120,8 @@ public final class StatisticUtils {
             final List<Double> sortedList, final Collection<Integer> percentiles) {
         return percentiles.stream()
                 .collect(
-                        Collectors.toMap(
-                                Function.identity(),
+                        toMap(
+                                identity(),
                                 p -> percentileForSortedList(sortedList, p).orElseThrow()));
     }
 
@@ -170,7 +171,7 @@ public final class StatisticUtils {
                                                         "%d=%s",
                                                         entry.getKey(),
                                                         numberFormatter.apply(entry.getValue())))
-                                .collect(Collectors.joining(", ", "[", "]")))
+                                .collect(joining(", ", "[", "]")))
                 .build();
     }
 }

@@ -2,7 +2,7 @@ package ch.ubique.backend.core.localized;
 
 import java.util.Locale;
 
-public class AdditionalLocales {
+public final class AdditionalLocales {
 
     public static final Locale ROMANSH = Locale.of("rm");
     public static final Locale GERMAN_SWITZERLAND = Locale.of("de", "CH");

@@ -1,5 +1,8 @@
 package ch.ubique.backend.core.utils;
 
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.*;
+
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
@@ -7,9 +10,7 @@ import org.apache.commons.lang3.SerializationUtils;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.function.Function;
 import java.util.function.ToDoubleFunction;
-import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
 public final class CollectionUtils {
@@ -34,7 +35,7 @@ public final class CollectionUtils {
             final ToDoubleFunction<T> valueExtractor,
             final double epsilon) {
         return valueClasses(items, valueExtractor, epsilon).stream()
-                .collect(Collectors.toMap(c -> averageBy(c, valueExtractor), Function.identity()));
+                .collect(toMap(c -> averageBy(c, valueExtractor), identity()));
     }
 
     /**
@@ -108,7 +109,7 @@ public final class CollectionUtils {
             @NotNull final Map<K, V> values) {
         return values.entrySet().stream()
                 .collect(
-                        Collectors.toMap(
+                        toMap(
                                 entry -> SerializationUtils.clone(entry.getKey()),
                                 entry -> SerializationUtils.clone(entry.getValue())));
     }
