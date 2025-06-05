@@ -1,38 +1,27 @@
 package ch.ubique.backend.core.utils;
 
-import jakarta.validation.*;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
 
-import java.text.MessageFormat;
-import java.util.Arrays;
 import java.util.Set;
 
 public final class ValidationUtils {
 
-    private static final Validator VALIDATOR =
-            Validation.buildDefaultValidatorFactory().getValidator();
+    private static final ValidationExecutor DEFAULT_EXECUTOR =
+            new ValidationExecutor(Validation.buildDefaultValidatorFactory().getValidator());
 
     private ValidationUtils() {}
 
     public static <T> boolean isValid(final T object, final Class<?>... validationGroups) {
-        final var constraintViolations = validate(object, validationGroups);
-        return constraintViolations.isEmpty();
+        return DEFAULT_EXECUTOR.isValid(object, validationGroups);
     }
 
-    @SuppressWarnings("UnusedReturnValue")
     public static <T> T requireIsValid(final T object, final Class<?>... validationGroups) {
-        final var constraintViolations = validate(object, validationGroups);
-        if (constraintViolations.isEmpty()) {
-            return object;
-        }
-        throw new ValidationException(
-                MessageFormat.format(
-                        "The provided object is not valid for validation groups {0}. Violations: {1}",
-                        Arrays.stream(validationGroups).map(Class::getSimpleName).toList(),
-                        constraintViolations));
+        return DEFAULT_EXECUTOR.requireIsValid(object, validationGroups);
     }
 
     public static <T> Set<ConstraintViolation<T>> validate(
             final T object, final Class<?>... validationGroups) {
-        return VALIDATOR.validate(object, validationGroups);
+        return DEFAULT_EXECUTOR.validate(object, validationGroups);
     }
 }
