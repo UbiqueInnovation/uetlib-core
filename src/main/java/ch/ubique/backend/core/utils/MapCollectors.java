@@ -32,10 +32,11 @@ public final class MapCollectors {
     }
 
     @NotNull
-    public static <K, V, T extends Map.Entry<? extends K, ? extends V>>
-            Collector<T, ?, Map<K, V>> entriesToMapWithValueMapper(
-                    @NotNull final Function<T, V> valueExtractor) {
-        return Collectors.toUnmodifiableMap(Entry::getKey, valueExtractor);
+    public static <K, V, T extends Map.Entry<? extends K, ? extends V>, V2>
+            Collector<T, ?, Map<K, V2>> entriesToMapWithValueMapper(
+                    @NotNull final Function<V, V2> valueMapper) {
+        return Collectors.toUnmodifiableMap(
+                Entry::getKey, entry -> valueMapper.apply(entry.getValue()));
     }
 
     @NotNull
