@@ -28,6 +28,18 @@ class MapCollectorsTest {
     }
 
     @Test
+    void entriesToMapWithValueMapper() {
+        final var map = ofEntries(entry("a", 1), entry("b", 2), entry("c", 3));
+        final var expectedMap = ofEntries(entry("a", "100"), entry("b", "200"), entry("c", "300"));
+        assertEquals(
+                expectedMap,
+                map.entrySet().stream()
+                        .collect(
+                                MapCollectors.entriesToMapWithValueMapper(
+                                        v -> String.valueOf(100 * v))));
+    }
+
+    @Test
     void entriesToMapWithMerge() {
         final var entries = Set.of(entry("a", 1), entry("a", 2), entry("b", 4), entry("c", 5));
         final var expected = ofEntries(entry("a", 3), entry("b", 4), entry("c", 5));
