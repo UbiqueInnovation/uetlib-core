@@ -125,12 +125,6 @@
             <artifactId>caffeine</artifactId>
         </dependency>
 
-        <!-- Checkerframework for static nullness checks, previously included in caffeine -->
-        <dependency>
-            <groupId>org.checkerframework</groupId>
-            <artifactId>checker-qual</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>jakarta.annotation</groupId>
             <artifactId>jakarta.annotation-api</artifactId>
