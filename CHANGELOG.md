@@ -1,10 +1,18 @@
 # CHANGELOG
 
+## 1.0.2
+
+### Improvements
+
+- Fix `MapCollectors::entriesToMapWithValueMapper` to allow mapping values to a new type and expect the map value
+  instead of the map entry as the mapping function argument
+
 ## 1.0.1
 
 ### Improvements
 
-- Added support for different key serialization (`DEFAULT`/`POSIX`/`UPPERCASE`) methods of `LocalizedValue` objects using jackson annotation, e.g.:
+- Added support for different key serialization (`DEFAULT`/`POSIX`/`UPPERCASE`) methods of `LocalizedValue` objects
+  using jackson annotation, e.g.:
     ```
     record KeySerialization(
         @JsonLocalizedValue(keySerialization = SerializationMethod.POSIX)
