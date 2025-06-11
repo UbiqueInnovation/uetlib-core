@@ -2,7 +2,7 @@ package ch.ubique.backend.core.utils;
 
 import com.github.benmanes.caffeine.cache.Cache;
 
-import org.checkerframework.checker.nullness.qual.PolyNull;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.function.Supplier;
 
@@ -28,7 +28,7 @@ public final class SingleCache<T> {
         return cache.getIfPresent(KEY);
     }
 
-    public T get(final Supplier<? extends @PolyNull T> valueGetter) {
+    public T get(final Supplier<? extends @NotNull T> valueGetter) {
         return cache.get(KEY, key -> valueGetter.get());
     }
 }
