@@ -6,8 +6,11 @@
 
 - Added `VersionToStringSerializer/StringToVersionSerializer` to read write `com.github.zafarkhaja.semver.Version`
   SemVer Strings to/from JSON.
-- Registered `VersionToStringSerializer/StringToVersionSerializer` with the default object mapper in `ObjectMapperUtils`.
+- Registered `VersionToStringSerializer/StringToVersionSerializer` with the default object mapper in
+  `ObjectMapperUtils`.
 - Added `LocalizedValueValueExtractor` to validate annotations on the generic type `T` of `LocalizedValue<T>`
+- Added `LocalizedValue::cascade` that contains all existing entries, plus new ones according to the cascade for all
+  given elemnts in the argument list.
 
 ## 1.1.1
 

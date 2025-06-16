@@ -1,7 +1,6 @@
 package ch.ubique.backend.core.localized;
 
-import static ch.ubique.backend.core.localized.AdditionalLocales.ENGLISH_SWITZERLAND;
-import static ch.ubique.backend.core.localized.AdditionalLocales.GERMAN_SWITZERLAND;
+import static ch.ubique.backend.core.localized.AdditionalLocales.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -465,8 +464,46 @@ class LocalizedValueTest {
     }
 
     @Test
-    void testGetKeysNotSwapped() {
+    void testCascade() {
+        final var uncascaded =
+                LocalizedValue.stringBuilder()
+                        .fromStringMap(
+                                ofEntries(
+                                        entry("de", "de"),
+                                        entry("fr-CH", "fr-CH"),
+                                        entry("rm", "rm")))
+                        .fullLocale()
+                        .build();
+        final var cascaded1 =
+                uncascaded.cascade(
+                        GERMAN_SWITZERLAND, Locale.FRENCH, Locale.ITALIAN, Locale.ENGLISH);
 
+        assertEquals("de", cascaded1.de());
+        assertEquals("de", cascaded1.get(GERMAN_SWITZERLAND));
+        assertEquals("fr-CH", cascaded1.get(FRENCH_SWITZERLAND));
+        assertEquals("de", cascaded1.get(Locale.FRENCH));
+        assertEquals("de", cascaded1.get(Locale.ITALIAN));
+        assertEquals("de", cascaded1.get(Locale.ENGLISH));
+        assertEquals("de", cascaded1.get(ENGLISH_SWITZERLAND));
+        assertEquals("rm", cascaded1.get(ROMANSH));
+        assertThrows(NoSuchElementException.class, () -> cascaded1.get(Locale.CHINA));
+
+        final var cascaded2 = uncascaded.cascade(Locale.CHINA);
+
+        assertEquals("de", cascaded2.de());
+        assertEquals("de", cascaded2.get(GERMAN_SWITZERLAND));
+        assertEquals("fr-CH", cascaded2.get(FRENCH_SWITZERLAND));
+        assertThrows(NoSuchElementException.class, cascaded2::fr);
+        assertThrows(NoSuchElementException.class, cascaded2::it);
+        assertThrows(NoSuchElementException.class, cascaded2::en);
+        assertThrows(NoSuchElementException.class, () -> cascaded2.get(ENGLISH_SWITZERLAND));
+        assertEquals("rm", cascaded2.get(ROMANSH));
+        // Any value that existed is fine as fallback
+        assertTrue(uncascaded.toMapWithLocaleKeys().containsValue(cascaded2.get(Locale.CHINA)));
+    }
+
+    @Test
+    void testGetKeysNotSwapped() {
         final var localizedString =
                 LocalizedValue.fromStringMap(
                         ofEntries(
@@ -500,7 +537,6 @@ class LocalizedValueTest {
         final var de1 = LocalizedValue.de("de1");
         final var de2 = LocalizedValue.de("de2");
         final var en1 = LocalizedValue.en("en1");
-        final var de1en1 = LocalizedValue.stringBuilder().de("de1").en("en1").build();
         final var de2en1 = LocalizedValue.stringBuilder().de("de2").en("en1").build();
 
         assertThrows(NullPointerException.class, () -> LocalizedValue.mergeAll(null));
@@ -514,6 +550,14 @@ class LocalizedValueTest {
         assertEquals(de1, LocalizedValue.mergeAll(List.of(de1, de2, de1)));
         assertEquals(de2, LocalizedValue.mergeAll(List.of(de1, de1, de2)));
         assertEquals(de2en1, LocalizedValue.mergeAll(List.of(de1, en1, de2)));
+    }
+
+    @Test
+    void mergeWith() {
+        final var de1 = LocalizedValue.de("de1");
+        final var de2 = LocalizedValue.de("de2");
+        final var en1 = LocalizedValue.en("en1");
+        final var de1en1 = LocalizedValue.stringBuilder().de("de1").en("en1").build();
 
         assertThrows(NullPointerException.class, () -> de1.mergeWith(null));
 
