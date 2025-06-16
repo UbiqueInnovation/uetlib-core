@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 1.2.0
+
+### Improvements
+
+- Added `VersionToStringSerializer/StringToVersionSerializer` to read write `com.github.zafarkhaja.semver.Version`
+  SemVer Strings to/from JSON.
+- Registered `VersionToStringSerializer/StringToVersionSerializer` with the default object mapper in `ObjectMapperUtils`.
+
 ## 1.1.1
 
 ### Improvements
