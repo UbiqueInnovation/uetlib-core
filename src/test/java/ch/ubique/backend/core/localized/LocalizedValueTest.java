@@ -1,7 +1,6 @@
 package ch.ubique.backend.core.localized;
 
-import static ch.ubique.backend.core.localized.AdditionalLocales.ENGLISH_SWITZERLAND;
-import static ch.ubique.backend.core.localized.AdditionalLocales.GERMAN_SWITZERLAND;
+import static ch.ubique.backend.core.localized.AdditionalLocales.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -466,7 +465,6 @@ class LocalizedValueTest {
 
     @Test
     void testGetKeysNotSwapped() {
-
         final var localizedString =
                 LocalizedValue.fromStringMap(
                         ofEntries(
@@ -499,9 +497,20 @@ class LocalizedValueTest {
     void mergeAll() {
         final var de1 = LocalizedValue.de("de1");
         final var de2 = LocalizedValue.de("de2");
+        final var deCH1 =
+                LocalizedValue.stringBuilder()
+                        .add("deCH1", GERMAN_SWITZERLAND)
+                        .fullLocale()
+                        .build();
         final var en1 = LocalizedValue.en("en1");
-        final var de1en1 = LocalizedValue.stringBuilder().de("de1").en("en1").build();
+
         final var de2en1 = LocalizedValue.stringBuilder().de("de2").en("en1").build();
+        final var de1deCH1 =
+                LocalizedValue.stringBuilder()
+                        .de("de1")
+                        .add("deCH1", GERMAN_SWITZERLAND)
+                        .fullLocale()
+                        .build();
 
         assertThrows(NullPointerException.class, () -> LocalizedValue.mergeAll(null));
         final var emptyList = List.<LocalizedValue<Serializable>>of();
@@ -514,6 +523,27 @@ class LocalizedValueTest {
         assertEquals(de1, LocalizedValue.mergeAll(List.of(de1, de2, de1)));
         assertEquals(de2, LocalizedValue.mergeAll(List.of(de1, de1, de2)));
         assertEquals(de2en1, LocalizedValue.mergeAll(List.of(de1, en1, de2)));
+        assertEquals(de1deCH1, LocalizedValue.mergeAll(List.of(de1, deCH1)));
+    }
+
+    @Test
+    void mergeWith() {
+        final var de1 = LocalizedValue.de("de1");
+        final var de2 = LocalizedValue.de("de2");
+        final var deCH1 =
+                LocalizedValue.stringBuilder()
+                        .add("deCH1", GERMAN_SWITZERLAND)
+                        .fullLocale()
+                        .build();
+        final var en1 = LocalizedValue.en("en1");
+
+        final var de1en1 = LocalizedValue.stringBuilder().de("de1").en("en1").build();
+        final var de1deCH1 =
+                LocalizedValue.stringBuilder()
+                        .de("de1")
+                        .add("deCH1", GERMAN_SWITZERLAND)
+                        .fullLocale()
+                        .build();
 
         assertThrows(NullPointerException.class, () -> de1.mergeWith(null));
 
@@ -521,6 +551,7 @@ class LocalizedValueTest {
         assertEquals(de1, de2.mergeWith(de1));
         assertEquals(de2, de1.mergeWith(de2));
         assertEquals(de1en1, de1.mergeWith(en1));
+        assertEquals(de1deCH1, de1.mergeWith(deCH1));
     }
 
     @Test
