@@ -163,7 +163,7 @@ public class LocalizedValue<T extends Serializable> {
                                     left.putAll(right);
                                     return left;
                                 });
-        return LocalizedValue.fromMap(deepCopyValues(mergedValues));
+        return LocalizedValue.<S>builder().fromMap(deepCopyValues(mergedValues)).fullLocale().build();
     }
 
     private static <S extends Serializable> Map<Locale, S> deepCopyValues(
