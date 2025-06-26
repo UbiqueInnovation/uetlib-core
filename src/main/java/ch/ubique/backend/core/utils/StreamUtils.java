@@ -64,10 +64,12 @@ public final class StreamUtils {
 
     /**
      * A replacement for Stream::distinct to compare on a key of the streamed elements. Consider
-     * distinct to be a stateful filter, so use as plugin to filter. DO NOT reuse the returned
+     * distinct to be a stateful filter, so use as a plugin to filter. DO NOT reuse the returned
      * predicate for multiple instances, as the internal map is captured by the returned Predicate.
      * Just use as `stream.filter(distinctByKey(Person::getName))`. Works with parallelStream.
      * Retains the first of each key seen.
+     *
+     * <p>See {@link Set#add(Object)} which returns a boolean if the object was already encountered.
      *
      * @param keyExtractor the extract the key
      * @param <T> the type of the elements
