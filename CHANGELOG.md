@@ -1,12 +1,5 @@
 # CHANGELOG
 
-## 1.2.1
-
-### Improvements
-
-- `NumberUtils` with `requirePositive`/`requireNegative`/`requireNonPositive`/`requireNonNegative` methods like
-  `Objects::requireNonNull`.
-
 ## 1.2.0
 
 ### Improvements
@@ -16,6 +9,8 @@
 - Registered `VersionToStringSerializer/StringToVersionSerializer` with the default object mapper in
   `ObjectMapperUtils`.
 - Added `LocalizedValueValueExtractor` to validate annotations on the generic type `T` of `LocalizedValue<T>`
+- `NumberUtils` with `requirePositive`/`requireNegative`/`requireNonPositive`/`requireNonNegative` methods like
+  `Objects::requireNonNull`.
 
 ## 1.1.1
 
