@@ -3,6 +3,11 @@ package ch.ubique.backend.image.webp;
 import ch.ubique.backend.core.process.ProcessConfig;
 import ch.ubique.backend.core.process.ProcessResult;
 import ch.ubique.backend.core.utils.ProcessUtils;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,11 +15,9 @@ import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.event.Level;
 
-class ImageWebpLibraryWrapper {
+final class ImageWebpLibraryWrapper {
+
     private static final Logger logger = LoggerFactory.getLogger(ImageWebpLibraryWrapper.class);
     private static final String CWEBP_BIN_PATH = "cwebp";
     private static final String IMG2WEBP_BIN_PATH = "img2webp";
