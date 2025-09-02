@@ -22,8 +22,17 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
+import java.net.HttpURLConnection;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
@@ -251,5 +260,36 @@ public final class InputStreamUtils {
         contentInfoInputStreamWrapper.reset();
 
         return match;
+    }
+
+    public static HttpURLConnection connectWithRedirect(final URL url, final int timeout)
+            throws IOException {
+        final var urlConnection = (HttpURLConnection) url.openConnection();
+        urlConnection.setConnectTimeout(timeout);
+        urlConnection.setReadTimeout(timeout);
+        // Typically true by default, just making sure.
+        urlConnection.setInstanceFollowRedirects(true);
+        urlConnection.connect();
+        if (urlConnection.getResponseCode() != HttpURLConnection.HTTP_MOVED_TEMP
+                && urlConnection.getResponseCode() != HttpURLConnection.HTTP_MOVED_PERM) {
+            return urlConnection;
+        }
+
+        // Java HttpURLConnection never follows cross-protocol redirects (https -> http or vice
+        // versa). Handle this explicitly.
+        final var location = urlConnection.getHeaderField("Location");
+        urlConnection.disconnect();
+        final URL redirectedUrl;
+        try {
+            redirectedUrl = new URI(location).toURL();
+        } catch (final URISyntaxException e) {
+            throw new IOException("Invalid redirect location header", e);
+        }
+        logger.debug("Following redirect to {}", redirectedUrl);
+        final var redirectedUrlConnection = (HttpURLConnection) redirectedUrl.openConnection();
+        redirectedUrlConnection.setConnectTimeout(timeout);
+        redirectedUrlConnection.setReadTimeout(timeout);
+        redirectedUrlConnection.connect();
+        return redirectedUrlConnection;
     }
 }

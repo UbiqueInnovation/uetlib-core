@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.2.1
+
+### Improvements
+
+- Added `InputStreamUtils.connectWithRedirect` to follow cross protocol redirects for URLs.
+
 ## 1.2.0
 
 ### Improvements
