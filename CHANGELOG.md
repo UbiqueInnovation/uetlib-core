@@ -1,5 +1,12 @@
 # CHANGELOG
 
+
+## 1.2.4
+
+### Improvements
+
+- `FileProvider` allows setting prefix and suffix for the temporary file name.
+
 ## 1.2.3
 
 ### Improvements

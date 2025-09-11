@@ -2,26 +2,34 @@ package ch.ubique.backend.core.io;
 
 import com.pivovarit.function.ThrowingSupplier;
 
+import jakarta.annotation.Nullable;
+
 import java.io.*;
 import java.nio.file.Path;
 
 public interface FileProvider extends AutoCloseable, InputStreamProvider {
 
-    static DirectFileProvider of(final File file) {
+    static FileProvider of(final File file) {
         return new DirectFileProvider(file);
     }
 
-    static AutoClosableTempFileProvider of(final byte[] bytes) {
+    static FileProvider of(final byte[] bytes) {
         return of(new ByteArrayInputStream(bytes));
     }
 
-    static AutoClosableTempFileProvider of(final InputStream inputStream) {
+    static FileProvider of(final InputStream inputStream) {
         return new AutoClosableTempFileProvider(inputStream);
     }
 
-    static InputStreamSupplierFileProvider of(
-            final ThrowingSupplier<InputStream, IOException> inputStreamSupplier) {
-        return new InputStreamSupplierFileProvider(inputStreamSupplier);
+    static FileProvider of(final ThrowingSupplier<InputStream, IOException> inputStreamSupplier) {
+        return of(inputStreamSupplier, null, null);
+    }
+
+    static FileProvider of(
+            final ThrowingSupplier<InputStream, IOException> inputStreamSupplier,
+            @Nullable final String filePrefix,
+            @Nullable final String fileSuffix) {
+        return new InputStreamSupplierFileProvider(inputStreamSupplier, filePrefix, fileSuffix);
     }
 
     File file() throws IOException;
