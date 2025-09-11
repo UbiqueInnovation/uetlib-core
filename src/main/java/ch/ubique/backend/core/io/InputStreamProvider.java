@@ -6,20 +6,20 @@ import java.io.*;
 
 public interface InputStreamProvider {
 
-    static DirectFileProvider of(final File file) throws FileNotFoundException {
+    static FileProvider of(final File file) {
         return FileProvider.of(file);
     }
 
-    static DirectInputStreamProvider of(final byte[] bytes) {
+    static InputStreamProvider of(final byte[] bytes) {
         return new DirectInputStreamProvider(new ByteArrayInputStream(bytes));
     }
 
-    static DirectInputStreamProvider of(final InputStream inputStream) {
+    static InputStreamProvider of(final InputStream inputStream) {
         return new DirectInputStreamProvider(inputStream);
     }
 
-    static InputStreamSupplierProvider of(
-        final ThrowingSupplier<InputStream, IOException> inputStreamSupplier) {
+    static InputStreamProvider of(
+            final ThrowingSupplier<InputStream, IOException> inputStreamSupplier) {
         return new InputStreamSupplierProvider(inputStreamSupplier);
     }
 
