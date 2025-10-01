@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.2.5
+
+### Improvements
+
+- Explicitly allow `@NullOrNotEmpty` on `Collection`s, `Map`s and arrays. Previously, only collections were allowed.
+- Allow `@NullOrNotBlank` on `CharSequence`s, not just `String`s.
 
 ## 1.2.4
 
