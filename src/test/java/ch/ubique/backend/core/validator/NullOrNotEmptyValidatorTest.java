@@ -1,22 +1,49 @@
 package ch.ubique.backend.core.validator;
 
+import static ch.ubique.backend.core.validator.ValidationTestUtils.*;
+
 import jakarta.validation.Valid;
 
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 class NullOrNotEmptyValidatorTest {
+
     @Test
     void test() {
-        ValidationTestUtils.assertIsValid(new Model(null));
-        ValidationTestUtils.assertIsValid(new Model(List.of(1)));
+        // Test valid
+        assertIsValid(new ModelList(null));
+        assertIsValid(new ModelMap(null));
+        assertIsValid(new ModelIntegerArray(null));
+        assertIsValid(new ModelIntArray(null));
 
-        ValidationTestUtils.assertIsNotValid(
-                new Model(List.of()), Set.of("value '[]' must be null or not empty"));
+        assertIsValid(new ModelList(List.of(1)));
+        assertIsValid(new ModelMap(Map.of("key", "value")));
+        assertIsValid(new ModelIntegerArray(new Integer[] {1}));
+        assertIsValid(new ModelIntArray(new int[] {1}));
+
+        // Test invalid empty
+        assertIsNotValid(new ModelList(List.of()), Set.of("value '[]' must be null or not empty"));
+        assertIsNotValid(new ModelMap(Map.of()), Set.of("value '{}' must be null or not empty"));
+        assertIsNotValid(
+                new ModelIntegerArray(new Integer[] {}),
+                Set.of("value '[]' must be null or not empty"));
+        assertIsNotValid(
+                new ModelIntArray(new int[] {}), Set.of("value '[]' must be null or not empty"));
     }
 
     @Valid
-    record Model(@NullOrNotEmpty List<Integer> list) {}
+    record ModelList(@NullOrNotEmpty List<Integer> list) {}
+
+    @Valid
+    record ModelMap(@NullOrNotEmpty Map<String, String> map) {}
+
+    @Valid
+    record ModelIntegerArray(@NullOrNotEmpty Integer[] array) {}
+
+    @Valid
+    record ModelIntArray(@NullOrNotEmpty int[] array) {}
 }
