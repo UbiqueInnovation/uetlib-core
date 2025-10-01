@@ -5,11 +5,11 @@ import jakarta.validation.ConstraintValidatorContext;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class NullOrNotBlankValidator implements ConstraintValidator<NullOrNotBlank, String> {
+public class NullOrNotBlankValidator implements ConstraintValidator<NullOrNotBlank, CharSequence> {
 
     @Override
     public boolean isValid(
-            final String s, final ConstraintValidatorContext constraintValidatorContext) {
+            final CharSequence s, final ConstraintValidatorContext constraintValidatorContext) {
         return s == null || StringUtils.isNotBlank(s);
     }
 }
