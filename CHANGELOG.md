@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.2.6
+
+### Improvements
+
+- New `AtLeastOneNull` validation annotation. This represents is the inverse of the existing `AtLeastOneNotNull`.
+
 ## 1.2.5
 
 ### Improvements
@@ -17,7 +23,7 @@
 
 ### Improvements
 
-- Added `InputStreamUtils.connectWithRedirect` to follow cross protocol redirects for URLs.
+- Added `InputStreamUtils.connectWithRedirect` to follow cross-protocol redirects for URLs.
 
 ## 1.2.0
 
