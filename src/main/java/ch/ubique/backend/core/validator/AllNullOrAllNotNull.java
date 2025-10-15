@@ -1,8 +1,6 @@
 package ch.ubique.backend.core.validator;
 
-import static ch.ubique.backend.core.validator.AllNullOrAllNotNull.*;
-
-import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import jakarta.validation.Constraint;
@@ -13,7 +11,7 @@ import java.lang.annotation.*;
 
 @Target(TYPE)
 @Retention(RUNTIME)
-@Repeatable(List.class)
+@Repeatable(AllNullOrAllNotNull.List.class)
 @Constraint(validatedBy = AllNullOrAllNotNullValidator.class)
 @Documented
 @NotNull
