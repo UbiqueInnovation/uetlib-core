@@ -1,7 +1,5 @@
 package ch.ubique.backend.core.validator;
 
-import static ch.ubique.backend.core.validator.NullOrNotBlank.*;
-
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -10,9 +8,10 @@ import jakarta.validation.Payload;
 
 import java.lang.annotation.*;
 
+/** Validates that the annotated element is null or not blank. Only allowed on char sequences. */
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
-@Repeatable(List.class)
+@Repeatable(NullOrNotBlank.List.class)
 @Constraint(validatedBy = NullOrNotBlankValidator.class)
 @Documented
 public @interface NullOrNotBlank {

@@ -1,7 +1,5 @@
 package ch.ubique.backend.core.validator;
 
-import static ch.ubique.backend.core.validator.AtLeastOneNotNull.*;
-
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -12,7 +10,7 @@ import java.lang.annotation.*;
 
 @Target(TYPE)
 @Retention(RUNTIME)
-@Repeatable(List.class)
+@Repeatable(AtLeastOneNotNull.List.class)
 @Constraint(validatedBy = AtLeastOneNotNullValidator.class)
 @Documented
 public @interface AtLeastOneNotNull {
