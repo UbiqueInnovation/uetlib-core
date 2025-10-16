@@ -1,16 +1,24 @@
 # CHANGELOG
 
+## 1.2.7
+
+### Improvements
+
+- `TempFileManager` implements `AutoCloseable` now for convenience.
+
 ## 1.2.6
 
 ### Improvements
 
-- New `AtLeastOneNull` validation annotation. This represents is the inverse of the existing `AtLeastOneNotNull`.
+- New `AtLeastOneNull` validation annotation. This represents is the inverse of the existing
+  `AtLeastOneNotNull`.
 
 ## 1.2.5
 
 ### Improvements
 
-- Explicitly allow `@NullOrNotEmpty` on `Collection`s, `Map`s and arrays. Previously, only collections were allowed.
+- Explicitly allow `@NullOrNotEmpty` on `Collection`s, `Map`s and arrays. Previously, only
+  collections were allowed.
 - Allow `@NullOrNotBlank` on `CharSequence`s, not just `String`s.
 
 ## 1.2.4
@@ -29,12 +37,15 @@
 
 ### Improvements
 
-- Added `VersionToStringSerializer/StringToVersionSerializer` to read write `com.github.zafarkhaja.semver.Version`
+- Added `VersionToStringSerializer/StringToVersionSerializer` to read write
+  `com.github.zafarkhaja.semver.Version`
   SemVer Strings to/from JSON.
 - Registered `VersionToStringSerializer/StringToVersionSerializer` with the default object mapper in
   `ObjectMapperUtils`.
-- Added `LocalizedValueValueExtractor` to validate annotations on the generic type `T` of `LocalizedValue<T>`
-- `NumberUtils` with `requirePositive`/`requireNegative`/`requireNonPositive`/`requireNonNegative` methods like
+- Added `LocalizedValueValueExtractor` to validate annotations on the generic type `T` of
+  `LocalizedValue<T>`
+- `NumberUtils` with `requirePositive`/`requireNegative`/`requireNonPositive`/`requireNonNegative`
+  methods like
   `Objects::requireNonNull`.
 
 ## 1.1.1
@@ -47,14 +58,16 @@
 
 ### Improvements
 
-- Fix `MapCollectors::entriesToMapWithValueMapper` to allow mapping values to a new type and expect the map value
+- Fix `MapCollectors::entriesToMapWithValueMapper` to allow mapping values to a new type and expect
+  the map value
   instead of the map entry as the mapping function argument
 
 ## 1.0.1
 
 ### Improvements
 
-- Added support for different key serialization (`DEFAULT`/`POSIX`/`UPPERCASE`) methods of `LocalizedValue` objects
+- Added support for different key serialization (`DEFAULT`/`POSIX`/`UPPERCASE`) methods of
+  `LocalizedValue` objects
   using jackson annotation, e.g.:
     ```
     record KeySerialization(
@@ -71,7 +84,8 @@
 
 ### Breaking Changes
 
-- Removed `JsonUnwrappedLocalizedValueSerializer`. The functionality is unchange, but you do not need to set the
+- Removed `JsonUnwrappedLocalizedValueSerializer`. The functionality is unchange, but you do not
+  need to set the
   serializer explicitly anymore, see the improvements above and:
     ```diff
     record Unwrapped(
