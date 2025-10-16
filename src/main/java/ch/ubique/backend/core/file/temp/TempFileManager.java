@@ -11,7 +11,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TempFileManager {
+public class TempFileManager implements AutoCloseable {
 
     private final List<Path> temporaryFileList = new ArrayList<>();
 
@@ -41,6 +41,7 @@ public class TempFileManager {
     }
 
     /** Creates a temporary file. */
+    @SuppressWarnings("java:S5443")
     public Path createTempPath(final String suffix) throws IOException {
         final var tmp = Files.createTempFile(null, suffix);
         temporaryFileList.add(tmp);
@@ -58,9 +59,15 @@ public class TempFileManager {
     }
 
     /** Creates a temporary directory. */
+    @SuppressWarnings("java:S5443")
     public Path createTempDir() throws IOException {
         final var tmp = Files.createTempDirectory(null);
         temporaryFileList.add(tmp);
         return tmp;
+    }
+
+    @Override
+    public void close() {
+        deleteTempFiles();
     }
 }
