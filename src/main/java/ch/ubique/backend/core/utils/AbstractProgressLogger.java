@@ -89,7 +89,7 @@ public abstract sealed class AbstractProgressLogger
     }
 
     public <T> Consumer<T> watch(final Consumer<T> consumer) {
-        return MdcUtils.runWithContext(
+        return MdcUtils.consumeWithContext(
                 t -> {
                     consumer.accept(t);
                     stepInternal();
@@ -98,7 +98,7 @@ public abstract sealed class AbstractProgressLogger
     }
 
     public <T, U> BiConsumer<T, U> watch(final BiConsumer<T, U> consumer) {
-        return MdcUtils.runWithContext(
+        return MdcUtils.biConsumeWithContext(
                 (t, u) -> {
                     consumer.accept(t, u);
                     stepInternal();
@@ -107,7 +107,7 @@ public abstract sealed class AbstractProgressLogger
     }
 
     public <T, R> Function<T, R> watch(final Function<T, R> function) {
-        return MdcUtils.runWithContext(
+        return MdcUtils.applyWithContext(
                 t -> {
                     final var result = function.apply(t);
                     stepInternal();
@@ -128,7 +128,7 @@ public abstract sealed class AbstractProgressLogger
 
     public <T, E extends Exception> ThrowingConsumer<T, E> watchThrowing(
             final ThrowingConsumer<T, E> consumer) {
-        return MdcUtils.runThrowingWithContext(
+        return MdcUtils.consumeThrowingWithContext(
                 t -> {
                     consumer.accept(t);
                     stepInternal();
@@ -138,7 +138,7 @@ public abstract sealed class AbstractProgressLogger
 
     public <T, U, E extends Exception> ThrowingBiConsumer<T, U, E> watchThrowing(
             final ThrowingBiConsumer<T, U, E> consumer) {
-        return MdcUtils.runThrowingWithContext(
+        return MdcUtils.biConsumeThrowingWithContext(
                 (t, u) -> {
                     consumer.accept(t, u);
                     stepInternal();
@@ -148,7 +148,7 @@ public abstract sealed class AbstractProgressLogger
 
     public <T, R, E extends Exception> ThrowingFunction<T, R, E> watchThrowing(
             final ThrowingFunction<T, R, E> function) {
-        return MdcUtils.runThrowingWithContext(
+        return MdcUtils.applyThrowingWithContext(
                 t -> {
                     final var result = function.apply(t);
                     stepInternal();
