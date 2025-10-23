@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.2.8
+
+### Improvements
+
+- Add overload to `MdcUtils` for a `Callable<T>`.
+
 ## 1.2.7
 
 ### Improvements
