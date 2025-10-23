@@ -7,6 +7,7 @@ import jakarta.annotation.Nullable;
 import org.slf4j.MDC;
 
 import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -21,6 +22,16 @@ public final class MdcUtils {
         final var previous = startMdcSection(mdcContext);
         runnable.run();
         endMdcSection(previous);
+    }
+
+    public static <T> Callable<T> runWithContext(
+            final Callable<T> callable, final Map<String, String> mdcContext) {
+        return () -> {
+            final var previous = startMdcSection(mdcContext);
+            final var result = callable.call();
+            endMdcSection(previous);
+            return result;
+        };
     }
 
     public static <T> Consumer<T> runWithContext(

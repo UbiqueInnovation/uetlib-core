@@ -157,6 +157,7 @@ public final class VirtualThreadUtils {
 
     private static <T, V> Callable<V> callable(final Function<T, V> mapper, final T input) {
         final var context = MDC.getCopyOfContextMap();
-        return () -> MdcUtils.runWithContext(() -> mapper.apply(input), context).get();
+        return () ->
+                MdcUtils.runWithContext((Callable<V>) () -> mapper.apply(input), context).call();
     }
 }
