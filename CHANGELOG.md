@@ -1,6 +1,11 @@
 # CHANGELOG
 
-## 1.2.8
+## 1.3.0
+
+### Breaking Changes
+
+- Any usage of `MdcUtils.runWithContext` with a lambda that is auto-cast to a `Supplier` must now explicitly be cast to
+  either a `Supplier` or `Callable`.
 
 ### Improvements
 
