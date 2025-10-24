@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 2.0.0
+
+### Breaking Changes
+
+#### Removed deprecated code
+
+- Removed all `MdcUtils::runWithContext`-overloads, renamed to `call`, `supply`, `consume` etc.
+- Removed `TimeFormatUtils::parseLocalDate/parseLocalTime/parseLocalDateTime` replaced by
+  `TimeFormatUtils::parsePrettyLocalDate/parsePrettyLocalTime/parsePrettyLocalDateTime`
+- Removed constructors of `BlurHashClient` without an explicit user agent. Use constructors with user agent.
+
 ## 1.3.3
 
 ### Improvements
