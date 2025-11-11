@@ -17,7 +17,7 @@ public final class HttpHeaderUtils {
 
     private static final ZoneId ZONE_ID_GMT = ZoneId.of("GMT").normalized();
     private static final DateTimeFormatter HTTP_HEADER_DATE_FORMATTER =
-            DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss z", Locale.US)
+            DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss 'GMT'", Locale.US)
                     .withZone(ZONE_ID_GMT);
 
     private HttpHeaderUtils() {}
