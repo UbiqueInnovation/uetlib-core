@@ -5,6 +5,7 @@
 ### Improvements
 
 - Add `ZONE_NAME_GMT`/`ZONE_ID_GMT`/`TIME_UTILS_GMT` to `TimeUtils`.
+- Extract http header relevant code from uetlib-spring-boot `HeaderUtility` to new `HttpHeaderUtils`.
 
 ## 1.3.0
 
