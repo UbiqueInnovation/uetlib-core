@@ -20,17 +20,22 @@ import java.util.Map;
  */
 public final class TimeUtils {
 
+    public static final String ZONE_NAME_GMT = "GMT";
     public static final String ZONE_NAME_UTC = "UTC";
     public static final String ZONE_NAME_EUROPE_BERLIN = "Europe/Berlin";
     public static final String ZONE_NAME_EUROPE_ZURICH = "Europe/Zurich";
 
+    public static final ZoneId ZONE_ID_GMT = ZoneId.of(ZONE_NAME_GMT).normalized();
     public static final ZoneId ZONE_ID_UTC = ZoneId.of(ZONE_NAME_UTC).normalized();
-    public static final TimeUtils TIME_UTILS_UTC = new TimeUtils(ZONE_ID_UTC);
     public static final ZoneId ZONE_ID_EUROPE_ZURICH =
             ZoneId.of(ZONE_NAME_EUROPE_ZURICH).normalized();
-    public static final TimeUtils TIME_UTILS_EUROPE_ZURICH = new TimeUtils(ZONE_ID_EUROPE_ZURICH);
+
     public static final ZoneId ZONE_ID_EUROPE_BERLIN =
             ZoneId.of(ZONE_NAME_EUROPE_BERLIN).normalized();
+
+    public static final TimeUtils TIME_UTILS_UTC = new TimeUtils(ZONE_ID_UTC);
+
+    public static final TimeUtils TIME_UTILS_EUROPE_ZURICH = new TimeUtils(ZONE_ID_EUROPE_ZURICH);
     public static final TimeUtils TIME_UTILS_EUROPE_BERLIN = new TimeUtils(ZONE_ID_EUROPE_BERLIN);
 
     private static final Map<ZoneId, TimeUtils> INSTANCES =

@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.3.1
+
+### Improvements
+
+- Add `ZONE_ID_GMT` to `TimeUtils`.
+
 ## 1.3.0
 
 ### Breaking Changes
