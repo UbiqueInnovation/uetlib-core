@@ -1,6 +1,7 @@
 package ch.ubique.backend.core.utils;
 
 import static ch.ubique.backend.core.utils.TimeUtils.*;
+import static ch.ubique.backend.core.utils.TimeUtils.TIME_UTILS_EUROPE_BERLIN;
 import static ch.ubique.backend.test.assertion.AssertionUtils.assertThrowsWithMessage;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,9 +16,18 @@ import java.time.temporal.ChronoUnit;
 class TimeUtilsTest {
 
     @Test
-    void now() {
-        final var expected = ZonedDateTime.now(ZONE_ID_EUROPE_BERLIN);
-        final var actual = TIME_UTILS_EUROPE_BERLIN.now();
+    void nowGmt() {
+        final var expected = ZonedDateTime.now(ZONE_ID_GMT);
+        final var actual = TIME_UTILS_GMT.now();
+        assertFalse(expected.isAfter(actual));
+        assertTrue(actual.minusSeconds(1L).isBefore(expected));
+        assertTrue(expected.minusSeconds(1L).isBefore(actual));
+    }
+
+    @Test
+    void nowUtc() {
+        final var expected = ZonedDateTime.now(ZONE_ID_UTC);
+        final var actual = TIME_UTILS_UTC.now();
         assertFalse(expected.isAfter(actual));
         assertTrue(actual.minusSeconds(1L).isBefore(expected));
         assertTrue(expected.minusSeconds(1L).isBefore(actual));
@@ -27,6 +37,15 @@ class TimeUtilsTest {
     void nowEuZh() {
         final var expected = ZonedDateTime.now(ZONE_ID_EUROPE_ZURICH);
         final var actual = TIME_UTILS_EUROPE_ZURICH.now();
+        assertFalse(expected.isAfter(actual));
+        assertTrue(actual.minusSeconds(1L).isBefore(expected));
+        assertTrue(expected.minusSeconds(1L).isBefore(actual));
+    }
+
+    @Test
+    void nowEuBerlin() {
+        final var expected = ZonedDateTime.now(ZONE_ID_EUROPE_BERLIN);
+        final var actual = TIME_UTILS_EUROPE_BERLIN.now();
         assertFalse(expected.isAfter(actual));
         assertTrue(actual.minusSeconds(1L).isBefore(expected));
         assertTrue(expected.minusSeconds(1L).isBefore(actual));
@@ -661,6 +680,8 @@ class TimeUtilsTest {
                 TimeUtils.toMillis(
                         ZonedDateTime.of(LocalDate.of(1000, 1, 1), LocalTime.NOON, ZONE_ID_UTC)));
 
+        assertEquals(
+                946_758_000_000L, TimeUtils.toMillis(TIME_UTILS_GMT.ofMillis(946_758_000_000L)));
         assertEquals(
                 946_758_000_000L, TimeUtils.toMillis(TIME_UTILS_UTC.ofMillis(946_758_000_000L)));
         assertEquals(

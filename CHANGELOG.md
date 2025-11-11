@@ -4,7 +4,7 @@
 
 ### Improvements
 
-- Add `ZONE_ID_GMT` to `TimeUtils`.
+- Add `ZONE_NAME_GMT`/`ZONE_ID_GMT`/`TIME_UTILS_GMT` to `TimeUtils`.
 
 ## 1.3.0
 
