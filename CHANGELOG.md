@@ -1,17 +1,5 @@
 # CHANGELOG
 
-## 2.0.0
-
-### Breaking Changes
-
-- Removed all `runWithContext`-overloads, renamed to `call`, `supply`, `consume` etc.
-
-## 1.4.0
-
-### Deprecations
-
-- Deprecated all `runWithContext`-overloads, renamed to `call`, `supply`, `consum` etc.
-
 ## 1.3.0
 
 ### Breaking Changes
