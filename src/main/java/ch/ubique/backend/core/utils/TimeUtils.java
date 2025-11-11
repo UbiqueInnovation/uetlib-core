@@ -33,6 +33,7 @@ public final class TimeUtils {
     public static final ZoneId ZONE_ID_EUROPE_BERLIN =
             ZoneId.of(ZONE_NAME_EUROPE_BERLIN).normalized();
 
+    public static final TimeUtils TIME_UTILS_GMT = new TimeUtils(ZONE_ID_GMT);
     public static final TimeUtils TIME_UTILS_UTC = new TimeUtils(ZONE_ID_UTC);
 
     public static final TimeUtils TIME_UTILS_EUROPE_ZURICH = new TimeUtils(ZONE_ID_EUROPE_ZURICH);
