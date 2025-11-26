@@ -15,12 +15,15 @@
 
     <packaging>jar</packaging>
 
+    <scm>
+        <url>https://github.com/UbiqueInnovation/uetlib-core</url>
+    </scm>
+
     <properties>
         <sonar.coverage.module>${project.artifactId}</sonar.coverage.module>
     </properties>
 
     <dependencies>
-
         <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
