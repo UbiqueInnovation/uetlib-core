@@ -15,10 +15,6 @@
 
     <packaging>jar</packaging>
 
-    <properties>
-        <sonar.coverage.module>${project.artifactId}</sonar.coverage.module>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.hibernate.validator</groupId>
@@ -29,12 +25,6 @@
         <dependency>
             <groupId>com.j256.simplemagic</groupId>
             <artifactId>simplemagic</artifactId>
-        </dependency>
-
-        <!-- Swagger annotations for models -->
-        <dependency>
-            <groupId>io.swagger.core.v3</groupId>
-            <artifactId>swagger-annotations-jakarta</artifactId>
         </dependency>
 
         <!-- Type 'Version' to represent semver strings -->
@@ -197,6 +187,7 @@
         <dependency>
             <groupId>ch.ubique</groupId>
             <artifactId>uetlib-test</artifactId>
+            <version>2.0.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -239,6 +230,6 @@
     </distributionManagement>
 
     <scm>
-        <url>https://github.com/UbiqueInnovation/uetlib-bom</url>
+        <url>https://github.com/UbiqueInnovation/uetlib-core</url>
     </scm>
 </project>
