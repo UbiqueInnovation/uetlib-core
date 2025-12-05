@@ -220,6 +220,11 @@
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
             </plugin>
+
+            <plugin>
+                <groupId>de.westemeyer</groupId>
+                <artifactId>artifact-version-maven-plugin</artifactId>
+            </plugin>
         </plugins>
     </build>
 
