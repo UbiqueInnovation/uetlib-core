@@ -9,11 +9,11 @@ import ch.ubique.backend.core.jackson.ObjectMapperUtils;
 import ch.ubique.backend.core.regex.SerializableMatchResult;
 import ch.ubique.backend.test.assertion.AssertionUtils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import tools.jackson.core.JacksonException;
 
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
@@ -40,7 +40,7 @@ class RegexUtilTest {
     }
 
     @Test
-    void testSerializableMatchResultJackson() throws JsonProcessingException {
+    void testSerializableMatchResultJackson() throws JacksonException {
         final var serialized = objectMapper.writeValueAsString(serializableMatchResult);
         final var deserialized = objectMapper.readValue(serialized, SerializableMatchResult.class);
         assertEquals(serializableMatchResult, deserialized);
