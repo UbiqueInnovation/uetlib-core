@@ -5,14 +5,13 @@ import ch.ubique.backend.core.localized.annotation.JsonLocalizedValue;
 import ch.ubique.backend.core.localized.annotation.JsonLocalizedValue.SerializationMethod;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.BeanProperty;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.ContextualSerializer;
 import com.pivovarit.function.ThrowingBiConsumer;
 
-import java.io.IOException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.BeanProperty;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ValueSerializer;
+
 import java.io.Serializable;
 import java.util.Map;
 import java.util.function.UnaryOperator;
@@ -23,6 +22,7 @@ import java.util.function.UnaryOperator;
  * annotation @{@link JsonLocalizedValue#keySerialization()}.}
  *
  * <p>The following examples show how to use the annotation on a field/method:
+ *
  * {@snippet lang = "java":
  * record Unwrapped(@JsonUnwrapped(suffix = ":suf") LocalizedValue<String> name) {}
  *
@@ -37,18 +37,21 @@ import java.util.function.UnaryOperator;
  * }
  *
  * <p>These are serialized to the following JSON:
+ *
  * {@snippet lang = "json":
  * {"de:suf":"value_de","en:suf":"value_en"}
  * }
+ *
  * {@snippet lang = "json":
  * {"name":{"de_CH":"value_de","en_CH":"value_en"}}
  * }
+ *
  * {@snippet lang = "json":
  * {"pre:EN-CH:suf":"value_en","pre:DE-CH:suf":"value_de"}
  * }
  */
-public class LocalizedValueSerializer extends JsonSerializer<LocalizedValue<? extends Serializable>>
-        implements ContextualSerializer {
+public class LocalizedValueSerializer
+        extends ValueSerializer<LocalizedValue<? extends Serializable>> {
 
     private final JsonUnwrapped jsonUnwrapped;
     private final JsonLocalizedValue jsonLocalizedValue;
@@ -67,8 +70,7 @@ public class LocalizedValueSerializer extends JsonSerializer<LocalizedValue<? ex
     public void serialize(
             final LocalizedValue localizedValue,
             final JsonGenerator gen,
-            final SerializerProvider serializers)
-            throws IOException {
+            final SerializationContext serializers) {
 
         if (!isUnwrappingSerializer()) {
             gen.writeStartObject(); // Unwrap starts here
@@ -99,8 +101,8 @@ public class LocalizedValueSerializer extends JsonSerializer<LocalizedValue<? ex
                 ThrowingBiConsumer.sneaky(
                         (key, value) -> {
                             final var mappedKey = keyMapper.apply(key);
-                            gen.writeFieldName(mappedKey);
-                            gen.writeObject(value);
+                            gen.writeName(mappedKey);
+                            gen.writePOJO(value);
                         }));
 
         // End unwrapping if needed
@@ -115,8 +117,8 @@ public class LocalizedValueSerializer extends JsonSerializer<LocalizedValue<? ex
     }
 
     @Override
-    public JsonSerializer<?> createContextual(
-            final SerializerProvider prov, final BeanProperty property) {
+    public ValueSerializer<?> createContextual(
+            final SerializationContext prov, final BeanProperty property) {
         if (property == null) {
             return new LocalizedValueSerializer();
         }

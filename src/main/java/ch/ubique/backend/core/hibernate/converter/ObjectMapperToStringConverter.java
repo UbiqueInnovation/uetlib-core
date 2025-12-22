@@ -2,9 +2,6 @@ package ch.ubique.backend.core.hibernate.converter;
 
 import ch.ubique.backend.core.jackson.ObjectMapperUtils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pivovarit.function.exception.WrappedException;
 
 import jakarta.persistence.AttributeConverter;
@@ -12,7 +9,9 @@ import jakarta.persistence.AttributeConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 
 @SuppressWarnings("com.intellij.jpb.ConverterNotAnnotatedInspection")
 public abstract class ObjectMapperToStringConverter<T> implements AttributeConverter<T, String> {
@@ -34,7 +33,7 @@ public abstract class ObjectMapperToStringConverter<T> implements AttributeConve
         }
         try {
             return objectMapper.writeValueAsString(attributes);
-        } catch (final JsonProcessingException e) {
+        } catch (final JacksonException e) {
             throw new WrappedException(e);
         }
     }
@@ -46,7 +45,7 @@ public abstract class ObjectMapperToStringConverter<T> implements AttributeConve
         }
         try {
             return objectMapper.readValue(dbData, typeReference);
-        } catch (final IOException e) {
+        } catch (final JacksonException e) {
             logger.info("Could not deserialize {} as {}.", dbData, typeReference, e);
             return null;
         }

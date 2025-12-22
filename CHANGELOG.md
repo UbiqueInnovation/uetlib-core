@@ -11,6 +11,11 @@
   `TimeFormatUtils::parsePrettyLocalDate/parsePrettyLocalTime/parsePrettyLocalDateTime`
 - Removed constructors of `BlurHashClient` without an explicit user agent. Use constructors with user agent.
 
+#### Jackson 3 support
+
+- Run this OpenRewrite recipe `mvn -U org.openrewrite.maven:rewrite-maven-plugin:run -Drewrite.recipeArtifactCoordinates=org.openrewrite.recipe:rewrite-jackson:RELEASE -Drewrite.activeRecipes=org.openrewrite.java.jackson.UpgradeJackson_2_3 -Drewrite.exportDatatables=true`
+- And follow https://github.com/FasterXML/jackson/blob/main/jackson3/MIGRATING_TO_JACKSON_3.md
+
 ## 1.3.3
 
 ### Improvements

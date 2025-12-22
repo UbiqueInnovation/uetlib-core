@@ -13,13 +13,12 @@ import ch.ubique.backend.core.localized.annotation.JsonLocalizedValue.Serializat
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.SerializationFeature;
+import tools.jackson.databind.json.JsonMapper;
 
 import org.junit.jupiter.api.Test;
+import tools.jackson.core.JacksonException;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -30,12 +29,11 @@ class LocalizedValueTest {
 
     private final ObjectMapper objectMapper =
             JsonMapper.builder()
-                    .enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)
                     .enable(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS)
                     .build();
 
     @Test
-    void serialization() throws JsonProcessingException {
+    void serialization() throws JacksonException {
         assertEquals(
                 "{\"zh\":\"Literal\"}",
                 objectMapper.writeValueAsString(LocalizedValue.from("Literal", Locale.CHINA)));
@@ -91,7 +89,7 @@ class LocalizedValueTest {
     }
 
     @Test
-    void deserialization() throws JsonProcessingException {
+    void deserialization() throws JacksonException {
         assertEquals(
                 LocalizedValue.from("Literal", Locale.CHINA),
                 objectMapper.readValue("{\"zh\":\"Literal\"}", LocalizedValue.class));
@@ -262,7 +260,7 @@ class LocalizedValueTest {
     }
 
     @Test
-    void json() throws JsonProcessingException {
+    void json() throws JacksonException {
         final var lv1 = LocalizedValue.from("Literal", Locale.CHINA);
         assertEquals(
                 "{\"zh\":\"Literal\"}",
@@ -276,7 +274,7 @@ class LocalizedValueTest {
     }
 
     @Test
-    void jsonWithPosixLocaleKeys() throws JsonProcessingException {
+    void jsonWithPosixLocaleKeys() throws JacksonException {
         final var lv1 = LocalizedValue.from("Literal", Locale.CHINA);
         assertEquals(
                 "{\"zh\":\"Literal\"}",
@@ -294,7 +292,7 @@ class LocalizedValueTest {
     }
 
     @Test
-    void jsonWithUppercaseKeys() throws JsonProcessingException {
+    void jsonWithUppercaseKeys() throws JacksonException {
         final var lv1 = LocalizedValue.from("Literal", Locale.CHINA);
         assertEquals(
                 "{\"ZH\":\"Literal\"}",
@@ -562,13 +560,13 @@ class LocalizedValueTest {
             assertEquals(
                     "{\"name\":{\"de\":\"value_de\",\"en\":\"value_en\"}}",
                     objectMapper.writeValueAsString(untouched));
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Test
-    void jsonUnwrapped() throws JsonProcessingException {
+    void jsonUnwrapped() throws JacksonException {
         final var unwrapped1 =
                 new Unwrapped1(
                         LocalizedValue.stringBuilder().de("value_de").en("value_en").build());
@@ -606,7 +604,7 @@ class LocalizedValueTest {
     }
 
     @Test
-    void keySerializationMethod() throws JsonProcessingException {
+    void keySerializationMethod() throws JacksonException {
         final var keySerialization1 =
                 new KeySerialization1(
                         LocalizedValue.stringBuilder()
@@ -653,7 +651,7 @@ class LocalizedValueTest {
     }
 
     @Test
-    void combinedSerialization() throws JsonProcessingException {
+    void combinedSerialization() throws JacksonException {
         final var combined1 =
                 new Combined1(
                         LocalizedValue.stringBuilder()

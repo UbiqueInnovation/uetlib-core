@@ -1,19 +1,17 @@
 package ch.ubique.backend.core.jackson;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.github.zafarkhaja.semver.Version;
 
-import java.io.IOException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.ValueDeserializer;
 
-public class StringToVersionDeserializer extends JsonDeserializer<Version> {
+public class StringToVersionDeserializer extends ValueDeserializer<Version> {
 
     @Override
     public Version deserialize(
-            final JsonParser jsonParser, final DeserializationContext deserializationContext)
-            throws IOException {
-        final var versionString = jsonParser.getText(); // Read the version string from the JSON
+            final JsonParser jsonParser, final DeserializationContext deserializationContext) {
+        final var versionString = jsonParser.getString(); // Read the version string from the JSON
         if (versionString != null) {
             return Version.parse(versionString, false); // Convert the string to a Version object
         }
