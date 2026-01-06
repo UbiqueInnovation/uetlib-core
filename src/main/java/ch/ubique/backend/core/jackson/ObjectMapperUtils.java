@@ -25,11 +25,17 @@ public final class ObjectMapperUtils {
         final var jsonMapperBuilder =
                 JsonMapper.builder()
                         .addModule(versionToStringModule())
+
+                        // DateTime features
                         .enable(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS)
                         .enable(DateTimeFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS)
                         .disable(DateTimeFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                         .disable(DateTimeFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS)
-                        .enable(EnumFeature.READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE);
+
+                        // Enum features
+                        .enable(EnumFeature.READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE)
+                        .disable(EnumFeature.READ_ENUMS_USING_TO_STRING)
+                        .disable(EnumFeature.WRITE_ENUMS_USING_TO_STRING);
 
         customizer.accept(jsonMapperBuilder);
 
