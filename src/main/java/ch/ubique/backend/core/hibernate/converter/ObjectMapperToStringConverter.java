@@ -9,14 +9,14 @@ import org.slf4j.LoggerFactory;
 
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 @SuppressWarnings("unused")
 public abstract class ObjectMapperToStringConverter<T> implements AttributeConverter<T, String> {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private final ObjectMapper objectMapper = ObjectMapperUtils.objectMapper();
+    private final JsonMapper objectMapper = ObjectMapperUtils.jsonMapper();
 
     private final TypeReference<T> typeReference;
 
