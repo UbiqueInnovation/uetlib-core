@@ -9,8 +9,6 @@ import ch.ubique.backend.core.jackson.ObjectMapperUtils;
 import ch.ubique.backend.core.regex.SerializableMatchResult;
 import ch.ubique.backend.test.assertion.AssertionUtils;
 
-import tools.jackson.databind.ObjectMapper;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -28,7 +26,7 @@ class RegexUtilTest {
     private static MatchResult matchResult;
     private static SerializableMatchResult serializableMatchResult;
 
-    private final ObjectMapper objectMapper = ObjectMapperUtils.objectMapper();
+    private final ObjectMapper objectMapper = ObjectMapperUtils.jsonMapper();
 
     @BeforeAll
     static void beforeAll() {
@@ -36,8 +34,7 @@ class RegexUtilTest {
         //noinspection ResultOfMethodCallIgnored
         matcher.matches();
         matchResult = matcher.toMatchResult();
-        serializableMatchResult =
-                (SerializableMatchResult) RegexUtil.toSerializableMatchResult(matcher);
+        serializableMatchResult = RegexUtil.toSerializableMatchResult(matcher);
     }
 
     @Test
