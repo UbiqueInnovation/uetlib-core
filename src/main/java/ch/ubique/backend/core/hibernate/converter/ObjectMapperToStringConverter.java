@@ -2,8 +2,6 @@ package ch.ubique.backend.core.hibernate.converter;
 
 import ch.ubique.backend.core.jackson.ObjectMapperUtils;
 
-import com.pivovarit.function.exception.WrappedException;
-
 import jakarta.persistence.AttributeConverter;
 
 import org.slf4j.Logger;
@@ -13,7 +11,7 @@ import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
-@SuppressWarnings("com.intellij.jpb.ConverterNotAnnotatedInspection")
+@SuppressWarnings("unused")
 public abstract class ObjectMapperToStringConverter<T> implements AttributeConverter<T, String> {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -31,11 +29,7 @@ public abstract class ObjectMapperToStringConverter<T> implements AttributeConve
         if (attributes == null) {
             return null;
         }
-        try {
-            return objectMapper.writeValueAsString(attributes);
-        } catch (final JacksonException e) {
-            throw new WrappedException(e);
-        }
+        return objectMapper.writeValueAsString(attributes);
     }
 
     @Override
