@@ -1,7 +1,5 @@
 package ch.ubique.backend.core.hibernate.converter;
 
-import ch.ubique.backend.core.jackson.ObjectMapperUtils;
-
 import jakarta.persistence.AttributeConverter;
 
 import org.slf4j.Logger;
@@ -9,18 +7,20 @@ import org.slf4j.LoggerFactory;
 
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.ObjectMapper;
 
 @SuppressWarnings("unused")
 public abstract class ObjectMapperToStringConverter<T> implements AttributeConverter<T, String> {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private final JsonMapper objectMapper = ObjectMapperUtils.jsonMapper();
+    private final ObjectMapper objectMapper;
 
     private final TypeReference<T> typeReference;
 
-    protected ObjectMapperToStringConverter(final TypeReference<T> typeReference) {
+    protected ObjectMapperToStringConverter(
+            final ObjectMapper objectMapper, final TypeReference<T> typeReference) {
+        this.objectMapper = objectMapper;
         this.typeReference = typeReference;
     }
 

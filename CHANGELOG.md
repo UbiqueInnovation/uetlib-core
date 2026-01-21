@@ -10,6 +10,7 @@
 - Removed `TimeFormatUtils::parseLocalDate/parseLocalTime/parseLocalDateTime` replaced by
   `TimeFormatUtils::parsePrettyLocalDate/parsePrettyLocalTime/parsePrettyLocalDateTime`
 - Removed constructors of `BlurHashClient` without an explicit user agent. Use constructors with user agent.
+- Added `JsonMapper` as the first constructor argument to `ObjectMapperToStringConverter`.
 
 #### Jackson 3 support
 
