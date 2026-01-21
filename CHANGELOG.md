@@ -13,8 +13,15 @@
 
 #### Jackson 3 support
 
-- Run this OpenRewrite recipe `mvn -U org.openrewrite.maven:rewrite-maven-plugin:run -Drewrite.recipeArtifactCoordinates=org.openrewrite.recipe:rewrite-jackson:RELEASE -Drewrite.activeRecipes=org.openrewrite.java.jackson.UpgradeJackson_2_3 -Drewrite.exportDatatables=true`
+- Run this OpenRewrite recipe
+  `mvn -U org.openrewrite.maven:rewrite-maven-plugin:run -Drewrite.recipeArtifactCoordinates=org.openrewrite.recipe:rewrite-jackson:RELEASE -Drewrite.activeRecipes=org.openrewrite.java.jackson.UpgradeJackson_2_3 -Drewrite.exportDatatables=true`
 - And follow https://github.com/FasterXML/jackson/blob/main/jackson3/MIGRATING_TO_JACKSON_3.md
+- Removed `ObjectMapperUtils`:
+    - Usages of default `ObjectMapper.objectMapper()` are replaced with Spring Boot Autoconfiguration in
+      `ch.ubique.backend.spring.boot.jackson.autoconfigure.UetlibSpringBootJacksonAutoConfiguration`.
+    - Usages of `ObjectMapperUtils.objectMapper(customizer)` have to replaced with you own
+      `org.springframework.boot.jackson.autoconfigure.JsonMapperBuilderCustomizer` bean, which will be applied to the
+      autoconfigured `ObjectMapper`.
 
 ## 1.3.3
 
