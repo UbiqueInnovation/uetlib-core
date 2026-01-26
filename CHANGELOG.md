@@ -20,9 +20,10 @@
 - Removed `ObjectMapperUtils`:
     - Usages of default `ObjectMapper.objectMapper()` are replaced with Spring Boot Autoconfiguration in
       `ch.ubique.backend.spring.boot.jackson.autoconfigure.UetlibSpringBootJacksonAutoConfiguration`.
-    - Usages of `ObjectMapperUtils.objectMapper(customizer)` have to replaced with you own
+    - Usages of `ObjectMapperUtils.objectMapper(customizer)` have to be replaced with your own
       `org.springframework.boot.jackson.autoconfigure.JsonMapperBuilderCustomizer` bean, which will be applied to the
       autoconfigured `ObjectMapper`.
+    - Kept `JsonMapperUtils` for some reusable standard `JsonMapper.Builder` customizations.
 
 ## 1.3.3
 
