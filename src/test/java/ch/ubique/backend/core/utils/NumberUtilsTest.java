@@ -25,7 +25,7 @@ class NumberUtilsTest {
         assertThrowsWithMessage(
                 IllegalArgumentException.class,
                 () -> requirePositive(input),
-                "Value must be positive");
+                "value must be positive");
     }
 
     @Test
@@ -41,7 +41,7 @@ class NumberUtilsTest {
         assertThrowsWithMessage(
                 IllegalArgumentException.class,
                 () -> requirePositive(input),
-                "Value must be positive");
+                "value must be positive");
     }
 
     @Test
@@ -57,7 +57,7 @@ class NumberUtilsTest {
         assertThrowsWithMessage(
                 IllegalArgumentException.class,
                 () -> requirePositive(input),
-                "Value must be positive");
+                "value must be positive");
     }
 
     @Test
@@ -73,7 +73,7 @@ class NumberUtilsTest {
         assertThrowsWithMessage(
                 IllegalArgumentException.class,
                 () -> requirePositive(input),
-                "Value must be positive");
+                "value must be positive");
     }
 
     @Test
@@ -89,7 +89,7 @@ class NumberUtilsTest {
         assertThrowsWithMessage(
                 IllegalArgumentException.class,
                 () -> requirePositive(input),
-                "Value must be positive");
+                "value must be positive");
     }
 
     @Test
@@ -105,14 +105,14 @@ class NumberUtilsTest {
         assertThrowsWithMessage(
                 IllegalArgumentException.class,
                 () -> requirePositive(input),
-                "Value must be positive");
+                "value must be positive");
     }
 
     @Test
     void testRequirePositiveNumber_NullValue_ShouldThrowException() {
         final Number input = null;
         assertThrowsWithMessage(
-                NullPointerException.class, () -> requirePositive(input), "Value must be positive");
+                NullPointerException.class, () -> requirePositive(input), "value must be positive");
     }
 
     @Test
@@ -146,7 +146,7 @@ class NumberUtilsTest {
         assertThrowsWithMessage(
                 IllegalArgumentException.class,
                 () -> requireNonNegative(input),
-                "Value must be non-negative");
+                "value must be non-negative");
     }
 
     @Test
@@ -162,7 +162,7 @@ class NumberUtilsTest {
         assertThrowsWithMessage(
                 IllegalArgumentException.class,
                 () -> requireNonNegative(input),
-                "Value must be non-negative");
+                "value must be non-negative");
     }
 
     @Test
@@ -178,7 +178,7 @@ class NumberUtilsTest {
         assertThrowsWithMessage(
                 IllegalArgumentException.class,
                 () -> requireNonNegative(input),
-                "Value must be non-negative");
+                "value must be non-negative");
     }
 
     @Test
@@ -194,7 +194,7 @@ class NumberUtilsTest {
         assertThrowsWithMessage(
                 IllegalArgumentException.class,
                 () -> requireNonNegative(input),
-                "Value must be non-negative");
+                "value must be non-negative");
     }
 
     @Test
@@ -210,7 +210,7 @@ class NumberUtilsTest {
         assertThrowsWithMessage(
                 IllegalArgumentException.class,
                 () -> requireNonNegative(input),
-                "Value must be non-negative");
+                "value must be non-negative");
     }
 
     @Test
@@ -226,7 +226,7 @@ class NumberUtilsTest {
         assertThrowsWithMessage(
                 IllegalArgumentException.class,
                 () -> requireNonNegative(input),
-                "Value must be non-negative");
+                "value must be non-negative");
     }
 
     @Test
@@ -235,7 +235,7 @@ class NumberUtilsTest {
         assertThrowsWithMessage(
                 NullPointerException.class,
                 () -> requireNonNegative(input),
-                "Value must be non-negative");
+                "value must be non-negative");
     }
 
     @Test
@@ -305,7 +305,7 @@ class NumberUtilsTest {
         assertThrowsWithMessage(
                 IllegalArgumentException.class,
                 () -> requireNegative(input),
-                "Value must be negative");
+                "value must be negative");
     }
 
     @Test
@@ -321,7 +321,7 @@ class NumberUtilsTest {
         assertThrowsWithMessage(
                 IllegalArgumentException.class,
                 () -> requireNegative(input),
-                "Value must be negative");
+                "value must be negative");
     }
 
     @Test
@@ -337,7 +337,7 @@ class NumberUtilsTest {
         assertThrowsWithMessage(
                 IllegalArgumentException.class,
                 () -> requireNegative(input),
-                "Value must be negative");
+                "value must be negative");
     }
 
     @Test
@@ -353,7 +353,7 @@ class NumberUtilsTest {
         assertThrowsWithMessage(
                 IllegalArgumentException.class,
                 () -> requireNegative(input),
-                "Value must be negative");
+                "value must be negative");
     }
 
     @Test
@@ -369,7 +369,7 @@ class NumberUtilsTest {
         assertThrowsWithMessage(
                 IllegalArgumentException.class,
                 () -> requireNegative(input),
-                "Value must be negative");
+                "value must be negative");
     }
 
     @Test
@@ -385,14 +385,14 @@ class NumberUtilsTest {
         assertThrowsWithMessage(
                 IllegalArgumentException.class,
                 () -> requireNegative(input),
-                "Value must be negative");
+                "value must be negative");
     }
 
     @Test
     void testRequireNegativeNumber_NullValue_ShouldThrowException() {
         final Number input = null;
         assertThrowsWithMessage(
-                NullPointerException.class, () -> requireNegative(input), "Value must be negative");
+                NullPointerException.class, () -> requireNegative(input), "value must be negative");
     }
 
     @Test
@@ -463,7 +463,7 @@ class NumberUtilsTest {
         assertThrowsWithMessage(
                 IllegalArgumentException.class,
                 () -> requireNonPositive(input),
-                "Value must be non-positive");
+                "value must be non-positive");
     }
 
     @Test
@@ -479,7 +479,7 @@ class NumberUtilsTest {
         assertThrowsWithMessage(
                 IllegalArgumentException.class,
                 () -> requireNonPositive(input),
-                "Value must be non-positive");
+                "value must be non-positive");
     }
 
     @Test
@@ -495,7 +495,7 @@ class NumberUtilsTest {
         assertThrowsWithMessage(
                 IllegalArgumentException.class,
                 () -> requireNonPositive(input),
-                "Value must be non-positive");
+                "value must be non-positive");
     }
 
     @Test
@@ -511,7 +511,7 @@ class NumberUtilsTest {
         assertThrowsWithMessage(
                 IllegalArgumentException.class,
                 () -> requireNonPositive(input),
-                "Value must be non-positive");
+                "value must be non-positive");
     }
 
     @Test
@@ -527,7 +527,7 @@ class NumberUtilsTest {
         assertThrowsWithMessage(
                 IllegalArgumentException.class,
                 () -> requireNonPositive(input),
-                "Value must be non-positive");
+                "value must be non-positive");
     }
 
     @Test
@@ -543,7 +543,7 @@ class NumberUtilsTest {
         assertThrowsWithMessage(
                 IllegalArgumentException.class,
                 () -> requireNonPositive(input),
-                "Value must be non-positive");
+                "value must be non-positive");
     }
 
     @Test
@@ -552,7 +552,7 @@ class NumberUtilsTest {
         assertThrowsWithMessage(
                 NullPointerException.class,
                 () -> requireNonPositive(input),
-                "Value must be non-positive");
+                "value must be non-positive");
     }
 
     @Test
