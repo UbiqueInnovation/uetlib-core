@@ -43,7 +43,7 @@ public final class JsonMapperUtils {
      * the autoconfiguration from {@code uetlib-spring-boot}. This one exists for cases where the
      * other one is super inconvenient.
      */
-    public static JsonMapper createJsonMapper() {
+    public static JsonMapper jsonMapper() {
         final var jsonMapperBuilder = JsonMapper.builder();
         configureBase(jsonMapperBuilder);
         return jsonMapperBuilder.build();
