@@ -117,6 +117,22 @@ class NumberUtilsTest {
                 "Value must be positive");
     }
 
+    @Test
+    void testRequirePositive_Overloads_ShouldBeCalled() {
+        assertEquals((short) 1, requirePositive((short) 1, "ok"));
+        assertEquals((short) 1, requirePositive((short) 1, () -> "ok"));
+        assertEquals(1, requirePositive(1, "ok"));
+        assertEquals(1, requirePositive(1, () -> "ok"));
+        assertEquals(1L, requirePositive(1L, "ok"));
+        assertEquals(1L, requirePositive(1L, () -> "ok"));
+        assertEquals(1.0, requirePositive(1.0, "ok"));
+        assertEquals(1.0, requirePositive(1.0, () -> "ok"));
+        assertEquals(1.0f, requirePositive(1.0f, "ok"));
+        assertEquals(1.0f, requirePositive(1.0f, () -> "ok"));
+        assertEquals(1, requirePositive((Number) 1, "ok"));
+        assertEquals(1, requirePositive((Number) 1, () -> "ok"));
+    }
+
     // Tests for requireNonNegative methods
 
     @Test
@@ -222,6 +238,58 @@ class NumberUtilsTest {
                 IllegalArgumentException.class,
                 () -> requireNonNegative(input),
                 "Value must be non-negative");
+    }
+
+    @Test
+    void testRequireNonNegativeInt_CustomMessage_ShouldThrowException() {
+        final var input = -1;
+        assertThrowsWithMessage(
+                IllegalArgumentException.class,
+                () -> requireNonNegative(input, "Non-negative required"),
+                "Non-negative required");
+    }
+
+    @Test
+    void testRequireNonNegativeInt_MessageSupplier_ShouldThrowException() {
+        final var input = -1;
+        assertThrowsWithMessage(
+                IllegalArgumentException.class,
+                () -> requireNonNegative(input, () -> "Non-negative required"),
+                "Non-negative required");
+    }
+
+    @Test
+    void testRequireNonNegativeNumber_CustomMessage_ShouldThrowException() {
+        final Number input = -1;
+        assertThrowsWithMessage(
+                IllegalArgumentException.class,
+                () -> requireNonNegative(input, "Non-negative required"),
+                "Non-negative required");
+    }
+
+    @Test
+    void testRequireNonNegativeNumber_MessageSupplier_ShouldThrowException() {
+        final Number input = -1;
+        assertThrowsWithMessage(
+                IllegalArgumentException.class,
+                () -> requireNonNegative(input, () -> "Non-negative required"),
+                "Non-negative required");
+    }
+
+    @Test
+    void testRequireNonNegative_Overloads_ShouldBeCalled() {
+        assertEquals((short) 0, requireNonNegative((short) 0, "ok"));
+        assertEquals((short) 0, requireNonNegative((short) 0, () -> "ok"));
+        assertEquals(0, requireNonNegative(0, "ok"));
+        assertEquals(0, requireNonNegative(0, () -> "ok"));
+        assertEquals(0L, requireNonNegative(0L, "ok"));
+        assertEquals(0L, requireNonNegative(0L, () -> "ok"));
+        assertEquals(0.0, requireNonNegative(0.0, "ok"));
+        assertEquals(0.0, requireNonNegative(0.0, () -> "ok"));
+        assertEquals(0.0f, requireNonNegative(0.0f, "ok"));
+        assertEquals(0.0f, requireNonNegative(0.0f, () -> "ok"));
+        assertEquals(0, requireNonNegative((Number) 0, "ok"));
+        assertEquals(0, requireNonNegative((Number) 0, () -> "ok"));
     }
 
     // Tests for requireNegative methods
@@ -331,6 +399,59 @@ class NumberUtilsTest {
                 "Value must be negative");
     }
 
+    @Test
+    void testRequireNegativeInt_CustomMessage_ShouldThrowException() {
+        final var input = 1;
+        assertThrowsWithMessage(
+                IllegalArgumentException.class,
+                () -> requireNegative(input, "Negative required"),
+                "Negative required");
+    }
+
+    @Test
+    void testRequireNegativeInt_MessageSupplier_ShouldThrowException() {
+        final var input = 1;
+        assertThrowsWithMessage(
+                IllegalArgumentException.class,
+                () -> requireNegative(input, () -> "Negative required"),
+                "Negative required");
+    }
+
+    @Test
+    void testRequireNegativeNumber_CustomMessage_ShouldThrowException() {
+        final Number input = 1;
+        assertThrowsWithMessage(
+                IllegalArgumentException.class,
+                () -> requireNegative(input, "Negative required"),
+                "Negative required");
+    }
+
+    @Test
+    void testRequireNegativeNumber_MessageSupplier_ShouldThrowException() {
+        final Number input = 1;
+        assertThrowsWithMessage(
+                IllegalArgumentException.class,
+                () -> requireNegative(input, () -> "Negative required"),
+                "Negative required");
+    }
+
+    @SuppressWarnings("UnnecessaryBoxing")
+    @Test
+    void testRequireNegative_Overloads_ShouldBeCalled() {
+        assertEquals((short) -1, requireNegative((short) -1, "ok"));
+        assertEquals((short) -1, requireNegative((short) -1, () -> "ok"));
+        assertEquals(-1, requireNegative(-1, "ok"));
+        assertEquals(-1, requireNegative(-1, () -> "ok"));
+        assertEquals(-1L, requireNegative(-1L, "ok"));
+        assertEquals(-1L, requireNegative(-1L, () -> "ok"));
+        assertEquals(-1.0, requireNegative(-1.0, "ok"));
+        assertEquals(-1.0, requireNegative(-1.0, () -> "ok"));
+        assertEquals(-1.0f, requireNegative(-1.0f, "ok"));
+        assertEquals(-1.0f, requireNegative(-1.0f, () -> "ok"));
+        assertEquals(-1, requireNegative((Number) Integer.valueOf(-1), "ok"));
+        assertEquals(-1, requireNegative((Number) Integer.valueOf(-1), () -> "ok"));
+    }
+
     // Tests for requireNonPositive methods
 
     @Test
@@ -436,5 +557,57 @@ class NumberUtilsTest {
                 IllegalArgumentException.class,
                 () -> requireNonPositive(input),
                 "Value must be non-positive");
+    }
+
+    @Test
+    void testRequireNonPositiveInt_CustomMessage_ShouldThrowException() {
+        final var input = 1;
+        assertThrowsWithMessage(
+                IllegalArgumentException.class,
+                () -> requireNonPositive(input, "Non-positive required"),
+                "Non-positive required");
+    }
+
+    @Test
+    void testRequireNonPositiveInt_MessageSupplier_ShouldThrowException() {
+        final var input = 1;
+        assertThrowsWithMessage(
+                IllegalArgumentException.class,
+                () -> requireNonPositive(input, () -> "Non-positive required"),
+                "Non-positive required");
+    }
+
+    @Test
+    void testRequireNonPositiveNumber_CustomMessage_ShouldThrowException() {
+        final Number input = 1;
+        assertThrowsWithMessage(
+                IllegalArgumentException.class,
+                () -> requireNonPositive(input, "Non-positive required"),
+                "Non-positive required");
+    }
+
+    @Test
+    void testRequireNonPositiveNumber_MessageSupplier_ShouldThrowException() {
+        final Number input = 1;
+        assertThrowsWithMessage(
+                IllegalArgumentException.class,
+                () -> requireNonPositive(input, () -> "Non-positive required"),
+                "Non-positive required");
+    }
+
+    @Test
+    void testRequireNonPositive_Overloads_ShouldBeCalled() {
+        assertEquals((short) 0, requireNonPositive((short) 0, "ok"));
+        assertEquals((short) 0, requireNonPositive((short) 0, () -> "ok"));
+        assertEquals(0, requireNonPositive(0, "ok"));
+        assertEquals(0, requireNonPositive(0, () -> "ok"));
+        assertEquals(0L, requireNonPositive(0L, "ok"));
+        assertEquals(0L, requireNonPositive(0L, () -> "ok"));
+        assertEquals(0.0, requireNonPositive(0.0, "ok"));
+        assertEquals(0.0, requireNonPositive(0.0, () -> "ok"));
+        assertEquals(0.0f, requireNonPositive(0.0f, "ok"));
+        assertEquals(0.0f, requireNonPositive(0.0f, () -> "ok"));
+        assertEquals(0, requireNonPositive((Number) 0, "ok"));
+        assertEquals(0, requireNonPositive((Number) 0, () -> "ok"));
     }
 }

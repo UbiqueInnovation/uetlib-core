@@ -25,6 +25,10 @@
       autoconfigured `ObjectMapper`.
     - Kept `JsonMapperUtils` for some reusable standard `JsonMapper.Builder` customizations.
 
+### Improvements
+
+- Add method variants that either a custom error `message` or a `messageSupplier` for all `NumberUtils.require*` methods.
+
 ## 1.3.3
 
 ### Improvements
