@@ -1,6 +1,9 @@
 package ch.ubique.backend.core.utils;
 
+import static java.util.Objects.requireNonNull;
+
 import org.jetbrains.annotations.Contract;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Supplier;
 
@@ -17,7 +20,10 @@ public final class NumberUtils {
      */
     @Contract(pure = true)
     public static short requirePositive(final short value) {
-        return requirePositive(value, "Value must be positive");
+        if (value <= 0) {
+            throw new IllegalArgumentException("Value must be positive");
+        }
+        return value;
     }
 
     /**
@@ -27,8 +33,14 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is negative or zero
      */
     @Contract(pure = true)
-    public static short requirePositive(final short value, final Supplier<String> messageSupplier) {
-        return requirePositive(value, messageSupplier != null ? messageSupplier.get() : null);
+    public static short requirePositive(
+            final short value, @Nullable final Supplier<String> messageSupplier) {
+        if (value <= 0) {
+            final var resolvedMessage =
+                    messageSupplier != null ? messageSupplier.get() : "Value must be positive";
+            throw new IllegalArgumentException(resolvedMessage);
+        }
+        return value;
     }
 
     /**
@@ -38,9 +50,10 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is negative or zero
      */
     @Contract(pure = true)
-    public static short requirePositive(final short value, final String message) {
+    public static short requirePositive(final short value, @Nullable final String message) {
         if (value <= 0) {
-            throw new IllegalArgumentException(message);
+            final var resolvedMessage = message != null ? message : "Value must be positive";
+            throw new IllegalArgumentException(resolvedMessage);
         }
         return value;
     }
@@ -52,7 +65,10 @@ public final class NumberUtils {
      */
     @Contract(pure = true)
     public static int requirePositive(final int value) {
-        return requirePositive(value, "Value must be positive");
+        if (value <= 0) {
+            throw new IllegalArgumentException("Value must be positive");
+        }
+        return value;
     }
 
     /**
@@ -62,8 +78,14 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is negative or zero
      */
     @Contract(pure = true)
-    public static int requirePositive(final int value, final Supplier<String> messageSupplier) {
-        return requirePositive(value, messageSupplier != null ? messageSupplier.get() : null);
+    public static int requirePositive(
+            final int value, @Nullable final Supplier<String> messageSupplier) {
+        if (value <= 0) {
+            final var resolvedMessage =
+                    messageSupplier != null ? messageSupplier.get() : "Value must be positive";
+            throw new IllegalArgumentException(resolvedMessage);
+        }
+        return value;
     }
 
     /**
@@ -73,9 +95,10 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is negative or zero
      */
     @Contract(pure = true)
-    public static int requirePositive(final int value, final String message) {
+    public static int requirePositive(final int value, @Nullable final String message) {
         if (value <= 0) {
-            throw new IllegalArgumentException(message);
+            final var resolvedMessage = message != null ? message : "Value must be positive";
+            throw new IllegalArgumentException(resolvedMessage);
         }
         return value;
     }
@@ -87,7 +110,10 @@ public final class NumberUtils {
      */
     @Contract(pure = true)
     public static long requirePositive(final long value) {
-        return requirePositive(value, "Value must be positive");
+        if (value <= 0) {
+            throw new IllegalArgumentException("Value must be positive");
+        }
+        return value;
     }
 
     /**
@@ -97,8 +123,14 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is negative or zero
      */
     @Contract(pure = true)
-    public static long requirePositive(final long value, final Supplier<String> messageSupplier) {
-        return requirePositive(value, messageSupplier != null ? messageSupplier.get() : null);
+    public static long requirePositive(
+            final long value, @Nullable final Supplier<String> messageSupplier) {
+        if (value <= 0) {
+            final var resolvedMessage =
+                    messageSupplier != null ? messageSupplier.get() : "Value must be positive";
+            throw new IllegalArgumentException(resolvedMessage);
+        }
+        return value;
     }
 
     /**
@@ -108,9 +140,10 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is negative or zero
      */
     @Contract(pure = true)
-    public static long requirePositive(final long value, final String message) {
+    public static long requirePositive(final long value, @Nullable final String message) {
         if (value <= 0) {
-            throw new IllegalArgumentException(message);
+            final var resolvedMessage = message != null ? message : "Value must be positive";
+            throw new IllegalArgumentException(resolvedMessage);
         }
         return value;
     }
@@ -122,7 +155,10 @@ public final class NumberUtils {
      */
     @Contract(pure = true)
     public static double requirePositive(final double value) {
-        return requirePositive(value, "Value must be positive");
+        if (value <= 0) {
+            throw new IllegalArgumentException("Value must be positive");
+        }
+        return value;
     }
 
     /**
@@ -132,8 +168,14 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is negative or zero
      */
     @Contract(pure = true)
-    public static double requirePositive(final double value, final Supplier<String> messageSupplier) {
-        return requirePositive(value, messageSupplier != null ? messageSupplier.get() : null);
+    public static double requirePositive(
+            final double value, @Nullable final Supplier<String> messageSupplier) {
+        if (value <= 0) {
+            final var resolvedMessage =
+                    messageSupplier != null ? messageSupplier.get() : "Value must be positive";
+            throw new IllegalArgumentException(resolvedMessage);
+        }
+        return value;
     }
 
     /**
@@ -143,9 +185,10 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is negative or zero
      */
     @Contract(pure = true)
-    public static double requirePositive(final double value, final String message) {
+    public static double requirePositive(final double value, @Nullable final String message) {
         if (value <= 0) {
-            throw new IllegalArgumentException(message);
+            final var resolvedMessage = message != null ? message : "Value must be positive";
+            throw new IllegalArgumentException(resolvedMessage);
         }
         return value;
     }
@@ -157,7 +200,10 @@ public final class NumberUtils {
      */
     @Contract(pure = true)
     public static float requirePositive(final float value) {
-        return requirePositive(value, "Value must be positive");
+        if (value <= 0) {
+            throw new IllegalArgumentException("Value must be positive");
+        }
+        return value;
     }
 
     /**
@@ -167,8 +213,14 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is negative or zero
      */
     @Contract(pure = true)
-    public static float requirePositive(final float value, final Supplier<String> messageSupplier) {
-        return requirePositive(value, messageSupplier != null ? messageSupplier.get() : null);
+    public static float requirePositive(
+            final float value, @Nullable final Supplier<String> messageSupplier) {
+        if (value <= 0) {
+            final var resolvedMessage =
+                    messageSupplier != null ? messageSupplier.get() : "Value must be positive";
+            throw new IllegalArgumentException(resolvedMessage);
+        }
+        return value;
     }
 
     /**
@@ -178,9 +230,10 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is negative or zero
      */
     @Contract(pure = true)
-    public static float requirePositive(final float value, final String message) {
+    public static float requirePositive(final float value, @Nullable final String message) {
         if (value <= 0) {
-            throw new IllegalArgumentException(message);
+            final var resolvedMessage = message != null ? message : "Value must be positive";
+            throw new IllegalArgumentException(resolvedMessage);
         }
         return value;
     }
@@ -188,34 +241,52 @@ public final class NumberUtils {
     /**
      * @param value number
      * @return the value, if it is positive (excluding zero)
-     * @throws IllegalArgumentException if the value is null or negative or zero
+     * @throws NullPointerException if the value is null
+     * @throws IllegalArgumentException if the value is negative or zero
      */
     @Contract(value = "null -> fail", pure = true)
     public static <T extends Number> T requirePositive(final T value) {
-        return requirePositive(value, "Value must be positive");
+        requireNonNull(value, "Value must be positive");
+        if (value.doubleValue() <= 0) {
+            final var resolvedMessage = "Value must be positive";
+            throw new IllegalArgumentException(resolvedMessage);
+        }
+        return value;
     }
 
     /**
      * @param value number
      * @param messageSupplier custom error message supplier
      * @return the value, if it is positive (excluding zero)
-     * @throws IllegalArgumentException if the value is null or negative or zero
+     * @throws NullPointerException if the value is null
+     * @throws IllegalArgumentException if the value is negative or zero
      */
     @Contract(value = "null, _ -> fail", pure = true)
-    public static <T extends Number> T requirePositive(final T value, final Supplier<String> messageSupplier) {
-        return requirePositive(value, messageSupplier != null ? messageSupplier.get() : null);
+    public static <T extends Number> T requirePositive(
+            final T value, @Nullable final Supplier<String> messageSupplier) {
+        final var resolvedMessage =
+                messageSupplier != null ? messageSupplier.get() : "Value must be positive";
+        requireNonNull(value, resolvedMessage);
+        if (value.doubleValue() <= 0) {
+            throw new IllegalArgumentException(resolvedMessage);
+        }
+        return value;
     }
 
     /**
      * @param value number
      * @param message custom error message
      * @return the value, if it is positive (excluding zero)
-     * @throws IllegalArgumentException if the value is null or negative or zero
+     * @throws NullPointerException if the value is null
+     * @throws IllegalArgumentException if the value is negative or zero
      */
     @Contract(value = "null, _ -> fail", pure = true)
-    public static <T extends Number> T requirePositive(final T value, final String message) {
-        if (value == null || value.doubleValue() <= 0) {
-            throw new IllegalArgumentException(message);
+    public static <T extends Number> T requirePositive(
+            final T value, @Nullable final String message) {
+        final var resolvedMessage = message != null ? message : "Value must be positive";
+        requireNonNull(value, resolvedMessage);
+        if (value.doubleValue() <= 0) {
+            throw new IllegalArgumentException(resolvedMessage);
         }
         return value;
     }
@@ -229,7 +300,10 @@ public final class NumberUtils {
      */
     @Contract(pure = true)
     public static short requireNonNegative(final short value) {
-        return requireNonNegative(value, "Value must be non-negative");
+        if (value < 0) {
+            throw new IllegalArgumentException("Value must be non-negative");
+        }
+        return value;
     }
 
     /**
@@ -239,8 +313,14 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is negative
      */
     @Contract(pure = true)
-    public static short requireNonNegative(final short value, final Supplier<String> messageSupplier) {
-        return requireNonNegative(value, messageSupplier != null ? messageSupplier.get() : null);
+    public static short requireNonNegative(
+            final short value, @Nullable final Supplier<String> messageSupplier) {
+        if (value < 0) {
+            final var resolvedMessage =
+                    messageSupplier != null ? messageSupplier.get() : "Value must be non-negative";
+            throw new IllegalArgumentException(resolvedMessage);
+        }
+        return value;
     }
 
     /**
@@ -250,9 +330,10 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is negative
      */
     @Contract(pure = true)
-    public static short requireNonNegative(final short value, final String message) {
+    public static short requireNonNegative(final short value, @Nullable final String message) {
         if (value < 0) {
-            throw new IllegalArgumentException(message);
+            final var resolvedMessage = message != null ? message : "Value must be non-negative";
+            throw new IllegalArgumentException(resolvedMessage);
         }
         return value;
     }
@@ -264,7 +345,10 @@ public final class NumberUtils {
      */
     @Contract(pure = true)
     public static int requireNonNegative(final int value) {
-        return requireNonNegative(value, "Value must be non-negative");
+        if (value < 0) {
+            throw new IllegalArgumentException("Value must be non-negative");
+        }
+        return value;
     }
 
     /**
@@ -274,8 +358,14 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is negative
      */
     @Contract(pure = true)
-    public static int requireNonNegative(final int value, final Supplier<String> messageSupplier) {
-        return requireNonNegative(value, messageSupplier != null ? messageSupplier.get() : null);
+    public static int requireNonNegative(
+            final int value, @Nullable final Supplier<String> messageSupplier) {
+        if (value < 0) {
+            final var resolvedMessage =
+                    messageSupplier != null ? messageSupplier.get() : "Value must be non-negative";
+            throw new IllegalArgumentException(resolvedMessage);
+        }
+        return value;
     }
 
     /**
@@ -285,9 +375,10 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is negative
      */
     @Contract(pure = true)
-    public static int requireNonNegative(final int value, final String message) {
+    public static int requireNonNegative(final int value, @Nullable final String message) {
         if (value < 0) {
-            throw new IllegalArgumentException(message);
+            final var resolvedMessage = message != null ? message : "Value must be non-negative";
+            throw new IllegalArgumentException(resolvedMessage);
         }
         return value;
     }
@@ -299,7 +390,10 @@ public final class NumberUtils {
      */
     @Contract(pure = true)
     public static long requireNonNegative(final long value) {
-        return requireNonNegative(value, "Value must be non-negative");
+        if (value < 0) {
+            throw new IllegalArgumentException("Value must be non-negative");
+        }
+        return value;
     }
 
     /**
@@ -309,8 +403,14 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is negative
      */
     @Contract(pure = true)
-    public static long requireNonNegative(final long value, final Supplier<String> messageSupplier) {
-        return requireNonNegative(value, messageSupplier != null ? messageSupplier.get() : null);
+    public static long requireNonNegative(
+            final long value, @Nullable final Supplier<String> messageSupplier) {
+        if (value < 0) {
+            final var resolvedMessage =
+                    messageSupplier != null ? messageSupplier.get() : "Value must be non-negative";
+            throw new IllegalArgumentException(resolvedMessage);
+        }
+        return value;
     }
 
     /**
@@ -320,9 +420,10 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is negative
      */
     @Contract(pure = true)
-    public static long requireNonNegative(final long value, final String message) {
+    public static long requireNonNegative(final long value, @Nullable final String message) {
         if (value < 0) {
-            throw new IllegalArgumentException(message);
+            final var resolvedMessage = message != null ? message : "Value must be non-negative";
+            throw new IllegalArgumentException(resolvedMessage);
         }
         return value;
     }
@@ -334,7 +435,10 @@ public final class NumberUtils {
      */
     @Contract(pure = true)
     public static double requireNonNegative(final double value) {
-        return requireNonNegative(value, "Value must be non-negative");
+        if (value < 0) {
+            throw new IllegalArgumentException("Value must be non-negative");
+        }
+        return value;
     }
 
     /**
@@ -344,8 +448,14 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is negative
      */
     @Contract(pure = true)
-    public static double requireNonNegative(final double value, final Supplier<String> messageSupplier) {
-        return requireNonNegative(value, messageSupplier != null ? messageSupplier.get() : null);
+    public static double requireNonNegative(
+            final double value, @Nullable final Supplier<String> messageSupplier) {
+        if (value < 0) {
+            final var resolvedMessage =
+                    messageSupplier != null ? messageSupplier.get() : "Value must be non-negative";
+            throw new IllegalArgumentException(resolvedMessage);
+        }
+        return value;
     }
 
     /**
@@ -355,9 +465,10 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is negative
      */
     @Contract(pure = true)
-    public static double requireNonNegative(final double value, final String message) {
+    public static double requireNonNegative(final double value, @Nullable final String message) {
         if (value < 0) {
-            throw new IllegalArgumentException(message);
+            final var resolvedMessage = message != null ? message : "Value must be non-negative";
+            throw new IllegalArgumentException(resolvedMessage);
         }
         return value;
     }
@@ -369,7 +480,10 @@ public final class NumberUtils {
      */
     @Contract(pure = true)
     public static float requireNonNegative(final float value) {
-        return requireNonNegative(value, "Value must be non-negative");
+        if (value < 0) {
+            throw new IllegalArgumentException("Value must be non-negative");
+        }
+        return value;
     }
 
     /**
@@ -379,8 +493,14 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is negative
      */
     @Contract(pure = true)
-    public static float requireNonNegative(final float value, final Supplier<String> messageSupplier) {
-        return requireNonNegative(value, messageSupplier != null ? messageSupplier.get() : null);
+    public static float requireNonNegative(
+            final float value, @Nullable final Supplier<String> messageSupplier) {
+        if (value < 0) {
+            final var resolvedMessage =
+                    messageSupplier != null ? messageSupplier.get() : "Value must be non-negative";
+            throw new IllegalArgumentException(resolvedMessage);
+        }
+        return value;
     }
 
     /**
@@ -390,9 +510,10 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is negative
      */
     @Contract(pure = true)
-    public static float requireNonNegative(final float value, final String message) {
+    public static float requireNonNegative(final float value, @Nullable final String message) {
         if (value < 0) {
-            throw new IllegalArgumentException(message);
+            final var resolvedMessage = message != null ? message : "Value must be non-negative";
+            throw new IllegalArgumentException(resolvedMessage);
         }
         return value;
     }
@@ -400,34 +521,52 @@ public final class NumberUtils {
     /**
      * @param value number
      * @return the value, if it is negative (excluding zero)
-     * @throws IllegalArgumentException if the value is null or negative
+     * @throws NullPointerException if the value is null
+     * @throws IllegalArgumentException if the value is negative
      */
     @Contract(value = "null -> fail", pure = true)
     public static <T extends Number> T requireNonNegative(final T value) {
-        return requireNonNegative(value, "Value must be non-negative");
+        requireNonNull(value, "Value must be non-negative");
+        if (value.doubleValue() < 0) {
+            final var resolvedMessage = "Value must be non-negative";
+            throw new IllegalArgumentException(resolvedMessage);
+        }
+        return value;
     }
 
     /**
      * @param value number
      * @param messageSupplier custom error message supplier
      * @return the value, if it is negative (excluding zero)
-     * @throws IllegalArgumentException if the value is null or negative
+     * @throws NullPointerException if the value is null
+     * @throws IllegalArgumentException if the value is negative
      */
     @Contract(value = "null, _ -> fail", pure = true)
-    public static <T extends Number> T requireNonNegative(final T value, final Supplier<String> messageSupplier) {
-        return requireNonNegative(value, messageSupplier != null ? messageSupplier.get() : null);
+    public static <T extends Number> T requireNonNegative(
+            final T value, @Nullable final Supplier<String> messageSupplier) {
+        final var resolvedMessage =
+                messageSupplier != null ? messageSupplier.get() : "Value must be non-negative";
+        requireNonNull(value, resolvedMessage);
+        if (value.doubleValue() < 0) {
+            throw new IllegalArgumentException(resolvedMessage);
+        }
+        return value;
     }
 
     /**
      * @param value number
      * @param message custom error message
      * @return the value, if it is negative (excluding zero)
-     * @throws IllegalArgumentException if the value is null or negative
+     * @throws NullPointerException if the value is null
+     * @throws IllegalArgumentException if the value is negative
      */
     @Contract(value = "null, _ -> fail", pure = true)
-    public static <T extends Number> T requireNonNegative(final T value, final String message) {
-        if (value == null || value.doubleValue() < 0) {
-            throw new IllegalArgumentException(message);
+    public static <T extends Number> T requireNonNegative(
+            final T value, @Nullable final String message) {
+        final var resolvedMessage = message != null ? message : "Value must be non-negative";
+        requireNonNull(value, resolvedMessage);
+        if (value.doubleValue() < 0) {
+            throw new IllegalArgumentException(resolvedMessage);
         }
         return value;
     }
@@ -441,7 +580,10 @@ public final class NumberUtils {
      */
     @Contract(pure = true)
     public static short requireNegative(final short value) {
-        return requireNegative(value, "Value must be negative");
+        if (value >= 0) {
+            throw new IllegalArgumentException("Value must be negative");
+        }
+        return value;
     }
 
     /**
@@ -451,8 +593,14 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is positive or zero
      */
     @Contract(pure = true)
-    public static short requireNegative(final short value, final Supplier<String> messageSupplier) {
-        return requireNegative(value, messageSupplier != null ? messageSupplier.get() : null);
+    public static short requireNegative(
+            final short value, @Nullable final Supplier<String> messageSupplier) {
+        if (value >= 0) {
+            final var resolvedMessage =
+                    messageSupplier != null ? messageSupplier.get() : "Value must be negative";
+            throw new IllegalArgumentException(resolvedMessage);
+        }
+        return value;
     }
 
     /**
@@ -462,9 +610,10 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is positive or zero
      */
     @Contract(pure = true)
-    public static short requireNegative(final short value, final String message) {
+    public static short requireNegative(final short value, @Nullable final String message) {
         if (value >= 0) {
-            throw new IllegalArgumentException(message);
+            final var resolvedMessage = message != null ? message : "Value must be negative";
+            throw new IllegalArgumentException(resolvedMessage);
         }
         return value;
     }
@@ -476,7 +625,10 @@ public final class NumberUtils {
      */
     @Contract(pure = true)
     public static int requireNegative(final int value) {
-        return requireNegative(value, "Value must be negative");
+        if (value >= 0) {
+            throw new IllegalArgumentException("Value must be negative");
+        }
+        return value;
     }
 
     /**
@@ -486,8 +638,14 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is positive or zero
      */
     @Contract(pure = true)
-    public static int requireNegative(final int value, final Supplier<String> messageSupplier) {
-        return requireNegative(value, messageSupplier != null ? messageSupplier.get() : null);
+    public static int requireNegative(
+            final int value, @Nullable final Supplier<String> messageSupplier) {
+        if (value >= 0) {
+            final var resolvedMessage =
+                    messageSupplier != null ? messageSupplier.get() : "Value must be negative";
+            throw new IllegalArgumentException(resolvedMessage);
+        }
+        return value;
     }
 
     /**
@@ -497,9 +655,10 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is positive or zero
      */
     @Contract(pure = true)
-    public static int requireNegative(final int value, final String message) {
+    public static int requireNegative(final int value, @Nullable final String message) {
         if (value >= 0) {
-            throw new IllegalArgumentException(message);
+            final var resolvedMessage = message != null ? message : "Value must be negative";
+            throw new IllegalArgumentException(resolvedMessage);
         }
         return value;
     }
@@ -511,7 +670,10 @@ public final class NumberUtils {
      */
     @Contract(pure = true)
     public static long requireNegative(final long value) {
-        return requireNegative(value, "Value must be negative");
+        if (value >= 0) {
+            throw new IllegalArgumentException("Value must be negative");
+        }
+        return value;
     }
 
     /**
@@ -521,8 +683,14 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is positive or zero
      */
     @Contract(pure = true)
-    public static long requireNegative(final long value, final Supplier<String> messageSupplier) {
-        return requireNegative(value, messageSupplier != null ? messageSupplier.get() : null);
+    public static long requireNegative(
+            final long value, @Nullable final Supplier<String> messageSupplier) {
+        if (value >= 0) {
+            final var resolvedMessage =
+                    messageSupplier != null ? messageSupplier.get() : "Value must be negative";
+            throw new IllegalArgumentException(resolvedMessage);
+        }
+        return value;
     }
 
     /**
@@ -532,9 +700,10 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is positive or zero
      */
     @Contract(pure = true)
-    public static long requireNegative(final long value, final String message) {
+    public static long requireNegative(final long value, @Nullable final String message) {
         if (value >= 0) {
-            throw new IllegalArgumentException(message);
+            final var resolvedMessage = message != null ? message : "Value must be negative";
+            throw new IllegalArgumentException(resolvedMessage);
         }
         return value;
     }
@@ -546,7 +715,10 @@ public final class NumberUtils {
      */
     @Contract(pure = true)
     public static double requireNegative(final double value) {
-        return requireNegative(value, "Value must be negative");
+        if (value >= 0) {
+            throw new IllegalArgumentException("Value must be negative");
+        }
+        return value;
     }
 
     /**
@@ -556,8 +728,14 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is positive or zero
      */
     @Contract(pure = true)
-    public static double requireNegative(final double value, final Supplier<String> messageSupplier) {
-        return requireNegative(value, messageSupplier != null ? messageSupplier.get() : null);
+    public static double requireNegative(
+            final double value, @Nullable final Supplier<String> messageSupplier) {
+        if (value >= 0) {
+            final var resolvedMessage =
+                    messageSupplier != null ? messageSupplier.get() : "Value must be negative";
+            throw new IllegalArgumentException(resolvedMessage);
+        }
+        return value;
     }
 
     /**
@@ -567,9 +745,10 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is positive or zero
      */
     @Contract(pure = true)
-    public static double requireNegative(final double value, final String message) {
+    public static double requireNegative(final double value, @Nullable final String message) {
         if (value >= 0) {
-            throw new IllegalArgumentException(message);
+            final var resolvedMessage = message != null ? message : "Value must be negative";
+            throw new IllegalArgumentException(resolvedMessage);
         }
         return value;
     }
@@ -581,7 +760,10 @@ public final class NumberUtils {
      */
     @Contract(pure = true)
     public static float requireNegative(final float value) {
-        return requireNegative(value, "Value must be negative");
+        if (value >= 0) {
+            throw new IllegalArgumentException("Value must be negative");
+        }
+        return value;
     }
 
     /**
@@ -591,8 +773,14 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is positive or zero
      */
     @Contract(pure = true)
-    public static float requireNegative(final float value, final Supplier<String> messageSupplier) {
-        return requireNegative(value, messageSupplier != null ? messageSupplier.get() : null);
+    public static float requireNegative(
+            final float value, @Nullable final Supplier<String> messageSupplier) {
+        if (value >= 0) {
+            final var resolvedMessage =
+                    messageSupplier != null ? messageSupplier.get() : "Value must be negative";
+            throw new IllegalArgumentException(resolvedMessage);
+        }
+        return value;
     }
 
     /**
@@ -602,9 +790,10 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is positive or zero
      */
     @Contract(pure = true)
-    public static float requireNegative(final float value, final String message) {
+    public static float requireNegative(final float value, @Nullable final String message) {
         if (value >= 0) {
-            throw new IllegalArgumentException(message);
+            final var resolvedMessage = message != null ? message : "Value must be negative";
+            throw new IllegalArgumentException(resolvedMessage);
         }
         return value;
     }
@@ -612,34 +801,52 @@ public final class NumberUtils {
     /**
      * @param value number
      * @return the value, if it is negative (excluding zero)
-     * @throws IllegalArgumentException if the value is null or positive or zero
+     * @throws NullPointerException if the value is null
+     * @throws IllegalArgumentException if the value is positive or zero
      */
     @Contract(value = "null -> fail", pure = true)
     public static <T extends Number> T requireNegative(final T value) {
-        return requireNegative(value, "Value must be negative");
+        requireNonNull(value, "Value must be negative");
+        if (value.doubleValue() >= 0) {
+            final var resolvedMessage = "Value must be negative";
+            throw new IllegalArgumentException(resolvedMessage);
+        }
+        return value;
     }
 
     /**
      * @param value number
      * @param messageSupplier custom error message supplier
      * @return the value, if it is negative (excluding zero)
-     * @throws IllegalArgumentException if the value is null or positive or zero
+     * @throws NullPointerException if the value is null
+     * @throws IllegalArgumentException if the value is positive or zero
      */
     @Contract(value = "null, _ -> fail", pure = true)
-    public static <T extends Number> T requireNegative(final T value, final Supplier<String> messageSupplier) {
-        return requireNegative(value, messageSupplier != null ? messageSupplier.get() : null);
+    public static <T extends Number> T requireNegative(
+            final T value, @Nullable final Supplier<String> messageSupplier) {
+        final var resolvedMessage =
+                messageSupplier != null ? messageSupplier.get() : "Value must be negative";
+        requireNonNull(value, resolvedMessage);
+        if (value.doubleValue() >= 0) {
+            throw new IllegalArgumentException(resolvedMessage);
+        }
+        return value;
     }
 
     /**
      * @param value number
      * @param message custom error message
      * @return the value, if it is negative (excluding zero)
-     * @throws IllegalArgumentException if the value is null or positive or zero
+     * @throws NullPointerException if the value is null
+     * @throws IllegalArgumentException if the value is positive or zero
      */
     @Contract(value = "null, _ -> fail", pure = true)
-    public static <T extends Number> T requireNegative(final T value, final String message) {
-        if (value == null || value.doubleValue() >= 0) {
-            throw new IllegalArgumentException(message);
+    public static <T extends Number> T requireNegative(
+            final T value, @Nullable final String message) {
+        final var resolvedMessage = message != null ? message : "Value must be negative";
+        requireNonNull(value, resolvedMessage);
+        if (value.doubleValue() >= 0) {
+            throw new IllegalArgumentException(resolvedMessage);
         }
         return value;
     }
@@ -653,7 +860,10 @@ public final class NumberUtils {
      */
     @Contract(pure = true)
     public static short requireNonPositive(final short value) {
-        return requireNonPositive(value, "Value must be non-positive");
+        if (value > 0) {
+            throw new IllegalArgumentException("Value must be non-positive");
+        }
+        return value;
     }
 
     /**
@@ -663,8 +873,14 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is positive
      */
     @Contract(pure = true)
-    public static short requireNonPositive(final short value, final Supplier<String> messageSupplier) {
-        return requireNonPositive(value, messageSupplier != null ? messageSupplier.get() : null);
+    public static short requireNonPositive(
+            final short value, @Nullable final Supplier<String> messageSupplier) {
+        if (value > 0) {
+            final var resolvedMessage =
+                    messageSupplier != null ? messageSupplier.get() : "Value must be non-positive";
+            throw new IllegalArgumentException(resolvedMessage);
+        }
+        return value;
     }
 
     /**
@@ -674,9 +890,10 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is positive
      */
     @Contract(pure = true)
-    public static short requireNonPositive(final short value, final String message) {
+    public static short requireNonPositive(final short value, @Nullable final String message) {
         if (value > 0) {
-            throw new IllegalArgumentException(message);
+            final var resolvedMessage = message != null ? message : "Value must be non-positive";
+            throw new IllegalArgumentException(resolvedMessage);
         }
         return value;
     }
@@ -688,7 +905,10 @@ public final class NumberUtils {
      */
     @Contract(pure = true)
     public static int requireNonPositive(final int value) {
-        return requireNonPositive(value, "Value must be non-positive");
+        if (value > 0) {
+            throw new IllegalArgumentException("Value must be non-positive");
+        }
+        return value;
     }
 
     /**
@@ -698,8 +918,14 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is positive
      */
     @Contract(pure = true)
-    public static int requireNonPositive(final int value, final Supplier<String> messageSupplier) {
-        return requireNonPositive(value, messageSupplier != null ? messageSupplier.get() : null);
+    public static int requireNonPositive(
+            final int value, @Nullable final Supplier<String> messageSupplier) {
+        if (value > 0) {
+            final var resolvedMessage =
+                    messageSupplier != null ? messageSupplier.get() : "Value must be non-positive";
+            throw new IllegalArgumentException(resolvedMessage);
+        }
+        return value;
     }
 
     /**
@@ -709,9 +935,10 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is positive
      */
     @Contract(pure = true)
-    public static int requireNonPositive(final int value, final String message) {
+    public static int requireNonPositive(final int value, @Nullable final String message) {
         if (value > 0) {
-            throw new IllegalArgumentException(message);
+            final var resolvedMessage = message != null ? message : "Value must be non-positive";
+            throw new IllegalArgumentException(resolvedMessage);
         }
         return value;
     }
@@ -723,7 +950,10 @@ public final class NumberUtils {
      */
     @Contract(pure = true)
     public static long requireNonPositive(final long value) {
-        return requireNonPositive(value, "Value must be non-positive");
+        if (value > 0) {
+            throw new IllegalArgumentException("Value must be non-positive");
+        }
+        return value;
     }
 
     /**
@@ -733,8 +963,14 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is positive
      */
     @Contract(pure = true)
-    public static long requireNonPositive(final long value, final Supplier<String> messageSupplier) {
-        return requireNonPositive(value, messageSupplier != null ? messageSupplier.get() : null);
+    public static long requireNonPositive(
+            final long value, @Nullable final Supplier<String> messageSupplier) {
+        if (value > 0) {
+            final var resolvedMessage =
+                    messageSupplier != null ? messageSupplier.get() : "Value must be non-positive";
+            throw new IllegalArgumentException(resolvedMessage);
+        }
+        return value;
     }
 
     /**
@@ -744,9 +980,10 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is positive
      */
     @Contract(pure = true)
-    public static long requireNonPositive(final long value, final String message) {
+    public static long requireNonPositive(final long value, @Nullable final String message) {
         if (value > 0) {
-            throw new IllegalArgumentException(message);
+            final var resolvedMessage = message != null ? message : "Value must be non-positive";
+            throw new IllegalArgumentException(resolvedMessage);
         }
         return value;
     }
@@ -758,7 +995,10 @@ public final class NumberUtils {
      */
     @Contract(pure = true)
     public static double requireNonPositive(final double value) {
-        return requireNonPositive(value, "Value must be non-positive");
+        if (value > 0) {
+            throw new IllegalArgumentException("Value must be non-positive");
+        }
+        return value;
     }
 
     /**
@@ -768,8 +1008,14 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is positive
      */
     @Contract(pure = true)
-    public static double requireNonPositive(final double value, final Supplier<String> messageSupplier) {
-        return requireNonPositive(value, messageSupplier != null ? messageSupplier.get() : null);
+    public static double requireNonPositive(
+            final double value, @Nullable final Supplier<String> messageSupplier) {
+        if (value > 0) {
+            final var resolvedMessage =
+                    messageSupplier != null ? messageSupplier.get() : "Value must be non-positive";
+            throw new IllegalArgumentException(resolvedMessage);
+        }
+        return value;
     }
 
     /**
@@ -779,9 +1025,10 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is positive
      */
     @Contract(pure = true)
-    public static double requireNonPositive(final double value, final String message) {
+    public static double requireNonPositive(final double value, @Nullable final String message) {
         if (value > 0) {
-            throw new IllegalArgumentException(message);
+            final var resolvedMessage = message != null ? message : "Value must be non-positive";
+            throw new IllegalArgumentException(resolvedMessage);
         }
         return value;
     }
@@ -793,7 +1040,10 @@ public final class NumberUtils {
      */
     @Contract(pure = true)
     public static float requireNonPositive(final float value) {
-        return requireNonPositive(value, "Value must be non-positive");
+        if (value > 0) {
+            throw new IllegalArgumentException("Value must be non-positive");
+        }
+        return value;
     }
 
     /**
@@ -803,8 +1053,14 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is positive
      */
     @Contract(pure = true)
-    public static float requireNonPositive(final float value, final Supplier<String> messageSupplier) {
-        return requireNonPositive(value, messageSupplier != null ? messageSupplier.get() : null);
+    public static float requireNonPositive(
+            final float value, @Nullable final Supplier<String> messageSupplier) {
+        if (value > 0) {
+            final var resolvedMessage =
+                    messageSupplier != null ? messageSupplier.get() : "Value must be non-positive";
+            throw new IllegalArgumentException(resolvedMessage);
+        }
+        return value;
     }
 
     /**
@@ -814,9 +1070,10 @@ public final class NumberUtils {
      * @throws IllegalArgumentException if the value is positive
      */
     @Contract(pure = true)
-    public static float requireNonPositive(final float value, final String message) {
+    public static float requireNonPositive(final float value, @Nullable final String message) {
         if (value > 0) {
-            throw new IllegalArgumentException(message);
+            final var resolvedMessage = message != null ? message : "Value must be non-positive";
+            throw new IllegalArgumentException(resolvedMessage);
         }
         return value;
     }
@@ -824,34 +1081,52 @@ public final class NumberUtils {
     /**
      * @param value number
      * @return the value, if it is negative (excluding zero)
-     * @throws IllegalArgumentException if the value is null or positive
+     * @throws NullPointerException if the value is null
+     * @throws IllegalArgumentException if the value is positive
      */
     @Contract(value = "null -> fail", pure = true)
     public static <T extends Number> T requireNonPositive(final T value) {
-        return requireNonPositive(value, "Value must be non-positive");
+        requireNonNull(value, "Value must be non-positive");
+        if (value.doubleValue() > 0) {
+            final var resolvedMessage = "Value must be non-positive";
+            throw new IllegalArgumentException(resolvedMessage);
+        }
+        return value;
     }
 
     /**
      * @param value number
      * @param messageSupplier custom error message supplier
      * @return the value, if it is negative (excluding zero)
-     * @throws IllegalArgumentException if the value is null or positive
+     * @throws NullPointerException if the value is null
+     * @throws IllegalArgumentException if the value is positive
      */
     @Contract(value = "null, _ -> fail", pure = true)
-    public static <T extends Number> T requireNonPositive(final T value, final Supplier<String> messageSupplier) {
-        return requireNonPositive(value, messageSupplier != null ? messageSupplier.get() : null);
+    public static <T extends Number> T requireNonPositive(
+            final T value, @Nullable final Supplier<String> messageSupplier) {
+        final var resolvedMessage =
+                messageSupplier != null ? messageSupplier.get() : "Value must be non-positive";
+        requireNonNull(value, resolvedMessage);
+        if (value.doubleValue() > 0) {
+            throw new IllegalArgumentException(resolvedMessage);
+        }
+        return value;
     }
 
     /**
      * @param value number
      * @param message custom error message
      * @return the value, if it is negative (excluding zero)
-     * @throws IllegalArgumentException if the value is null or positive
+     * @throws NullPointerException if the value is null
+     * @throws IllegalArgumentException if the value is positive
      */
     @Contract(value = "null, _ -> fail", pure = true)
-    public static <T extends Number> T requireNonPositive(final T value, final String message) {
-        if (value == null || value.doubleValue() > 0) {
-            throw new IllegalArgumentException(message);
+    public static <T extends Number> T requireNonPositive(
+            final T value, @Nullable final String message) {
+        final var resolvedMessage = message != null ? message : "Value must be non-positive";
+        requireNonNull(value, resolvedMessage);
+        if (value.doubleValue() > 0) {
+            throw new IllegalArgumentException(resolvedMessage);
         }
         return value;
     }

@@ -112,9 +112,7 @@ class NumberUtilsTest {
     void testRequirePositiveNumber_NullValue_ShouldThrowException() {
         final Number input = null;
         assertThrowsWithMessage(
-                IllegalArgumentException.class,
-                () -> requirePositive(input),
-                "Value must be positive");
+                NullPointerException.class, () -> requirePositive(input), "Value must be positive");
     }
 
     @Test
@@ -235,7 +233,7 @@ class NumberUtilsTest {
     void testRequireNonNegativeNumber_NullValue_ShouldThrowException() {
         final Number input = null;
         assertThrowsWithMessage(
-                IllegalArgumentException.class,
+                NullPointerException.class,
                 () -> requireNonNegative(input),
                 "Value must be non-negative");
     }
@@ -394,9 +392,7 @@ class NumberUtilsTest {
     void testRequireNegativeNumber_NullValue_ShouldThrowException() {
         final Number input = null;
         assertThrowsWithMessage(
-                IllegalArgumentException.class,
-                () -> requireNegative(input),
-                "Value must be negative");
+                NullPointerException.class, () -> requireNegative(input), "Value must be negative");
     }
 
     @Test
@@ -554,7 +550,7 @@ class NumberUtilsTest {
     void testRequireNonPositiveNumber_NullValue_ShouldThrowException() {
         final Number input = null;
         assertThrowsWithMessage(
-                IllegalArgumentException.class,
+                NullPointerException.class,
                 () -> requireNonPositive(input),
                 "Value must be non-positive");
     }
