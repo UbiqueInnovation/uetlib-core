@@ -31,4 +31,21 @@ public final class JsonMapperUtils {
     public static void configureVersion(final JsonMapper.Builder jsonMapperBuilder) {
         jsonMapperBuilder.addModule(new UetlibCoreJacksonVersionModule());
     }
+
+    public static void configureBase(final JsonMapper.Builder jsonMapperBuilder) {
+        JsonMapperUtils.configureDateTime(jsonMapperBuilder);
+        JsonMapperUtils.configureEnum(jsonMapperBuilder);
+        JsonMapperUtils.configureVersion(jsonMapperBuilder);
+    }
+
+    /**
+     * Prefer to not use this method directly, use the Spring Boot autoconfigured one, together with
+     * the autoconfiguration from {@code uetlib-spring-boot}. This one exists for cases where the
+     * other one is super inconvenient.
+     */
+    public static JsonMapper createJsonMapper() {
+        final var jsonMapperBuilder = JsonMapper.builder();
+        configureBase(jsonMapperBuilder);
+        return jsonMapperBuilder.build();
+    }
 }
