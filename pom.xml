@@ -15,6 +15,10 @@
 
     <packaging>jar</packaging>
 
+    <properties>
+        <uetlib-test.version>2.0.0-alpha.3</uetlib-test.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.hibernate.validator</groupId>
@@ -174,22 +178,10 @@
         <dependency>
             <groupId>ch.ubique</groupId>
             <artifactId>uetlib-test</artifactId>
-            <version>2.0.0-alpha.3</version>
+            <version>${uetlib-test.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>ch.ubique</groupId>
-                <artifactId>uetlib-bom</artifactId>
-                <version>2026.0.0-alpha.5</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <build>
         <plugins>
