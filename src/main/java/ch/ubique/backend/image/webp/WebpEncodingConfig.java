@@ -20,8 +20,8 @@ public record WebpEncodingConfig(
         private WebpEncodingConfigBuilder(
                 final Duration initialDuration,
                 final WebpQuality initialQuality,
-                CompressionMethod method,
-                int compressionFactor) {
+                final CompressionMethod method,
+                final int compressionFactor) {
             this.duration = initialDuration;
             this.quality = initialQuality;
             this.method = method;

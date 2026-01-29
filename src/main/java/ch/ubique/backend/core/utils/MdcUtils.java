@@ -35,7 +35,6 @@ public final class MdcUtils {
         };
     }
 
-
     public static <T> Callable<T> callWithContext(
             final Callable<T> callable, final Map<String, String> mdcContext) {
         return () -> {
@@ -45,7 +44,6 @@ public final class MdcUtils {
             return result;
         };
     }
-
 
     public static <T> Supplier<T> supplyWithContext(
             final Supplier<T> supplier, final Map<String, String> mdcContext) {
@@ -57,7 +55,6 @@ public final class MdcUtils {
         };
     }
 
-
     public static <T> Consumer<T> consumeWithContext(
             final Consumer<T> consumer, final Map<String, String> mdcContext) {
         return input -> {
@@ -67,7 +64,6 @@ public final class MdcUtils {
         };
     }
 
-
     public static <T, U> BiConsumer<T, U> biConsumeWithContext(
             final BiConsumer<T, U> consumer, final Map<String, String> mdcContext) {
         return (input1, input2) -> {
@@ -76,7 +72,6 @@ public final class MdcUtils {
             endMdcSection(previous);
         };
     }
-
 
     public static <T, R> Function<T, R> applyWithContext(
             final Function<T, R> function, final Map<String, String> mdcContext) {
@@ -98,7 +93,6 @@ public final class MdcUtils {
         };
     }
 
-
     public static <T, E extends Exception> ThrowingConsumer<T, E> consumeThrowingWithContext(
             final ThrowingConsumer<T, E> consumer, final Map<String, String> mdcContext) {
         return (t) -> {
@@ -107,7 +101,6 @@ public final class MdcUtils {
             endMdcSection(previous);
         };
     }
-
 
     public static <T, U, E extends Exception>
             ThrowingBiConsumer<T, U, E> biConsumeThrowingWithContext(
@@ -120,7 +113,6 @@ public final class MdcUtils {
         };
     }
 
-
     public static <T, R, E extends Exception> ThrowingFunction<T, R, E> applyThrowingWithContext(
             final ThrowingFunction<T, R, E> function, final Map<String, String> mdcContext) {
         return input -> {
@@ -130,7 +122,6 @@ public final class MdcUtils {
             return result;
         };
     }
-
 
     public static <T, U, R, E extends Exception>
             ThrowingBiFunction<T, U, R, E> biApplyThrowingWithContext(
