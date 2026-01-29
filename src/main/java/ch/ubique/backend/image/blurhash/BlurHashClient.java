@@ -17,7 +17,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.net.URLConnection;
 
 import javax.imageio.ImageIO;
 
@@ -49,8 +48,8 @@ public class BlurHashClient {
      * Return an url connection inputstream with custom user agent. Should be used when syncing data
      * from websites, so that the other side knows who's crawling the data.
      */
-    private InputStream getInputStreamWithCustomUserAgent(String url) throws IOException {
-        URLConnection hc = URI.create(url).toURL().openConnection();
+    private InputStream getInputStreamWithCustomUserAgent(final String url) throws IOException {
+        final var hc = URI.create(url).toURL().openConnection();
         hc.setRequestProperty("User-Agent", userAgent);
         hc.setRequestProperty("Referer", url);
         return hc.getInputStream();

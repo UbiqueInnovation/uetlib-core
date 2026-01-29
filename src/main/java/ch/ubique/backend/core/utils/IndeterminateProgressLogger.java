@@ -28,7 +28,7 @@ public final class IndeterminateProgressLogger extends AbstractProgressLogger {
         if (logger.isInfoEnabled()) {
             logger.info(
                     "{}Processed {} elements (current {} elements per second, overall {} elements"
-                        + " per second)",
+                            + " per second)",
                     prefix,
                     currentCount,
                     elementsPerSecond,

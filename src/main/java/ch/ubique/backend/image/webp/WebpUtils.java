@@ -3,6 +3,11 @@ package ch.ubique.backend.image.webp;
 import ch.ubique.backend.core.file.temp.TempFileManager;
 import ch.ubique.backend.image.util.ImageType;
 import ch.ubique.backend.image.util.ImageUtils;
+
+import org.apache.commons.lang3.tuple.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.awt.image.BufferedImage;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -11,10 +16,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
+
 import javax.imageio.ImageIO;
-import org.apache.commons.lang3.tuple.Pair;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public final class WebpUtils {
 

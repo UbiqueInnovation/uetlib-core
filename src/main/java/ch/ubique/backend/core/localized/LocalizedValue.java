@@ -10,7 +10,6 @@ import ch.ubique.backend.core.utils.LocaleHelper;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
-import tools.jackson.databind.annotation.JsonSerialize;
 
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotEmpty;
@@ -21,6 +20,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
+import tools.jackson.databind.annotation.JsonSerialize;
 
 import java.io.Serializable;
 import java.util.*;
@@ -163,7 +164,10 @@ public class LocalizedValue<T extends Serializable> {
                                     left.putAll(right);
                                     return left;
                                 });
-        return LocalizedValue.<S>builder().fromMap(deepCopyValues(mergedValues)).fullLocale().build();
+        return LocalizedValue.<S>builder()
+                .fromMap(deepCopyValues(mergedValues))
+                .fullLocale()
+                .build();
     }
 
     private static <S extends Serializable> Map<Locale, S> deepCopyValues(

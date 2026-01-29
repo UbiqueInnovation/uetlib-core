@@ -1,9 +1,9 @@
 package ch.ubique.backend.core.validator;
 
 import ch.ubique.backend.core.reflection.IntrospectionWrapper;
+
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-
 
 import java.util.Arrays;
 import java.util.Objects;
