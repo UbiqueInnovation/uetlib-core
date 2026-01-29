@@ -3,15 +3,19 @@ package ch.ubique.backend.image.webp;
 import static ch.ubique.backend.image.webp.ImageWebpLibraryWrapper.convertListToWebP;
 
 import ch.ubique.backend.core.executor.VirtualThreadUtils;
+
+import org.apache.commons.io.FileUtils;
+
 import java.awt.image.BufferedImage;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import javax.imageio.ImageIO;
-import org.apache.commons.io.FileUtils;
 
+import javax.imageio.ImageIO;
+
+@SuppressWarnings("unused")
 public class WebpWriter implements AutoCloseable {
 
     private final Path workingDirectory;

@@ -21,8 +21,8 @@ public class GZIPCompressingInputStream extends InputStream {
 
     private final InputStream in;
     private final GZIPOutputStream gz;
-    private byte[] buf = new byte[8192];
     private final byte[] readBuf = new byte[8192];
+    private byte[] buf = new byte[8192];
     int read;
     int write;
 

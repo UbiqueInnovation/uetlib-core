@@ -19,17 +19,17 @@ public class ByteFile {
     private byte[] bytes;
 
     public static ByteFile fromBytes(
-        @NotNull final byte[] bytes,
-        @Nullable final String fileName,
-        @Nullable final String contentType) {
+            @NotNull final byte[] bytes,
+            @Nullable final String fileName,
+            @Nullable final String contentType) {
 
         final var contentTypeOrOctetStream =
-            Objects.requireNonNullElse(contentType, "application/octet-stream");
+                Objects.requireNonNullElse(contentType, "application/octet-stream");
 
         return new ByteFile()
-            .setBytes(bytes)
-            .setFileName(fileName)
-            .setContentType(contentTypeOrOctetStream);
+                .setBytes(bytes)
+                .setFileName(fileName)
+                .setContentType(contentTypeOrOctetStream);
     }
 
     public String getFileName() {
@@ -71,8 +71,8 @@ public class ByteFile {
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-            .append("fileName", fileName)
-            .append("fileHash", fileHash)
-            .toString();
+                .append("fileName", fileName)
+                .append("fileHash", fileHash)
+                .toString();
     }
 }
