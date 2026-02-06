@@ -1,5 +1,7 @@
 package ch.ubique.backend.core.file;
 
+import static java.util.Objects.requireNonNullElse;
+
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 
@@ -9,7 +11,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.Objects;
 
 public class ByteFile {
 
@@ -24,7 +25,7 @@ public class ByteFile {
             @Nullable final String contentType) {
 
         final var contentTypeOrOctetStream =
-                Objects.requireNonNullElse(contentType, "application/octet-stream");
+                requireNonNullElse(contentType, "application/octet-stream");
 
         return new ByteFile()
                 .setBytes(bytes)
