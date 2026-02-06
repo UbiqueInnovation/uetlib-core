@@ -1,5 +1,7 @@
 package ch.ubique.backend.core.io;
 
+import static java.util.Objects.requireNonNullElse;
+
 import com.pivovarit.function.ThrowingSupplier;
 
 import jakarta.annotation.Nullable;
@@ -14,7 +16,6 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
-import java.util.Objects;
 
 public class InputStreamSupplierFileProvider implements FileProvider {
 
@@ -35,8 +36,8 @@ public class InputStreamSupplierFileProvider implements FileProvider {
             @Nullable final String filePrefix,
             @Nullable final String fileSuffix) {
         this.inputStreamSupplier = inputStreamSupplier;
-        this.filePrefix = Objects.requireNonNullElse(filePrefix, "file-provider-");
-        this.fileSuffix = Objects.requireNonNullElse(fileSuffix, ".tmp");
+        this.filePrefix = requireNonNullElse(filePrefix, "file-provider-");
+        this.fileSuffix = requireNonNullElse(fileSuffix, ".tmp");
     }
 
     @Override
