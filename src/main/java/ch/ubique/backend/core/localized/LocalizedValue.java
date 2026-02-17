@@ -196,7 +196,14 @@ public class LocalizedValue<T extends Serializable> {
      */
     @NotNull
     public T get(final String key) {
-        return getOptional(key).orElseThrow();
+        return getOptional(key)
+                .orElseThrow(
+                        () ->
+                                new NoSuchElementException(
+                                        "No value present for language "
+                                                + key
+                                                + ". Existing keys: "
+                                                + values.keySet()));
     }
 
     /**
@@ -238,7 +245,14 @@ public class LocalizedValue<T extends Serializable> {
      */
     @NotNull
     public T get(final Locale locale) {
-        return getOptional(locale).orElseThrow();
+        return getOptional(locale)
+                .orElseThrow(
+                        () ->
+                                new NoSuchElementException(
+                                        "No value present for locale "
+                                                + locale
+                                                + ". Existing keys: "
+                                                + values.keySet()));
     }
 
     /**
@@ -273,7 +287,12 @@ public class LocalizedValue<T extends Serializable> {
      */
     @NotNull
     public T en() {
-        return enOptional().orElseThrow();
+        return enOptional()
+                .orElseThrow(
+                        () ->
+                                new NoSuchElementException(
+                                        "No value present for locale en. Existing keys: "
+                                                + values.keySet()));
     }
 
     /**
@@ -282,7 +301,12 @@ public class LocalizedValue<T extends Serializable> {
      */
     @NotNull
     public T de() {
-        return deOptional().orElseThrow();
+        return deOptional()
+                .orElseThrow(
+                        () ->
+                                new NoSuchElementException(
+                                        "No value present for locale de. Existing keys: "
+                                                + values.keySet()));
     }
 
     /**
@@ -291,7 +315,12 @@ public class LocalizedValue<T extends Serializable> {
      */
     @NotNull
     public T fr() {
-        return frOptional().orElseThrow();
+        return frOptional()
+                .orElseThrow(
+                        () ->
+                                new NoSuchElementException(
+                                        "No value present for locale fr. Existing keys: "
+                                                + values.keySet()));
     }
 
     /**
@@ -300,7 +329,12 @@ public class LocalizedValue<T extends Serializable> {
      */
     @NotNull
     public T it() {
-        return itOptional().orElseThrow();
+        return itOptional()
+                .orElseThrow(
+                        () ->
+                                new NoSuchElementException(
+                                        "No value present for locale it. Existing keys: "
+                                                + values.keySet()));
     }
 
     /**
@@ -309,7 +343,14 @@ public class LocalizedValue<T extends Serializable> {
      */
     @NotNull
     public T romansh() {
-        return romanshOptional().orElseThrow();
+        return romanshOptional()
+                .orElseThrow(
+                        () ->
+                                new NoSuchElementException(
+                                        "No value present for locale "
+                                                + AdditionalLocales.ROMANSH.toLanguageTag()
+                                                + ". Existing keys: "
+                                                + values.keySet()));
     }
 
     /**
@@ -401,7 +442,14 @@ public class LocalizedValue<T extends Serializable> {
      */
     @NotNull
     public T coalesce(final Locale... locales) {
-        return coalesceOptional(locales).orElseThrow();
+        return coalesceOptional(locales)
+                .orElseThrow(
+                        () ->
+                                new NoSuchElementException(
+                                        "No value present for any of the provided locales "
+                                                + Arrays.toString(locales)
+                                                + ". Existing keys: "
+                                                + values.keySet()));
     }
 
     /**
@@ -413,7 +461,14 @@ public class LocalizedValue<T extends Serializable> {
      */
     @NotNull
     public T coalesce(final String... keys) {
-        return coalesceOptional(keys).orElseThrow();
+        return coalesceOptional(keys)
+                .orElseThrow(
+                        () ->
+                                new NoSuchElementException(
+                                        "No value present for any of the provided languages "
+                                                + Arrays.toString(keys)
+                                                + ". Existing keys: "
+                                                + values.keySet()));
     }
 
     /**
@@ -470,7 +525,12 @@ public class LocalizedValue<T extends Serializable> {
     @NotNull
     @JsonIgnore
     public T getAny() {
-        return values.values().stream().findAny().orElseThrow();
+        return values.values().stream()
+                .findAny()
+                .orElseThrow(
+                        () ->
+                                new NoSuchElementException(
+                                        "No value present in LocalizedValue. This should not happen, as a LocalizedValue should always contain at least one value."));
     }
 
     /**

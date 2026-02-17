@@ -551,6 +551,74 @@ class LocalizedValueTest {
     }
 
     @Test
+    void fromMapFiltersInvalidValues() {
+        final Map<Locale, String> values = new HashMap<>();
+        values.put(Locale.ENGLISH, "ok");
+        values.put(Locale.GERMAN, " ");
+        values.put(null, "bad");
+        values.put(Locale.FRENCH, null);
+
+        final var localized = LocalizedValue.fromMap(values);
+        assertEquals(Map.of("en", "ok"), localized.toMapWithLanguageTagKeys());
+    }
+
+    @Test
+    void fromStringMapFullLocaleKeepsRegion() {
+        final var localized =
+                LocalizedValue.fromStringMapFullLocale(
+                        Map.of("de-CH", "ch", "de", "de", "fr_FR", "fr"));
+
+        assertEquals(
+                Map.of("de-CH", "ch", "de", "de", "fr-FR", "fr"),
+                localized.toMapWithLanguageTagKeys());
+    }
+
+    @Test
+    void builderDuplicateLanguageThrows() {
+        final var builder = LocalizedValue.stringBuilder();
+        builder.add("us", Locale.US);
+        builder.add("gb", Locale.UK);
+
+        assertThrows(IllegalStateException.class, builder::build);
+
+        final var fullLocale =
+                LocalizedValue.stringBuilder()
+                        .fullLocale()
+                        .add("us", Locale.US)
+                        .add("gb", Locale.UK)
+                        .build();
+        assertEquals(
+                Map.of("en-US", "us", "en-GB", "gb"), fullLocale.toMapWithLanguageTagKeys());
+    }
+
+    @Test
+    void invalidLocaleStringThrows() {
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> LocalizedValue.fromStringMap(Map.of("invalid_tag", "value")));
+
+        final var localized = LocalizedValue.en("value");
+        assertThrows(IllegalArgumentException.class, () -> localized.get("invalid_tag"));
+        assertThrows(IllegalArgumentException.class, () -> localized.getNullable("invalid_tag"));
+        assertThrows(IllegalArgumentException.class, () -> localized.getOptional("invalid_tag"));
+    }
+
+    @Test
+    void toMapWithLocaleKeysIsCopy() {
+        final var localized = LocalizedValue.en("test");
+        final var mapCopy = localized.toMapWithLocaleKeys();
+        mapCopy.put(Locale.GERMAN, "de");
+
+        assertEquals(Map.of("en", "test"), localized.toMapWithLanguageTagKeys());
+    }
+
+    @Test
+    void getAnyThrowsWhenEmpty() {
+        final var empty = new LocalizedValue<String>(Map.of());
+        assertThrows(NoSuchElementException.class, empty::getAny);
+    }
+
+    @Test
     void untouched() {
         final var untouched =
                 new Untouched(LocalizedValue.stringBuilder().de("value_de").en("value_en").build());
