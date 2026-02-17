@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2.0.1
+
+### Bugfixes
+
+- Extend `JsonMapperUtils` to make sure some `java.time` types are serialized as ISO-8601 strings by default.
+
 ## 2.0.0
 
 ### Breaking Changes
@@ -27,7 +33,8 @@
 
 ### Improvements
 
-- Add method variants that either a custom error `message` or a `messageSupplier` for all `NumberUtils.require*` methods.
+- Add method variants that either a custom error `message` or a `messageSupplier` for all `NumberUtils.require*`
+  methods.
 
 ## 1.3.3
 
