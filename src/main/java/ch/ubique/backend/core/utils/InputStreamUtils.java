@@ -1,5 +1,7 @@
 package ch.ubique.backend.core.utils;
 
+import static java.util.Objects.requireNonNull;
+
 import ch.ubique.backend.core.io.CompressionAlgorithm;
 
 import com.j256.simplemagic.ContentInfo;
@@ -19,16 +21,11 @@ import org.apache.commons.compress.compressors.z.ZCompressorInputStream;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.input.BOMInputStream;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.Contract;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -119,15 +116,23 @@ public final class InputStreamUtils {
         return bufferedReader(inputStream, StandardCharsets.UTF_8);
     }
 
+    /**
+     * Create a readable {@link InputStream} from a {@link ByteArrayOutputStream} by piping its
+     * current contents into an {@link InputStream}.
+     */
     @SuppressWarnings("java:S2095")
+    @Contract("null -> fail")
     public static InputStream pipeOutputToInputStream(final ByteArrayOutputStream originOut) {
+        requireNonNull(originOut, "originOut");
 
         // connect the pipe
         final var inPipe = new PipedInputStream();
 
         try {
+            //noinspection ExtractMethodRecommender
             final var outPipe = new PipedOutputStream(inPipe);
-            new Thread(
+            final var writerThread =
+                    new Thread(
                             () -> {
                                 // write originOut into outPipe
                                 try (outPipe) {
@@ -135,8 +140,10 @@ public final class InputStreamUtils {
                                 } catch (final IOException e) {
                                     throw new WrappedException(e);
                                 }
-                            })
-                    .start();
+                            },
+                            "input-stream-utils-pipe-writer");
+            writerThread.setDaemon(true);
+            writerThread.start();
             // return the input stream
             return inPipe;
         } catch (final IOException e) {
@@ -244,13 +251,14 @@ public final class InputStreamUtils {
      * input stream after reading the first bytes to determine the content type
      */
     public static ContentInfo contentInfo(final InputStream inputStream) throws IOException {
-        final var contentInfoInputStreamWrapper = new ContentInfoInputStreamWrapper(inputStream);
-
-        if (!contentInfoInputStreamWrapper.markSupported()) {
-            logger.debug(
-                    "Cannot search the given input stream for its content type."
-                            + " 'inputStream.markSupported()' returned false.");
-            return null;
+        final ContentInfoInputStreamWrapper contentInfoInputStreamWrapper;
+        if (inputStream.markSupported()) {
+            contentInfoInputStreamWrapper = new ContentInfoInputStreamWrapper(inputStream);
+        } else {
+            contentInfoInputStreamWrapper =
+                    new ContentInfoInputStreamWrapper(
+                            new BufferedInputStream(
+                                    inputStream, ContentInfoUtil.DEFAULT_READ_SIZE));
         }
 
         contentInfoInputStreamWrapper.mark(ContentInfoUtil.DEFAULT_READ_SIZE);
