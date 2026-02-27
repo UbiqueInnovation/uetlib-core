@@ -13,13 +13,13 @@ public record DataAndFileProvider<T>(
         @NonNull T data, @NonNull Collection<@NonNull FileProvider> inputFileProviders)
         implements AutoCloseable {
 
-    public DataAndFileProvider(@NonNull final T data) {
-        this(data, List.of());
+    public static <T> DataAndFileProvider<T> of(@NonNull final T data) {
+        return new DataAndFileProvider<>(data, List.of());
     }
 
-    public DataAndFileProvider(
+    public static <T> DataAndFileProvider<T> of(
             @NonNull final T data, @NonNull final FileProvider inputFileProvider) {
-        this(data, List.of(inputFileProvider));
+        return new DataAndFileProvider<>(data, List.of(inputFileProvider));
     }
 
     @NonNull
