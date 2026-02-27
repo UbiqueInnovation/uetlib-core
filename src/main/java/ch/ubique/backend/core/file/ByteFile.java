@@ -2,6 +2,8 @@ package ch.ubique.backend.core.file;
 
 import static java.util.Objects.requireNonNullElse;
 
+import ch.ubique.backend.core.io.FileProvider;
+
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 
@@ -12,6 +14,10 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
+/**
+ * @deprecated since 2.1.0, use {@link FileProvider} instead
+ */
+@Deprecated(since = "2.1.0")
 public class ByteFile {
 
     private String fileName;
