@@ -18,7 +18,7 @@ public interface FileProvider extends AutoCloseable, InputStreamProvider {
     }
 
     static FileProvider of(final InputStream inputStream) {
-        return new AutoClosableTempFileProvider(inputStream);
+        return of(() -> inputStream);
     }
 
     static FileProvider of(final ThrowingSupplier<InputStream, IOException> inputStreamSupplier) {

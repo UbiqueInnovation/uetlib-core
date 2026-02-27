@@ -5,7 +5,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 
-/** The InputStream passed as an argument can only be consumed once. */
+/**
+ * The InputStream passed as an argument can only be consumed once.
+ *
+ * @deprecated since 2.1, use {@link FileProvider#of(InputStream)} instead.
+ */
+@Deprecated(forRemoval = true, since = "2.1.0")
 public class AutoClosableTempFileProvider implements FileProvider {
 
     private final InputStreamSupplierFileProvider fileProvider;
