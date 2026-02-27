@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2.1.0
+
+- deprecate `AutoClosableTempFileProvider` for removal
+- add new `DataAndFileProvder`, analogous to `DataAndInput` but for `FileProvder` instead of `ByteFile` and deprecate
+  `DataAndInput` and `ByteFile` while at it
+
 ## 2.0.1
 
 ### Bugfixes
