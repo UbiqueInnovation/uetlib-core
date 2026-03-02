@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 1.4.1
+
+### Improvements
+
+- New `InputStreamSupplierFileProvider` without arguments that creates a temporary file without weiting any data to it
+  initially.
+
 ## 1.4.0
 
 ### Backports from 2.1.0
