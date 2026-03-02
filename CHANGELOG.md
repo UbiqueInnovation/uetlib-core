@@ -5,6 +5,7 @@
 - deprecate `AutoClosableTempFileProvider` for removal
 - add new `DataAndFileProvder`, analogous to `DataAndInput` but for `FileProvder` instead of `ByteFile` and deprecate
   `DataAndInput` and `ByteFile` while at it
+- New `TempFileProvider` that creates an empty temporary file and deletes it after use (ported to 2.1.0 from 1.4.1)
 
 ## 2.0.1
 
