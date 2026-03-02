@@ -2,52 +2,45 @@ package ch.ubique.backend.core.service;
 
 import ch.ubique.backend.core.io.FileProvider;
 
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.IOException;
 import java.util.Map;
 import java.util.function.Function;
 
+@NullMarked
 public final class DataAndFileProvider<T> implements AutoCloseable {
 
     private final T data;
     private final Map<String, FileProvider> fileProviders;
 
-    private DataAndFileProvider(
-            @NonNull final T data,
-            @NonNull final Map<@NonNull String, @NonNull FileProvider> fileProviders) {
+    private DataAndFileProvider(final T data, final Map<String, FileProvider> fileProviders) {
         this.data = data;
         this.fileProviders = fileProviders;
     }
 
-    public static <T> DataAndFileProvider<T> of(@NonNull final T data) {
+    public static <T> DataAndFileProvider<T> of(final T data) {
         return new DataAndFileProvider<>(data, Map.of());
     }
 
     public static <T> DataAndFileProvider<T> of(
-            @NonNull final T data,
-            @NonNull final String name,
-            @NonNull final FileProvider fileProvider) {
+            final T data, final String name, final FileProvider fileProvider) {
         return new DataAndFileProvider<>(data, Map.of(name, fileProvider));
     }
 
     public static <T> DataAndFileProvider<T> of(
-            @NonNull final T data,
-            @NonNull final Map<@NonNull String, @NonNull FileProvider> fileProviders) {
+            final T data, final Map<String, FileProvider> fileProviders) {
         return new DataAndFileProvider<>(data, fileProviders);
     }
 
-    @NonNull
-    public <R> DataAndFileProvider<R> map(@NonNull final Function<T, R> mapper) {
+    public <R> DataAndFileProvider<R> map(final Function<T, R> mapper) {
         return new DataAndFileProvider<>(mapper.apply(data), fileProviders);
     }
 
-    @NonNull
     public T data() {
         return data;
     }
 
-    @NonNull
     public Map<String, FileProvider> fileProviders() {
         return fileProviders;
     }
