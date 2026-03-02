@@ -4,7 +4,7 @@
 
 ### Improvements
 
-- New `InputStreamSupplierFileProvider` constructor without arguments that creates a temporary file without writing any data to it
+- New `TempFileProvider` that creates an empty temporary file and deletes it after use.
   initially.
 
 ## 1.4.0
