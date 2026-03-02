@@ -42,6 +42,13 @@
 - Add method variants that either a custom error `message` or a `messageSupplier` for all `NumberUtils.require*`
   methods.
 
+## 1.4.1
+
+### Improvements
+
+- New `TempFileProvider` that creates an empty temporary file and deletes it after use.
+  initially.
+
 ## 1.4.0
 
 ### Backports from 2.1.0

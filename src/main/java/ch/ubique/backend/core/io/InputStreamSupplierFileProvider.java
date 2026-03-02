@@ -1,12 +1,10 @@
 package ch.ubique.backend.core.io;
 
-import static java.util.Objects.requireNonNullElse;
-
 import com.pivovarit.function.ThrowingSupplier;
 
-import jakarta.annotation.Nullable;
-
 import org.apache.commons.io.FileUtils;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,55 +12,55 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
-import java.nio.file.Path;
 
-public class InputStreamSupplierFileProvider implements FileProvider {
+@NullMarked
+public class InputStreamSupplierFileProvider extends TempFileProvider {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private final ThrowingSupplier<InputStream, IOException> inputStreamSupplier;
-    private final String filePrefix;
-    private final String fileSuffix;
-    private Path filePath;
 
-    public InputStreamSupplierFileProvider(
+    /**
+     * @see #InputStreamSupplierFileProvider(ThrowingSupplier, String, String)
+     */
+    InputStreamSupplierFileProvider(
             final ThrowingSupplier<InputStream, IOException> inputStreamSupplier) {
         this(inputStreamSupplier, null, null);
     }
 
-    public InputStreamSupplierFileProvider(
+    /**
+     * Constructs an {@code InputStreamSupplierFileProvider} instance with a supplier for providing
+     * the input stream and optional file naming configuration for temporary files.
+     *
+     * @param inputStreamSupplier a supplier for providing the input stream to be used
+     * @param filePrefix see {@link TempFileProvider(String, String)}
+     * @param fileSuffix see {@link TempFileProvider(String, String)}
+     * @see TempFileProvider#TempFileProvider(String, String)
+     */
+    InputStreamSupplierFileProvider(
             final ThrowingSupplier<InputStream, IOException> inputStreamSupplier,
             @Nullable final String filePrefix,
             @Nullable final String fileSuffix) {
+        super(filePrefix, fileSuffix);
         this.inputStreamSupplier = inputStreamSupplier;
-        this.filePrefix = requireNonNullElse(filePrefix, "file-provider-");
-        this.fileSuffix = requireNonNullElse(fileSuffix, ".tmp");
     }
 
     @Override
     @SuppressWarnings("java:S5443")
     public File file() throws IOException {
+        // create the file and write the input stream to it on first use
         if (filePath == null) {
-            filePath = Files.createTempFile(filePrefix, fileSuffix);
+            final var file = super.file();
+
+            final var filePath = file.toPath();
             logger.info("Saving input to temporary file {}.", filePath);
             try (final var inputStream = inputStreamSupplier.get()) {
-                FileUtils.copyToFile(inputStream, filePath.toFile());
+                FileUtils.copyToFile(inputStream, file);
             }
             final var fileSize = FileUtils.byteCountToDisplaySize(Files.size(filePath));
             logger.info("Transferred {} from input stream to file", fileSize);
         }
-        return filePath.toFile();
-    }
 
-    @Override
-    public void close() throws IOException {
-        try {
-            if (filePath != null) {
-                Files.delete(filePath);
-            }
-        } catch (final NoSuchFileException e) {
-            /* Do nothing, no file to delete */
-        }
+        return filePath.toFile();
     }
 }
