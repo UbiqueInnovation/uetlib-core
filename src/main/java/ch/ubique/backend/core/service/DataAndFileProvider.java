@@ -2,35 +2,53 @@ package ch.ubique.backend.core.service;
 
 import ch.ubique.backend.core.io.FileProvider;
 
-import jakarta.validation.constraints.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
-public record DataAndFileProvider<T>(
-        @NotNull T data, @NotNull Collection<FileProvider> inputFileProviders)
-        implements AutoCloseable {
+@NullMarked
+public final class DataAndFileProvider<T> implements AutoCloseable {
 
-    public DataAndFileProvider(@NotNull final T data) {
-        this(data, List.of());
+    private final T data;
+    private final Map<String, FileProvider> fileProviders;
+
+    private DataAndFileProvider(final T data, final Map<String, FileProvider> fileProviders) {
+        this.data = data;
+        this.fileProviders = fileProviders;
     }
 
-    public DataAndFileProvider(
-            @NotNull final T data, @NotNull final FileProvider inputFileProvider) {
-        this(data, List.of(inputFileProvider));
+    public static <T> DataAndFileProvider<T> of(final T data) {
+        return new DataAndFileProvider<>(data, Map.of());
     }
 
-    @NotNull
-    public <R> DataAndFileProvider<R> map(@NotNull final Function<T, R> mapper) {
-        return new DataAndFileProvider<>(mapper.apply(data), inputFileProviders);
+    public static <T> DataAndFileProvider<T> of(
+            final T data, final String name, final FileProvider fileProvider) {
+        return new DataAndFileProvider<>(data, Map.of(name, fileProvider));
+    }
+
+    public static <T> DataAndFileProvider<T> of(
+            final T data, final Map<String, FileProvider> fileProviders) {
+        return new DataAndFileProvider<>(data, fileProviders);
+    }
+
+    public <R> DataAndFileProvider<R> map(final Function<T, R> mapper) {
+        return new DataAndFileProvider<>(mapper.apply(data), fileProviders);
+    }
+
+    public T data() {
+        return data;
+    }
+
+    public Map<String, FileProvider> fileProviders() {
+        return fileProviders;
     }
 
     @Override
     public void close() throws IOException {
-        for (final var inputFileProvider : inputFileProviders) {
-            inputFileProvider.close();
+        for (final var fileProvider : fileProviders.values()) {
+            fileProvider.close();
         }
     }
 }

@@ -42,6 +42,12 @@
 - Add method variants that either a custom error `message` or a `messageSupplier` for all `NumberUtils.require*`
   methods.
 
+## 1.4.0
+
+### Backports from 2.1.0
+
+- New `DataAndFileProvder`, analogous to `DataAndInput` but for `FileProvder` instead of `ByteFile`
+
 ## 1.3.3
 
 ### Improvements
