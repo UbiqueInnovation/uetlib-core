@@ -4,6 +4,8 @@ import com.pivovarit.function.ThrowingSupplier;
 
 import jakarta.annotation.Nullable;
 
+import org.jspecify.annotations.NullMarked;
+
 import java.io.*;
 import java.nio.file.Path;
 
@@ -12,6 +14,7 @@ import java.nio.file.Path;
  * this class have to make sure that the {@link #close()} method is called when the file is no
  * longer needed., either directly or with try-with-resources.
  */
+@NullMarked
 public interface FileProvider extends AutoCloseable, InputStreamProvider {
 
     /**
@@ -20,8 +23,21 @@ public interface FileProvider extends AutoCloseable, InputStreamProvider {
      *
      * @return a {@link FileProvider} that provides a temporary file
      */
-    static FileProvider ofTempFile() {
-        return new TempFileProvider();
+    static FileProvider emptyTempFile() {
+        return emptyTempFile(null, null);
+    }
+
+    /**
+     * * Creates a {@link FileProvider} that provides a temporary file. The file will be deleted on
+     * * close.
+     *
+     * @param filePrefix the prefix for the temporary file
+     * @param fileSuffix the suffix for the temporary file
+     * @return a {@link FileProvider} that provides a temporary file
+     */
+    static FileProvider emptyTempFile(
+            @Nullable final String filePrefix, @Nullable final String fileSuffix) {
+        return new TempFileProvider(filePrefix, fileSuffix);
     }
 
     /**
@@ -43,7 +59,7 @@ public interface FileProvider extends AutoCloseable, InputStreamProvider {
      * @return a {@link FileProvider} that provides the given bytes
      */
     static FileProvider of(final byte[] bytes) {
-        return of(new ByteArrayInputStream(bytes));
+        return of(() -> new ByteArrayInputStream(bytes));
     }
 
     /**
