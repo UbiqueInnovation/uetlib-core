@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.1.1
+
+- Fix NPE in updated `InputStreamSupplierFileProvider` on calling `file()`
+
 ## 2.1.0
 
 - deprecate `AutoClosableTempFileProvider` for removal
