@@ -2,7 +2,7 @@ package ch.ubique.backend.core.io;
 
 import com.pivovarit.function.ThrowingSupplier;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.*;
 import java.nio.file.Path;
