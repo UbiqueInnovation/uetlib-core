@@ -4,8 +4,6 @@ import com.pivovarit.function.ThrowingSupplier;
 
 import jakarta.annotation.Nullable;
 
-import org.jspecify.annotations.NullMarked;
-
 import java.io.*;
 import java.nio.file.Path;
 
@@ -14,7 +12,6 @@ import java.nio.file.Path;
  * this class have to make sure that the {@link #close()} method is called when the file is no
  * longer needed., either directly or with try-with-resources.
  */
-@NullMarked
 public interface FileProvider extends AutoCloseable, InputStreamProvider {
 
     /**
