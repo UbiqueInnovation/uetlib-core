@@ -4,7 +4,7 @@ import static java.util.Objects.requireNonNullElse;
 
 import ch.ubique.backend.core.io.FileProvider;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.validation.constraints.NotNull;
 
 import org.apache.commons.codec.digest.DigestUtils;

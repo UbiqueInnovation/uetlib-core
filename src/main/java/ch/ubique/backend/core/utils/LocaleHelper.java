@@ -3,12 +3,12 @@ package ch.ubique.backend.core.utils;
 import static java.util.Map.entry;
 import static java.util.stream.Collectors.*;
 
-import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 
 import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.lang3.LocaleUtils;
 import org.jetbrains.annotations.Contract;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -24,7 +24,7 @@ public final class LocaleHelper {
      * using {@link LocaleUtils#toLocale(Locale)}.
      */
     @Contract("null -> null; !null -> new")
-    public static Locale fromLanguageTagThenPosix(final String localeCode) {
+    public static Locale fromLanguageTagThenPosix(final @Nullable String localeCode) {
         if (null == localeCode) {
             return null;
         }

@@ -1,6 +1,6 @@
 package ch.ubique.backend.core.utils;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.validation.constraints.NotNull;
 
 import org.jetbrains.annotations.Contract;

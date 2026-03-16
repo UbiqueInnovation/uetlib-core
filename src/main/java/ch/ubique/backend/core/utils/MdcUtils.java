@@ -2,7 +2,7 @@ package ch.ubique.backend.core.utils;
 
 import com.pivovarit.function.*;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.slf4j.MDC;
 
