@@ -3,8 +3,6 @@ package ch.ubique.backend.core.io;
 import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNullElse;
 
-import org.jetbrains.annotations.Contract;
-import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +13,6 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 
-@NullMarked
 public class TempFileProvider implements FileProvider {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
