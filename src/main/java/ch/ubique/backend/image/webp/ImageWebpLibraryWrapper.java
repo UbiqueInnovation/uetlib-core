@@ -3,11 +3,6 @@ package ch.ubique.backend.image.webp;
 import ch.ubique.backend.core.process.ProcessConfig;
 import ch.ubique.backend.core.process.ProcessResult;
 import ch.ubique.backend.core.utils.ProcessUtils;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.event.Level;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,6 +10,9 @@ import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
 
 final class ImageWebpLibraryWrapper {
 
@@ -22,9 +20,9 @@ final class ImageWebpLibraryWrapper {
     private static final String CWEBP_BIN_PATH = "cwebp";
     private static final String IMG2WEBP_BIN_PATH = "img2webp";
     private static final String WEBPMUX_BIN_PATH = "webpmux";
-    private static final Duration PROCESS_TIMEOUT_FIXED = Duration.ofSeconds(30);
 
-    private ImageWebpLibraryWrapper() {}
+    private ImageWebpLibraryWrapper() {
+    }
 
     public static boolean isCWebPAvailable() {
         return isLibAvailable(CWEBP_BIN_PATH);
@@ -40,7 +38,7 @@ final class ImageWebpLibraryWrapper {
 
     public static boolean isLibAvailable(final String binPath) {
         try {
-            Runtime.getRuntime().exec(new String[] {binPath, "-version"});
+            Runtime.getRuntime().exec(new String[]{binPath, "-version"});
             return true;
         } catch (final IOException e) {
             logger.error("Failed to execute {}", binPath, e);
@@ -49,7 +47,8 @@ final class ImageWebpLibraryWrapper {
     }
 
     public static byte[] convertToWebP(
-            final Path imageFile, final Path targetFile, final int quality) {
+            final Path imageFile, final Path targetFile, final int quality,
+            final Duration processTimeout) {
         try {
             final var command =
                     List.of(
@@ -62,7 +61,7 @@ final class ImageWebpLibraryWrapper {
             final var config =
                     ProcessConfig.builder()
                             .command(command)
-                            .timeout(PROCESS_TIMEOUT_FIXED)
+                            .timeout(processTimeout)
                             .logLevelStdout(Level.DEBUG)
                             .logLevelStderr(Level.INFO);
             final var result = ProcessUtils.executeProcess(config.build());
@@ -89,7 +88,7 @@ final class ImageWebpLibraryWrapper {
         final var perImageArguments =
                 frames.stream().flatMap(frame -> perImageArguments(frame, config));
         final var command = createWebAnimationCommand(targetPath, perImageArguments);
-        return execute(command);
+        return execute(command, config.processTimeout());
     }
 
     /**
@@ -101,7 +100,8 @@ final class ImageWebpLibraryWrapper {
      * @return The byte array of the WebP animation
      */
     public static byte[] convertListToWebP(
-            final Collection<PartialImage> imageFiles, final Path tmpFileOutputPath) {
+            final Collection<PartialImage> imageFiles, final Path tmpFileOutputPath,
+            final Duration processTimeout) {
         if (imageFiles.stream().anyMatch(f -> !f.file().exists())) {
             throw new IllegalArgumentException("Not all files exist");
         }
@@ -111,7 +111,7 @@ final class ImageWebpLibraryWrapper {
                         tmpFileOutputPath,
                         imageFiles.stream().flatMap(ImageWebpLibraryWrapper::perImageArguments));
         try {
-            final var processResult = execute(command);
+            final var processResult = execute(command, processTimeout);
             if (processResult.success()) {
                 return Files.readAllBytes(tmpFileOutputPath);
             } else {
@@ -135,11 +135,12 @@ final class ImageWebpLibraryWrapper {
         return Stream.concat(baseCommand, perImageArguments).toList();
     }
 
-    private static ProcessResult execute(final List<String> command) throws IOException {
+    private static ProcessResult execute(final List<String> command, final Duration processTimeout)
+            throws IOException {
         final var config =
                 ProcessConfig.builder()
                         .command(command)
-                        .timeout(PROCESS_TIMEOUT_FIXED)
+                        .timeout(processTimeout)
                         .logLevelStdout(Level.DEBUG)
                         .logLevelStderr(Level.DEBUG)
                         .build();

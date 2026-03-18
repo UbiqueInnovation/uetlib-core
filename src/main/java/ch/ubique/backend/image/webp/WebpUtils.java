@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
 import javax.imageio.ImageIO;
@@ -20,7 +21,8 @@ public final class WebpUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(WebpUtils.class);
 
-    private WebpUtils() {}
+    private WebpUtils() {
+    }
 
     public static byte[] fromBufferedImage(final BufferedImage bufferedImage) {
         final var tempDir = createTmpDir();
@@ -59,10 +61,11 @@ public final class WebpUtils {
     /**
      * Deletes all temp files from TempFileManager that is passed in
      *
-     * @param inputWebp the input file for conversion
-     * @param xmp the value of the XMP Metadata, is being trimmed and line breaks are removed
+     * @param inputWebp       the input file for conversion
+     * @param xmp             the value of the XMP Metadata, is being trimmed and line breaks are
+     *                        removed
      * @param tempFileManager a TempFileManager to create temporary files. All directories are
-     *     cleared at the end of this method.
+     *                        cleared at the end of this method.
      * @return a byte array containing the data for the new WebP Image
      */
     private static byte[] addMetadata(
@@ -90,7 +93,8 @@ public final class WebpUtils {
 
     private static byte[] convertPngToWebp(final Path completeTmpPath, final Path outputPathWebp) {
         try {
-            return ImageWebpLibraryWrapper.convertToWebP(completeTmpPath, outputPathWebp, 100);
+            return ImageWebpLibraryWrapper.convertToWebP(completeTmpPath, outputPathWebp, 100,
+                    Duration.ofSeconds(30));
         } catch (final Exception e) {
             logger.error("Failed to convert image to WebP", e);
             return new byte[0];
@@ -150,7 +154,7 @@ public final class WebpUtils {
 
         try {
             return ImageWebpLibraryWrapper.convertListToWebP(
-                    imageList, completeTmpPath.resolve("tmp.webp"));
+                    imageList, completeTmpPath.resolve("tmp.webp"), config.processTimeout());
         } catch (final Exception e) {
             logger.error("Failed to convert images to WebP", e);
             return new byte[0];

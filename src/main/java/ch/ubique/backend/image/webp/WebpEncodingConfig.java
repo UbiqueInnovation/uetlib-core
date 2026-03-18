@@ -3,13 +3,17 @@ package ch.ubique.backend.image.webp;
 import java.time.Duration;
 
 public record WebpEncodingConfig(
-        Duration duration, WebpQuality quality, CompressionMethod method, int compressionFactor) {
+        Duration duration, WebpQuality quality, CompressionMethod method, int compressionFactor,
+        Duration processTimeout) {
+
     public static WebpEncodingConfigBuilder builder() {
         return new WebpEncodingConfigBuilder(
-                Duration.ofSeconds(1), LosslessWebp.INSTANCE, CompressionMethod.M4, 75);
+                Duration.ofSeconds(1), LosslessWebp.INSTANCE, CompressionMethod.M4, 75,
+                Duration.ofSeconds(30));
     }
 
     public static class WebpEncodingConfigBuilder {
+
         private Duration duration;
         private WebpQuality quality;
 
@@ -17,15 +21,19 @@ public record WebpEncodingConfig(
 
         private int compressionFactor;
 
+        private Duration processTimeout;
+
         private WebpEncodingConfigBuilder(
                 final Duration initialDuration,
                 final WebpQuality initialQuality,
-                CompressionMethod method,
-                int compressionFactor) {
+                final CompressionMethod method,
+                final int compressionFactor,
+                final Duration processTimeout) {
             this.duration = initialDuration;
             this.quality = initialQuality;
             this.method = method;
             this.compressionFactor = compressionFactor;
+            this.processTimeout = processTimeout;
         }
 
         public WebpEncodingConfigBuilder duration(final Duration duration) {
@@ -48,8 +56,15 @@ public record WebpEncodingConfig(
             return this;
         }
 
-        public WebpEncodingConfig build() {
-            return new WebpEncodingConfig(duration, quality, method, compressionFactor);
+        public WebpEncodingConfigBuilder processTimeout(final Duration processTimeout) {
+            this.processTimeout = processTimeout;
+            return this;
         }
+
+        public WebpEncodingConfig build() {
+            return new WebpEncodingConfig(duration, quality, method, compressionFactor,
+                    processTimeout);
+        }
+
     }
 }
