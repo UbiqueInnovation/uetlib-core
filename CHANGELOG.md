@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.4.2
+
+### Improvements
+
+- Make process timeout configurable in `WebpEncodingConfig`
+
 ## 1.4.1
 
 ### Improvements
