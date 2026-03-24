@@ -1,8 +1,10 @@
 package ch.ubique.backend.image.webp;
 
 import static ch.ubique.backend.image.webp.ImageWebpLibraryWrapper.convertListToWebP;
+import static ch.ubique.backend.image.webp.ImageWebpLibraryWrapper.convertPartialImagesToWebP;
 
 import ch.ubique.backend.core.executor.VirtualThreadUtils;
+import ch.ubique.backend.image.webp.Frame.BufferedImageFrame;
 import java.awt.image.BufferedImage;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -47,6 +49,34 @@ public class WebpWriter implements AutoCloseable {
         }
     }
 
+    public Path encodeFrames(final List<Frame> frames, final String xmpMetadata) throws IOException {
+        final var webp = encodeFrames(frames);
+        final var metadata = createMetadataFile(xmpMetadata);
+        try {
+            return createWebpWithMetadata(webp, metadata);
+        } finally {
+            deleteFile(webp);
+            deleteFile(metadata);
+        }
+    }
+
+    public Path encodeFrames(final List<Frame> frames) throws IOException {
+        final var partialImages = VirtualThreadUtils.throwingMapAll(this::toPartialImage, frames);
+        try {
+            final var webpPath = createTempFile("webp");
+            final var processResult =
+                    convertPartialImagesToWebP(partialImages, webpPath, config.processTimeout());
+            processResult.throwIfNotSuccessful();
+            return webpPath;
+        } finally {
+            for (final var partialImage : partialImages) {
+                if (partialImage.ownedFile()) {
+                    deleteFile(partialImage.file().toPath());
+                }
+            }
+        }
+    }
+
     public Path encode(final List<Path> framePaths) throws IOException {
         final var webpPath = createTempFile("webp");
         final var processResult = convertListToWebP(framePaths, config, webpPath);
@@ -68,6 +98,18 @@ public class WebpWriter implements AutoCloseable {
                 ImageWebpLibraryWrapper.createWebpWithMetadata(webp, metadata, webpWithMetadata);
         processResult.throwIfNotSuccessful();
         return webpWithMetadata;
+    }
+
+    private PartialImage toPartialImage(final Frame frame) throws IOException {
+        final var frameConfig =
+                frame.duration() != null ? config.withDuration(frame.duration()) : config;
+        return switch (frame) {
+            case BufferedImageFrame bif -> {
+                final var imagePath = write(bif.image());
+                yield new PartialImage(imagePath.toFile(), frameConfig, true);
+            }
+            case Frame.PathFrame pf -> new PartialImage(pf.path().toFile(), frameConfig, false);
+        };
     }
 
     private Path write(final BufferedImage image) throws IOException {

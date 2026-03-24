@@ -6,6 +6,10 @@ public record WebpEncodingConfig(
         Duration duration, WebpQuality quality, CompressionMethod method, int compressionFactor,
         Duration processTimeout) {
 
+    public WebpEncodingConfig withDuration(final Duration duration) {
+        return new WebpEncodingConfig(duration, quality, method, compressionFactor, processTimeout);
+    }
+
     public static WebpEncodingConfigBuilder builder() {
         return new WebpEncodingConfigBuilder(
                 Duration.ofSeconds(1), LosslessWebp.INSTANCE, CompressionMethod.M4, 75,
