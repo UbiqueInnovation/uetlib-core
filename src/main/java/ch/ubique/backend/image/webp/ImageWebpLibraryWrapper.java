@@ -92,6 +92,23 @@ final class ImageWebpLibraryWrapper {
     }
 
     /**
+     * Converts a list of partial images to a WebP animation. Each partial image carries its own
+     * {@link WebpEncodingConfig}, allowing per-frame duration and encoding settings.
+     *
+     * @param frames List of partial images with per-frame encoding configurations
+     * @param targetPath Path for the resulting WebP file
+     * @param processTimeout Timeout for the conversion process
+     */
+    public static ProcessResult convertPartialImagesToWebP(
+            final List<PartialImage> frames, final Path targetPath,
+            final Duration processTimeout) throws IOException {
+        final var perImageArguments =
+                frames.stream().flatMap(ImageWebpLibraryWrapper::perImageArguments);
+        final var command = createWebAnimationCommand(targetPath, perImageArguments);
+        return execute(command, processTimeout);
+    }
+
+    /**
      * Converts a collection of images to a WebP animation. Relies upon the fact that the directory
      * the images are in is being deleted afterward (so should not be called directly, only through
      * {@link WebpUtils}).

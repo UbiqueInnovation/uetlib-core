@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.4.4
+
+### Improvements
+
+- WebpWriter now supports creating webp animations with individual durations per frame.
+
 ## 1.4.3
 
 ### Improvements
