@@ -9,9 +9,9 @@ public enum CompressionMethod {
     M5(5),
     M6(6);
 
-    private int method;
+    private final int method;
 
-    CompressionMethod(int m) {
+    CompressionMethod(final int m) {
         this.method = m;
     }
 

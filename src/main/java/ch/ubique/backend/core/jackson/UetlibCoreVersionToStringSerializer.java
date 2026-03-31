@@ -1,20 +1,18 @@
 package ch.ubique.backend.core.jackson;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
 import com.github.zafarkhaja.semver.Version;
 
-import java.io.IOException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ValueSerializer;
 
-public class VersionToStringSerializer extends JsonSerializer<Version> {
+public class UetlibCoreVersionToStringSerializer extends ValueSerializer<Version> {
 
     @Override
     public void serialize(
             final Version version,
             final JsonGenerator jsonGenerator,
-            final SerializerProvider serializerProvider)
-            throws IOException {
+            final SerializationContext serializerProvider) {
         if (version != null) {
             jsonGenerator.writeString(version.toString());
         } else {

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.ZonedDateTime;
 
-class HeaderUtilityTest {
+class HttpHeaderUtilsTest {
 
     @Test
     void testFormatHttpHeaderDate() {

@@ -1,17 +1,18 @@
 package ch.ubique.backend.core.utils;
 
+import static java.util.Objects.requireNonNullElse;
+
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Objects;
 
+@SuppressWarnings("unused")
 public final class StringFormattingUtils {
 
     private StringFormattingUtils() {}
 
     public static String formatDuration(final Instant from, final Instant to) {
-        return millisToString(
-                Duration.between(from, Objects.requireNonNullElse(to, Instant.now())));
+        return millisToString(Duration.between(from, requireNonNullElse(to, Instant.now())));
     }
 
     public static String millisToString(final Duration duration) {

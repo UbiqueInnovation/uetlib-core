@@ -8,6 +8,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 
+/**
+ * @deprecated since 2.1.0, use {@link DataAndFileProvider} instead
+ */
+@Deprecated(since = "2.1.0")
 public record DataAndInput<T>(@NotNull T data, @NotNull Collection<ByteFile> inputFiles) {
 
     public DataAndInput(@NotNull final T data) {

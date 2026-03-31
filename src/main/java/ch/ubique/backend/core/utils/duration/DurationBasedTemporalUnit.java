@@ -14,9 +14,10 @@ public final class DurationBasedTemporalUnit implements TemporalUnit {
     private final Duration duration;
 
     private DurationBasedTemporalUnit(final Duration duration) {
-        if (duration.isZero() || duration.isNegative())
+        if (duration.isZero() || duration.isNegative()) {
             throw new IllegalArgumentException(
                     "Duration unit may not have a zero or negative duration.");
+        }
         this.duration = duration;
     }
 
@@ -86,7 +87,9 @@ public final class DurationBasedTemporalUnit implements TemporalUnit {
 
     @Override
     public boolean equals(final Object o) {
-        if (this == o) return true;
+        if (this == o) {
+            return true;
+        }
         if (!(o instanceof final DurationBasedTemporalUnit that)) {
             return false;
         }
