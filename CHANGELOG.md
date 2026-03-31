@@ -9,6 +9,7 @@
       as `deCh`
     - `PASCAL_CASE` to serialize keys in pascal case. E.g. `Locale.of("de", "CH")`
       as `DeCh`
+- New `LocalizedValue` deserialization, symmetric to the serialization options.
 
 ## 1.4.4
 
