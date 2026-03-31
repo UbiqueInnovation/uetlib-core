@@ -5,16 +5,14 @@ import static com.google.common.base.CaseFormat.LOWER_HYPHEN;
 import static java.util.Map.Entry;
 import static java.util.stream.Collectors.*;
 
-import ch.ubique.backend.core.localized.serializer.LocalizedValueSerializer;
 import ch.ubique.backend.core.localized.deserializer.LocalizedValueDeserializer;
+import ch.ubique.backend.core.localized.serializer.LocalizedValueSerializer;
 import ch.ubique.backend.core.utils.CollectionUtils;
 import ch.ubique.backend.core.utils.LocaleHelper;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.CaseFormat;
 
 import jakarta.annotation.Nullable;
@@ -26,6 +24,9 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 import java.io.Serializable;
 import java.util.*;
