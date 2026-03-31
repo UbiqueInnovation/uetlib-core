@@ -8,16 +8,15 @@ import ch.ubique.backend.core.localized.annotation.JsonLocalizedValue.Serializat
 import ch.ubique.backend.core.localized.serializer.LocalizedValueSerializer;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.BeanProperty;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.util.NameTransformer;
 import com.google.common.base.CaseFormat;
 
-import java.io.IOException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.BeanProperty;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.ValueDeserializer;
+import tools.jackson.databind.node.ObjectNode;
+import tools.jackson.databind.util.NameTransformer;
+
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Locale;
@@ -110,8 +109,7 @@ import java.util.Locale;
  * </ul>
  */
 public class LocalizedValueDeserializer
-        extends JsonDeserializer<LocalizedValue<? extends Serializable>>
-        implements ContextualDeserializer {
+        extends ValueDeserializer<LocalizedValue<? extends Serializable>> {
 
     private final JsonUnwrapped jsonUnwrapped;
     private final JsonLocalizedValue jsonLocalizedValue;
@@ -128,8 +126,8 @@ public class LocalizedValueDeserializer
 
     @Override
     public LocalizedValue<? extends Serializable> deserialize(
-            final JsonParser parser, final DeserializationContext context) throws IOException {
-        final var node = parser.getCodec().readTree(parser);
+            final JsonParser parser, final DeserializationContext context) {
+        final var node = parser.objectReadContext().readTree(parser);
         if (!(node instanceof final ObjectNode objectNode)) {
             return (LocalizedValue<? extends Serializable>)
                     context.handleUnexpectedToken(LocalizedValue.class, parser);
@@ -155,7 +153,7 @@ public class LocalizedValueDeserializer
                 continue;
             }
 
-            final var value = parser.getCodec().treeToValue(entry.getValue(), Object.class);
+            final var value = context.readTreeAsValue(entry.getValue(), Object.class);
             if (value instanceof final Serializable serializableValue) {
                 values.put(normalizedKey, serializableValue);
             }
@@ -165,7 +163,7 @@ public class LocalizedValueDeserializer
     }
 
     @Override
-    public JsonDeserializer<?> createContextual(
+    public ValueDeserializer<?> createContextual(
             final DeserializationContext context, final BeanProperty property) {
         if (property == null) {
             return new LocalizedValueDeserializer();
@@ -178,8 +176,8 @@ public class LocalizedValueDeserializer
     }
 
     @Override
-    public JsonDeserializer<LocalizedValue<? extends Serializable>> unwrappingDeserializer(
-            final NameTransformer transformer) {
+    public ValueDeserializer<LocalizedValue<? extends Serializable>> unwrappingDeserializer(
+            final DeserializationContext ctxt, final NameTransformer unwrapper) {
         return new LocalizedValueDeserializer(jsonUnwrapped, jsonLocalizedValue);
     }
 

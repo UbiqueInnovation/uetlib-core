@@ -10,15 +10,14 @@ import ch.ubique.backend.core.localized.annotation.JsonLocalizedValue.Serializat
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.json.JsonMapper;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.SerializationFeature;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.Locale;
 import java.util.Map;
@@ -26,10 +25,7 @@ import java.util.Map;
 class LocalizedValueJacksonTest {
 
     private final ObjectMapper objectMapper =
-            JsonMapper.builder()
-                    .enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)
-                    .enable(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS)
-                    .build();
+            JsonMapper.builder().enable(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS).build();
 
     @ParameterizedTest
     @CsvSource(
@@ -39,8 +35,7 @@ class LocalizedValueJacksonTest {
                 "EN|{\"en\":\"Test\"}"
             },
             delimiter = '|')
-    void localizedValueSerialization(final String variant, final String expectedJson)
-            throws JsonProcessingException {
+    void localizedValueSerialization(final String variant, final String expectedJson) {
         assertEquals(expectedJson, objectMapper.writeValueAsString(localizedValueVariant(variant)));
     }
 
@@ -52,8 +47,7 @@ class LocalizedValueJacksonTest {
                 "{\"ZH-CN\":\"Literal\"}|zh-CN"
             },
             delimiter = '|')
-    void localizedValueDeserialization(final String inputJson, final String expectedLanguageTag)
-            throws JsonProcessingException {
+    void localizedValueDeserialization(final String inputJson, final String expectedLanguageTag) {
         final var localizedValue = objectMapper.readValue(inputJson, LocalizedValue.class);
         assertEquals(
                 Map.of(expectedLanguageTag, "Literal"), localizedValue.toMapWithLanguageTagKeys());
@@ -67,8 +61,7 @@ class LocalizedValueJacksonTest {
                 "UPPERCASE|{\"ZH-CN\":\"Literal\"}"
             },
             delimiter = '|')
-    void mapKeySerializationVariants(final String keyStyle, final String expectedJson)
-            throws JsonProcessingException {
+    void mapKeySerializationVariants(final String keyStyle, final String expectedJson) {
         final var lv =
                 LocalizedValue.stringBuilder().fullLocale().add("Literal", Locale.CHINA).build();
         assertEquals(
@@ -76,7 +69,7 @@ class LocalizedValueJacksonTest {
     }
 
     @Test
-    void untouchedSerialization() throws JsonProcessingException {
+    void untouchedSerialization() {
         final var untouched =
                 new Untouched(LocalizedValue.stringBuilder().de("value_de").en("value_en").build());
         assertEquals(
@@ -94,8 +87,7 @@ class LocalizedValueJacksonTest {
                 "UnwrappedSerialization5|{\"name\":{\"de\":\"value_de\",\"en\":\"value_en\"},\"pre:de:suf\":\"value_de\",\"pre:en:suf\":\"value_en\"}"
             },
             delimiter = '|')
-    void unwrappedSerialization(final String className, final String expectedJson)
-            throws JsonProcessingException {
+    void unwrappedSerialization(final String className, final String expectedJson) {
         assertEquals(
                 expectedJson,
                 objectMapper.writeValueAsString(unwrappedSerializationVariant(className)));
@@ -110,8 +102,7 @@ class LocalizedValueJacksonTest {
                 "Unwrapped4|{\"pre:de:suf\":\"value_de\",\"pre:en:suf\":\"value_en\"}"
             },
             delimiter = '|')
-    void unwrappedDeserialization(final String className, final String inputJson)
-            throws JsonProcessingException {
+    void unwrappedDeserialization(final String className, final String inputJson) {
         assertEquals(
                 LocalizedValue.stringBuilder().de("value_de").en("value_en").build(),
                 unwrappedDeserializationVariant(className, inputJson));
@@ -127,8 +118,7 @@ class LocalizedValueJacksonTest {
                 "KeySerialization5|{\"name\":{\"enCh\":\"value_enCh\",\"deCh\":\"value_deCh\"}}"
             },
             delimiter = '|')
-    void keySerializationMethodSerialization(final String className, final String expectedJson)
-            throws JsonProcessingException {
+    void keySerializationMethodSerialization(final String className, final String expectedJson) {
         assertEquals(
                 expectedJson, objectMapper.writeValueAsString(keySerializationVariant(className)));
     }
@@ -143,8 +133,7 @@ class LocalizedValueJacksonTest {
                 "KeySerialization5|{\"name\":{\"enCh\":\"value_enCh\",\"deCh\":\"value_deCh\"}}"
             },
             delimiter = '|')
-    void keySerializationMethodDeserialization(final String className, final String inputJson)
-            throws JsonProcessingException {
+    void keySerializationMethodDeserialization(final String className, final String inputJson) {
         assertEquals(testLocalizedValue(), keyDeserializationVariant(className, inputJson));
     }
 
@@ -156,8 +145,7 @@ class LocalizedValueJacksonTest {
                 "CombinedSerialization1|{\"name\":{\"en-CH\":\"value_enCh\",\"de-CH\":\"value_deCh\"},\"pre:EN-CH:suf\":\"value_enCh\",\"pre:DE-CH:suf\":\"value_deCh\"}"
             },
             delimiter = '|')
-    void combinedSerialization(final String className, final String expectedJson)
-            throws JsonProcessingException {
+    void combinedSerialization(final String className, final String expectedJson) {
         assertEquals(
                 expectedJson,
                 objectMapper.writeValueAsString(combinedSerializationVariant(className)));
@@ -170,8 +158,7 @@ class LocalizedValueJacksonTest {
                 "Combined2|{\"nameDeCh\":\"value_deCh\",\"nameEnCh\":\"value_enCh\"}"
             },
             delimiter = '|')
-    void combinedDeserialization(final String className, final String inputJson)
-            throws JsonProcessingException {
+    void combinedDeserialization(final String className, final String inputJson) {
         assertEquals(testLocalizedValue(), combinedDeserializationVariant(className, inputJson));
     }
 
@@ -216,7 +203,7 @@ class LocalizedValueJacksonTest {
     }
 
     private LocalizedValue<String> unwrappedDeserializationVariant(
-            final String className, final String inputJson) throws JsonProcessingException {
+            final String className, final String inputJson) {
         return switch (className) {
             case "Unwrapped1" -> objectMapper.readValue(inputJson, Unwrapped1.class).name();
             case "Unwrapped2" -> objectMapper.readValue(inputJson, Unwrapped2.class).name();
@@ -243,7 +230,7 @@ class LocalizedValueJacksonTest {
     }
 
     private LocalizedValue<String> keyDeserializationVariant(
-            final String className, final String inputJson) throws JsonProcessingException {
+            final String className, final String inputJson) {
         return switch (className) {
             case "KeySerialization1" ->
                     objectMapper.readValue(inputJson, KeySerialization1.class).name;
@@ -272,7 +259,7 @@ class LocalizedValueJacksonTest {
     }
 
     private LocalizedValue<String> combinedDeserializationVariant(
-            final String className, final String inputJson) throws JsonProcessingException {
+            final String className, final String inputJson) {
         return switch (className) {
             case "Combined1" -> objectMapper.readValue(inputJson, Combined1.class).name();
             case "Combined2" -> objectMapper.readValue(inputJson, Combined2.class).name();
