@@ -61,7 +61,6 @@ public class LocalizedValueSerializer
         final Map<String, Object> map =
                 switch (keySerializationMethod) {
                     case DEFAULT -> localizedValue.toMapWithLanguageTagKeys();
-                    case POSIX -> localizedValue.toMapWithPosixLocaleKeys();
                     case UPPERCASE -> localizedValue.toMapWithUppercaseKeys();
                     case CAMEL_CASE ->
                             localizedValue.toMapWithCaseFormatKeys(CaseFormat.LOWER_CAMEL);
