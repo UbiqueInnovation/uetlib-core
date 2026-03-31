@@ -6,12 +6,14 @@ import static java.util.Map.Entry;
 import static java.util.stream.Collectors.*;
 
 import ch.ubique.backend.core.localized.serializer.LocalizedValueSerializer;
+import ch.ubique.backend.core.localized.serializer.LocalizedValueDeserializer;
 import ch.ubique.backend.core.utils.CollectionUtils;
 import ch.ubique.backend.core.utils.LocaleHelper;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.CaseFormat;
 
@@ -36,6 +38,7 @@ import java.util.*;
  * @param <T> the value type of the internal map
  */
 @JsonSerialize(using = LocalizedValueSerializer.class)
+@JsonDeserialize(using = LocalizedValueDeserializer.class)
 public class LocalizedValue<T extends Serializable> {
 
     @NotEmpty private final Map<Locale, T> values;
