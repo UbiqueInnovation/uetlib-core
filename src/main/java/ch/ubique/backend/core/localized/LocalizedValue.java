@@ -1,19 +1,16 @@
 package ch.ubique.backend.core.localized;
 
-import static com.google.common.base.CaseFormat.LOWER_HYPHEN;
-
 import static java.util.Map.Entry;
 import static java.util.stream.Collectors.*;
 
-import ch.ubique.backend.core.localized.deserializer.LocalizedValueDeserializer;
-import ch.ubique.backend.core.localized.serializer.LocalizedValueSerializer;
+import ch.ubique.backend.core.localized.jackson.LocalizedValueDeserializer;
+import ch.ubique.backend.core.localized.jackson.LocalizedValueSerializer;
 import ch.ubique.backend.core.utils.CollectionUtils;
 import ch.ubique.backend.core.utils.LocaleHelper;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.google.common.base.CaseFormat;
 
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotEmpty;
@@ -500,71 +497,6 @@ public class LocalizedValue<T extends Serializable> {
     public Map<String, T> toMapWithLanguageTagKeys() {
         return values.entrySet().stream()
                 .collect(toMap(entry -> entry.getKey().toLanguageTag(), Entry::getValue));
-    }
-
-    /**
-     * alternative serialization method using Posix Locales.
-     *
-     * <ul>
-     *   <li>{@code Locale.of("en")} would be serialized to {@code "en"}
-     *   <li>{@code Locale.of("de", "CH")} would be serialized to {@code "de_CH"}
-     * </ul>
-     */
-    @NotEmpty
-    public Map<String, T> toMapWithPosixLocaleKeys() {
-        return values.entrySet().stream()
-                .collect(toMap(entry -> entry.getKey().toString(), Entry::getValue));
-    }
-
-    /**
-     * alternative serialization method using upper case keys.
-     *
-     * <ul>
-     *   <li>{@code Locale.of("en")} would be serialized to {@code "EN"}
-     *   <li>{@code Locale.of("de", "CH")} would be serialized to {@code "DE-CH"}
-     * </ul>
-     */
-    @NotEmpty
-    public Map<String, T> toMapWithUppercaseKeys() {
-        return values.entrySet().stream()
-                .collect(
-                        toMap(
-                                entry -> entry.getKey().toLanguageTag().toUpperCase(),
-                                Entry::getValue));
-    }
-
-    /**
-     * alternative serialization method using the given case format after lowercasing the locale.
-     * Some examples:
-     *
-     * <ul>
-     *   <li>{@link CaseFormat#UPPER_UNDERSCORE}:
-     *       <ul>
-     *         <li>{@code Locale.of("en")} would be serialized to {@code "EN"}
-     *         <li>{@code Locale.of("de", "CH")} would be serialized to {@code "DE_CH"}
-     *       </ul>
-     *   <li>{@link CaseFormat#UPPER_CAMEL}:
-     *       <ul>
-     *         <li>{@code Locale.of("en")} would be serialized to {@code "En"}
-     *         <li>{@code Locale.of("de", "CH")} would be serialized to {@code "DeCh"}
-     *       </ul>
-     *   <li>{@link CaseFormat#LOWER_CAMEL}:
-     *       <ul>
-     *         <li>{@code Locale.of("en")} would be serialized to {@code "en"}
-     *         <li>{@code Locale.of("de", "CH")} would be serialized to {@code "deCh"}
-     *       </ul>
-     * </ul>
-     */
-    @NotEmpty
-    public Map<String, T> toMapWithCaseFormatKeys(final CaseFormat caseFormatTo) {
-        return values.entrySet().stream()
-                .collect(
-                        toMap(
-                                entry ->
-                                        LOWER_HYPHEN.to(
-                                                caseFormatTo,
-                                                entry.getKey().toLanguageTag().toLowerCase()),
-                                Entry::getValue));
     }
 
     @Override

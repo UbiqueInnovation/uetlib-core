@@ -64,21 +64,13 @@ class LocalizedValueJacksonTest {
                 Map.of(expectedLanguageTag, "Literal"), localizedValue.toMapWithLanguageTagKeys());
     }
 
-    @ParameterizedTest
-    @CsvSource(
-            value = {
-                "LANGUAGE_TAG|{\"zh-CN\":\"Literal\"}",
-                "POSIX|{\"zh_CN\":\"Literal\"}",
-                "UPPERCASE|{\"ZH-CN\":\"Literal\"}"
-            },
-            delimiter = '|')
-    void mapKeySerializationVariants(final String keyStyle, final String expectedJson)
-            throws JSONException {
+    @Test
+    void mapKeySerializationVariants() throws JSONException {
         final var lv =
                 LocalizedValue.stringBuilder().fullLocale().add("Literal", Locale.CHINA).build();
         JSONAssert.assertEquals(
-                expectedJson,
-                objectMapper.writeValueAsString(serializeWithKeyStyle(lv, keyStyle)),
+                "{\"zh-CN\":\"Literal\"}",
+                objectMapper.writeValueAsString(lv.toMapWithLanguageTagKeys()),
                 STRICT);
     }
 
@@ -194,17 +186,6 @@ class LocalizedValueJacksonTest {
             default ->
                     throw new IllegalArgumentException(
                             "Unknown variant for localizedValueVariant: " + variant);
-        };
-    }
-
-    private Object serializeWithKeyStyle(final LocalizedValue<String> value, final String style) {
-        return switch (style) {
-            case "LANGUAGE_TAG" -> value;
-            case "POSIX" -> value.toMapWithPosixLocaleKeys();
-            case "UPPERCASE" -> value.toMapWithUppercaseKeys();
-            default ->
-                    throw new IllegalArgumentException(
-                            "Unknown style for serializeWithKeyStyle: " + style);
         };
     }
 
