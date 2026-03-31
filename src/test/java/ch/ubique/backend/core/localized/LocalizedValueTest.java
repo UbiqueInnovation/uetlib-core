@@ -610,46 +610,57 @@ class LocalizedValueTest {
         final var keySerialization1 =
                 new KeySerialization1(
                         LocalizedValue.stringBuilder()
-                                .add("value_de", GERMAN_SWITZERLAND)
-                                .add("value_en", ENGLISH_SWITZERLAND)
+                                .add("value_deCh", GERMAN_SWITZERLAND)
+                                .add("value_enCh", ENGLISH_SWITZERLAND)
                                 .fullLocale()
                                 .build());
         assertEquals(
-                "{\"name\":{\"en-CH\":\"value_en\",\"de-CH\":\"value_de\"}}",
+                "{\"name\":{\"en-CH\":\"value_enCh\",\"de-CH\":\"value_deCh\"}}",
                 objectMapper.writeValueAsString(keySerialization1));
 
         final var keySerialization2 =
                 new KeySerialization2(
                         LocalizedValue.stringBuilder()
-                                .add("value_de", GERMAN_SWITZERLAND)
-                                .add("value_en", ENGLISH_SWITZERLAND)
+                                .add("value_deCh", GERMAN_SWITZERLAND)
+                                .add("value_enCh", ENGLISH_SWITZERLAND)
                                 .fullLocale()
                                 .build());
         assertEquals(
-                "{\"name\":{\"de_CH\":\"value_de\",\"en_CH\":\"value_en\"}}",
+                "{\"name\":{\"de_CH\":\"value_deCh\",\"en_CH\":\"value_enCh\"}}",
                 objectMapper.writeValueAsString(keySerialization2));
 
         final var keySerialization3 =
                 new KeySerialization3(
                         LocalizedValue.stringBuilder()
-                                .add("value_de", GERMAN_SWITZERLAND)
-                                .add("value_en", ENGLISH_SWITZERLAND)
+                                .add("value_deCh", GERMAN_SWITZERLAND)
+                                .add("value_enCh", ENGLISH_SWITZERLAND)
                                 .fullLocale()
                                 .build());
         assertEquals(
-                "{\"name\":{\"EN-CH\":\"value_en\",\"DE-CH\":\"value_de\"}}",
+                "{\"name\":{\"EN-CH\":\"value_enCh\",\"DE-CH\":\"value_deCh\"}}",
                 objectMapper.writeValueAsString(keySerialization3));
 
         final var keySerialization4 =
                 new KeySerialization4(
                         LocalizedValue.stringBuilder()
-                                .add("value_de", GERMAN_SWITZERLAND)
-                                .add("value_en", ENGLISH_SWITZERLAND)
+                                .add("value_deCh", GERMAN_SWITZERLAND)
+                                .add("value_enCh", ENGLISH_SWITZERLAND)
                                 .fullLocale()
                                 .build());
         assertEquals(
-                "{\"name\":{\"en-CH\":\"value_en\",\"de-CH\":\"value_de\"},\"nameMethod\":{\"EN-CH\":\"value_en\",\"DE-CH\":\"value_de\"}}",
+                "{\"name\":{\"en-CH\":\"value_enCh\",\"de-CH\":\"value_deCh\"},\"nameMethod\":{\"EN-CH\":\"value_enCh\",\"DE-CH\":\"value_deCh\"}}",
                 objectMapper.writeValueAsString(keySerialization4));
+
+        final var keySerialization5 =
+                new KeySerialization5(
+                        LocalizedValue.stringBuilder()
+                                .add("value_deCh", GERMAN_SWITZERLAND)
+                                .add("value_enCh", ENGLISH_SWITZERLAND)
+                                .fullLocale()
+                                .build());
+        assertEquals(
+                "{\"name\":{\"enCh\":\"value_enCh\",\"deCh\":\"value_deCh\"}}",
+                objectMapper.writeValueAsString(keySerialization5));
     }
 
     @Test
@@ -657,24 +668,35 @@ class LocalizedValueTest {
         final var combined1 =
                 new Combined1(
                         LocalizedValue.stringBuilder()
-                                .add("value_de", GERMAN_SWITZERLAND)
-                                .add("value_en", ENGLISH_SWITZERLAND)
+                                .add("value_deCh", GERMAN_SWITZERLAND)
+                                .add("value_enCh", ENGLISH_SWITZERLAND)
                                 .fullLocale()
                                 .build());
         assertEquals(
-                "{\"pre:EN-CH:suf\":\"value_en\",\"pre:DE-CH:suf\":\"value_de\"}",
+                "{\"pre:EN-CH:suf\":\"value_enCh\",\"pre:DE-CH:suf\":\"value_deCh\"}",
                 objectMapper.writeValueAsString(combined1));
 
         final var combined2 =
                 new Combined2(
                         LocalizedValue.stringBuilder()
-                                .add("value_de", GERMAN_SWITZERLAND)
-                                .add("value_en", ENGLISH_SWITZERLAND)
+                                .add("value_deCh", GERMAN_SWITZERLAND)
+                                .add("value_enCh", ENGLISH_SWITZERLAND)
                                 .fullLocale()
                                 .build());
         assertEquals(
-                "{\"name\":{\"en-CH\":\"value_en\",\"de-CH\":\"value_de\"},\"pre:EN-CH:suf\":\"value_en\",\"pre:DE-CH:suf\":\"value_de\"}",
+                "{\"name\":{\"en-CH\":\"value_enCh\",\"de-CH\":\"value_deCh\"},\"pre:EN-CH:suf\":\"value_enCh\",\"pre:DE-CH:suf\":\"value_deCh\"}",
                 objectMapper.writeValueAsString(combined2));
+
+        final var combined3 =
+                new Combined3(
+                        LocalizedValue.stringBuilder()
+                                .add("value_deCh", GERMAN_SWITZERLAND)
+                                .add("value_enCh", ENGLISH_SWITZERLAND)
+                                .fullLocale()
+                                .build());
+        assertEquals(
+                "{\"nameDeCh\":\"value_deCh\",\"nameEnCh\":\"value_enCh\"}",
+                objectMapper.writeValueAsString(combined3));
     }
 
     record Untouched(LocalizedValue<String> name) {}
@@ -716,6 +738,10 @@ class LocalizedValueTest {
         }
     }
 
+    record KeySerialization5(
+            @JsonLocalizedValue(keySerialization = SerializationMethod.CAMEL_CASE)
+            LocalizedValue<String> name) {}
+
     record Combined1(
             @JsonUnwrapped(prefix = "pre:", suffix = ":suf")
                     @JsonLocalizedValue(keySerialization = SerializationMethod.UPPERCASE)
@@ -730,4 +756,9 @@ class LocalizedValueTest {
             return name;
         }
     }
+
+    record Combined3(
+            @JsonUnwrapped(prefix = "name")
+                    @JsonLocalizedValue(keySerialization = SerializationMethod.PASCAL_CASE)
+                    LocalizedValue<String> name) {}
 }

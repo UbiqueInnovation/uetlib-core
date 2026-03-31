@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.ContextualSerializer;
+import com.google.common.base.CaseFormat;
 import com.pivovarit.function.ThrowingBiConsumer;
 
 import java.io.IOException;
@@ -23,6 +24,7 @@ import java.util.function.UnaryOperator;
  * annotation @{@link JsonLocalizedValue#keySerialization()}.}
  *
  * <p>The following examples show how to use the annotation on a field/method:
+ *
  * {@snippet lang = "java":
  * record Unwrapped(@JsonUnwrapped(suffix = ":suf") LocalizedValue<String> name) {}
  *
@@ -37,12 +39,15 @@ import java.util.function.UnaryOperator;
  * }
  *
  * <p>These are serialized to the following JSON:
+ *
  * {@snippet lang = "json":
  * {"de:suf":"value_de","en:suf":"value_en"}
  * }
+ *
  * {@snippet lang = "json":
  * {"name":{"de_CH":"value_de","en_CH":"value_en"}}
  * }
+ *
  * {@snippet lang = "json":
  * {"pre:EN-CH:suf":"value_en","pre:DE-CH:suf":"value_de"}
  * }
@@ -84,6 +89,10 @@ public class LocalizedValueSerializer extends JsonSerializer<LocalizedValue<? ex
                     case DEFAULT -> localizedValue.toMapWithLanguageTagKeys();
                     case POSIX -> localizedValue.toMapWithPosixLocaleKeys();
                     case UPPERCASE -> localizedValue.toMapWithUppercaseKeys();
+                    case CAMEL_CASE ->
+                            localizedValue.toMapWithCaseFormatKeys(CaseFormat.LOWER_CAMEL);
+                    case PASCAL_CASE ->
+                            localizedValue.toMapWithCaseFormatKeys(CaseFormat.UPPER_CAMEL);
                 };
 
         final UnaryOperator<String> keyMapper;
@@ -121,8 +130,8 @@ public class LocalizedValueSerializer extends JsonSerializer<LocalizedValue<? ex
             return new LocalizedValueSerializer();
         }
 
-        final var jsonLocalizedValue = property.getAnnotation(JsonLocalizedValue.class);
-        final var jsonUnwrapped = property.getAnnotation(JsonUnwrapped.class);
-        return new LocalizedValueSerializer(jsonUnwrapped, jsonLocalizedValue);
+        final var jsonLocalizedValueAnnotation = property.getAnnotation(JsonLocalizedValue.class);
+        final var jsonUnwrappedAnnotation = property.getAnnotation(JsonUnwrapped.class);
+        return new LocalizedValueSerializer(jsonUnwrappedAnnotation, jsonLocalizedValueAnnotation);
     }
 }
