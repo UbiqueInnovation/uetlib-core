@@ -4,6 +4,7 @@ import static ch.ubique.backend.core.localized.AdditionalLocales.ENGLISH_SWITZER
 import static ch.ubique.backend.core.localized.AdditionalLocales.GERMAN_SWITZERLAND;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.skyscreamer.jsonassert.JSONCompareMode.STRICT;
 
 import ch.ubique.backend.core.localized.annotation.JsonLocalizedValue;
 import ch.ubique.backend.core.localized.annotation.JsonLocalizedValue.SerializationMethod;
@@ -11,10 +12,13 @@ import ch.ubique.backend.core.localized.annotation.JsonLocalizedValue.Serializat
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
+import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.skyscreamer.jsonassert.JSONAssert;
 
+import tools.jackson.databind.MapperFeature;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.SerializationFeature;
 import tools.jackson.databind.json.JsonMapper;
@@ -25,7 +29,10 @@ import java.util.Map;
 class LocalizedValueJacksonTest {
 
     private final ObjectMapper objectMapper =
-            JsonMapper.builder().enable(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS).build();
+            JsonMapper.builder()
+                    .enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)
+                    .enable(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS)
+                    .build();
 
     @ParameterizedTest
     @CsvSource(
@@ -35,8 +42,12 @@ class LocalizedValueJacksonTest {
                 "EN|{\"en\":\"Test\"}"
             },
             delimiter = '|')
-    void localizedValueSerialization(final String variant, final String expectedJson) {
-        assertEquals(expectedJson, objectMapper.writeValueAsString(localizedValueVariant(variant)));
+    void localizedValueSerialization(final String variant, final String expectedJson)
+            throws JSONException {
+        JSONAssert.assertEquals(
+                expectedJson,
+                objectMapper.writeValueAsString(localizedValueVariant(variant)),
+                STRICT);
     }
 
     @ParameterizedTest
@@ -61,20 +72,24 @@ class LocalizedValueJacksonTest {
                 "UPPERCASE|{\"ZH-CN\":\"Literal\"}"
             },
             delimiter = '|')
-    void mapKeySerializationVariants(final String keyStyle, final String expectedJson) {
+    void mapKeySerializationVariants(final String keyStyle, final String expectedJson)
+            throws JSONException {
         final var lv =
                 LocalizedValue.stringBuilder().fullLocale().add("Literal", Locale.CHINA).build();
-        assertEquals(
-                expectedJson, objectMapper.writeValueAsString(serializeWithKeyStyle(lv, keyStyle)));
+        JSONAssert.assertEquals(
+                expectedJson,
+                objectMapper.writeValueAsString(serializeWithKeyStyle(lv, keyStyle)),
+                STRICT);
     }
 
     @Test
-    void untouchedSerialization() {
+    void untouchedSerialization() throws JSONException {
         final var untouched =
                 new Untouched(LocalizedValue.stringBuilder().de("value_de").en("value_en").build());
-        assertEquals(
+        JSONAssert.assertEquals(
                 "{\"name\":{\"de\":\"value_de\",\"en\":\"value_en\"}}",
-                objectMapper.writeValueAsString(untouched));
+                objectMapper.writeValueAsString(untouched),
+                STRICT);
     }
 
     @ParameterizedTest
@@ -87,10 +102,12 @@ class LocalizedValueJacksonTest {
                 "UnwrappedSerialization5|{\"name\":{\"de\":\"value_de\",\"en\":\"value_en\"},\"pre:de:suf\":\"value_de\",\"pre:en:suf\":\"value_en\"}"
             },
             delimiter = '|')
-    void unwrappedSerialization(final String className, final String expectedJson) {
-        assertEquals(
+    void unwrappedSerialization(final String className, final String expectedJson)
+            throws JSONException {
+        JSONAssert.assertEquals(
                 expectedJson,
-                objectMapper.writeValueAsString(unwrappedSerializationVariant(className)));
+                objectMapper.writeValueAsString(unwrappedSerializationVariant(className)),
+                STRICT);
     }
 
     @ParameterizedTest
@@ -112,25 +129,26 @@ class LocalizedValueJacksonTest {
     @CsvSource(
             value = {
                 "KeySerialization1|{\"name\":{\"en-CH\":\"value_enCh\",\"de-CH\":\"value_deCh\"}}",
-                "KeySerialization2|{\"name\":{\"de_CH\":\"value_deCh\",\"en_CH\":\"value_enCh\"}}",
-                "KeySerialization3|{\"name\":{\"EN-CH\":\"value_enCh\",\"DE-CH\":\"value_deCh\"}}",
-                "KeySerialization4|{\"name\":{\"en-CH\":\"value_enCh\",\"de-CH\":\"value_deCh\"},\"nameMethod\":{\"EN-CH\":\"value_enCh\",\"DE-CH\":\"value_deCh\"}}",
-                "KeySerialization5|{\"name\":{\"enCh\":\"value_enCh\",\"deCh\":\"value_deCh\"}}"
+                "KeySerialization2|{\"name\":{\"EN-CH\":\"value_enCh\",\"DE-CH\":\"value_deCh\"}}",
+                "KeySerialization3|{\"name\":{\"en-CH\":\"value_enCh\",\"de-CH\":\"value_deCh\"},\"nameMethod\":{\"EN-CH\":\"value_enCh\",\"DE-CH\":\"value_deCh\"}}",
+                "KeySerialization4|{\"name\":{\"enCh\":\"value_enCh\",\"deCh\":\"value_deCh\"}}"
             },
             delimiter = '|')
-    void keySerializationMethodSerialization(final String className, final String expectedJson) {
-        assertEquals(
-                expectedJson, objectMapper.writeValueAsString(keySerializationVariant(className)));
+    void keySerializationMethodSerialization(final String className, final String expectedJson)
+            throws JSONException {
+        JSONAssert.assertEquals(
+                expectedJson,
+                objectMapper.writeValueAsString(keySerializationVariant(className)),
+                STRICT);
     }
 
     @ParameterizedTest
     @CsvSource(
             value = {
                 "KeySerialization1|{\"name\":{\"en-CH\":\"value_enCh\",\"de-CH\":\"value_deCh\"}}",
-                "KeySerialization2|{\"name\":{\"de_CH\":\"value_deCh\",\"en_CH\":\"value_enCh\"}}",
-                "KeySerialization3|{\"name\":{\"EN-CH\":\"value_enCh\",\"DE-CH\":\"value_deCh\"}}",
-                "KeySerialization4|{\"name\":{\"en-CH\":\"value_enCh\",\"de-CH\":\"value_deCh\"}}",
-                "KeySerialization5|{\"name\":{\"enCh\":\"value_enCh\",\"deCh\":\"value_deCh\"}}"
+                "KeySerialization2|{\"name\":{\"EN-CH\":\"value_enCh\",\"DE-CH\":\"value_deCh\"}}",
+                "KeySerialization3|{\"name\":{\"en-CH\":\"value_enCh\",\"de-CH\":\"value_deCh\"}}",
+                "KeySerialization4|{\"name\":{\"enCh\":\"value_enCh\",\"deCh\":\"value_deCh\"}}"
             },
             delimiter = '|')
     void keySerializationMethodDeserialization(final String className, final String inputJson) {
@@ -145,10 +163,12 @@ class LocalizedValueJacksonTest {
                 "CombinedSerialization1|{\"name\":{\"en-CH\":\"value_enCh\",\"de-CH\":\"value_deCh\"},\"pre:EN-CH:suf\":\"value_enCh\",\"pre:DE-CH:suf\":\"value_deCh\"}"
             },
             delimiter = '|')
-    void combinedSerialization(final String className, final String expectedJson) {
-        assertEquals(
+    void combinedSerialization(final String className, final String expectedJson)
+            throws JSONException {
+        JSONAssert.assertEquals(
                 expectedJson,
-                objectMapper.writeValueAsString(combinedSerializationVariant(className)));
+                objectMapper.writeValueAsString(combinedSerializationVariant(className)),
+                STRICT);
     }
 
     @ParameterizedTest
@@ -222,7 +242,6 @@ class LocalizedValueJacksonTest {
             case "KeySerialization2" -> new KeySerialization2(value);
             case "KeySerialization3" -> new KeySerialization3(value);
             case "KeySerialization4" -> new KeySerialization4(value);
-            case "KeySerialization5" -> new KeySerialization5(value);
             default ->
                     throw new IllegalArgumentException(
                             "Unknown class name for keySerializationVariant: " + className);
@@ -240,8 +259,6 @@ class LocalizedValueJacksonTest {
                     objectMapper.readValue(inputJson, KeySerialization3.class).name;
             case "KeySerialization4" ->
                     objectMapper.readValue(inputJson, KeySerialization4.class).name;
-            case "KeySerialization5" ->
-                    objectMapper.readValue(inputJson, KeySerialization5.class).name;
             default ->
                     throw new IllegalArgumentException(
                             "Unknown class name for keyDeserializationVariant: " + className);
@@ -298,14 +315,10 @@ class LocalizedValueJacksonTest {
     record KeySerialization1(@JsonLocalizedValue LocalizedValue<String> name) {}
 
     record KeySerialization2(
-            @JsonLocalizedValue(keySerialization = SerializationMethod.POSIX)
-                    LocalizedValue<String> name) {}
-
-    record KeySerialization3(
             @JsonLocalizedValue(keySerialization = SerializationMethod.UPPERCASE)
                     LocalizedValue<String> name) {}
 
-    record KeySerialization4(LocalizedValue<String> name) {
+    record KeySerialization3(LocalizedValue<String> name) {
 
         @JsonProperty
         @JsonLocalizedValue(keySerialization = SerializationMethod.UPPERCASE)
@@ -314,7 +327,7 @@ class LocalizedValueJacksonTest {
         }
     }
 
-    record KeySerialization5(
+    record KeySerialization4(
             @JsonLocalizedValue(keySerialization = SerializationMethod.CAMEL_CASE)
                     LocalizedValue<String> name) {}
 

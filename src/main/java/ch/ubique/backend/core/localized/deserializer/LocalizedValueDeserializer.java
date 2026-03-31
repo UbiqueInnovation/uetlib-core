@@ -128,7 +128,7 @@ public class LocalizedValueDeserializer
         }
 
         return switch (serializationMethod) {
-            case DEFAULT, POSIX -> rawKey;
+            case DEFAULT -> rawKey;
             case UPPERCASE -> rawKey.toLowerCase(Locale.ROOT);
             case CAMEL_CASE -> convertCase(rawKey, CaseFormat.LOWER_CAMEL);
             case PASCAL_CASE -> convertCase(rawKey, CaseFormat.UPPER_CAMEL);
