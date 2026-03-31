@@ -5,15 +5,19 @@ import static ch.ubique.backend.image.webp.ImageWebpLibraryWrapper.convertPartia
 
 import ch.ubique.backend.core.executor.VirtualThreadUtils;
 import ch.ubique.backend.image.webp.Frame.BufferedImageFrame;
+
+import org.apache.commons.io.FileUtils;
+
 import java.awt.image.BufferedImage;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import javax.imageio.ImageIO;
-import org.apache.commons.io.FileUtils;
 
+import javax.imageio.ImageIO;
+
+@SuppressWarnings("unused")
 public class WebpWriter implements AutoCloseable {
 
     private final Path workingDirectory;
@@ -49,7 +53,8 @@ public class WebpWriter implements AutoCloseable {
         }
     }
 
-    public Path encodeFrames(final List<Frame> frames, final String xmpMetadata) throws IOException {
+    public Path encodeFrames(final List<Frame> frames, final String xmpMetadata)
+            throws IOException {
         final var webp = encodeFrames(frames);
         final var metadata = createMetadataFile(xmpMetadata);
         try {

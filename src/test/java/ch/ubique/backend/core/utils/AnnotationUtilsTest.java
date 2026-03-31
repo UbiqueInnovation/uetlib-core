@@ -137,6 +137,11 @@ class AnnotationUtilsTest {
     @MyAnnotation("Meta Annotation")
     public @interface MetaAnnotation {}
 
+    public interface AnnotatedInterface {
+        @MyAnnotation("Interface Annotation")
+        void interfaceAnnotatedMethod();
+    }
+
     // Example classes for testing
     @MyAnnotation("Direct Value")
     public static class AnnotatedClass {
@@ -148,10 +153,10 @@ class AnnotationUtilsTest {
 
         public void nonAnnotatedMethod() {}
 
+        public static class StaticNestedClass {}
+
         @SuppressWarnings("InnerClassMayBeStatic")
         public class InnerClass {}
-
-        public static class StaticNestedClass {}
     }
 
     @MetaAnnotation
@@ -164,11 +169,6 @@ class AnnotationUtilsTest {
         @SuppressWarnings("RedundantMethodOverride")
         @Override
         public void nonAnnotatedMethod() {}
-    }
-
-    public interface AnnotatedInterface {
-        @MyAnnotation("Interface Annotation")
-        void interfaceAnnotatedMethod();
     }
 
     public static class InterfaceImplementingClass implements AnnotatedInterface {

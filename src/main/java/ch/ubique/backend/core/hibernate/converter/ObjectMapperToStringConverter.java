@@ -1,29 +1,26 @@
 package ch.ubique.backend.core.hibernate.converter;
 
-import ch.ubique.backend.core.jackson.ObjectMapperUtils;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pivovarit.function.exception.WrappedException;
-
 import jakarta.persistence.AttributeConverter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 
-@SuppressWarnings("com.intellij.jpb.ConverterNotAnnotatedInspection")
+@SuppressWarnings("unused")
 public abstract class ObjectMapperToStringConverter<T> implements AttributeConverter<T, String> {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private final ObjectMapper objectMapper = ObjectMapperUtils.objectMapper();
+    private final ObjectMapper objectMapper;
 
     private final TypeReference<T> typeReference;
 
-    protected ObjectMapperToStringConverter(final TypeReference<T> typeReference) {
+    protected ObjectMapperToStringConverter(
+            final ObjectMapper objectMapper, final TypeReference<T> typeReference) {
+        this.objectMapper = objectMapper;
         this.typeReference = typeReference;
     }
 
@@ -32,11 +29,7 @@ public abstract class ObjectMapperToStringConverter<T> implements AttributeConve
         if (attributes == null) {
             return null;
         }
-        try {
-            return objectMapper.writeValueAsString(attributes);
-        } catch (final JsonProcessingException e) {
-            throw new WrappedException(e);
-        }
+        return objectMapper.writeValueAsString(attributes);
     }
 
     @Override
@@ -46,7 +39,7 @@ public abstract class ObjectMapperToStringConverter<T> implements AttributeConve
         }
         try {
             return objectMapper.readValue(dbData, typeReference);
-        } catch (final IOException e) {
+        } catch (final JacksonException e) {
             logger.info("Could not deserialize {} as {}.", dbData, typeReference, e);
             return null;
         }
