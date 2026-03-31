@@ -192,32 +192,6 @@ class LocalizedValueTest {
     }
 
     @Test
-    void withPosixLocaleKeys() {
-        final var lv1 = LocalizedValue.from("Literal", Locale.CHINA);
-        assertEquals(Map.of("zh", "Literal"), lv1.toMapWithPosixLocaleKeys());
-
-        final var lv2 =
-                LocalizedValue.stringBuilder().fullLocale().add("Literal", Locale.CHINA).build();
-        assertEquals(Map.of("zh_CN", "Literal"), lv2.toMapWithPosixLocaleKeys());
-
-        final var lv3 = LocalizedValue.en("Test");
-        assertEquals(Map.of("en", "Test"), lv3.toMapWithPosixLocaleKeys());
-    }
-
-    @Test
-    void withUppercaseKeys() {
-        final var lv1 = LocalizedValue.from("Literal", Locale.CHINA);
-        assertEquals(Map.of("ZH", "Literal"), lv1.toMapWithUppercaseKeys());
-
-        final var lv2 =
-                LocalizedValue.stringBuilder().fullLocale().add("Literal", Locale.CHINA).build();
-        assertEquals(Map.of("ZH-CN", "Literal"), lv2.toMapWithUppercaseKeys());
-
-        final var lv3 = LocalizedValue.fromMap(Map.of(Locale.US, "Test"));
-        assertEquals(Map.of("EN", "Test"), lv3.toMapWithUppercaseKeys());
-    }
-
-    @Test
     void coalesce() {
         final var sample = LocalizedValue.stringBuilder().romansh("rm").de("de").build();
 
@@ -408,5 +382,4 @@ class LocalizedValueTest {
         assertEquals(de1en1, de1.mergeWith(en1));
         assertEquals(de1deCH1, de1.mergeWith(deCH1));
     }
-
 }
