@@ -6,7 +6,7 @@ import static java.util.Map.Entry;
 import static java.util.stream.Collectors.*;
 
 import ch.ubique.backend.core.localized.serializer.LocalizedValueSerializer;
-import ch.ubique.backend.core.localized.serializer.LocalizedValueDeserializer;
+import ch.ubique.backend.core.localized.deserializer.LocalizedValueDeserializer;
 import ch.ubique.backend.core.utils.CollectionUtils;
 import ch.ubique.backend.core.utils.LocaleHelper;
 
