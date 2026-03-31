@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 1.5.0
+
+### Improvements
+
+- New `LocalizedValue` serialization methods:
+    - `CAMEL_CASE` to serialize keys in camel case. E.g. `Locale.of("de", "CH")`
+      as `deCh`
+    - `PASCAL_CASE` to serialize keys in pascal case. E.g. `Locale.of("de", "CH")`
+      as `DeCh`
+
 ## 1.4.4
 
 ### Improvements

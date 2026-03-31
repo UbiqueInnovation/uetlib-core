@@ -1,5 +1,7 @@
 package ch.ubique.backend.core.localized;
 
+import static com.google.common.base.CaseFormat.LOWER_HYPHEN;
+
 import static java.util.Map.Entry;
 import static java.util.stream.Collectors.*;
 
@@ -11,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.common.base.CaseFormat;
 
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotEmpty;
@@ -163,7 +166,10 @@ public class LocalizedValue<T extends Serializable> {
                                     left.putAll(right);
                                     return left;
                                 });
-        return LocalizedValue.<S>builder().fromMap(deepCopyValues(mergedValues)).fullLocale().build();
+        return LocalizedValue.<S>builder()
+                .fromMap(deepCopyValues(mergedValues))
+                .fullLocale()
+                .build();
     }
 
     private static <S extends Serializable> Map<Locale, S> deepCopyValues(
@@ -480,7 +486,10 @@ public class LocalizedValue<T extends Serializable> {
     /**
      * default serialization method using IETF BCP 47 Language Tag.
      *
-     * <p>{@code Locale.of("de", "CH")} would be serialized to {@code "de-CH"}
+     * <ul>
+     *   <li>{@code Locale.of("en")} would be serialized to {@code "en"}
+     *   <li>{@code Locale.of("de", "CH")} would be serialized to {@code "de-CH"}
+     * </ul>
      */
     @JsonValue
     @NotEmpty
@@ -492,7 +501,10 @@ public class LocalizedValue<T extends Serializable> {
     /**
      * alternative serialization method using Posix Locales.
      *
-     * <p>{@code Locale.of("de", "CH")} would be serialized to {@code "de_CH"}
+     * <ul>
+     *   <li>{@code Locale.of("en")} would be serialized to {@code "en"}
+     *   <li>{@code Locale.of("de", "CH")} would be serialized to {@code "de_CH"}
+     * </ul>
      */
     @NotEmpty
     public Map<String, T> toMapWithPosixLocaleKeys() {
@@ -503,7 +515,10 @@ public class LocalizedValue<T extends Serializable> {
     /**
      * alternative serialization method using upper case keys.
      *
-     * <p>{@code Locale.of("de", "CH")} would be serialized to {@code "DE-CH"}
+     * <ul>
+     *   <li>{@code Locale.of("en")} would be serialized to {@code "EN"}
+     *   <li>{@code Locale.of("de", "CH")} would be serialized to {@code "DE-CH"}
+     * </ul>
      */
     @NotEmpty
     public Map<String, T> toMapWithUppercaseKeys() {
@@ -511,6 +526,40 @@ public class LocalizedValue<T extends Serializable> {
                 .collect(
                         toMap(
                                 entry -> entry.getKey().toLanguageTag().toUpperCase(),
+                                Entry::getValue));
+    }
+
+    /**
+     * alternative serialization method using the given case format after lowercasing the locale.
+     * Some examples:
+     *
+     * <ul>
+     *   <li>{@link CaseFormat#UPPER_UNDERSCORE}:
+     *       <ul>
+     *         <li>{@code Locale.of("en")} would be serialized to {@code "EN"}
+     *         <li>{@code Locale.of("de", "CH")} would be serialized to {@code "DE_CH"}
+     *       </ul>
+     *   <li>{@link CaseFormat#UPPER_CAMEL}:
+     *       <ul>
+     *         <li>{@code Locale.of("en")} would be serialized to {@code "En"}
+     *         <li>{@code Locale.of("de", "CH")} would be serialized to {@code "DeCh"}
+     *       </ul>
+     *   <li>{@link CaseFormat#LOWER_CAMEL}:
+     *       <ul>
+     *         <li>{@code Locale.of("en")} would be serialized to {@code "en"}
+     *         <li>{@code Locale.of("de", "CH")} would be serialized to {@code "deCh"}
+     *       </ul>
+     * </ul>
+     */
+    @NotEmpty
+    public Map<String, T> toMapWithCaseFormatKeys(final CaseFormat caseFormatTo) {
+        return values.entrySet().stream()
+                .collect(
+                        toMap(
+                                entry ->
+                                        LOWER_HYPHEN.to(
+                                                caseFormatTo,
+                                                entry.getKey().toLanguageTag().toLowerCase()),
                                 Entry::getValue));
     }
 
