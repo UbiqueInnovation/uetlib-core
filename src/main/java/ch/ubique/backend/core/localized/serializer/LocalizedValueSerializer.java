@@ -19,11 +19,11 @@ import java.util.Map;
 import java.util.function.UnaryOperator;
 
 /**
- * This serializer serializes a {@link LocalizedValue} to a JSON object. It handles both the
- * unwrapping case with @{@link JsonUnwrapped} and the different key serialization methods with
- * annotation @{@link JsonLocalizedValue#keySerialization()}.}
+ * Serializes a {@link LocalizedValue} to a JSON object. It supports both unwrapped properties
+ * with @{@link JsonUnwrapped} and the different key serialization methods configured through
+ * annotation @{@link JsonLocalizedValue#keySerialization()}.
  *
- * <p>The following examples show how to use the annotation on a field/method:
+ * <p>The following examples show how to use the annotation on a field or method:
  *
  * {@snippet lang = "java":
  * record Unwrapped(@JsonUnwrapped(suffix = ":suf") LocalizedValue<String> name) {}
@@ -38,19 +38,64 @@ import java.util.function.UnaryOperator;
  *                     LocalizedValue<String> name) {}
  * }
  *
- * <p>These are serialized to the following JSON:
+ * <p>These Java snippets are serialized as follows:
+ *
+ * <p>
+ *
+ * {@snippet lang = "java":
+ * Unwrapped(
+ *         LocalizedValue.<String>builder()
+ *                 .fullLocale()
+ *                 .fromStringMap(Map.of("de", "value_de", "en", "value_en"))
+ *                 .build())
+ * }
+ *
+ * serializes to
  *
  * {@snippet lang = "json":
  * {"de:suf":"value_de","en:suf":"value_en"}
  * }
  *
+ * <p>
+ *
+ * {@snippet lang = "java":
+ * KeySerialization(
+ *         LocalizedValue.<String>builder()
+ *                 .fullLocale()
+ *                 .fromStringMap(Map.of("de_CH", "value_de", "en_CH", "value_en"))
+ *                 .build())
+ * }
+ *
+ * serializes to
+ *
  * {@snippet lang = "json":
  * {"name":{"de_CH":"value_de","en_CH":"value_en"}}
  * }
  *
+ * serializes to
+ *
+ * {@snippet lang = "java":
+ * Combined(
+ *         LocalizedValue.<String>builder()
+ *                 .fullLocale()
+ *                 .fromStringMap(Map.of("en-ch", "value_en", "de-ch", "value_de"))
+ *                 .build())
+ * }
+ *
+ * serializes to
+ *
  * {@snippet lang = "json":
  * {"pre:EN-CH:suf":"value_en","pre:DE-CH:suf":"value_de"}
  * }
+ *
+ * <p>Behavior notes:
+ *
+ * <ul>
+ *   <li>If {@link JsonLocalizedValue} is not present, {@link SerializationMethod#DEFAULT} is used.
+ *   <li>If {@link JsonUnwrapped} is present, keys are emitted directly into the surrounding JSON
+ *       object after applying the configured prefix and suffix.
+ *   <li>Otherwise, a nested JSON object is written for the {@link LocalizedValue}.
+ * </ul>
  */
 public class LocalizedValueSerializer extends JsonSerializer<LocalizedValue<? extends Serializable>>
         implements ContextualSerializer {
