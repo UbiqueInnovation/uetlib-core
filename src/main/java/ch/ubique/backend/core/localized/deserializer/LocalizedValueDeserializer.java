@@ -7,8 +7,9 @@ import ch.ubique.backend.core.localized.annotation.JsonLocalizedValue;
 import ch.ubique.backend.core.localized.annotation.JsonLocalizedValue.SerializationMethod;
 import ch.ubique.backend.core.localized.serializer.LocalizedValueSerializer;
 
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.google.common.base.CaseFormat;
+
+import org.apache.commons.lang3.StringUtils;
 
 import tools.jackson.core.JsonParser;
 import tools.jackson.databind.BeanProperty;
@@ -23,95 +24,18 @@ import java.util.Locale;
 
 /**
  * Deserializes a {@link LocalizedValue} from a JSON object. It supports both unwrapped properties
- * with @{@link JsonUnwrapped} and the different key deserialization methods configured through
- * annotation @{@link JsonLocalizedValue#keySerialization()}.
+ * and the different key deserialization methods configured through annotation @{@link
+ * JsonLocalizedValue#keySerialization()}.
  *
- * <p>This deserializer is intended to be symmetric to {@link LocalizedValueSerializer}. Keys
- * written with a given serialization method are normalized back to the locale key format expected
- * by {@link LocalizedValue} through {@code builder().fullLocale().fromStringMap(...)}.
- *
- * <p>The following examples show how to use the annotation on a field or method:
- *
- * {@snippet lang = "java":
- * record Unwrapped(@JsonUnwrapped(suffix = ":suf") LocalizedValue<String> name) {}
- *
- * record KeySerialization(
- *             @JsonLocalizedValue(keySerialization = SerializationMethod.POSIX)
- *                     LocalizedValue<String> name) {}
- *
- * record Combined(
- *             @JsonUnwrapped(prefix = "pre:", suffix = ":suf")
- *                     @JsonLocalizedValue(keySerialization = SerializationMethod.UPPERCASE)
- *                     LocalizedValue<String> name) {}
- * }
- *
- * <p>These JSON payloads are deserialized as follows:
- *
- * <p>
- *
- * {@snippet lang = "json":
- * {"de:suf":"value_de","en:suf":"value_en"}
- * }
- *
- * deserializes to
- *
- * {@snippet lang = "java":
- * Unwrapped(
- *         LocalizedValue.<String>builder()
- *                 .fullLocale()
- *                 .fromStringMap(Map.of("de", "value_de", "en", "value_en"))
- *                 .build())
- * }
- *
- * <p>
- *
- * {@snippet lang = "json":
- * {"name":{"de_CH":"value_de","en_CH":"value_en"}}
- * }
- *
- * deserializes to
- *
- * {@snippet lang = "java":
- * KeySerialization(
- *         LocalizedValue.<String>builder()
- *                 .fullLocale()
- *                 .fromStringMap(Map.of("de_CH", "value_de", "en_CH", "value_en"))
- *                 .build())
- * }
- *
- * <p>
- *
- * {@snippet lang = "json":
- * {"pre:EN-CH:suf":"value_en","pre:DE-CH:suf":"value_de"}
- * }
- *
- * deserializes to
- *
- * {@snippet lang = "java":
- * Combined(
- *         LocalizedValue.<String>builder()
- *                 .fullLocale()
- *                 .fromStringMap(Map.of("en-ch", "value_en", "de-ch", "value_de"))
- *                 .build())
- * }
- *
- * <p>Behavior notes:
- *
- * <ul>
- *   <li>For {@link SerializationMethod#DEFAULT} and {@link SerializationMethod#POSIX}, keys are
- *       kept as-is and passed to {@link LocalizedValue} for locale parsing.
- *   <li>For {@link SerializationMethod#UPPERCASE}, keys are lowercased before locale parsing.
- *   <li>For {@link SerializationMethod#CAMEL_CASE} and {@link SerializationMethod#PASCAL_CASE},
- *       keys are converted back to lower-hyphen form before locale parsing.
- *   <li>When {@link JsonUnwrapped} is used, only properties matching the configured prefix and
- *       suffix are considered part of the {@link LocalizedValue}.
- *   <li>Keys that cannot be normalized are skipped.
- * </ul>
+ * <p>This deserializer is intended to be symmetric to {@link LocalizedValueSerializer}. For
+ * unwrapped properties Jackson provides a {@link NameTransformer}; this deserializer uses {@link
+ * NameTransformer#reverse(String)} to map external flattened field names back to localized keys
+ * before normalizing them.
  */
 public class LocalizedValueDeserializer
         extends ValueDeserializer<LocalizedValue<? extends Serializable>> {
 
-    private final JsonUnwrapped jsonUnwrapped;
+    private final NameTransformer nameTransformer;
     private final JsonLocalizedValue jsonLocalizedValue;
 
     public LocalizedValueDeserializer() {
@@ -119,8 +43,8 @@ public class LocalizedValueDeserializer
     }
 
     public LocalizedValueDeserializer(
-            final JsonUnwrapped jsonUnwrapped, final JsonLocalizedValue jsonLocalizedValue) {
-        this.jsonUnwrapped = jsonUnwrapped;
+            final NameTransformer nameTransformer, final JsonLocalizedValue jsonLocalizedValue) {
+        this.nameTransformer = nameTransformer;
         this.jsonLocalizedValue = jsonLocalizedValue;
     }
 
@@ -139,11 +63,8 @@ public class LocalizedValueDeserializer
                         ? jsonLocalizedValue.keySerialization()
                         : SerializationMethod.DEFAULT;
 
-        final var prefix = jsonUnwrapped != null ? jsonUnwrapped.prefix() : "";
-        final var suffix = jsonUnwrapped != null ? jsonUnwrapped.suffix() : "";
-
         for (final var entry : objectNode.properties()) {
-            final var extracted = extractKey(entry.getKey(), prefix, suffix);
+            final var extracted = extractKey(entry.getKey());
             if (extracted == null) {
                 continue;
             }
@@ -170,32 +91,29 @@ public class LocalizedValueDeserializer
         }
 
         final var jsonLocalizedValueAnnotation = property.getAnnotation(JsonLocalizedValue.class);
-        final var jsonUnwrappedAnnotation = property.getAnnotation(JsonUnwrapped.class);
-        return new LocalizedValueDeserializer(
-                jsonUnwrappedAnnotation, jsonLocalizedValueAnnotation);
+        return new LocalizedValueDeserializer(nameTransformer, jsonLocalizedValueAnnotation);
     }
 
     @Override
     public ValueDeserializer<LocalizedValue<? extends Serializable>> unwrappingDeserializer(
-            final DeserializationContext ctxt, final NameTransformer unwrapper) {
-        return new LocalizedValueDeserializer(jsonUnwrapped, jsonLocalizedValue);
+            final DeserializationContext ctxt, final NameTransformer nameTransformer) {
+        return new LocalizedValueDeserializer(nameTransformer, jsonLocalizedValue);
     }
 
     /**
-     * Extracts the localized key from an unwrapped property name by removing the configured prefix
-     * and suffix. Returns {@code null} if the property does not match the expected unwrapped shape.
+     * For unwrapped deserialization, reverse the Jackson name transformation. For regular
+     * deserialization, use the raw key as-is.
      */
-    private static String extractKey(
-            final String rawKey, final String prefix, final String suffix) {
-        if (!rawKey.startsWith(prefix) || !rawKey.endsWith(suffix)) {
+    private String extractKey(final String rawKey) {
+        if (StringUtils.isBlank(rawKey)) {
             return null;
         }
 
-        final var withoutPrefix = rawKey.substring(prefix.length());
-        if (suffix.isEmpty()) {
-            return withoutPrefix;
+        if (nameTransformer == null) {
+            return rawKey;
         }
-        return withoutPrefix.substring(0, withoutPrefix.length() - suffix.length());
+
+        return nameTransformer.reverse(rawKey);
     }
 
     /**
