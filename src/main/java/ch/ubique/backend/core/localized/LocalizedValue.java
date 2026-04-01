@@ -3,7 +3,8 @@ package ch.ubique.backend.core.localized;
 import static java.util.Map.Entry;
 import static java.util.stream.Collectors.*;
 
-import ch.ubique.backend.core.localized.serializer.LocalizedValueSerializer;
+import ch.ubique.backend.core.localized.jackson.LocalizedValueDeserializer;
+import ch.ubique.backend.core.localized.jackson.LocalizedValueSerializer;
 import ch.ubique.backend.core.utils.CollectionUtils;
 import ch.ubique.backend.core.utils.LocaleHelper;
 
@@ -21,6 +22,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.annotation.JsonSerialize;
 
 import java.io.Serializable;
@@ -34,6 +36,7 @@ import java.util.*;
  * @param <T> the value type of the internal map
  */
 @JsonSerialize(using = LocalizedValueSerializer.class)
+@JsonDeserialize(using = LocalizedValueDeserializer.class)
 public class LocalizedValue<T extends Serializable> {
 
     @NotEmpty private final Map<Locale, T> values;
@@ -196,14 +199,7 @@ public class LocalizedValue<T extends Serializable> {
      */
     @NotNull
     public T get(final String key) {
-        return getOptional(key)
-                .orElseThrow(
-                        () ->
-                                new NoSuchElementException(
-                                        "No value present for language "
-                                                + key
-                                                + ". Existing keys: "
-                                                + values.keySet()));
+        return getOptional(key).orElseThrow();
     }
 
     /**
@@ -245,14 +241,7 @@ public class LocalizedValue<T extends Serializable> {
      */
     @NotNull
     public T get(final Locale locale) {
-        return getOptional(locale)
-                .orElseThrow(
-                        () ->
-                                new NoSuchElementException(
-                                        "No value present for locale "
-                                                + locale
-                                                + ". Existing keys: "
-                                                + values.keySet()));
+        return getOptional(locale).orElseThrow();
     }
 
     /**
@@ -287,12 +276,7 @@ public class LocalizedValue<T extends Serializable> {
      */
     @NotNull
     public T en() {
-        return enOptional()
-                .orElseThrow(
-                        () ->
-                                new NoSuchElementException(
-                                        "No value present for locale en. Existing keys: "
-                                                + values.keySet()));
+        return enOptional().orElseThrow();
     }
 
     /**
@@ -301,12 +285,7 @@ public class LocalizedValue<T extends Serializable> {
      */
     @NotNull
     public T de() {
-        return deOptional()
-                .orElseThrow(
-                        () ->
-                                new NoSuchElementException(
-                                        "No value present for locale de. Existing keys: "
-                                                + values.keySet()));
+        return deOptional().orElseThrow();
     }
 
     /**
@@ -315,12 +294,7 @@ public class LocalizedValue<T extends Serializable> {
      */
     @NotNull
     public T fr() {
-        return frOptional()
-                .orElseThrow(
-                        () ->
-                                new NoSuchElementException(
-                                        "No value present for locale fr. Existing keys: "
-                                                + values.keySet()));
+        return frOptional().orElseThrow();
     }
 
     /**
@@ -329,12 +303,7 @@ public class LocalizedValue<T extends Serializable> {
      */
     @NotNull
     public T it() {
-        return itOptional()
-                .orElseThrow(
-                        () ->
-                                new NoSuchElementException(
-                                        "No value present for locale it. Existing keys: "
-                                                + values.keySet()));
+        return itOptional().orElseThrow();
     }
 
     /**
@@ -343,14 +312,7 @@ public class LocalizedValue<T extends Serializable> {
      */
     @NotNull
     public T romansh() {
-        return romanshOptional()
-                .orElseThrow(
-                        () ->
-                                new NoSuchElementException(
-                                        "No value present for locale "
-                                                + AdditionalLocales.ROMANSH.toLanguageTag()
-                                                + ". Existing keys: "
-                                                + values.keySet()));
+        return romanshOptional().orElseThrow();
     }
 
     /**
@@ -442,14 +404,7 @@ public class LocalizedValue<T extends Serializable> {
      */
     @NotNull
     public T coalesce(final Locale... locales) {
-        return coalesceOptional(locales)
-                .orElseThrow(
-                        () ->
-                                new NoSuchElementException(
-                                        "No value present for any of the provided locales "
-                                                + Arrays.toString(locales)
-                                                + ". Existing keys: "
-                                                + values.keySet()));
+        return coalesceOptional(locales).orElseThrow();
     }
 
     /**
@@ -461,14 +416,7 @@ public class LocalizedValue<T extends Serializable> {
      */
     @NotNull
     public T coalesce(final String... keys) {
-        return coalesceOptional(keys)
-                .orElseThrow(
-                        () ->
-                                new NoSuchElementException(
-                                        "No value present for any of the provided languages "
-                                                + Arrays.toString(keys)
-                                                + ". Existing keys: "
-                                                + values.keySet()));
+        return coalesceOptional(keys).orElseThrow();
     }
 
     /**
@@ -525,12 +473,7 @@ public class LocalizedValue<T extends Serializable> {
     @NotNull
     @JsonIgnore
     public T getAny() {
-        return values.values().stream()
-                .findAny()
-                .orElseThrow(
-                        () ->
-                                new NoSuchElementException(
-                                        "No value present in LocalizedValue. This should not happen, as a LocalizedValue should always contain at least one value."));
+        return values.values().stream().findAny().orElseThrow();
     }
 
     /**
@@ -544,38 +487,16 @@ public class LocalizedValue<T extends Serializable> {
     /**
      * default serialization method using IETF BCP 47 Language Tag.
      *
-     * <p>{@code Locale.of("de", "CH")} would be serialized to {@code "de-CH"}
+     * <ul>
+     *   <li>{@code Locale.of("en")} would be serialized to {@code "en"}
+     *   <li>{@code Locale.of("de", "CH")} would be serialized to {@code "de-CH"}
+     * </ul>
      */
     @JsonValue
     @NotEmpty
     public Map<String, T> toMapWithLanguageTagKeys() {
         return values.entrySet().stream()
                 .collect(toMap(entry -> entry.getKey().toLanguageTag(), Entry::getValue));
-    }
-
-    /**
-     * alternative serialization method using Posix Locales.
-     *
-     * <p>{@code Locale.of("de", "CH")} would be serialized to {@code "de_CH"}
-     */
-    @NotEmpty
-    public Map<String, T> toMapWithPosixLocaleKeys() {
-        return values.entrySet().stream()
-                .collect(toMap(entry -> entry.getKey().toString(), Entry::getValue));
-    }
-
-    /**
-     * alternative serialization method using upper case keys.
-     *
-     * <p>{@code Locale.of("de", "CH")} would be serialized to {@code "DE-CH"}
-     */
-    @NotEmpty
-    public Map<String, T> toMapWithUppercaseKeys() {
-        return values.entrySet().stream()
-                .collect(
-                        toMap(
-                                entry -> entry.getKey().toLanguageTag().toUpperCase(),
-                                Entry::getValue));
     }
 
     @Override

@@ -13,7 +13,8 @@ public @interface JsonLocalizedValue {
 
     enum SerializationMethod {
         DEFAULT,
-        POSIX,
-        UPPERCASE
+        UPPERCASE,
+        CAMEL_CASE,
+        PASCAL_CASE
     }
 }
