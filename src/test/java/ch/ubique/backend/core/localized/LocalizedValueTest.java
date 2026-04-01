@@ -409,4 +409,30 @@ class LocalizedValueTest {
         assertEquals(de1deCH1, de1.mergeWith(deCH1));
     }
 
+    @Test
+    void testMapValues() {
+        final var localizedValue =
+                LocalizedValue.stringBuilder().de("de").en("en").fr("fr").it("it").build();
+
+        final var expected =
+                LocalizedValue.stringBuilder().de("dede").en("enen").fr("frfr").it("itit").build();
+
+        assertEquals(expected, localizedValue.mapValues(s -> s + s));
+
+        final var exception1 =
+                assertThrows(NullPointerException.class, () -> localizedValue.mapValues(null));
+        assertEquals(
+                "Cannot invoke \"java.util.function.Function.apply(Object)\" because \"valueMapper\" is null",
+                exception1.getMessage());
+
+        final var exception2 =
+                assertThrows(NullPointerException.class, () -> localizedValue.mapValues(s -> null));
+        assertEquals("Value mapper cannot return null for input de", exception2.getMessage());
+
+        final var exception3 =
+                assertThrows(
+                        NullPointerException.class,
+                        () -> localizedValue.mapValues(s -> "fr".equals(s) ? null : s));
+        assertEquals("Value mapper cannot return null for input fr", exception3.getMessage());
+    }
 }
