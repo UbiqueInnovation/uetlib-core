@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.5.1
+
+### Improvements
+
+- New `LocalizedValue#mapValues` to map only the values of a `LocalizedValue`
+
 ## 1.5.0
 
 ### Improvements

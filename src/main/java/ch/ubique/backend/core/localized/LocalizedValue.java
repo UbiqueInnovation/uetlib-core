@@ -3,6 +3,7 @@ package ch.ubique.backend.core.localized;
 import static com.google.common.base.CaseFormat.LOWER_HYPHEN;
 
 import static java.util.Map.Entry;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.*;
 
 import ch.ubique.backend.core.localized.serializer.LocalizedValueSerializer;
@@ -26,9 +27,12 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.jetbrains.annotations.Contract;
+import org.jspecify.annotations.NonNull;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * A LocalizedValue object does always contain at least one entry in its internal map. All
@@ -564,6 +568,28 @@ public class LocalizedValue<T extends Serializable> {
                                                 caseFormatTo,
                                                 entry.getKey().toLanguageTag().toLowerCase()),
                                 Entry::getValue));
+    }
+
+    /**
+     * Transform values using the provided mapper function.
+     *
+     * @return A new LocalizedValue<V> with transformed values and the same keys.
+     * @throws NullPointerException if the mapper function is null or returns null for any input.
+     */
+    @NonNull
+    @Contract(value = "_ -> new", pure = true)
+    public <V extends Serializable> LocalizedValue<V> mapValues(
+            final @NonNull Function<T, @NonNull V> valueMapper) {
+        return new LocalizedValue<>(
+                values.entrySet().stream()
+                        .collect(
+                                toMap(
+                                        Entry::getKey,
+                                        entry ->
+                                                requireNonNull(
+                                                        valueMapper.apply(entry.getValue()),
+                                                        "Value mapper cannot return null for input "
+                                                                + entry.getValue()))));
     }
 
     @Override
