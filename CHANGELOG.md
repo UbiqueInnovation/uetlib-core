@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2.2.0
+
+- All features and fixes from `1.4.3`, `1.4.4` and `1.5.0`
+- Remove `JsonLocalizedValue` serialization method `POSIX` and `LocalizedValue#toMapWithPosixLocaleKeys(unused and
+  annoying)
+- Remove `LocalizedValue#toMapWithUppercaseKeys` (unused and can be achieved with
+  `@JsonLocalizedValue(keySerialization = SerializationMethod.UPPERCASE)`)
+
 ## 2.1.1
 
 - Fix NPE in updated `InputStreamSupplierFileProvider` on calling `file()`
@@ -46,6 +54,29 @@
 
 - Add method variants that either a custom error `message` or a `messageSupplier` for all `NumberUtils.require*`
   methods.
+
+## 1.5.0
+
+### Improvements
+
+- New `LocalizedValue` serialization methods:
+    - `CAMEL_CASE` to serialize keys in camel case. E.g. `Locale.of("de", "CH")`
+      as `deCh`
+    - `PASCAL_CASE` to serialize keys in pascal case. E.g. `Locale.of("de", "CH")`
+      as `DeCh`
+- New `LocalizedValue` deserialization, symmetric to the serialization options.
+
+## 1.4.4
+
+### Improvements
+
+- WebpWriter now supports creating webp animations with individual durations per frame.
+
+## 1.4.3
+
+### Improvements
+
+- Make process timeout configurable in `WebpEncodingConfig`
 
 ## 1.4.1
 
