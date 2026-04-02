@@ -4,7 +4,7 @@
 
 ### Improvements
 
-- New `LocalizedValue#mapValues` to map only the values of a `LocalizedValue` (Ported from [1.5.1](#151))
+- New `LocalizedValue#mapValues` to map only the values of a `LocalizedValue` (Ported from [1.5.2](#152))
 
 ## 2.2.0
 
@@ -62,7 +62,7 @@
 - Add method variants that either a custom error `message` or a `messageSupplier` for all `NumberUtils.require*`
   methods.
 
-## 1.5.1
+## 1.5.2
 
 ### Improvements
 
