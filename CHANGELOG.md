@@ -8,7 +8,7 @@
 
 ## 2.2.0
 
-- All features and fixes from `1.4.3`, `1.4.4` and `1.5.0`
+- All features and fixes from [1.4.3](#143), [1.4.4](#144) and [1.5.0](#150)
 - Remove `JsonLocalizedValue` serialization method `POSIX` and `LocalizedValue#toMapWithPosixLocaleKeys(unused and
   annoying)
 - Remove `LocalizedValue#toMapWithUppercaseKeys` (unused and can be achieved with
@@ -23,7 +23,8 @@
 - deprecate `AutoClosableTempFileProvider` for removal
 - add new `DataAndFileProvder`, analogous to `DataAndInput` but for `FileProvder` instead of `ByteFile` and deprecate
   `DataAndInput` and `ByteFile` while at it
-- New `TempFileProvider` that creates an empty temporary file and deletes it after use (ported to 2.1.0 from 1.4.1)
+- New `TempFileProvider` that creates an empty temporary file and deletes it after use (ported to [2.1.0](#210)
+  from [1.4.1](#141))
 
 ## 2.0.1
 
