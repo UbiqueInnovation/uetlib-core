@@ -11,14 +11,28 @@ import java.time.Instant;
 class DurationBasedTemporalUnitTest {
     @Test
     void testOf() {
-        assertEquals(DurationBasedTemporalUnit.of(Duration.ofDays(2)), DurationBasedTemporalUnit.ofDays(2));
-        assertEquals(DurationBasedTemporalUnit.of(Duration.ofHours(2)), DurationBasedTemporalUnit.ofHours(2));
-        assertEquals(DurationBasedTemporalUnit.of(Duration.ofMinutes(2)), DurationBasedTemporalUnit.ofMinutes(2));
-        assertEquals(DurationBasedTemporalUnit.of(Duration.ofSeconds(2)), DurationBasedTemporalUnit.ofSeconds(2));
-        assertEquals(DurationBasedTemporalUnit.of(Duration.ofMillis(2)), DurationBasedTemporalUnit.ofMillis(2));
-        assertEquals(DurationBasedTemporalUnit.of(Duration.ofNanos(2)), DurationBasedTemporalUnit.ofNanos(2));
+        assertEquals(
+                DurationBasedTemporalUnit.of(Duration.ofDays(2)),
+                DurationBasedTemporalUnit.ofDays(2));
+        assertEquals(
+                DurationBasedTemporalUnit.of(Duration.ofHours(2)),
+                DurationBasedTemporalUnit.ofHours(2));
+        assertEquals(
+                DurationBasedTemporalUnit.of(Duration.ofMinutes(2)),
+                DurationBasedTemporalUnit.ofMinutes(2));
+        assertEquals(
+                DurationBasedTemporalUnit.of(Duration.ofSeconds(2)),
+                DurationBasedTemporalUnit.ofSeconds(2));
+        assertEquals(
+                DurationBasedTemporalUnit.of(Duration.ofMillis(2)),
+                DurationBasedTemporalUnit.ofMillis(2));
+        assertEquals(
+                DurationBasedTemporalUnit.of(Duration.ofNanos(2)),
+                DurationBasedTemporalUnit.ofNanos(2));
 
-        assertNotEquals(DurationBasedTemporalUnit.of(Duration.ofHours(2)), DurationBasedTemporalUnit.ofMinutes(2));
+        assertNotEquals(
+                DurationBasedTemporalUnit.of(Duration.ofHours(2)),
+                DurationBasedTemporalUnit.ofMinutes(2));
     }
 
     @Test

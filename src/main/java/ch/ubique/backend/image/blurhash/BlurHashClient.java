@@ -3,18 +3,22 @@ package ch.ubique.backend.image.blurhash;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.Weigher;
+
 import io.trbl.blurhash.BlurHash;
+
+import org.imgscalr.Scalr;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.awt.image.BufferedImage;
 import java.awt.image.ImagingOpException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.net.URLConnection;
+
 import javax.imageio.ImageIO;
-import org.imgscalr.Scalr;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /** A client to retrieve blur hashes and image dimensions for images. */
 public class BlurHashClient {
@@ -23,7 +27,7 @@ public class BlurHashClient {
     public static final double FALLBACK_ASPECT_RATIO = 1.0;
     public static final String DEFAULT_USER_AGENT = "ubique-backend";
     private static final Logger logger = LoggerFactory.getLogger(BlurHashClient.class);
-    private final Cache<String, BlurHashRepresentation> urlToBlurHashCache;
+    private final Cache<@NotNull String, BlurHashRepresentation> urlToBlurHashCache;
     private final String userAgent;
 
     public BlurHashClient(final int maximumSize, final String userAgent) {
@@ -32,38 +36,20 @@ public class BlurHashClient {
     }
 
     public BlurHashClient(
-            final int maximumWeight, final Weigher<String, BlurHashRepresentation> weigher, final String userAgent) {
+            final int maximumWeight,
+            final Weigher<@NotNull String, @NotNull BlurHashRepresentation> weigher,
+            final String userAgent) {
         this.urlToBlurHashCache =
                 Caffeine.newBuilder().maximumWeight(maximumWeight).weigher(weigher).build();
         this.userAgent = userAgent;
     }
 
     /**
-     * @deprecated since 2.5.0, Use {@link #BlurHashClient(int, String)} instead.
-     */
-    @Deprecated(since = "2.5.0", forRemoval = true)
-    public BlurHashClient(final int maximumSize) {
-        this.urlToBlurHashCache = Caffeine.newBuilder().maximumSize(maximumSize).build();
-        this.userAgent = DEFAULT_USER_AGENT;
-    }
-
-    /**
-     * @deprecated since 2.5.0, Use {@link #BlurHashClient(int, Weigher, String)} instead.
-     */
-    @Deprecated(since = "2.5.0", forRemoval = true)
-    public BlurHashClient(
-            final int maximumWeight, final Weigher<String, BlurHashRepresentation> weigher) {
-        this.urlToBlurHashCache =
-                Caffeine.newBuilder().maximumWeight(maximumWeight).weigher(weigher).build();
-        this.userAgent = DEFAULT_USER_AGENT;
-    }
-
-    /**
      * Return an url connection inputstream with custom user agent. Should be used when syncing data
      * from websites, so that the other side knows who's crawling the data.
      */
-    private InputStream getInputStreamWithCustomUserAgent(String url) throws IOException {
-        URLConnection hc = URI.create(url).toURL().openConnection();
+    private InputStream getInputStreamWithCustomUserAgent(final String url) throws IOException {
+        final var hc = URI.create(url).toURL().openConnection();
         hc.setRequestProperty("User-Agent", userAgent);
         hc.setRequestProperty("Referer", url);
         return hc.getInputStream();
@@ -81,7 +67,8 @@ public class BlurHashClient {
                 url -> {
                     try {
                         return encodeToBlurHashRepresentation(
-                                ImageIO.read(getInputStreamWithCustomUserAgent(imageUrl)), fallbackBlurHash);
+                                ImageIO.read(getInputStreamWithCustomUserAgent(imageUrl)),
+                                fallbackBlurHash);
                     } catch (final IOException e) {
                         return new BlurHashRepresentation(fallbackBlurHash, FALLBACK_ASPECT_RATIO);
                     }

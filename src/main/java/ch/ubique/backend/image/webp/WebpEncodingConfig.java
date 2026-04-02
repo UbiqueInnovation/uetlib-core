@@ -3,7 +3,10 @@ package ch.ubique.backend.image.webp;
 import java.time.Duration;
 
 public record WebpEncodingConfig(
-        Duration duration, WebpQuality quality, CompressionMethod method, int compressionFactor,
+        Duration duration,
+        WebpQuality quality,
+        CompressionMethod method,
+        int compressionFactor,
         Duration processTimeout) {
 
     public WebpEncodingConfig withDuration(final Duration duration) {
@@ -12,11 +15,14 @@ public record WebpEncodingConfig(
 
     public static WebpEncodingConfigBuilder builder() {
         return new WebpEncodingConfigBuilder(
-                Duration.ofSeconds(1), LosslessWebp.INSTANCE, CompressionMethod.M4, 75,
+                Duration.ofSeconds(1),
+                LosslessWebp.INSTANCE,
+                CompressionMethod.M4,
+                75,
                 Duration.ofSeconds(30));
     }
 
-    public static class WebpEncodingConfigBuilder {
+    public static final class WebpEncodingConfigBuilder {
 
         private Duration duration;
         private WebpQuality quality;
@@ -66,9 +72,8 @@ public record WebpEncodingConfig(
         }
 
         public WebpEncodingConfig build() {
-            return new WebpEncodingConfig(duration, quality, method, compressionFactor,
-                    processTimeout);
+            return new WebpEncodingConfig(
+                    duration, quality, method, compressionFactor, processTimeout);
         }
-
     }
 }
