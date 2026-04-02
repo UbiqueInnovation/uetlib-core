@@ -53,36 +53,12 @@ public final class TimeFormatUtils {
         return getInstance(ZoneId.of(zoneId));
     }
 
-    /**
-     * @deprecated since v2.5, use {@link #parsePrettyLocalDate(String)}
-     */
-    @Deprecated(since = "2.5")
-    public static LocalDate parseLocalDate(final String localDate) {
-        return LocalDate.parse(localDate, PRETTY_LOCAL_DATE_FORMATTER);
-    }
-
     public static LocalDate parsePrettyLocalDate(final String localDate) {
         return LocalDate.parse(localDate, PRETTY_LOCAL_DATE_FORMATTER);
     }
 
-    /**
-     * @deprecated since v2.5, use {@link #parsePrettyLocalTime(String)}
-     */
-    @Deprecated(since = "2.5")
-    public static LocalTime parseLocalTime(final String localTime) {
-        return LocalTime.parse(localTime, PRETTY_LOCAL_TIME_FORMATTER);
-    }
-
     public static LocalTime parsePrettyLocalTime(final String localTime) {
         return LocalTime.parse(localTime, PRETTY_LOCAL_TIME_FORMATTER);
-    }
-
-    /**
-     * @deprecated since v2.5, use {@link #parsePrettyLocalDateTime(String)}
-     */
-    @Deprecated(since = "2.5")
-    public static LocalDateTime parseLocalDateTime(final String localDateTime) {
-        return LocalDateTime.parse(localDateTime, PRETTY_LOCAL_DATE_TIME_FORMATTER);
     }
 
     public static LocalDateTime parsePrettyLocalDateTime(final String localDateTime) {
@@ -91,11 +67,12 @@ public final class TimeFormatUtils {
 
     public @NotNull ZonedDateTime parsePrettyLocalDateLocalTimeAtZone(
             final String localDate, final String localTime) {
-        return timeUtils.ofLocalDateLocalTime(parseLocalDate(localDate), parseLocalTime(localTime));
+        return timeUtils.ofLocalDateLocalTime(
+                parsePrettyLocalDate(localDate), parsePrettyLocalTime(localTime));
     }
 
     public @NotNull ZonedDateTime parsePrettyLocalDateTimeAtZone(final String localDateTime) {
-        return timeUtils.ofLocalDateTime(parseLocalDateTime(localDateTime));
+        return timeUtils.ofLocalDateTime(parsePrettyLocalDateTime(localDateTime));
     }
 
     public String formatLocalDate(final ZonedDateTime temporal) {

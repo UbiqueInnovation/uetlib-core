@@ -52,7 +52,7 @@ public class InputStreamSupplierFileProvider extends TempFileProvider {
         if (filePath == null) {
             final var file = super.file();
 
-            final var filePath = file.toPath();
+            filePath = file.toPath();
             logger.info("Saving input to temporary file {}.", filePath);
             try (final var inputStream = inputStreamSupplier.get()) {
                 FileUtils.copyToFile(inputStream, file);

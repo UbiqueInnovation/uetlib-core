@@ -27,7 +27,8 @@ public class ValidationExecutor {
         }
         throw new ValidationException(
                 MessageFormat.format(
-                        "The provided object is not valid for validation groups {0}. Violations: {1}",
+                        "The provided object is not valid for validation groups {0}. Violations:"
+                                + " {1}",
                         Arrays.stream(validationGroups).map(Class::getSimpleName).toList(),
                         violations));
     }

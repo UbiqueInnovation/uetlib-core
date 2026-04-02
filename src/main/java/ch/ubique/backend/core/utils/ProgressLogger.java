@@ -42,7 +42,7 @@ public final class ProgressLogger extends AbstractProgressLogger {
         if (logger.isInfoEnabled()) {
             logger.info(
                     "{}Processed {}% (current {} elements per second, overall {} elements per"
-                        + " second, {} of {})",
+                            + " second, {} of {})",
                     prefix,
                     percentage,
                     elementsPerSecond,

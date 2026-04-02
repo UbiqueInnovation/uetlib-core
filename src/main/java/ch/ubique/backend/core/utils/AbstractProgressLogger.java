@@ -1,5 +1,7 @@
 package ch.ubique.backend.core.utils;
 
+import static java.util.Objects.requireNonNullElse;
+
 import com.pivovarit.function.ThrowingBiConsumer;
 import com.pivovarit.function.ThrowingConsumer;
 import com.pivovarit.function.ThrowingFunction;
@@ -12,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -36,7 +37,7 @@ public abstract sealed class AbstractProgressLogger
             @Positive final long stepSize,
             final Map<String, String> mdcContextMap) {
 
-        this.prefix = Objects.requireNonNullElse(prefix, "");
+        this.prefix = requireNonNullElse(prefix, "");
         this.stepSize = stepSize;
         this.mdcContextMap = mdcContextMap;
 

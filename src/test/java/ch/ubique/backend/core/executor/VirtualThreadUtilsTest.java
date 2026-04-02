@@ -10,6 +10,13 @@ import java.util.stream.Stream;
 
 class VirtualThreadUtilsTest {
 
+    private static Integer throwForThree(final int i) throws IOException {
+        if (i == 3) {
+            throw new IOException();
+        }
+        return i;
+    }
+
     @Test
     void throwingForEach() {
         assertThrows(
@@ -35,12 +42,5 @@ class VirtualThreadUtilsTest {
                 () ->
                         VirtualThreadUtils.throwingMapAll(
                                 VirtualThreadUtilsTest::throwForThree, List.of(0, 1, 2, 3, 4)));
-    }
-
-    private static Integer throwForThree(final int i) throws IOException {
-        if (i == 3) {
-            throw new IOException();
-        }
-        return i;
     }
 }
