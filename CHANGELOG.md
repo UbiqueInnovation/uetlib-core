@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2.2.2
+
+### Bugfixes
+
+- Jackson 3.x changed duration serialization to string. This version configures it back as long.
+
 ## 2.2.1
 
 ### Improvements

@@ -26,6 +26,7 @@ public final class JsonMapperUtils {
                 // DateTime features
                 .enable(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS)
                 .enable(DateTimeFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS)
+                .enable(DateTimeFeature.WRITE_DURATIONS_AS_TIMESTAMPS)
                 .disable(DateTimeFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .disable(DateTimeFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS)
                 .addModule(javaTimeStringModule())
