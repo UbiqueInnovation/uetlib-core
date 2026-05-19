@@ -74,32 +74,28 @@ class LocalizedValueJacksonTest {
                 STRICT);
     }
 
-    @Test
-    void untouchedSerialization() throws JSONException {
-        final var untouched =
-                new Untouched(LocalizedValue.stringBuilder().de("value_de").en("value_en").build());
-        JSONAssert.assertEquals(
-                "{\"name\":{\"de\":\"value_de\",\"en\":\"value_en\"}}",
-                objectMapper.writeValueAsString(untouched),
-                STRICT);
+    @ParameterizedTest
+    @CsvSource(
+            value = "Untouched|{\"name\":{\"de-CH\":\"value_deCh\",\"en-CH\":\"value_enCh\"}}",
+            delimiter = '|')
+    void untouchedSerialization(final String className, final String expectedJson)
+            throws JSONException {
+        JSONAssert.assertEquals(expectedJson, serializeTestValue(className), STRICT);
     }
 
     @ParameterizedTest
     @CsvSource(
             value = {
-                "UnwrappedSerialization1|{\"de\":\"value_de\",\"en\":\"value_en\"}",
-                "UnwrappedSerialization2|{\"pre:de\":\"value_de\",\"pre:en\":\"value_en\"}",
-                "UnwrappedSerialization3|{\"de:suf\":\"value_de\",\"en:suf\":\"value_en\"}",
-                "UnwrappedSerialization4|{\"pre:de:suf\":\"value_de\",\"pre:en:suf\":\"value_en\"}",
-                "UnwrappedSerialization5|{\"name\":{\"de\":\"value_de\",\"en\":\"value_en\"},\"pre:de:suf\":\"value_de\",\"pre:en:suf\":\"value_en\"}"
+                "Unwrapped1|{\"de-CH\":\"value_deCh\",\"en-CH\":\"value_enCh\"}",
+                "Unwrapped2|{\"pre:de-CH\":\"value_deCh\",\"pre:en-CH\":\"value_enCh\"}",
+                "Unwrapped3|{\"de-CH:suf\":\"value_deCh\",\"en-CH:suf\":\"value_enCh\"}",
+                "Unwrapped4|{\"pre:de-CH:suf\":\"value_deCh\",\"pre:en-CH:suf\":\"value_enCh\"}",
+                "UnwrappedSerialization1|{\"name\":{\"de-CH\":\"value_deCh\",\"en-CH\":\"value_enCh\"},\"pre:de-CH:suf\":\"value_deCh\",\"pre:en-CH:suf\":\"value_enCh\"}"
             },
             delimiter = '|')
     void unwrappedSerialization(final String className, final String expectedJson)
             throws JSONException {
-        JSONAssert.assertEquals(
-                expectedJson,
-                objectMapper.writeValueAsString(unwrappedSerializationVariant(className)),
-                STRICT);
+        JSONAssert.assertEquals(expectedJson, serializeTestValue(className), STRICT);
     }
 
     @ParameterizedTest
@@ -114,7 +110,7 @@ class LocalizedValueJacksonTest {
     void unwrappedDeserialization(final String className, final String inputJson) {
         assertEquals(
                 LocalizedValue.stringBuilder().de("value_de").en("value_en").build(),
-                unwrappedDeserializationVariant(className, inputJson));
+                deserializeTestValue(className, inputJson));
     }
 
     @ParameterizedTest
@@ -128,10 +124,7 @@ class LocalizedValueJacksonTest {
             delimiter = '|')
     void keySerializationMethodSerialization(final String className, final String expectedJson)
             throws JSONException {
-        JSONAssert.assertEquals(
-                expectedJson,
-                objectMapper.writeValueAsString(keySerializationVariant(className)),
-                STRICT);
+        JSONAssert.assertEquals(expectedJson, serializeTestValue(className), STRICT);
     }
 
     @ParameterizedTest
@@ -144,7 +137,7 @@ class LocalizedValueJacksonTest {
             },
             delimiter = '|')
     void keySerializationMethodDeserialization(final String className, final String inputJson) {
-        assertEquals(testLocalizedValue(), keyDeserializationVariant(className, inputJson));
+        assertEquals(testLocalizedValue(), deserializeTestValue(className, inputJson));
     }
 
     @ParameterizedTest
@@ -157,10 +150,7 @@ class LocalizedValueJacksonTest {
             delimiter = '|')
     void combinedSerialization(final String className, final String expectedJson)
             throws JSONException {
-        JSONAssert.assertEquals(
-                expectedJson,
-                objectMapper.writeValueAsString(combinedSerializationVariant(className)),
-                STRICT);
+        JSONAssert.assertEquals(expectedJson, serializeTestValue(className), STRICT);
     }
 
     @ParameterizedTest
@@ -171,7 +161,7 @@ class LocalizedValueJacksonTest {
             },
             delimiter = '|')
     void combinedDeserialization(final String className, final String inputJson) {
-        assertEquals(testLocalizedValue(), combinedDeserializationVariant(className, inputJson));
+        assertEquals(testLocalizedValue(), deserializeTestValue(className, inputJson));
     }
 
     private Object localizedValueVariant(final String variant) {
@@ -189,79 +179,55 @@ class LocalizedValueJacksonTest {
         };
     }
 
-    private Object unwrappedSerializationVariant(final String className) {
-        final var value = LocalizedValue.stringBuilder().de("value_de").en("value_en").build();
-        return switch (className) {
-            case "UnwrappedSerialization1" -> new Unwrapped1(value);
-            case "UnwrappedSerialization2" -> new Unwrapped2(value);
-            case "UnwrappedSerialization3" -> new Unwrapped3(value);
-            case "UnwrappedSerialization4" -> new Unwrapped4(value);
-            case "UnwrappedSerialization5" -> new UnwrappedSerialization1(value);
-            default ->
-                    throw new IllegalArgumentException(
-                            "Unknown class name for unwrappedSerializationVariant: " + className);
-        };
+    private String serializeTestValue(final String className) {
+        final var value = testLocalizedValue();
+        final var variant =
+                switch (className) {
+                    case "Untouched" -> new Untouched(value);
+                    case "Unwrapped1" -> new Unwrapped1(value);
+                    case "Unwrapped2" -> new Unwrapped2(value);
+                    case "Unwrapped3" -> new Unwrapped3(value);
+                    case "Unwrapped4" -> new Unwrapped4(value);
+                    case "UnwrappedSerialization1" -> new UnwrappedSerialization1(value);
+                    case "KeySerialization1" -> new KeySerialization1(value);
+                    case "KeySerialization2" -> new KeySerialization2(value);
+                    case "KeySerialization3" -> new KeySerialization3(value);
+                    case "KeySerialization4" -> new KeySerialization4(value);
+                    case "Combined1" -> new Combined1(value);
+                    case "Combined2" -> new Combined2(value);
+                    case "CombinedSerialization1" -> new CombinedSerialization1(value);
+                    default ->
+                            throw new IllegalArgumentException(
+                                    "Unknown test class name: " + className);
+                };
+        return objectMapper.writeValueAsString(variant);
     }
 
-    private LocalizedValue<String> unwrappedDeserializationVariant(
+    private LocalizedValue<String> deserializeTestValue(
             final String className, final String inputJson) {
         return switch (className) {
+            case "Untouched" -> objectMapper.readValue(inputJson, Untouched.class).name();
             case "Unwrapped1" -> objectMapper.readValue(inputJson, Unwrapped1.class).name();
             case "Unwrapped2" -> objectMapper.readValue(inputJson, Unwrapped2.class).name();
             case "Unwrapped3" -> objectMapper.readValue(inputJson, Unwrapped3.class).name();
             case "Unwrapped4" -> objectMapper.readValue(inputJson, Unwrapped4.class).name();
+            case "UnwrappedSerialization1" ->
+                    objectMapper.readValue(inputJson, UnwrappedSerialization1.class).name();
+            case "KeySerialization1" ->
+                    objectMapper.readValue(inputJson, KeySerialization1.class).name();
+            case "KeySerialization2" ->
+                    objectMapper.readValue(inputJson, KeySerialization2.class).name();
+            case "KeySerialization3" ->
+                    objectMapper.readValue(inputJson, KeySerialization3.class).name();
+            case "KeySerialization4" ->
+                    objectMapper.readValue(inputJson, KeySerialization4.class).name();
+            case "Combined1" -> objectMapper.readValue(inputJson, Combined1.class).name();
+            case "Combined2" -> objectMapper.readValue(inputJson, Combined2.class).name();
+            case "CombinedSerialization1" ->
+                    objectMapper.readValue(inputJson, CombinedSerialization1.class).name();
             default ->
                     throw new IllegalArgumentException(
                             "Unknown class name for unwrappedDeserializationVariant: " + className);
-        };
-    }
-
-    private Object keySerializationVariant(final String className) {
-        final var value = testLocalizedValue();
-        return switch (className) {
-            case "KeySerialization1" -> new KeySerialization1(value);
-            case "KeySerialization2" -> new KeySerialization2(value);
-            case "KeySerialization3" -> new KeySerialization3(value);
-            case "KeySerialization4" -> new KeySerialization4(value);
-            default ->
-                    throw new IllegalArgumentException(
-                            "Unknown class name for keySerializationVariant: " + className);
-        };
-    }
-
-    private LocalizedValue<String> keyDeserializationVariant(
-            final String className, final String inputJson) {
-        return switch (className) {
-            case "KeySerialization1" ->
-                    objectMapper.readValue(inputJson, KeySerialization1.class).name;
-            case "KeySerialization2" ->
-                    objectMapper.readValue(inputJson, KeySerialization2.class).name;
-            case "KeySerialization3" ->
-                    objectMapper.readValue(inputJson, KeySerialization3.class).name;
-            case "KeySerialization4" ->
-                    objectMapper.readValue(inputJson, KeySerialization4.class).name;
-            default ->
-                    throw new IllegalArgumentException(
-                            "Unknown class name for keyDeserializationVariant: " + className);
-        };
-    }
-
-    private Object combinedSerializationVariant(final String className) {
-        final var value = testLocalizedValue();
-        return switch (className) {
-            case "Combined1" -> new Combined1(value);
-            case "Combined2" -> new Combined2(value);
-            case "CombinedSerialization1" -> new CombinedSerialization1(value);
-            default -> throw new IllegalArgumentException("Unknown class name: " + className);
-        };
-    }
-
-    private LocalizedValue<String> combinedDeserializationVariant(
-            final String className, final String inputJson) {
-        return switch (className) {
-            case "Combined1" -> objectMapper.readValue(inputJson, Combined1.class).name();
-            case "Combined2" -> objectMapper.readValue(inputJson, Combined2.class).name();
-            default -> throw new IllegalArgumentException("Unknown class name: " + className);
         };
     }
 
