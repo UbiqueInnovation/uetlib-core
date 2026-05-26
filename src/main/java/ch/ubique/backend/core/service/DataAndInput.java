@@ -2,6 +2,8 @@ package ch.ubique.backend.core.service;
 
 import ch.ubique.backend.core.file.ByteFile;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.validation.constraints.NotNull;
 
 import java.util.Collection;
@@ -12,18 +14,19 @@ import java.util.function.Function;
  * @deprecated since 2.1.0, use {@link DataAndFileProvider} instead
  */
 @Deprecated(since = "2.1.0")
-public record DataAndInput<T>(@NotNull T data, @NotNull Collection<ByteFile> inputFiles) {
+public record DataAndInput<T>(
+        @JsonProperty(required = true) @NotNull T data,
+        @JsonProperty(required = true) @NotNull Collection<ByteFile> inputFiles) {
 
-    public DataAndInput(@NotNull final T data) {
+    public DataAndInput(final T data) {
         this(data, List.of());
     }
 
-    public DataAndInput(@NotNull final T data, @NotNull final ByteFile inputFile) {
+    public DataAndInput(final T data, final ByteFile inputFile) {
         this(data, List.of(inputFile));
     }
 
-    @NotNull
-    public <R> DataAndInput<R> map(@NotNull final Function<T, R> mapper) {
+    public <R> DataAndInput<R> map(final Function<T, R> mapper) {
         return new DataAndInput<>(mapper.apply(data), inputFiles);
     }
 }

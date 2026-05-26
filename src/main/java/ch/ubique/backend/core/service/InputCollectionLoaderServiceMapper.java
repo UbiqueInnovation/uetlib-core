@@ -8,19 +8,17 @@ import java.util.function.Function;
 
 public class InputCollectionLoaderServiceMapper<T, R> implements InputCollectionLoaderService<R> {
 
-    @NotNull private final InputCollectionLoaderService<T> service;
+    private final InputCollectionLoaderService<T> service;
 
-    @NotNull private final Function<T, R> mapper;
+    private final Function<T, R> mapper;
 
     public InputCollectionLoaderServiceMapper(
-            @NotNull final InputCollectionLoaderService<T> service,
-            @NotNull final Function<T, R> mapper) {
+            final InputCollectionLoaderService<T> service, final Function<T, R> mapper) {
         this.service = service;
         this.mapper = mapper;
     }
 
     @Override
-    @NotNull
     public DataAndInput<Collection<R>> loadData() throws IOException {
         return service.loadData().map(collection -> collection.stream().map(mapper).toList());
     }

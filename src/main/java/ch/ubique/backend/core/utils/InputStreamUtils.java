@@ -10,8 +10,6 @@ import com.j256.simplemagic.ContentInfoUtil;
 import com.pivovarit.function.ThrowingSupplier;
 import com.pivovarit.function.exception.WrappedException;
 
-import jakarta.validation.constraints.NotNull;
-
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.compress.compressors.brotli.BrotliCompressorInputStream;
@@ -99,19 +97,16 @@ public final class InputStreamUtils {
      * Wrap an input stream in a {@link BOMInputStream} if the file starts with a BOM that needs to
      * be stripped before parsing.
      */
-    @NotNull
     public static BOMInputStream bomInputStream(final InputStream inputStream) {
         // asSupplier to wrap the IOException with UncheckedIOException
         return BOMInputStream.builder().setInputStream(inputStream).asSupplier().get();
     }
 
-    @NotNull
     public static BufferedReader bufferedReader(
             final InputStream inputStream, final Charset charset) {
         return new BufferedReader(new InputStreamReader(inputStream, charset));
     }
 
-    @NotNull
     public static BufferedReader bufferedReader(final InputStream inputStream) {
         return bufferedReader(inputStream, StandardCharsets.UTF_8);
     }

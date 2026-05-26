@@ -38,7 +38,7 @@ public final class LocaleHelper {
 
     @Nullable
     public static Locale findBestMatchLocale(
-            final Locale locale, final @NotNull Iterable<Locale> candidates) {
+            final Locale locale, final Iterable<Locale> candidates) {
         if (locale == null) {
             return null;
         }
@@ -52,21 +52,19 @@ public final class LocaleHelper {
 
     @Nullable
     public static String findBestMatchLocaleString(
-            final Locale locale, final @NotNull Collection<String> candidateStrings) {
+            final Locale locale, final Collection<String> candidateStrings) {
         final var candidates = candidateStrings.stream().map(Locale::forLanguageTag).toList();
         return Optional.ofNullable(findBestMatchLocale(locale, candidates))
                 .map(Locale::toLanguageTag)
                 .orElse(null);
     }
 
-    @NotNull
     public static Optional<String> localValue(
             final Map<Locale, String> values, final Locale locale) {
         final var matchedLocale = findBestMatchLocale(locale, values.keySet());
         return Optional.ofNullable(values.get(matchedLocale));
     }
 
-    @NotNull
     public static Optional<Locale> getLocale(final String key) {
         try {
             return Optional.ofNullable(LocaleUtils.toLocale(key))
@@ -76,7 +74,6 @@ public final class LocaleHelper {
         }
     }
 
-    @NotNull
     public static Map<Locale, String> getLocalizedStrings(
             final Map<String, ?> dictionary, final String keyPrefix, final String separator) {
         return dictionary.entrySet().stream()
@@ -86,7 +83,6 @@ public final class LocaleHelper {
                 .collect(toMap(Entry::getKey, Entry::getValue, (existing, other) -> existing));
     }
 
-    @NotNull
     private static Optional<Map.Entry<Locale, String>> tryToGetLocalizedString(
             final Map.Entry<String, ?> entry, final String prefix, final String separator) {
 
