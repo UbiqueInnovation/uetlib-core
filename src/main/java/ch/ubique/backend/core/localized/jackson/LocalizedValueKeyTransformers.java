@@ -21,68 +21,14 @@ import java.util.Locale;
  */
 final class LocalizedValueKeyTransformers {
 
-    public static final NameTransformer IDENTITY =
-            new NameTransformer() {
-                @Override
-                public String transform(final String name) {
-                    return name;
-                }
-
-                @Override
-                public String reverse(final String transformed) {
-                    return transformed;
-                }
-
-                @Override
-                public String toString() {
-                    return "NameTransformer[LocalizedValue IDENTITY]";
-                }
-            };
-
     private LocalizedValueKeyTransformers() {}
 
     static NameTransformer keySerializationTransformer(
             final JsonLocalizedValue.SerializationMethod serializationMethod) {
         return switch (serializationMethod) {
-            case DEFAULT -> IDENTITY;
-            case UPPERCASE ->
-                    new NameTransformer() {
-                        @Override
-                        public String transform(final String name) {
-                            return name == null ? null : name.toUpperCase(Locale.ROOT);
-                        }
-
-                        @Override
-                        public String reverse(final String transformed) {
-                            return transformed == null
-                                    ? null
-                                    : transformed.toLowerCase(Locale.ROOT);
-                        }
-
-                        @Override
-                        public String toString() {
-                            return "NameTransformer[LocalizedValue UPPERCASE]";
-                        }
-                    };
-            case CAMEL_CASE ->
-                    new NameTransformer() {
-                        @Override
-                        public String transform(final String name) {
-                            return convertCase(
-                                    name, CaseFormat.LOWER_HYPHEN, CaseFormat.LOWER_CAMEL);
-                        }
-
-                        @Override
-                        public String reverse(final String transformed) {
-                            return convertCase(
-                                    transformed, CaseFormat.LOWER_CAMEL, CaseFormat.LOWER_HYPHEN);
-                        }
-
-                        @Override
-                        public String toString() {
-                            return "NameTransformer[LocalizedValue CAMEL_CASE]";
-                        }
-                    };
+            case DEFAULT -> new IdentityNameTransformer();
+            case UPPERCASE -> new UpperCaseNameTransformer();
+            case CAMEL_CASE -> new CamelCaseNameTransformer();
             case PASCAL_CASE ->
                     new NameTransformer() {
                         @Override
@@ -114,6 +60,74 @@ final class LocalizedValueKeyTransformers {
             return from.to(to, rawKey);
         } catch (final IllegalArgumentException ignored) {
             return null;
+        }
+    }
+
+    public static class IdentityNameTransformer extends NameTransformer {
+        @Override
+        public String transform(final String name) {
+            return name;
+        }
+
+        @Override
+        public String reverse(final String transformed) {
+            return transformed;
+        }
+
+        @Override
+        public String toString() {
+            return "NameTransformer[LocalizedValue IDENTITY]";
+        }
+    }
+
+    public static class UpperCaseNameTransformer extends NameTransformer {
+        @Override
+        public String transform(final String name) {
+            return name == null ? null : name.toUpperCase(Locale.ROOT);
+        }
+
+        @Override
+        public String reverse(final String transformed) {
+            return transformed == null ? null : transformed.toLowerCase(Locale.ROOT);
+        }
+
+        @Override
+        public String toString() {
+            return "NameTransformer[LocalizedValue UPPERCASE]";
+        }
+    }
+
+    public static class CamelCaseNameTransformer extends NameTransformer {
+        @Override
+        public String transform(final String name) {
+            return convertCase(name, CaseFormat.LOWER_HYPHEN, CaseFormat.LOWER_CAMEL);
+        }
+
+        @Override
+        public String reverse(final String transformed) {
+            return convertCase(transformed, CaseFormat.LOWER_CAMEL, CaseFormat.LOWER_HYPHEN);
+        }
+
+        @Override
+        public String toString() {
+            return "NameTransformer[LocalizedValue CAMEL_CASE]";
+        }
+    }
+
+    public static class PascalCaseNameTransformer extends NameTransformer {
+        @Override
+        public String transform(final String name) {
+            return convertCase(name, CaseFormat.LOWER_HYPHEN, CaseFormat.UPPER_CAMEL);
+        }
+
+        @Override
+        public String reverse(final String transformed) {
+            return convertCase(transformed, CaseFormat.UPPER_CAMEL, CaseFormat.LOWER_HYPHEN);
+        }
+
+        @Override
+        public String toString() {
+            return "NameTransformer[LocalizedValue PASCAL_CASE]";
         }
     }
 }
