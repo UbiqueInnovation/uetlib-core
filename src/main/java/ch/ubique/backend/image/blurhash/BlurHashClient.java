@@ -27,7 +27,7 @@ public class BlurHashClient {
     public static final double FALLBACK_ASPECT_RATIO = 1.0;
     public static final String DEFAULT_USER_AGENT = "ubique-backend";
     private static final Logger logger = LoggerFactory.getLogger(BlurHashClient.class);
-    private final Cache<@NotNull String, BlurHashRepresentation> urlToBlurHashCache;
+    private final Cache<String, BlurHashRepresentation> urlToBlurHashCache;
     private final String userAgent;
 
     public BlurHashClient(final int maximumSize, final String userAgent) {
@@ -37,7 +37,7 @@ public class BlurHashClient {
 
     public BlurHashClient(
             final int maximumWeight,
-            final Weigher<@NotNull String, @NotNull BlurHashRepresentation> weigher,
+            final Weigher<String, BlurHashRepresentation> weigher,
             final String userAgent) {
         this.urlToBlurHashCache =
                 Caffeine.newBuilder().maximumWeight(maximumWeight).weigher(weigher).build();

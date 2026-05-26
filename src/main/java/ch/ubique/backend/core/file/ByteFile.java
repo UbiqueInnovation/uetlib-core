@@ -26,7 +26,7 @@ public class ByteFile {
     private byte[] bytes;
 
     public static ByteFile fromBytes(
-            @NotNull final byte[] bytes,
+            final byte[] bytes,
             @Nullable final String fileName,
             @Nullable final String contentType) {
 

@@ -11,7 +11,7 @@ public final class MapUtils {
 
     private MapUtils() {}
 
-    public static @NotNull <T, K extends Comparable<? super K>> List<T> sortMapByKeys(
+    public static <T, K extends Comparable<? super K>> List<T> sortMapByKeys(
             final Map<K, T> values) {
         return values.entrySet().stream()
                 .sorted(Entry.comparingByKey())

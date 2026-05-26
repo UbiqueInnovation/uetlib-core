@@ -7,9 +7,7 @@ import java.util.function.Function;
 
 public interface InputCollectionLoaderService<T> extends InputDataLoaderService<Collection<T>> {
 
-    @NotNull
-    default <R> InputCollectionLoaderService<R> mapCollection(
-            @NotNull final Function<T, R> mapper) {
+    default <R> InputCollectionLoaderService<R> mapCollection(final Function<T, R> mapper) {
         return new InputCollectionLoaderServiceMapper<>(this, mapper);
     }
 }

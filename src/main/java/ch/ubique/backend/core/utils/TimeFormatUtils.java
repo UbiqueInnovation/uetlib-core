@@ -36,20 +36,20 @@ public final class TimeFormatUtils {
     private static final DateTimeFormatter PRETTY_LOCAL_DATE_TIME_FORMATTER =
             DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
-    @NotNull private final TimeUtils timeUtils;
+    private final TimeUtils timeUtils;
 
     @Contract(pure = true)
-    private TimeFormatUtils(@NotNull final TimeUtils timeUtils) {
+    private TimeFormatUtils(final TimeUtils timeUtils) {
         this.timeUtils = timeUtils;
     }
 
-    public static TimeFormatUtils getInstance(@NotNull final ZoneId zoneId) {
+    public static TimeFormatUtils getInstance(final ZoneId zoneId) {
         final var normalized = zoneId.normalized();
         return INSTANCES.computeIfAbsent(
                 normalized, zi -> new TimeFormatUtils(TimeUtils.getInstance(zi)));
     }
 
-    public static TimeFormatUtils getInstance(@NotNull final String zoneId) {
+    public static TimeFormatUtils getInstance(final String zoneId) {
         return getInstance(ZoneId.of(zoneId));
     }
 
@@ -65,13 +65,13 @@ public final class TimeFormatUtils {
         return LocalDateTime.parse(localDateTime, PRETTY_LOCAL_DATE_TIME_FORMATTER);
     }
 
-    public @NotNull ZonedDateTime parsePrettyLocalDateLocalTimeAtZone(
+    public ZonedDateTime parsePrettyLocalDateLocalTimeAtZone(
             final String localDate, final String localTime) {
         return timeUtils.ofLocalDateLocalTime(
                 parsePrettyLocalDate(localDate), parsePrettyLocalTime(localTime));
     }
 
-    public @NotNull ZonedDateTime parsePrettyLocalDateTimeAtZone(final String localDateTime) {
+    public ZonedDateTime parsePrettyLocalDateTimeAtZone(final String localDateTime) {
         return timeUtils.ofLocalDateTime(parsePrettyLocalDateTime(localDateTime));
     }
 
