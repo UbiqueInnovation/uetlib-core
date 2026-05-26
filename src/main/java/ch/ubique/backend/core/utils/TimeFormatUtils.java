@@ -5,8 +5,6 @@ import static ch.ubique.backend.core.utils.TimeUtils.*;
 import static java.util.Map.entry;
 import static java.util.Map.ofEntries;
 
-import jakarta.validation.constraints.NotNull;
-
 import org.jetbrains.annotations.Contract;
 
 import java.time.*;

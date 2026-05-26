@@ -2,8 +2,6 @@ package ch.ubique.backend.core.utils;
 
 import static java.util.Map.Entry;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.List;
 import java.util.Map;
 

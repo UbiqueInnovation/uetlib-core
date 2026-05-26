@@ -5,8 +5,6 @@ import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.mapping;
 import static java.util.stream.Collectors.toList;
 
-import jakarta.validation.constraints.NotNull;
-
 import java.util.List;
 import java.util.Map;
 import java.util.function.BinaryOperator;
