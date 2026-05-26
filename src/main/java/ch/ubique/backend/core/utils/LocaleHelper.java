@@ -3,8 +3,6 @@ package ch.ubique.backend.core.utils;
 import static java.util.Map.entry;
 import static java.util.stream.Collectors.*;
 
-import jakarta.validation.constraints.NotNull;
-
 import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.lang3.LocaleUtils;
 import org.jetbrains.annotations.Contract;

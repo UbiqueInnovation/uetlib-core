@@ -2,8 +2,6 @@ package ch.ubique.backend.core.utils;
 
 import com.github.zafarkhaja.semver.Version;
 
-import jakarta.validation.constraints.NotNull;
-
 public final class VersionUtils {
 
     private VersionUtils() {}
