@@ -3,7 +3,10 @@ package ch.ubique.backend.core.file.watch;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
+import static java.util.Objects.requireNonNull;
 
+import java.util.Objects;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +25,7 @@ public class WatchManager implements Runnable {
     private final WatchService watchService;
     private final FileEventListener listener;
 
-    private Thread thread;
+    @Nullable private Thread thread;
 
     public WatchManager(final WatchService watchService, final FileEventListener listener) {
         this.watchService = watchService;
@@ -31,7 +34,7 @@ public class WatchManager implements Runnable {
 
     public void destroy() {
         try {
-            thread.interrupt();
+            requireNonNull(thread).interrupt();
             watchService.close();
         } catch (final IOException ignored) {
             // ignore exception

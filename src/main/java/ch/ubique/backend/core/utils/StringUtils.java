@@ -38,7 +38,7 @@ public final class StringUtils {
     }
 
     @Contract("null, _ -> fail")
-    public static String requireNonBlank(final String value, @Nullable final String message) {
+    public static String requireNonBlank(final String value,  final @Nullable  String message) {
         final var resolvedMessage = message != null ? message : "value must be non-blank";
         requireNonNull(value, resolvedMessage);
         if (org.apache.commons.lang3.StringUtils.isBlank(value)) {
@@ -49,7 +49,7 @@ public final class StringUtils {
 
     @Contract("null, _ -> fail")
     public static String requireNonBlank(
-            final String value, @Nullable final Supplier<String> messageSupplier) {
+            final String value,  final @Nullable  Supplier<String> messageSupplier) {
         requireNonNull(value, "value must be non-blank");
         if (org.apache.commons.lang3.StringUtils.isBlank(value)) {
             final var resolvedMessage =

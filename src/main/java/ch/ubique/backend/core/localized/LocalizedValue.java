@@ -185,7 +185,7 @@ public class LocalizedValue<T extends Serializable> {
      * @return T value given best matching key
      * @throws NoSuchElementException if the given key does not match any entry
      */
-    public T get(final String key) {
+    public T get( final @Nullable  String key) {
         return getOptional(key).orElseThrow();
     }
 
@@ -199,7 +199,7 @@ public class LocalizedValue<T extends Serializable> {
      * @return T value given best matching key or null if the given key does match any entry
      */
     @Nullable
-    public T getNullable(final String key) {
+    public T getNullable( final @Nullable  String key) {
         return getOptional(key).orElse(null);
     }
 
@@ -213,7 +213,7 @@ public class LocalizedValue<T extends Serializable> {
      * @return T value given best matching key or {@link Optional#empty()} if the given key does
      *     match any entry
      */
-    public Optional<T> getOptional(final String key) {
+    public Optional<T> getOptional( final @Nullable  String key) {
         return getOptional(LocaleHelper.fromLanguageTagThenPosix(key));
     }
 
@@ -225,7 +225,7 @@ public class LocalizedValue<T extends Serializable> {
      * @return T value given best matching key
      * @throws NoSuchElementException if the given key does not match any key any entry
      */
-    public T get(final Locale locale) {
+    public T get( final @Nullable  Locale locale) {
         return getOptional(locale).orElseThrow();
     }
 
@@ -237,7 +237,7 @@ public class LocalizedValue<T extends Serializable> {
      * @return T value given best matching key or null if the given key does match any entry
      */
     @Nullable
-    public T getNullable(final Locale locale) {
+    public T getNullable( final @Nullable  Locale locale) {
         return getOptional(locale).orElse(null);
     }
 
@@ -249,7 +249,7 @@ public class LocalizedValue<T extends Serializable> {
      * @return T value given best matching key or {@link Optional#empty()} if the given key does
      *     match any entry
      */
-    public Optional<T> getOptional(final Locale locale) {
+    public Optional<T> getOptional( final @Nullable  Locale locale) {
         final var matchedKey = LocaleHelper.findBestMatchLocale(locale, values.keySet());
         return Optional.ofNullable(matchedKey).map(values::get);
     }

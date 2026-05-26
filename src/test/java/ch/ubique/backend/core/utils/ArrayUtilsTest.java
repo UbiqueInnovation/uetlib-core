@@ -23,28 +23,28 @@ class ArrayUtilsTest {
     }
 
     @Test
-    void testSingletonOrNull() {
-        assertEquals(0, singletonOrNull(new char[] {}));
-        assertEquals(0, singletonOrNull(new int[] {}));
-        assertEquals(0, singletonOrNull(new long[] {}));
-        assertEquals(0.0, singletonOrNull(new double[] {}));
+    void testSingletonOrNullOrZero() {
+        assertEquals(0, ArrayUtils.singletonOrZero(new char[] {}));
+        assertEquals(0, ArrayUtils.singletonOrZero(new int[] {}));
+        assertEquals(0, ArrayUtils.singletonOrZero(new long[] {}));
+        assertEquals(0.0, ArrayUtils.singletonOrZero(new double[] {}));
         assertNull(singletonOrNull(new String[][] {}));
 
         AssertionUtils.assertThrowsWithMessage(
                 IllegalArgumentException.class,
-                () -> singletonOrNull(new char[] {'a', 'b', 'c', 'd', 'e'}),
+                () -> ArrayUtils.singletonOrZero(new char[] {'a', 'b', 'c', 'd', 'e'}),
                 "Can extract singleton only when array length == 1");
         AssertionUtils.assertThrowsWithMessage(
                 IllegalArgumentException.class,
-                () -> singletonOrNull(new int[] {1, 2, 3, 4, 5}),
+                () -> ArrayUtils.singletonOrZero(new int[] {1, 2, 3, 4, 5}),
                 "Can extract singleton only when array length == 1");
         AssertionUtils.assertThrowsWithMessage(
                 IllegalArgumentException.class,
-                () -> singletonOrNull(new long[] {1, 2, 3, 4, 5}),
+                () -> ArrayUtils.singletonOrZero(new long[] {1, 2, 3, 4, 5}),
                 "Can extract singleton only when array length == 1");
         AssertionUtils.assertThrowsWithMessage(
                 IllegalArgumentException.class,
-                () -> singletonOrNull(new double[] {1.1, 2.2, 3.3, 4.4, 5.5}),
+                () -> ArrayUtils.singletonOrZero(new double[] {1.1, 2.2, 3.3, 4.4, 5.5}),
                 "Can extract singleton only when array length == 1");
         AssertionUtils.assertThrowsWithMessage(
                 IllegalArgumentException.class,
@@ -53,18 +53,18 @@ class ArrayUtilsTest {
 
         assertEquals(
                 'a',
-                singletonOrNull(
+                ArrayUtils.singletonOrZero(
                         new char[] {
                             'a',
                         }));
         assertEquals(
                 1,
-                singletonOrNull(
+                ArrayUtils.singletonOrZero(
                         new int[] {
                             1,
                         }));
-        assertEquals(1L, singletonOrNull(new long[] {1}));
-        assertEquals(1.1, singletonOrNull(new double[] {1.1}));
+        assertEquals(1L, ArrayUtils.singletonOrZero(new long[] {1}));
+        assertEquals(1.1, ArrayUtils.singletonOrZero(new double[] {1.1}));
         assertEquals("1", singletonOrNull(new String[] {"1"}));
     }
 }

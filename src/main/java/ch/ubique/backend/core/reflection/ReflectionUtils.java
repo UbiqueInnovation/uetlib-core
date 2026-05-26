@@ -1,5 +1,8 @@
 package ch.ubique.backend.core.reflection;
 
+import java.util.List;
+import java.util.function.Function;
+
 public final class ReflectionUtils {
 
     private ReflectionUtils() {}

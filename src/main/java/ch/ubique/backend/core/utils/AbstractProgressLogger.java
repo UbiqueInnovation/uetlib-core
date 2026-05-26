@@ -7,9 +7,9 @@ import com.pivovarit.function.ThrowingConsumer;
 import com.pivovarit.function.ThrowingFunction;
 import com.pivovarit.function.ThrowingRunnable;
 
-import org.jspecify.annotations.Nullable;
 import jakarta.validation.constraints.Positive;
 
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +24,7 @@ public abstract sealed class AbstractProgressLogger
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Nullable protected final String prefix;
+    protected final String prefix;
     @Positive private final long stepSize;
 
     private final AtomicLong count;
@@ -33,13 +33,13 @@ public abstract sealed class AbstractProgressLogger
     private long lastTime;
 
     protected AbstractProgressLogger(
-            final String prefix,
+             final @Nullable  String prefix,
             @Positive final long stepSize,
-            final Map<String, String> mdcContextMap) {
+             final @Nullable  Map<String, String> mdcContextMap) {
 
         this.prefix = requireNonNullElse(prefix, "");
         this.stepSize = stepSize;
-        this.mdcContextMap = mdcContextMap;
+        this.mdcContextMap = requireNonNullElse(mdcContextMap, Map.of());
 
         this.count = new AtomicLong();
         this.startTime = System.currentTimeMillis();

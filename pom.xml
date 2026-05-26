@@ -7,7 +7,7 @@
     <parent>
         <groupId>ch.ubique</groupId>
         <artifactId>uetlib-parent</artifactId>
-        <version>2026.3.0</version>
+        <version>2027.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>uetlib-core</artifactId>
@@ -17,6 +17,9 @@
 
     <properties>
         <uetlib-test.version>2.0.1</uetlib-test.version>
+
+        <explicit-null-marking-level>ERROR</explicit-null-marking-level>
+        <westemeyer-version-package-name>ch.ubique.backend.core.version</westemeyer-version-package-name>
     </properties>
 
     <dependencies>

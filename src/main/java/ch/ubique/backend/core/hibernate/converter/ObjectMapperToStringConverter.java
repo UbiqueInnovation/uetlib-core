@@ -2,6 +2,7 @@ package ch.ubique.backend.core.hibernate.converter;
 
 import jakarta.persistence.AttributeConverter;
 
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +11,8 @@ import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
 @SuppressWarnings("unused")
-public abstract class ObjectMapperToStringConverter<T> implements AttributeConverter<T, String> {
+public abstract class ObjectMapperToStringConverter<T>
+        implements AttributeConverter<@Nullable T, String> {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -25,7 +27,8 @@ public abstract class ObjectMapperToStringConverter<T> implements AttributeConve
     }
 
     @Override
-    public String convertToDatabaseColumn(final T attributes) {
+    @Nullable
+    public String convertToDatabaseColumn(final @Nullable T attributes) {
         if (attributes == null) {
             return null;
         }
@@ -33,7 +36,8 @@ public abstract class ObjectMapperToStringConverter<T> implements AttributeConve
     }
 
     @Override
-    public T convertToEntityAttribute(final String dbData) {
+    @Nullable
+    public T convertToEntityAttribute(final @Nullable String dbData) {
         if (dbData == null) {
             return null;
         }
