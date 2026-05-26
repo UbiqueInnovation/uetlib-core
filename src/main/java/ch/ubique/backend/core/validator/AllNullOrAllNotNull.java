@@ -25,7 +25,7 @@ public @interface AllNullOrAllNotNull {
     Class<? extends Payload>[] payload() default {};
 
     /** Fields to validate */
-    String[] fields();
+    String[] fields() default {};
 
     /**
      * Defines several {@link AllNullOrAllNotNull} annotations on the same element.

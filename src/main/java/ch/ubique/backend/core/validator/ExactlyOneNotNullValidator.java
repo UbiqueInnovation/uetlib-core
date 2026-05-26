@@ -5,16 +5,19 @@ import ch.ubique.backend.core.reflection.IntrospectionWrapper;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class ExactlyOneNotNullValidator implements ConstraintValidator<ExactlyOneNotNull, Object> {
 
-    private String[] fields;
+    private final List<String> fields = new ArrayList<>();
 
     @Override
     public void initialize(final ExactlyOneNotNull atLeastOneNotNull) {
-        fields = atLeastOneNotNull.fields();
+        fields.clear();
+        fields.addAll(Arrays.asList(atLeastOneNotNull.fields()));
     }
 
     @Override
@@ -24,10 +27,7 @@ public class ExactlyOneNotNullValidator implements ConstraintValidator<ExactlyOn
         final var beanWrapper = new IntrospectionWrapper(object);
 
         final var nonNullCount =
-                Arrays.stream(fields)
-                        .map(beanWrapper::getPropertyValue)
-                        .filter(Objects::nonNull)
-                        .count();
+                fields.stream().map(beanWrapper::getPropertyValue).filter(Objects::nonNull).count();
         return nonNullCount == 1;
     }
 }

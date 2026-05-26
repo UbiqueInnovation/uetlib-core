@@ -5,16 +5,19 @@ import ch.ubique.backend.core.reflection.IntrospectionWrapper;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class AtLeastOneNullValidator implements ConstraintValidator<AtLeastOneNull, Object> {
 
-    private String[] fields;
+    private final List<String> fields = new ArrayList<>();
 
     @Override
     public void initialize(final AtLeastOneNull atLeastOneNull) {
-        fields = atLeastOneNull.fields();
+        fields.clear();
+        fields.addAll(Arrays.asList(atLeastOneNull.fields()));
     }
 
     @Override
@@ -23,6 +26,6 @@ public class AtLeastOneNullValidator implements ConstraintValidator<AtLeastOneNu
 
         final var beanWrapper = new IntrospectionWrapper(object);
 
-        return Arrays.stream(fields).map(beanWrapper::getPropertyValue).anyMatch(Objects::isNull);
+        return fields.stream().map(beanWrapper::getPropertyValue).anyMatch(Objects::isNull);
     }
 }

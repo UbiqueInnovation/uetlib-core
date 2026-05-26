@@ -9,6 +9,7 @@ import com.pivovarit.function.exception.WrappedException;
 import org.apache.commons.lang3.exception.UncheckedException;
 import org.apache.commons.lang3.exception.UncheckedInterruptedException;
 import org.apache.commons.lang3.stream.Streams;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.MDC;
 
 import java.util.ArrayList;
@@ -27,15 +28,18 @@ public final class VirtualThreadUtils {
 
     private VirtualThreadUtils() {}
 
-    public static <T, V> List<V> mapAll(final Function<T, V> mapper, final Iterable<T> inputs) {
-        return mapAll(mapper, Streams.of(inputs)).toList();
+    public static <T extends @Nullable Object, V extends @Nullable Object> List<@Nullable V> mapAll(
+            final Function<@Nullable T, @Nullable V> mapper, final Iterable<@Nullable T> inputs) {
+        return mapAll(mapper, Streams.<@Nullable T>of(inputs)).toList();
     }
 
-    public static <T> void forEach(final Consumer<T> consumer, final Iterable<T> inputs) {
+    public static <T extends @Nullable Object> void forEach(
+            final Consumer<@Nullable T> consumer, final Iterable<@Nullable T> inputs) {
         forEach(consumer, Streams.of(inputs));
     }
 
-    public static <T> void forEach(final Consumer<T> consumer, final Stream<T> inputs) {
+    public static <T extends @Nullable Object> void forEach(
+            final Consumer<@Nullable T> consumer, final Stream<@Nullable T> inputs) {
         final var context = MDC.getCopyOfContextMap();
         final var tasks = inputs.map(callable(consumer, context)).toList();
         mapAll(tasks);
@@ -44,34 +48,42 @@ public final class VirtualThreadUtils {
     /**
      * Calls a throwing consumer for every input element.
      *
-     * <p>If an exception is thrown inside a virtual, it is rethrown on the calling thread. Any
-     * computations are skipped after the first exception has been thrown.
+     * <p>If an exception is thrown inside a virtual thread, it is rethrown on the calling thread.
+     * Any computations are skipped after the first exception has been thrown.
      */
-    public static <T, E extends Exception> void throwingForEach(
-            final ThrowingConsumer<T, E> throwingConsumer, final Stream<T> inputs) throws E {
+    public static <T extends @Nullable Object, E extends Exception> void throwingForEach(
+            final ThrowingConsumer<@Nullable T, E> throwingConsumer,
+            final Stream<@Nullable T> inputs)
+            throws E {
         throwingMapAll(throwingConsumer.asFunction(), inputs.toList());
     }
 
     /**
      * Calls a throwing consumer for every input element.
      *
-     * <p>If an exception is thrown inside a virtual, it is rethrown on the calling thread. Any
-     * computations are skipped after the first exception has been thrown.
+     * <p>If an exception is thrown inside a virtual thread, it is rethrown on the calling thread.
+     * Any computations are skipped after the first exception has been thrown.
      */
-    public static <T, E extends Exception> void throwingForEach(
-            final ThrowingConsumer<T, E> throwingConsumer, final Iterable<T> inputs) throws E {
+    public static <T extends @Nullable Object, E extends Exception> void throwingForEach(
+            final ThrowingConsumer<@Nullable T, E> throwingConsumer,
+            final Iterable<@Nullable T> inputs)
+            throws E {
         throwingForEach(throwingConsumer, Streams.of(inputs));
     }
 
-    public static <T, V> Stream<V> mapAll(final Function<T, V> mapper, final Stream<T> inputs) {
+    public static <T extends @Nullable Object, V extends @Nullable Object>
+            Stream<@Nullable V> mapAll(
+                    final Function<@Nullable T, @Nullable V> mapper,
+                    final Stream<@Nullable T> inputs) {
         final var tasks = inputs.map(callable(mapper)).toList();
         return mapAll(tasks);
     }
 
-    public static <R> Stream<R> mapAll(final Collection<Callable<R>> tasks) {
+    public static <R extends @Nullable Object> Stream<@Nullable R> mapAll(
+            final Collection<Callable<@Nullable R>> tasks) {
         try (final var executor = Executors.newVirtualThreadPerTaskExecutor()) {
             final var futures = executor.invokeAll(tasks);
-            final var results = new ArrayList<R>();
+            final var results = new ArrayList<@Nullable R>();
             for (final var future : futures) {
                 results.add(future.get());
             }
@@ -111,11 +123,14 @@ public final class VirtualThreadUtils {
      * Calls a throwing function for every element in inputs and returns a collection of all
      * results.
      *
-     * <p>If an exception is thrown inside a virtual, it is rethrown on the calling thread. Any
-     * computations are skipped after the first exception has been thrown.
+     * <p>If an exception is thrown inside a virtual thread, it is rethrown on the calling thread.
+     * Any computations are skipped after the first exception has been thrown.
      */
-    public static <T, V, E extends Exception> List<V> throwingMapAll(
-            final ThrowingFunction<T, V, E> throwingMapper, final Iterable<T> inputs) throws E {
+    public static <T extends @Nullable Object, V extends @Nullable Object, E extends Exception>
+            List<@Nullable V> throwingMapAll(
+                    final ThrowingFunction<@Nullable T, @Nullable V, E> throwingMapper,
+                    final Iterable<@Nullable T> inputs)
+                    throws E {
         final var exceptions = new ConcurrentLinkedDeque<E>();
         final var results =
                 mapAll(
@@ -138,24 +153,30 @@ public final class VirtualThreadUtils {
         return results;
     }
 
-    private static <T, V> Function<T, Callable<V>> callable(final Function<T, V> mapper) {
+    private static <T extends @Nullable Object, V extends @Nullable Object>
+            Function<@Nullable T, Callable<@Nullable V>> callable(
+                    final Function<@Nullable T, @Nullable V> mapper) {
         return input -> callable(mapper, input);
     }
 
-    private static <T> Function<T, Callable<Integer>> callable(
-            final Consumer<T> consumer, final Map<String, String> mdcContext) {
+    private static <T extends @Nullable Object> Function<@Nullable T, Callable<Integer>> callable(
+            final Consumer<@Nullable T> consumer, final Map<String, String> mdcContext) {
         return input -> callable(consumer, input, mdcContext);
     }
 
-    private static <T> Callable<Integer> callable(
-            final Consumer<T> consumer, final T input, final Map<String, String> mdcContext) {
+    private static <T extends @Nullable Object> Callable<Integer> callable(
+            final Consumer<@Nullable T> consumer,
+            final @Nullable T input,
+            final Map<String, String> mdcContext) {
         return () -> {
             MdcUtils.runWithContext(() -> consumer.accept(input), mdcContext);
             return 0;
         };
     }
 
-    private static <T, V> Callable<V> callable(final Function<T, V> mapper, final T input) {
+    private static <T extends @Nullable Object, V extends @Nullable Object>
+            Callable<@Nullable V> callable(
+                    final Function<@Nullable T, @Nullable V> mapper, final @Nullable T input) {
         final var context = MDC.getCopyOfContextMap();
         return () -> MdcUtils.callWithContext(() -> mapper.apply(input), context).call();
     }

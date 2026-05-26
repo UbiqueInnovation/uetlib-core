@@ -24,6 +24,7 @@ public final class LocaleHelper {
      * using {@link LocaleUtils#toLocale(Locale)}.
      */
     @Contract("null -> null; !null -> new")
+    @Nullable
     public static Locale fromLanguageTagThenPosix(final @Nullable String localeCode) {
         if (null == localeCode) {
             return null;
@@ -38,12 +39,12 @@ public final class LocaleHelper {
 
     @Nullable
     public static Locale findBestMatchLocale(
-            final Locale locale, final Iterable<Locale> candidates) {
+             final @Nullable  Locale locale, final Iterable<Locale> candidates) {
         if (locale == null) {
             return null;
         }
         final var lookupList = LocaleUtils.localeLookupList(locale);
-        return lookupList.stream()
+        return lookupList.<@Nullable Locale>stream()
                 .map(lookupLocale -> IterableUtils.find(candidates, lookupLocale::equals))
                 .filter(Objects::nonNull)
                 .findFirst()

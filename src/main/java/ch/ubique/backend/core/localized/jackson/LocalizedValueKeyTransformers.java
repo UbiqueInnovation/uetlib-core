@@ -6,6 +6,7 @@ import ch.ubique.backend.core.localized.annotation.JsonLocalizedValue;
 import com.google.common.base.CaseFormat;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jspecify.annotations.Nullable;
 
 import tools.jackson.databind.util.NameTransformer;
 
@@ -29,28 +30,11 @@ final class LocalizedValueKeyTransformers {
             case DEFAULT -> new IdentityNameTransformer();
             case UPPERCASE -> new UpperCaseNameTransformer();
             case CAMEL_CASE -> new CamelCaseNameTransformer();
-            case PASCAL_CASE ->
-                    new NameTransformer() {
-                        @Override
-                        public String transform(final String name) {
-                            return convertCase(
-                                    name, CaseFormat.LOWER_HYPHEN, CaseFormat.UPPER_CAMEL);
-                        }
-
-                        @Override
-                        public String reverse(final String transformed) {
-                            return convertCase(
-                                    transformed, CaseFormat.UPPER_CAMEL, CaseFormat.LOWER_HYPHEN);
-                        }
-
-                        @Override
-                        public String toString() {
-                            return "NameTransformer[LocalizedValue PASCAL_CASE]";
-                        }
-                    };
+            case PASCAL_CASE -> new PascalCaseNameTransformer();
         };
     }
 
+    @Nullable
     static String convertCase(final String rawKey, final CaseFormat from, final CaseFormat to) {
         if (StringUtils.isBlank(rawKey)) {
             return null;
@@ -82,11 +66,13 @@ final class LocalizedValueKeyTransformers {
 
     public static class UpperCaseNameTransformer extends NameTransformer {
         @Override
+        @Nullable
         public String transform(final String name) {
             return name == null ? null : name.toUpperCase(Locale.ROOT);
         }
 
         @Override
+        @Nullable
         public String reverse(final String transformed) {
             return transformed == null ? null : transformed.toLowerCase(Locale.ROOT);
         }
@@ -99,11 +85,13 @@ final class LocalizedValueKeyTransformers {
 
     public static class CamelCaseNameTransformer extends NameTransformer {
         @Override
+        @Nullable
         public String transform(final String name) {
             return convertCase(name, CaseFormat.LOWER_HYPHEN, CaseFormat.LOWER_CAMEL);
         }
 
         @Override
+        @Nullable
         public String reverse(final String transformed) {
             return convertCase(transformed, CaseFormat.LOWER_CAMEL, CaseFormat.LOWER_HYPHEN);
         }
@@ -116,11 +104,13 @@ final class LocalizedValueKeyTransformers {
 
     public static class PascalCaseNameTransformer extends NameTransformer {
         @Override
+        @Nullable
         public String transform(final String name) {
             return convertCase(name, CaseFormat.LOWER_HYPHEN, CaseFormat.UPPER_CAMEL);
         }
 
         @Override
+        @Nullable
         public String reverse(final String transformed) {
             return convertCase(transformed, CaseFormat.UPPER_CAMEL, CaseFormat.LOWER_HYPHEN);
         }

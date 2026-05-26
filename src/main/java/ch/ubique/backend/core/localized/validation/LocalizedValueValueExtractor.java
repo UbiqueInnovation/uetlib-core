@@ -25,7 +25,7 @@ public class LocalizedValueValueExtractor
 
     @Override
     public void extractValues(
-            @Nullable final LocalizedValue<?> originalValue,
+             final @Nullable  LocalizedValue<?> originalValue,
             final ValueExtractor.ValueReceiver receiver) {
         if (originalValue != null) {
             // Here, we extract all values for validation
