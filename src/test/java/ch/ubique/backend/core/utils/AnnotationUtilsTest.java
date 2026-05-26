@@ -4,9 +4,10 @@ import static ch.ubique.backend.core.utils.AnnotationUtils.findAnnotation;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import static java.lang.annotation.ElementType.*;
+
 import org.junit.jupiter.api.Test;
 
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -127,13 +128,13 @@ class AnnotationUtilsTest {
 
     // Example annotations for testing
     @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.TYPE, ElementType.METHOD})
+    @Target({TYPE, METHOD})
     public @interface MyAnnotation {
         String value() default "Default Value";
     }
 
     @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.TYPE, ElementType.METHOD})
+    @Target({TYPE, METHOD})
     @MyAnnotation("Meta Annotation")
     public @interface MetaAnnotation {}
 

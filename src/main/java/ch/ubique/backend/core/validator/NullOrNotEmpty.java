@@ -12,7 +12,7 @@ import java.lang.annotation.*;
  * Validates that the annotated element is null or not empty. Only allowed on collections, maps and
  * arrays.
  */
-@Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
+@Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE, RECORD_COMPONENT})
 @Retention(RUNTIME)
 @Repeatable(NullOrNotEmpty.List.class)
 @Constraint(validatedBy = NullOrNotEmptyValidator.class)
@@ -30,7 +30,7 @@ public @interface NullOrNotEmpty {
      *
      * @see NullOrNotEmpty
      */
-    @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
+    @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE, RECORD_COMPONENT})
     @Retention(RUNTIME)
     @Documented
     @interface List {
