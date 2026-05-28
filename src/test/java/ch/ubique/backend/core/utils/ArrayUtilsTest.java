@@ -33,23 +33,23 @@ class ArrayUtilsTest {
         AssertionUtils.assertThrowsWithMessage(
                 IllegalArgumentException.class,
                 () -> ArrayUtils.singletonOrZero(new char[] {'a', 'b', 'c', 'd', 'e'}),
-                "Can extract singleton only when array length == 1");
+                "Cannot extract singleton when array length > 1");
         AssertionUtils.assertThrowsWithMessage(
                 IllegalArgumentException.class,
                 () -> ArrayUtils.singletonOrZero(new int[] {1, 2, 3, 4, 5}),
-                "Can extract singleton only when array length == 1");
+                "Cannot extract singleton when array length > 1");
         AssertionUtils.assertThrowsWithMessage(
                 IllegalArgumentException.class,
                 () -> ArrayUtils.singletonOrZero(new long[] {1, 2, 3, 4, 5}),
-                "Can extract singleton only when array length == 1");
+                "Cannot extract singleton when array length > 1");
         AssertionUtils.assertThrowsWithMessage(
                 IllegalArgumentException.class,
                 () -> ArrayUtils.singletonOrZero(new double[] {1.1, 2.2, 3.3, 4.4, 5.5}),
-                "Can extract singleton only when array length == 1");
+                "Cannot extract singleton when array length > 1");
         AssertionUtils.assertThrowsWithMessage(
                 IllegalArgumentException.class,
                 () -> singletonOrNull(new String[] {"1", "2", "3", "4", "5"}),
-                "Can extract singleton only when array length == 1");
+                "Cannot extract singleton when array length > 1");
 
         assertEquals(
                 'a',
