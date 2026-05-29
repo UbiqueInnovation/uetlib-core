@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 2.3
+## 2.3.0
 
 ### Improvements
 
