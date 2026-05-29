@@ -4,7 +4,6 @@ import ch.ubique.backend.core.utils.MdcUtils;
 
 import com.pivovarit.function.ThrowingConsumer;
 import com.pivovarit.function.ThrowingFunction;
-import com.pivovarit.function.exception.WrappedException;
 
 import org.apache.commons.lang3.exception.UncheckedException;
 import org.apache.commons.lang3.exception.UncheckedInterruptedException;
@@ -18,9 +17,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -125,27 +124,32 @@ public final class VirtualThreadUtils {
             List<V> throwingMapAll(
                     final ThrowingFunction<T, V, E> throwingMapper, final Iterable<T> inputs)
                     throws E {
-        final var exceptions = new ConcurrentLinkedDeque<E>();
+
+        final var hasExceptions = new AtomicBoolean(false);
 
         final var results =
-                VirtualThreadUtils.<T, Optional<V>>mapAll(
+                VirtualThreadUtils.<T, MappingState<V, E>>mapAll(
                         input -> {
-                            if (!exceptions.isEmpty()) {
-                                return Optional.empty();
+                            if (hasExceptions.get()) {
+                                return new Skipped<>();
                             }
                             try {
-                                return Optional.ofNullable(throwingMapper.uncheck().apply(input));
-                            } catch (final WrappedException e) {
+                                return new Success<>(throwingMapper.apply(input));
+                            } catch (final Exception e) {
+                                hasExceptions.set(true);
                                 //noinspection unchecked
-                                exceptions.add((E) e.getCause());
-                                return Optional.empty();
+                                return new Failure<>((E) e);
                             }
                         },
                         inputs);
-        if (!exceptions.isEmpty()) {
-            throw exceptions.getFirst();
+        if (hasExceptions.get()) {
+            throw results.stream()
+                    .map(MappingState::exceptionMaybe)
+                    .flatMap(Optional::stream)
+                    .findFirst()
+                    .orElseThrow();
         }
-        return results.stream().map(Optional::orElseThrow).toList();
+        return results.stream().map(MappingState::valueOrThrow).toList();
     }
 
     private static <T extends @Nullable Object, V extends @Nullable Object>
@@ -171,4 +175,31 @@ public final class VirtualThreadUtils {
         final var context = MDC.getCopyOfContextMap();
         return () -> MdcUtils.callWithContext(() -> mapper.apply(input), context).call();
     }
+
+    private sealed interface MappingState<T extends @Nullable Object, E extends Throwable>
+            permits Success, Failure, Skipped {
+
+        default T valueOrThrow() {
+            if (this instanceof Success<T, E>(final var value)) {
+                return value;
+            }
+            throw new IllegalStateException("Can only get value if succesful.");
+        }
+
+        default Optional<E> exceptionMaybe() {
+            if (this instanceof Failure<T, E>(final var exception)) {
+                return Optional.of(exception);
+            }
+            return Optional.empty();
+        }
+    }
+
+    private record Success<T extends @Nullable Object, E extends Throwable>(T data)
+            implements MappingState<T, E> {}
+
+    private record Failure<T extends @Nullable Object, E extends Throwable>(E exception)
+            implements MappingState<T, E> {}
+
+    private record Skipped<T extends @Nullable Object, E extends Throwable>()
+            implements MappingState<T, E> {}
 }
