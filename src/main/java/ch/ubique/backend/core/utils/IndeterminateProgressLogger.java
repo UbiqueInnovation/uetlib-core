@@ -1,6 +1,6 @@
 package ch.ubique.backend.core.utils;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.validation.constraints.Positive;
 
 import org.slf4j.MDC;
@@ -14,9 +14,9 @@ public final class IndeterminateProgressLogger extends AbstractProgressLogger {
     }
 
     public IndeterminateProgressLogger(
-            @Nullable final String prefix,
+             final @Nullable  String prefix,
             @Positive final long stepSize,
-            @Nullable final Map<String, String> mdcContextMap) {
+             final @Nullable  Map<String, String> mdcContextMap) {
         super(prefix, stepSize, mdcContextMap);
     }
 

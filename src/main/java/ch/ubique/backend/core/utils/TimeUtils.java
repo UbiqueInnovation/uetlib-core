@@ -3,8 +3,6 @@ package ch.ubique.backend.core.utils;
 import static java.util.Map.entry;
 import static java.util.Map.ofEntries;
 
-import jakarta.validation.constraints.NotNull;
-
 import org.apache.commons.lang3.ObjectUtils;
 import org.jetbrains.annotations.Contract;
 
@@ -46,19 +44,19 @@ public final class TimeUtils {
                             entry(ZONE_ID_EUROPE_ZURICH, TIME_UTILS_EUROPE_ZURICH),
                             entry(ZONE_ID_EUROPE_BERLIN, TIME_UTILS_EUROPE_BERLIN)));
 
-    @NotNull private final ZoneId zoneId;
+    private final ZoneId zoneId;
 
     @Contract(pure = true)
-    private TimeUtils(@NotNull final ZoneId zoneId) {
+    private TimeUtils(final ZoneId zoneId) {
         this.zoneId = zoneId.normalized();
     }
 
-    public static TimeUtils getInstance(@NotNull final ZoneId zoneId) {
+    public static TimeUtils getInstance(final ZoneId zoneId) {
         final var normalized = zoneId.normalized();
         return INSTANCES.computeIfAbsent(normalized, TimeUtils::new);
     }
 
-    public static TimeUtils getInstance(@NotNull final String zoneId) {
+    public static TimeUtils getInstance(final String zoneId) {
         return getInstance(ZoneId.of(zoneId));
     }
 
@@ -71,10 +69,8 @@ public final class TimeUtils {
      * @param roundIncrement floor to multiples of this value in the given field
      * @return a copy representing the floored value
      */
-    public static @NotNull ZonedDateTime floorTo(
-            final @NotNull ZonedDateTime input,
-            final TemporalField floorTo,
-            final int roundIncrement) {
+    public static ZonedDateTime floorTo(
+            final ZonedDateTime input, final TemporalField floorTo, final int roundIncrement) {
         /* Extract the field being floored. */
         final var field = input.getLong(floorTo);
 
@@ -106,10 +102,8 @@ public final class TimeUtils {
     }
 
     @Contract("_, _, _ -> new")
-    private static @NotNull ZonedDateTime floor(
-            final @NotNull ZonedDateTime input,
-            final @NotNull TemporalField floorTo,
-            final long remainder) {
+    private static ZonedDateTime floor(
+            final ZonedDateTime input, final TemporalField floorTo, final long remainder) {
         return input.plus(-remainder, floorTo.getBaseUnit()).truncatedTo(floorTo.getBaseUnit());
     }
 
@@ -117,16 +111,16 @@ public final class TimeUtils {
      * helper function for floorTo/ceilTo. This function ALWAYS ceils, even if input = floor(input)
      */
     @Contract("_, _, _, _ -> new")
-    private static @NotNull ZonedDateTime ceil(
+    private static ZonedDateTime ceil(
             final ZonedDateTime input,
-            final @NotNull TemporalField ceilTo,
+            final TemporalField ceilTo,
             final int roundIncrement,
             final long remainder) {
         return input.plus(roundIncrement - remainder, ceilTo.getBaseUnit())
                 .truncatedTo(ceilTo.getBaseUnit());
     }
 
-    public static @NotNull ZonedDateTime floorToQuarterHours(final ZonedDateTime input) {
+    public static ZonedDateTime floorToQuarterHours(final ZonedDateTime input) {
         return floorTo(input, ChronoField.MINUTE_OF_HOUR, 15);
     }
 
@@ -145,16 +139,14 @@ public final class TimeUtils {
     /**
      * @return true iff temporal1 >= temporal2
      */
-    public static boolean isAfterOrEqual(
-            @NotNull final Instant temporal1, @NotNull final Instant temporal2) {
+    public static boolean isAfterOrEqual(final Instant temporal1, final Instant temporal2) {
         return !temporal1.isBefore(temporal2);
     }
 
     /**
      * @return true iff temporal1 <= temporal2
      */
-    public static boolean isBeforeOrEqual(
-            @NotNull final Instant temporal1, @NotNull final Instant temporal2) {
+    public static boolean isBeforeOrEqual(final Instant temporal1, final Instant temporal2) {
         return !temporal1.isAfter(temporal2);
     }
 
@@ -162,7 +154,7 @@ public final class TimeUtils {
      * @return true iff temporal1 >= temporal2
      */
     public static boolean isAfterOrEqual(
-            @NotNull final ZonedDateTime temporal1, @NotNull final ZonedDateTime temporal2) {
+            final ZonedDateTime temporal1, final ZonedDateTime temporal2) {
         return !temporal1.isBefore(temporal2);
     }
 
@@ -170,7 +162,7 @@ public final class TimeUtils {
      * @return true iff temporal1 <= temporal2
      */
     public static boolean isBeforeOrEqual(
-            @NotNull final ZonedDateTime temporal1, @NotNull final ZonedDateTime temporal2) {
+            final ZonedDateTime temporal1, final ZonedDateTime temporal2) {
         return !temporal1.isAfter(temporal2);
     }
 
@@ -178,7 +170,7 @@ public final class TimeUtils {
      * @return true iff temporal1 >= temporal2
      */
     public static boolean isAfterOrEqual(
-            @NotNull final OffsetDateTime temporal1, @NotNull final OffsetDateTime temporal2) {
+            final OffsetDateTime temporal1, final OffsetDateTime temporal2) {
         return !temporal1.isBefore(temporal2);
     }
 
@@ -186,7 +178,7 @@ public final class TimeUtils {
      * @return true iff temporal1 <= temporal2
      */
     public static boolean isBeforeOrEqual(
-            @NotNull final OffsetDateTime temporal1, @NotNull final OffsetDateTime temporal2) {
+            final OffsetDateTime temporal1, final OffsetDateTime temporal2) {
         return !temporal1.isAfter(temporal2);
     }
 
@@ -194,7 +186,7 @@ public final class TimeUtils {
      * @return true iff temporal1 >= temporal2
      */
     public static boolean isAfterOrEqual(
-            @NotNull final LocalDateTime temporal1, @NotNull final LocalDateTime temporal2) {
+            final LocalDateTime temporal1, final LocalDateTime temporal2) {
         return !temporal1.isBefore(temporal2);
     }
 
@@ -202,39 +194,35 @@ public final class TimeUtils {
      * @return true iff temporal1 <= temporal2
      */
     public static boolean isBeforeOrEqual(
-            @NotNull final LocalDateTime temporal1, @NotNull final LocalDateTime temporal2) {
+            final LocalDateTime temporal1, final LocalDateTime temporal2) {
         return !temporal1.isAfter(temporal2);
     }
 
     /**
      * @return true iff temporal1 >= temporal2
      */
-    public static boolean isAfterOrEqual(
-            @NotNull final LocalDate temporal1, @NotNull final LocalDate temporal2) {
+    public static boolean isAfterOrEqual(final LocalDate temporal1, final LocalDate temporal2) {
         return !temporal1.isBefore(temporal2);
     }
 
     /**
      * @return true iff temporal1 <= temporal2
      */
-    public static boolean isBeforeOrEqual(
-            @NotNull final LocalDate temporal1, @NotNull final LocalDate temporal2) {
+    public static boolean isBeforeOrEqual(final LocalDate temporal1, final LocalDate temporal2) {
         return !temporal1.isAfter(temporal2);
     }
 
     /**
      * @return true iff temporal1 >= temporal2
      */
-    public static boolean isAfterOrEqual(
-            @NotNull final LocalTime temporal1, @NotNull final LocalTime temporal2) {
+    public static boolean isAfterOrEqual(final LocalTime temporal1, final LocalTime temporal2) {
         return !temporal1.isBefore(temporal2);
     }
 
     /**
      * @return true iff temporal1 <= temporal2
      */
-    public static boolean isBeforeOrEqual(
-            @NotNull final LocalTime temporal1, @NotNull final LocalTime temporal2) {
+    public static boolean isBeforeOrEqual(final LocalTime temporal1, final LocalTime temporal2) {
         return !temporal1.isAfter(temporal2);
     }
 
@@ -244,8 +232,7 @@ public final class TimeUtils {
      * @param end of the valid interval [start, end)
      * @return true <=> start <= time < end <=> time \in [start, end)
      */
-    public static boolean isBetween(
-            @NotNull final Instant time, @NotNull final Instant start, @NotNull final Instant end) {
+    public static boolean isBetween(final Instant time, final Instant start, final Instant end) {
         return !time.isBefore(start) && time.isBefore(end);
     }
 
@@ -256,9 +243,7 @@ public final class TimeUtils {
      * @return true <=> start <= time < end <=> time \in [start, end)
      */
     public static boolean isBetween(
-            @NotNull final ZonedDateTime time,
-            @NotNull final ZonedDateTime start,
-            @NotNull final ZonedDateTime end) {
+            final ZonedDateTime time, final ZonedDateTime start, final ZonedDateTime end) {
         return !time.isBefore(start) && time.isBefore(end);
     }
 
@@ -269,9 +254,7 @@ public final class TimeUtils {
      * @return true <=> start <= time < end <=> time \in [start, end)
      */
     public static boolean isBetween(
-            @NotNull final OffsetDateTime time,
-            @NotNull final OffsetDateTime start,
-            @NotNull final OffsetDateTime end) {
+            final OffsetDateTime time, final OffsetDateTime start, final OffsetDateTime end) {
         return !time.isBefore(start) && time.isBefore(end);
     }
 
@@ -282,9 +265,7 @@ public final class TimeUtils {
      * @return true <=> start <= time < end <=> time \in [start, end)
      */
     public static boolean isBetween(
-            @NotNull final LocalDateTime time,
-            @NotNull final LocalDateTime start,
-            @NotNull final LocalDateTime end) {
+            final LocalDateTime time, final LocalDateTime start, final LocalDateTime end) {
         return !time.isBefore(start) && time.isBefore(end);
     }
 
@@ -295,9 +276,7 @@ public final class TimeUtils {
      * @return true <=> start <= time < end <=> time \in [start, end)
      */
     public static boolean isBetween(
-            @NotNull final LocalDate time,
-            @NotNull final LocalDate start,
-            @NotNull final LocalDate end) {
+            final LocalDate time, final LocalDate start, final LocalDate end) {
         return !time.isBefore(start) && time.isBefore(end);
     }
 
@@ -308,13 +287,11 @@ public final class TimeUtils {
      * @return true <=> start <= time < end <=> time \in [start, end)
      */
     public static boolean isBetween(
-            @NotNull final LocalTime time,
-            @NotNull final LocalTime start,
-            @NotNull final LocalTime end) {
+            final LocalTime time, final LocalTime start, final LocalTime end) {
         return !time.isBefore(start) && time.isBefore(end);
     }
 
-    public static long toMillis(final @NotNull ZonedDateTime zonedDateTime) {
+    public static long toMillis(final ZonedDateTime zonedDateTime) {
         return zonedDateTime.toInstant().toEpochMilli();
     }
 
@@ -331,38 +308,38 @@ public final class TimeUtils {
     }
 
     @Contract(pure = true)
-    public @NotNull ZoneId zoneId() {
+    public ZoneId zoneId() {
         return zoneId;
     }
 
     @Contract(" -> new")
-    public @NotNull ZonedDateTime now() {
+    public ZonedDateTime now() {
         return ZonedDateTime.now(zoneId);
     }
 
     @Contract("_ -> new")
-    public @NotNull ZonedDateTime ofMillis(final long millis) {
+    public ZonedDateTime ofMillis(final long millis) {
         return Instant.ofEpochMilli(millis).atZone(zoneId);
     }
 
     @Contract("_ -> new")
-    public @NotNull ZonedDateTime ofInstant(final Instant instant) {
+    public ZonedDateTime ofInstant(final Instant instant) {
         return instant.atZone(zoneId);
     }
 
     @Contract("_, _ -> new")
-    public @NotNull ZonedDateTime ofLocalDateLocalTime(
+    public ZonedDateTime ofLocalDateLocalTime(
             final LocalDate localDate, final LocalTime localTime) {
         return ZonedDateTime.of(localDate, localTime, zoneId);
     }
 
     @Contract("_ -> new")
-    public @NotNull ZonedDateTime ofLocalDateTime(final LocalDateTime localDateTime) {
+    public ZonedDateTime ofLocalDateTime(final LocalDateTime localDateTime) {
         return ZonedDateTime.of(localDateTime, zoneId);
     }
 
     @Contract("_ -> new")
-    public @NotNull ZonedDateTime withZoneSameInstant(final @NotNull ZonedDateTime zonedDateTime) {
+    public ZonedDateTime withZoneSameInstant(final ZonedDateTime zonedDateTime) {
         return zonedDateTime.withZoneSameInstant(zoneId);
     }
 
@@ -379,7 +356,7 @@ public final class TimeUtils {
     }
 
     @Contract("_ -> new")
-    public @NotNull ZonedDateTime atZoneSameInstant(final @NotNull OffsetDateTime offsetDateTime) {
+    public ZonedDateTime atZoneSameInstant(final OffsetDateTime offsetDateTime) {
         return offsetDateTime.atZoneSameInstant(zoneId);
     }
 
@@ -396,19 +373,19 @@ public final class TimeUtils {
     }
 
     @Contract("_ -> new")
-    public @NotNull ZonedDateTime atZone(final @NotNull Instant instant) {
+    public ZonedDateTime atZone(final Instant instant) {
         return instant.atZone(zoneId);
     }
 
-    public LocalDate toLocalDate(final @NotNull Instant instant) {
+    public LocalDate toLocalDate(final Instant instant) {
         return atZone(instant).toLocalDate();
     }
 
-    public LocalTime toLocalTime(final @NotNull Instant instant) {
+    public LocalTime toLocalTime(final Instant instant) {
         return atZone(instant).toLocalTime();
     }
 
-    public LocalDateTime toLocalDateTime(final @NotNull Instant instant) {
+    public LocalDateTime toLocalDateTime(final Instant instant) {
         return atZone(instant).toLocalDateTime();
     }
 
@@ -422,39 +399,39 @@ public final class TimeUtils {
     }
 
     @Contract(" -> new")
-    public @NotNull ZonedDateTime startOfToday() {
+    public ZonedDateTime startOfToday() {
         return now().truncatedTo(ChronoUnit.DAYS);
     }
 
     @Contract("_ -> new")
-    public @NotNull ZonedDateTime startOfDay(final ZonedDateTime zonedDateTime) {
+    public ZonedDateTime startOfDay(final ZonedDateTime zonedDateTime) {
         return withZoneSameInstant(zonedDateTime).truncatedTo(ChronoUnit.DAYS);
     }
 
     @Contract("_ -> new")
-    public @NotNull ZonedDateTime startOfDay(final LocalDate localDate) {
+    public ZonedDateTime startOfDay(final LocalDate localDate) {
         return localDate.atStartOfDay(zoneId);
     }
 
     @Contract(" -> new")
-    public @NotNull ZonedDateTime startOfMonth() {
+    public ZonedDateTime startOfMonth() {
         return now().with(TemporalAdjusters.firstDayOfMonth()).truncatedTo(ChronoUnit.DAYS);
     }
 
     @Contract("_ -> new")
-    public @NotNull ZonedDateTime startOfMonth(final ZonedDateTime zonedDateTime) {
+    public ZonedDateTime startOfMonth(final ZonedDateTime zonedDateTime) {
         return withZoneSameInstant(zonedDateTime)
                 .with(TemporalAdjusters.firstDayOfMonth())
                 .truncatedTo(ChronoUnit.DAYS);
     }
 
     @Contract("_ -> new")
-    public @NotNull ZonedDateTime startOfMonth(final LocalDate localDate) {
+    public ZonedDateTime startOfMonth(final LocalDate localDate) {
         return startOfDay(localDate.with(TemporalAdjusters.firstDayOfMonth()));
     }
 
     @Contract(" -> new")
-    public @NotNull ZonedDateTime startOfNextMonth() {
+    public ZonedDateTime startOfNextMonth() {
         return now().with(TemporalAdjusters.firstDayOfNextMonth()).truncatedTo(ChronoUnit.DAYS);
     }
 }

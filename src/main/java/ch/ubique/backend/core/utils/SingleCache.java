@@ -2,7 +2,7 @@ package ch.ubique.backend.core.utils;
 
 import com.github.benmanes.caffeine.cache.Cache;
 
-import jakarta.validation.constraints.NotNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Supplier;
 
@@ -24,11 +24,12 @@ public final class SingleCache<T> {
         cache.put(KEY, value);
     }
 
+    @Nullable
     public T getIfPresent() {
         return cache.getIfPresent(KEY);
     }
 
-    public T get(final Supplier<? extends @NotNull T> valueGetter) {
+    public T get(final Supplier<? extends T> valueGetter) {
         return cache.get(KEY, key -> valueGetter.get());
     }
 }

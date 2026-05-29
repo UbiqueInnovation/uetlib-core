@@ -3,7 +3,6 @@ package ch.ubique.backend.core.io;
 import com.pivovarit.function.ThrowingSupplier;
 
 import org.apache.commons.io.FileUtils;
-import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 
-@NullMarked
 public class InputStreamSupplierFileProvider extends TempFileProvider {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -39,8 +37,8 @@ public class InputStreamSupplierFileProvider extends TempFileProvider {
      */
     InputStreamSupplierFileProvider(
             final ThrowingSupplier<InputStream, IOException> inputStreamSupplier,
-            @Nullable final String filePrefix,
-            @Nullable final String fileSuffix) {
+             final @Nullable  String filePrefix,
+             final @Nullable  String fileSuffix) {
         super(filePrefix, fileSuffix);
         this.inputStreamSupplier = inputStreamSupplier;
     }

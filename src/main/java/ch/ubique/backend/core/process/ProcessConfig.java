@@ -1,6 +1,7 @@
 package ch.ubique.backend.core.process;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.event.Level;
 
 import java.nio.file.Path;
@@ -10,14 +11,14 @@ import java.util.List;
 public class ProcessConfig {
     private final List<String> command;
     private final Duration timeout;
-    private final Path directory;
+    private final @Nullable Path directory;
     private final Level logLevelStdout;
     private final Level logLevelStderr;
 
     private ProcessConfig(
             final List<String> command,
             final Duration timeout,
-            final Path directory,
+            final @Nullable Path directory,
             final Level logLevelStdout,
             final Level logLevelStderr) {
         this.command = command;
@@ -39,7 +40,7 @@ public class ProcessConfig {
         return timeout;
     }
 
-    public Path directory() {
+    public @Nullable Path directory() {
         return directory;
     }
 
@@ -52,9 +53,9 @@ public class ProcessConfig {
     }
 
     public static class ProcessConfigBuilder {
-        private List<String> command;
+        private @Nullable List<String> command;
         private Duration timeout;
-        private Path directory;
+        private @Nullable Path directory;
         private Level logLevelStdout;
         private Level logLevelStderr;
 

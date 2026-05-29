@@ -9,6 +9,7 @@ import ch.ubique.backend.core.localized.annotation.JsonLocalizedValue;
 import ch.ubique.backend.core.localized.annotation.JsonLocalizedValue.SerializationMethod;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jspecify.annotations.Nullable;
 
 import tools.jackson.core.JsonParser;
 import tools.jackson.databind.BeanProperty;
@@ -37,8 +38,8 @@ import java.util.LinkedHashMap;
 public class LocalizedValueDeserializer
         extends ValueDeserializer<LocalizedValue<? extends Serializable>> {
 
-    private final JsonLocalizedValue jsonLocalizedValue;
-    private final NameTransformer unwrapper;
+    @Nullable private final JsonLocalizedValue jsonLocalizedValue;
+    @Nullable private final NameTransformer unwrapper;
     private final NameTransformer effectiveUnwrapper;
 
     public LocalizedValueDeserializer() {
@@ -46,13 +47,15 @@ public class LocalizedValueDeserializer
     }
 
     public LocalizedValueDeserializer(
-            final JsonLocalizedValue jsonLocalizedValue, final NameTransformer unwrapper) {
+             final @Nullable  JsonLocalizedValue jsonLocalizedValue,
+             final @Nullable  NameTransformer unwrapper) {
         this.jsonLocalizedValue = jsonLocalizedValue;
         this.unwrapper = unwrapper;
         this.effectiveUnwrapper = buildEffectiveUnwrapper(jsonLocalizedValue, unwrapper);
     }
 
     @Override
+    @Nullable
     public LocalizedValue<? extends Serializable> deserialize(
             final JsonParser parser, final DeserializationContext context) {
         final var node = parser.objectReadContext().readTree(parser);
@@ -80,7 +83,7 @@ public class LocalizedValueDeserializer
 
     @Override
     public ValueDeserializer<?> createContextual(
-            final DeserializationContext context, final BeanProperty property) {
+             final @Nullable  DeserializationContext context,  final @Nullable  BeanProperty property) {
         if (property == null) {
             return this;
         }
@@ -100,7 +103,8 @@ public class LocalizedValueDeserializer
     }
 
     private static NameTransformer buildEffectiveUnwrapper(
-            final JsonLocalizedValue jsonLocalizedValue, final NameTransformer unwrapper) {
+             final @Nullable  JsonLocalizedValue jsonLocalizedValue,
+             final @Nullable  NameTransformer unwrapper) {
         final var keySerializationMethod =
                 jsonLocalizedValue != null
                         ? jsonLocalizedValue.keySerialization()

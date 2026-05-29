@@ -1,9 +1,13 @@
 package ch.ubique.backend.core.utils.duration;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.time.Duration;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalUnit;
-import java.util.Objects;
 
 public final class DurationBasedTemporalUnit implements TemporalUnit {
 
@@ -81,23 +85,27 @@ public final class DurationBasedTemporalUnit implements TemporalUnit {
     }
 
     @Override
-    public String toString() {
-        return duration.toString();
-    }
-
-    @Override
     public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
+
         if (!(o instanceof final DurationBasedTemporalUnit that)) {
             return false;
         }
-        return Objects.equals(duration, that.duration);
+
+        return new EqualsBuilder().append(duration, that.duration).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(duration);
+        return new HashCodeBuilder(17, 37).append(duration).toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("duration", duration)
+                .toString();
     }
 }

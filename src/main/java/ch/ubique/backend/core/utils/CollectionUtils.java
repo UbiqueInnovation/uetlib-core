@@ -4,7 +4,6 @@ import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.*;
 
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.SerializationUtils;
 
@@ -104,9 +103,8 @@ public final class CollectionUtils {
      * @param <V> the type of the values in the map (must implement the Serializable interface)
      * @return a new map with the same keys and deep copies of the values
      */
-    @NotNull
     public static <K extends Serializable, V extends Serializable> Map<K, V> deepCopy(
-            @NotNull final Map<K, V> values) {
+            final Map<K, V> values) {
         return values.entrySet().stream()
                 .collect(
                         toMap(

@@ -1,5 +1,7 @@
 package ch.ubique.backend.core.reflection;
 
+import org.jspecify.annotations.Nullable;
+
 public class IntrospectionWrapper {
 
     private final Object object;
@@ -8,6 +10,7 @@ public class IntrospectionWrapper {
         this.object = object;
     }
 
+    @Nullable
     public Object getPropertyValue(final String fieldName) {
         try {
             return ReflectionUtils.getFieldValue(object, fieldName);

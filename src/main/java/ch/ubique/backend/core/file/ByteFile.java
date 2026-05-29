@@ -4,7 +4,7 @@ import static java.util.Objects.requireNonNullElse;
 
 import ch.ubique.backend.core.io.FileProvider;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.validation.constraints.NotNull;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -20,15 +20,15 @@ import java.io.InputStream;
 @Deprecated(since = "2.1.0")
 public class ByteFile {
 
-    private String fileName;
-    private String fileHash;
-    private String contentType;
-    private byte[] bytes;
+    @Nullable private String fileName;
+    @Nullable private String fileHash;
+    @Nullable private String contentType;
+    private byte @Nullable [] bytes;
 
     public static ByteFile fromBytes(
-            @NotNull final byte[] bytes,
-            @Nullable final String fileName,
-            @Nullable final String contentType) {
+            final byte[] bytes,
+             final @Nullable  String fileName,
+             final @Nullable  String contentType) {
 
         final var contentTypeOrOctetStream =
                 requireNonNullElse(contentType, "application/octet-stream");
@@ -39,33 +39,36 @@ public class ByteFile {
                 .setContentType(contentTypeOrOctetStream);
     }
 
+    @Nullable
     public String getFileName() {
         return fileName;
     }
 
-    public ByteFile setFileName(final String fileName) {
+    public ByteFile setFileName( final @Nullable  String fileName) {
         this.fileName = fileName;
         return this;
     }
 
+    @Nullable
     public String getFileHash() {
         return fileHash;
     }
 
+    @Nullable
     public String getContentType() {
         return contentType;
     }
 
-    public ByteFile setContentType(final String contentType) {
+    public ByteFile setContentType( final @Nullable  String contentType) {
         this.contentType = contentType;
         return this;
     }
 
-    public byte[] getBytes() {
+    public byte @Nullable [] getBytes() {
         return bytes;
     }
 
-    public ByteFile setBytes(final byte[] bytes) {
+    public ByteFile setBytes(final byte @Nullable [] bytes) {
         this.bytes = bytes;
         this.fileHash = DigestUtils.sha3_512Hex(bytes);
         return this;

@@ -10,8 +10,6 @@ import com.j256.simplemagic.ContentInfoUtil;
 import com.pivovarit.function.ThrowingSupplier;
 import com.pivovarit.function.exception.WrappedException;
 
-import jakarta.validation.constraints.NotNull;
-
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.compress.compressors.brotli.BrotliCompressorInputStream;
@@ -21,7 +19,7 @@ import org.apache.commons.compress.compressors.z.ZCompressorInputStream;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.input.BOMInputStream;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.Contract;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -99,19 +97,16 @@ public final class InputStreamUtils {
      * Wrap an input stream in a {@link BOMInputStream} if the file starts with a BOM that needs to
      * be stripped before parsing.
      */
-    @NotNull
     public static BOMInputStream bomInputStream(final InputStream inputStream) {
         // asSupplier to wrap the IOException with UncheckedIOException
         return BOMInputStream.builder().setInputStream(inputStream).asSupplier().get();
     }
 
-    @NotNull
     public static BufferedReader bufferedReader(
             final InputStream inputStream, final Charset charset) {
         return new BufferedReader(new InputStreamReader(inputStream, charset));
     }
 
-    @NotNull
     public static BufferedReader bufferedReader(final InputStream inputStream) {
         return bufferedReader(inputStream, StandardCharsets.UTF_8);
     }
@@ -121,7 +116,6 @@ public final class InputStreamUtils {
      * current contents into an {@link InputStream}.
      */
     @SuppressWarnings("java:S2095")
-    @Contract("null -> fail")
     public static InputStream pipeOutputToInputStream(final ByteArrayOutputStream originOut) {
         requireNonNull(originOut, "originOut");
 
@@ -157,11 +151,13 @@ public final class InputStreamUtils {
     }
 
     public static InputStream uncompress(
-            final InputStream inputStream, final String contentEncoding, final String path)
+            final InputStream inputStream,
+            final String contentEncoding,
+             final @Nullable  String path)
             throws IOException {
 
         final var compressionAlgorithm =
-                Stream.<ThrowingSupplier<CompressionAlgorithm, IOException>>of(
+                Stream.<ThrowingSupplier<@Nullable CompressionAlgorithm, IOException>>of(
                                 () -> findCompressionByContentInfo(inputStream),
                                 () -> findCompressionByContentEncoding(contentEncoding),
                                 () -> findCompressionByFilePath(path))
@@ -185,6 +181,7 @@ public final class InputStreamUtils {
         };
     }
 
+    @Nullable
     private static CompressionAlgorithm findCompressionByContentInfo(final InputStream inputStream)
             throws IOException {
         final var contentInfo = contentInfo(inputStream);
@@ -204,6 +201,7 @@ public final class InputStreamUtils {
         };
     }
 
+    @Nullable
     public static CompressionAlgorithm findCompressionByContentEncoding(
             final String contentEncoding) {
         if (StringUtils.isBlank(contentEncoding)) {
@@ -227,7 +225,8 @@ public final class InputStreamUtils {
         };
     }
 
-    public static CompressionAlgorithm findCompressionByFilePath(final String filePath) {
+    @Nullable
+    public static CompressionAlgorithm findCompressionByFilePath( final @Nullable  String filePath) {
         final var extension = FilenameUtils.getExtension(filePath);
         if (StringUtils.isBlank(extension)) {
             logger.debug("No file extension found for path {}", filePath);
@@ -250,6 +249,7 @@ public final class InputStreamUtils {
      * Attempts to get {@link ContentInfo} from the given input stream and restoring the supplied
      * input stream after reading the first bytes to determine the content type
      */
+    @Nullable
     public static ContentInfo contentInfo(final InputStream inputStream) throws IOException {
         final ContentInfoInputStreamWrapper contentInfoInputStreamWrapper;
         if (inputStream.markSupported()) {

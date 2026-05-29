@@ -1,6 +1,6 @@
 package ch.ubique.backend.core.utils;
 
-import static org.apache.commons.lang3.ArrayUtils.isEmpty;
+import org.jspecify.annotations.Nullable;
 
 @SuppressWarnings("java:S1192")
 public final class ArrayUtils {
@@ -23,56 +23,57 @@ public final class ArrayUtils {
         return array[array.length - 1];
     }
 
-    public static <T> T lastElement(final T[] array) {
+    public static <T extends @Nullable Object> T lastElement(final T[] array) {
         return array[array.length - 1];
     }
 
-    public static char singletonOrNull(final char[] array) {
-        if (isEmpty(array)) {
+    public static char singletonOrZero(final char @Nullable [] array) {
+        if (array == null || array.length == 0) {
             return 0;
         }
         if (array.length > 1) {
-            throw new IllegalArgumentException("Can extract singleton only when array length == 1");
+            throw new IllegalArgumentException("Cannot extract singleton when array length > 1");
         }
         return array[0];
     }
 
-    public static int singletonOrNull(final int[] array) {
-        if (isEmpty(array)) {
+    public static int singletonOrZero(final int @Nullable [] array) {
+        if (array == null || array.length == 0) {
             return 0;
         }
         if (array.length > 1) {
-            throw new IllegalArgumentException("Can extract singleton only when array length == 1");
+            throw new IllegalArgumentException("Cannot extract singleton when array length > 1");
         }
         return array[0];
     }
 
-    public static long singletonOrNull(final long[] array) {
-        if (isEmpty(array)) {
+    public static long singletonOrZero(final long @Nullable [] array) {
+        if (array == null || array.length == 0) {
             return 0;
         }
         if (array.length > 1) {
-            throw new IllegalArgumentException("Can extract singleton only when array length == 1");
+            throw new IllegalArgumentException("Cannot extract singleton when array length > 1");
         }
         return array[0];
     }
 
-    public static double singletonOrNull(final double[] array) {
-        if (isEmpty(array)) {
+    public static double singletonOrZero(final double @Nullable [] array) {
+        if (array == null || array.length == 0) {
             return 0;
         }
         if (array.length > 1) {
-            throw new IllegalArgumentException("Can extract singleton only when array length == 1");
+            throw new IllegalArgumentException("Cannot extract singleton when array length > 1");
         }
         return array[0];
     }
 
-    public static <T> T singletonOrNull(final T[] array) {
-        if (isEmpty(array)) {
+    public static <T extends @Nullable Object> @Nullable T singletonOrNull(
+            final T @Nullable [] array) {
+        if (array == null || array.length == 0) {
             return null;
         }
         if (array.length > 1) {
-            throw new IllegalArgumentException("Can extract singleton only when array length == 1");
+            throw new IllegalArgumentException("Cannot extract singleton when array length > 1");
         }
         return array[0];
     }

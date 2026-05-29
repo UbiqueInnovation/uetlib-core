@@ -13,9 +13,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -23,7 +21,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.jetbrains.annotations.Contract;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.annotation.JsonSerialize;
@@ -49,12 +47,10 @@ public class LocalizedValue<T extends Serializable> {
         this.values = CollectionUtils.deepCopy(values);
     }
 
-    @NotNull
     public static <S extends Serializable> LocalizedValueBuilder<S> builder() {
         return new LocalizedValueBuilder<>();
     }
 
-    @NotNull
     public static LocalizedValueBuilder<String> stringBuilder() {
         return new LocalizedValueBuilder<>();
     }
@@ -63,7 +59,6 @@ public class LocalizedValue<T extends Serializable> {
      * Convenience method for single {@link Locale}. For full flexibility, {@link
      * LocalizedValue#builder()} can be used.
      */
-    @NotNull
     public static <S extends Serializable> LocalizedValue<S> from(
             final S value, final Locale locale) {
         return LocalizedValue.<S>builder().add(value, locale).build();
@@ -73,7 +68,6 @@ public class LocalizedValue<T extends Serializable> {
      * Convenience method if you want to set the same value for multiple {@link Locale}s. For full
      * flexibility, {@link LocalizedValue#builder()} can be used.
      */
-    @NotNull
     public static <S extends Serializable> LocalizedValue<S> from(
             final S value, final Collection<Locale> locales) {
         return LocalizedValue.<S>builder().add(value, locales).build();
@@ -83,7 +77,6 @@ public class LocalizedValue<T extends Serializable> {
      * Convenience method if you want to initialize the localized value from a map. The standard
      * validation will be called, i.e. the correct null handling is still enforced.
      */
-    @NotNull
     public static <S extends Serializable> LocalizedValue<S> fromMap(final Map<Locale, S> values) {
         return LocalizedValue.<S>builder().fromMap(values).build();
     }
@@ -92,7 +85,6 @@ public class LocalizedValue<T extends Serializable> {
      * Convenience method if you want to initialize the localized value from a map. The standard
      * validation will be called, i.e. the correct null handling is still enforced.
      */
-    @NotNull
     public static <S extends Serializable> LocalizedValue<S> fromStringMap(
             final Map<String, S> values) {
         return LocalizedValue.<S>builder().fromStringMap(values).build();
@@ -104,7 +96,6 @@ public class LocalizedValue<T extends Serializable> {
      * enforced.
      */
     @JsonCreator
-    @NotNull
     public static <S extends Serializable> LocalizedValue<S> fromStringMapFullLocale(
             final Map<String, S> values) {
         return LocalizedValue.<S>builder().fullLocale().fromStringMap(values).build();
@@ -114,7 +105,6 @@ public class LocalizedValue<T extends Serializable> {
      * Convenience method if you only need English. For multiple languages, {@link
      * LocalizedValue#builder()} can be used.
      */
-    @NotNull
     public static <S extends Serializable> LocalizedValue<S> en(final S value) {
         return LocalizedValue.<S>builder().en(value).build();
     }
@@ -123,7 +113,6 @@ public class LocalizedValue<T extends Serializable> {
      * Convenience method if you only need German. For multiple languages, {@link
      * LocalizedValue#builder()} can be used.
      */
-    @NotNull
     public static <S extends Serializable> LocalizedValue<S> de(final S value) {
         return LocalizedValue.<S>builder().de(value).build();
     }
@@ -132,7 +121,6 @@ public class LocalizedValue<T extends Serializable> {
      * Convenience method if you only need French. For multiple languages, {@link
      * LocalizedValue#builder()} can be used.
      */
-    @NotNull
     public static <S extends Serializable> LocalizedValue<S> fr(final S value) {
         return LocalizedValue.<S>builder().fr(value).build();
     }
@@ -141,7 +129,6 @@ public class LocalizedValue<T extends Serializable> {
      * Convenience method if you only need Italian. For multiple languages, {@link
      * LocalizedValue#builder()} can be used.
      */
-    @NotNull
     public static <S extends Serializable> LocalizedValue<S> it(final S value) {
         return LocalizedValue.<S>builder().it(value).build();
     }
@@ -150,7 +137,6 @@ public class LocalizedValue<T extends Serializable> {
      * Convenience method if you only need Romansch (Rätoromanisch). For multiple languages, {@link
      * LocalizedValue#builder()} can be used.
      */
-    @NotNull
     public static <S extends Serializable> LocalizedValue<S> romansh(final S value) {
         return LocalizedValue.<S>builder().romansh(value).build();
     }
@@ -159,9 +145,8 @@ public class LocalizedValue<T extends Serializable> {
      * Return a new LocalizedValue with the merged set of entries, where the later argument values
      * override the previous.
      */
-    @NotNull
     public static <S extends Serializable> LocalizedValue<S> mergeAll(
-            @NotNull final Collection<LocalizedValue<S>> mergees) {
+            final Collection<LocalizedValue<S>> mergees) {
         final var mergedValues =
                 mergees.stream()
                         .map(mergee -> mergee.values)
@@ -186,8 +171,7 @@ public class LocalizedValue<T extends Serializable> {
      * Return a new LocalizedValue with the merged set of entries, where the argument values
      * override the current object. Shortcut for {@link #mergeAll} for {@code n == 2}.
      */
-    @NotNull
-    public LocalizedValue<T> mergeWith(@NotNull final LocalizedValue<T> mergee) {
+    public LocalizedValue<T> mergeWith(final LocalizedValue<T> mergee) {
         return mergeAll(List.of(this, mergee));
     }
 
@@ -201,8 +185,7 @@ public class LocalizedValue<T extends Serializable> {
      * @return T value given best matching key
      * @throws NoSuchElementException if the given key does not match any entry
      */
-    @NotNull
-    public T get(final String key) {
+    public T get( final @Nullable  String key) {
         return getOptional(key).orElseThrow();
     }
 
@@ -216,7 +199,7 @@ public class LocalizedValue<T extends Serializable> {
      * @return T value given best matching key or null if the given key does match any entry
      */
     @Nullable
-    public T getNullable(final String key) {
+    public T getNullable( final @Nullable  String key) {
         return getOptional(key).orElse(null);
     }
 
@@ -230,8 +213,7 @@ public class LocalizedValue<T extends Serializable> {
      * @return T value given best matching key or {@link Optional#empty()} if the given key does
      *     match any entry
      */
-    @NotNull
-    public Optional<T> getOptional(final String key) {
+    public Optional<T> getOptional( final @Nullable  String key) {
         return getOptional(LocaleHelper.fromLanguageTagThenPosix(key));
     }
 
@@ -243,8 +225,7 @@ public class LocalizedValue<T extends Serializable> {
      * @return T value given best matching key
      * @throws NoSuchElementException if the given key does not match any key any entry
      */
-    @NotNull
-    public T get(final Locale locale) {
+    public T get( final @Nullable  Locale locale) {
         return getOptional(locale).orElseThrow();
     }
 
@@ -256,7 +237,7 @@ public class LocalizedValue<T extends Serializable> {
      * @return T value given best matching key or null if the given key does match any entry
      */
     @Nullable
-    public T getNullable(final Locale locale) {
+    public T getNullable( final @Nullable  Locale locale) {
         return getOptional(locale).orElse(null);
     }
 
@@ -268,8 +249,7 @@ public class LocalizedValue<T extends Serializable> {
      * @return T value given best matching key or {@link Optional#empty()} if the given key does
      *     match any entry
      */
-    @NotNull
-    public Optional<T> getOptional(final Locale locale) {
+    public Optional<T> getOptional( final @Nullable  Locale locale) {
         final var matchedKey = LocaleHelper.findBestMatchLocale(locale, values.keySet());
         return Optional.ofNullable(matchedKey).map(values::get);
     }
@@ -278,7 +258,6 @@ public class LocalizedValue<T extends Serializable> {
      * @return T value best matching end
      * @throws NoSuchElementException if there is no entry matching en
      */
-    @NotNull
     public T en() {
         return enOptional().orElseThrow();
     }
@@ -287,7 +266,6 @@ public class LocalizedValue<T extends Serializable> {
      * @return T value best matching de
      * @throws NoSuchElementException if there is no entry matching de
      */
-    @NotNull
     public T de() {
         return deOptional().orElseThrow();
     }
@@ -296,7 +274,6 @@ public class LocalizedValue<T extends Serializable> {
      * @return T value best matching fr
      * @throws NoSuchElementException if there is no entry matching fr
      */
-    @NotNull
     public T fr() {
         return frOptional().orElseThrow();
     }
@@ -305,7 +282,6 @@ public class LocalizedValue<T extends Serializable> {
      * @return T value best matching it
      * @throws NoSuchElementException if there is no entry matching it
      */
-    @NotNull
     public T it() {
         return itOptional().orElseThrow();
     }
@@ -314,7 +290,6 @@ public class LocalizedValue<T extends Serializable> {
      * @return T value best matching romansh
      * @throws NoSuchElementException if there is no entry matching romansh
      */
-    @NotNull
     public T romansh() {
         return romanshOptional().orElseThrow();
     }
@@ -362,7 +337,6 @@ public class LocalizedValue<T extends Serializable> {
     /**
      * @return Optional value best matching en or {@link Optional#empty()}
      */
-    @NotNull
     public Optional<T> enOptional() {
         return getOptional(Locale.ENGLISH);
     }
@@ -370,7 +344,6 @@ public class LocalizedValue<T extends Serializable> {
     /**
      * @return Optional value best matching de or {@link Optional#empty()}
      */
-    @NotNull
     public Optional<T> deOptional() {
         return getOptional(Locale.GERMAN);
     }
@@ -378,7 +351,6 @@ public class LocalizedValue<T extends Serializable> {
     /**
      * @return Optional value best matching fr or {@link Optional#empty()}
      */
-    @NotNull
     public Optional<T> frOptional() {
         return getOptional(Locale.FRENCH);
     }
@@ -386,7 +358,6 @@ public class LocalizedValue<T extends Serializable> {
     /**
      * @return Optional value best matching it or {@link Optional#empty()}
      */
-    @NotNull
     public Optional<T> itOptional() {
         return getOptional(Locale.ITALIAN);
     }
@@ -394,7 +365,6 @@ public class LocalizedValue<T extends Serializable> {
     /**
      * @return Optional value best matching romansh or {@link Optional#empty()}
      */
-    @NotNull
     public Optional<T> romanshOptional() {
         return getOptional(AdditionalLocales.ROMANSH);
     }
@@ -406,7 +376,6 @@ public class LocalizedValue<T extends Serializable> {
      * @return T
      * @throws NoSuchElementException if none match.
      */
-    @NotNull
     public T coalesce(final Locale... locales) {
         return coalesceOptional(locales).orElseThrow();
     }
@@ -418,7 +387,6 @@ public class LocalizedValue<T extends Serializable> {
      * @return T
      * @throws NoSuchElementException if none match.
      */
-    @NotNull
     public T coalesce(final String... keys) {
         return coalesceOptional(keys).orElseThrow();
     }
@@ -429,7 +397,6 @@ public class LocalizedValue<T extends Serializable> {
      *
      * @return T
      */
-    @NotNull
     public T coalesceOrGetAny(final Locale... locales) {
         return coalesceOptional(locales).orElseGet(this::getAny);
     }
@@ -440,7 +407,6 @@ public class LocalizedValue<T extends Serializable> {
      *
      * @return T
      */
-    @NotNull
     public T coalesceOrGetAny(final String... keys) {
         return coalesceOptional(keys).orElseGet(this::getAny);
     }
@@ -451,7 +417,6 @@ public class LocalizedValue<T extends Serializable> {
      *
      * @return Optional
      */
-    @NotNull
     public Optional<T> coalesceOptional(final Locale... locales) {
         return Arrays.stream(locales).map(this::getOptional).flatMap(Optional::stream).findFirst();
     }
@@ -462,7 +427,6 @@ public class LocalizedValue<T extends Serializable> {
      *
      * @return Optional
      */
-    @NotNull
     public Optional<T> coalesceOptional(final String... keys) {
         return Arrays.stream(keys).map(this::getOptional).flatMap(Optional::stream).findFirst();
     }
@@ -474,7 +438,6 @@ public class LocalizedValue<T extends Serializable> {
      * @throws NoSuchElementException if no value exists (This should be disallowed by the builder
      *     methods of {@link LocalizedValue}).
      */
-    @NotNull
     @JsonIgnore
     public T getAny() {
         return values.values().stream().findAny().orElseThrow();
@@ -509,10 +472,8 @@ public class LocalizedValue<T extends Serializable> {
      * @return A new LocalizedValue<V> with transformed values and the same keys.
      * @throws NullPointerException if the mapper function is null or returns null for any input.
      */
-    @NonNull
     @Contract(value = "_ -> new", pure = true)
-    public <V extends Serializable> LocalizedValue<V> mapValues(
-            final @NonNull Function<T, @NonNull V> valueMapper) {
+    public <V extends Serializable> LocalizedValue<V> mapValues(final Function<T, V> valueMapper) {
         return new LocalizedValue<>(
                 values.entrySet().stream()
                         .collect(
@@ -526,7 +487,7 @@ public class LocalizedValue<T extends Serializable> {
     }
 
     @Override
-    public boolean equals(final Object o) {
+    public boolean equals(final @Nullable Object o) {
         if (this == o) {
             return true;
         }
@@ -546,7 +507,6 @@ public class LocalizedValue<T extends Serializable> {
     }
 
     @Override
-    @NotNull
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("values", values)

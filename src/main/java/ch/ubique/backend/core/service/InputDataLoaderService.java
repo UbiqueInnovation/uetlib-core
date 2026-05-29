@@ -7,11 +7,9 @@ import java.util.function.Function;
 
 public interface InputDataLoaderService<T> {
 
-    @NotNull
     DataAndInput<T> loadData() throws IOException;
 
-    @NotNull
-    default <R> InputDataLoaderService<R> map(@NotNull final Function<T, R> mapper) {
+    default <R> InputDataLoaderService<R> map(final Function<T, R> mapper) {
         return new InputDataLoaderServiceMapper<>(this, mapper);
     }
 }
