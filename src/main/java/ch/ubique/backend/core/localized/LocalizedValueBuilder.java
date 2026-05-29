@@ -17,39 +17,39 @@ import java.util.Optional;
 
 public final class LocalizedValueBuilder<T extends Serializable> {
 
-    private final Map<Locale, @Nullable T> values = new HashMap<>();
+    private final Map<Locale, T> values = new HashMap<>();
     private boolean keepLanguageOnly = true;
 
     LocalizedValueBuilder() {}
 
     public LocalizedValueBuilder<T> en(final @Nullable T value) {
-        values.put(Locale.ENGLISH, value);
+        putIfPresent(value, Locale.ENGLISH);
         return this;
     }
 
     public LocalizedValueBuilder<T> fr(final @Nullable T value) {
-        values.put(Locale.FRENCH, value);
+        putIfPresent(value, Locale.FRENCH);
         return this;
     }
 
     public LocalizedValueBuilder<T> it(final @Nullable T value) {
-        values.put(Locale.ITALIAN, value);
+        putIfPresent(value, Locale.ITALIAN);
         return this;
     }
 
     public LocalizedValueBuilder<T> de(final @Nullable T value) {
-        values.put(Locale.GERMAN, value);
+        putIfPresent(value, Locale.GERMAN);
         return this;
     }
 
     /** Rätoromanisch */
     public LocalizedValueBuilder<T> romansh(final @Nullable T value) {
-        values.put(AdditionalLocales.ROMANSH, value);
+        putIfPresent(value, AdditionalLocales.ROMANSH);
         return this;
     }
 
     public LocalizedValueBuilder<T> add(final @Nullable T value, final String localeCode) {
-        values.put(LocaleHelper.fromLanguageTagThenPosix(localeCode), value);
+        putIfPresent(value, LocaleHelper.fromNonNullLanguageTagThenPosix(localeCode));
         return this;
     }
 
@@ -59,7 +59,7 @@ public final class LocalizedValueBuilder<T extends Serializable> {
     }
 
     public LocalizedValueBuilder<T> add(final @Nullable T value, final Locale locale) {
-        values.put(locale, value);
+        putIfPresent(value, locale);
         return this;
     }
 
@@ -117,6 +117,12 @@ public final class LocalizedValueBuilder<T extends Serializable> {
     private Locale finalLocale(final Entry<Locale, ?> entry) {
         final var locale = entry.getKey();
         return keepLanguageOnly ? Locale.of(locale.getLanguage()) : locale;
+    }
+
+    private void putIfPresent(@Nullable final T value, final Locale locale) {
+        if (value != null) {
+            values.put(locale, value);
+        }
     }
 
     @Nullable

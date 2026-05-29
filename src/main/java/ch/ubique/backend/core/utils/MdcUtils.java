@@ -34,8 +34,8 @@ public final class MdcUtils {
         };
     }
 
-    public static <T> Callable<@Nullable T> callWithContext(
-            final Callable<@Nullable T> callable, final Map<String, String> mdcContext) {
+    public static <T extends @Nullable Object> Callable<T> callWithContext(
+            final Callable<T> callable, final Map<String, String> mdcContext) {
         return () -> {
             final var previous = startMdcSection(mdcContext);
             final var result = callable.call();
@@ -44,8 +44,8 @@ public final class MdcUtils {
         };
     }
 
-    public static <T> Supplier<@Nullable T> supplyWithContext(
-            final Supplier<@Nullable T> supplier, final Map<String, String> mdcContext) {
+    public static <T extends @Nullable Object> Supplier<T> supplyWithContext(
+            final Supplier<T> supplier, final Map<String, String> mdcContext) {
         return () -> {
             final var previous = startMdcSection(mdcContext);
             final var result = supplier.get();
@@ -54,8 +54,8 @@ public final class MdcUtils {
         };
     }
 
-    public static <T> Consumer<@Nullable T> consumeWithContext(
-            final Consumer<@Nullable T> consumer, final Map<String, String> mdcContext) {
+    public static <T extends @Nullable Object> Consumer<T> consumeWithContext(
+            final Consumer<T> consumer, final Map<String, String> mdcContext) {
         return input -> {
             final var previous = startMdcSection(mdcContext);
             consumer.accept(input);
@@ -63,9 +63,8 @@ public final class MdcUtils {
         };
     }
 
-    public static <T, U> BiConsumer<@Nullable T, @Nullable U> biConsumeWithContext(
-            final BiConsumer<@Nullable T, @Nullable U> consumer,
-            final Map<String, String> mdcContext) {
+    public static <T, U> BiConsumer<T, @Nullable U> biConsumeWithContext(
+            final BiConsumer<T, @Nullable U> consumer, final Map<String, String> mdcContext) {
         return (input1, input2) -> {
             final var previous = startMdcSection(mdcContext);
             consumer.accept(input1, input2);
@@ -73,9 +72,8 @@ public final class MdcUtils {
         };
     }
 
-    public static <T, R> Function<@Nullable T, @Nullable R> applyWithContext(
-            final Function<@Nullable T, @Nullable R> function,
-            final Map<String, String> mdcContext) {
+    public static <T, R> Function<T, @Nullable R> applyWithContext(
+            final Function<T, @Nullable R> function, final Map<String, String> mdcContext) {
         return input -> {
             final var previous = startMdcSection(mdcContext);
             final var result = function.apply(input);
@@ -84,9 +82,8 @@ public final class MdcUtils {
         };
     }
 
-    public static <T, U, R> BiFunction<@Nullable T, @Nullable U, R> biApplyWithContext(
-            final BiFunction<@Nullable T, @Nullable U, R> function,
-            final Map<String, String> mdcContext) {
+    public static <T, U, R> BiFunction<T, @Nullable U, R> biApplyWithContext(
+            final BiFunction<T, @Nullable U, R> function, final Map<String, String> mdcContext) {
         return (t, u) -> {
             final var previous = startMdcSection(mdcContext);
             final var result = function.apply(t, u);
@@ -95,10 +92,8 @@ public final class MdcUtils {
         };
     }
 
-    public static <T, E extends Exception>
-            ThrowingConsumer<@Nullable T, E> consumeThrowingWithContext(
-                    final ThrowingConsumer<@Nullable T, E> consumer,
-                    final Map<String, String> mdcContext) {
+    public static <T, E extends Exception> ThrowingConsumer<T, E> consumeThrowingWithContext(
+            final ThrowingConsumer<T, E> consumer, final Map<String, String> mdcContext) {
         return t -> {
             final var previous = startMdcSection(mdcContext);
             consumer.accept(t);
@@ -107,8 +102,8 @@ public final class MdcUtils {
     }
 
     public static <T, U, E extends Exception>
-            ThrowingBiConsumer<@Nullable T, @Nullable U, E> biConsumeThrowingWithContext(
-                    final ThrowingBiConsumer<@Nullable T, @Nullable U, E> biConsumer,
+            ThrowingBiConsumer<T, @Nullable U, E> biConsumeThrowingWithContext(
+                    final ThrowingBiConsumer<T, @Nullable U, E> biConsumer,
                     final Map<String, String> mdcContext) {
         return (t, u) -> {
             final var previous = startMdcSection(mdcContext);
@@ -118,8 +113,8 @@ public final class MdcUtils {
     }
 
     public static <T, R, E extends Exception>
-            ThrowingFunction<@Nullable T, @Nullable R, E> applyThrowingWithContext(
-                    final ThrowingFunction<@Nullable T, @Nullable R, E> function,
+            ThrowingFunction<T, @Nullable R, E> applyThrowingWithContext(
+                    final ThrowingFunction<T, @Nullable R, E> function,
                     final Map<String, String> mdcContext) {
         return input -> {
             final var previous = startMdcSection(mdcContext);
@@ -130,8 +125,8 @@ public final class MdcUtils {
     }
 
     public static <T, U, R, E extends Exception>
-            ThrowingBiFunction<@Nullable T, @Nullable U, @Nullable R, E> biApplyThrowingWithContext(
-                    final ThrowingBiFunction<@Nullable T, @Nullable U, @Nullable R, E> function,
+            ThrowingBiFunction<T, @Nullable U, @Nullable R, E> biApplyThrowingWithContext(
+                    final ThrowingBiFunction<T, @Nullable U, @Nullable R, E> function,
                     final Map<String, String> mdcContext) {
         return (t, u) -> {
             final var previous = startMdcSection(mdcContext);
@@ -141,8 +136,8 @@ public final class MdcUtils {
         };
     }
 
-    public static <T> IntFunction<@Nullable T> intApplyWithContext(
-            final IntFunction<@Nullable T> function, final Map<String, String> mdcContext) {
+    public static <T extends @Nullable Object> IntFunction<T> intApplyWithContext(
+            final IntFunction<T> function, final Map<String, String> mdcContext) {
         return i -> {
             final var previous = startMdcSection(mdcContext);
             final var result = function.apply(i);
@@ -151,8 +146,8 @@ public final class MdcUtils {
         };
     }
 
-    public static <T> LongFunction<@Nullable T> longApplyWithContext(
-            final LongFunction<@Nullable T> function, final Map<String, String> mdcContext) {
+    public static <T extends @Nullable Object> LongFunction<T> longApplyWithContext(
+            final LongFunction<T> function, final Map<String, String> mdcContext) {
         return i -> {
             final var previous = startMdcSection(mdcContext);
             final var result = function.apply(i);
@@ -161,8 +156,8 @@ public final class MdcUtils {
         };
     }
 
-    public static <T> DoubleFunction<@Nullable T> doubleApplyWithContext(
-            final DoubleFunction<@Nullable T> function, final Map<String, String> mdcContext) {
+    public static <T extends @Nullable Object> DoubleFunction<T> doubleApplyWithContext(
+            final DoubleFunction<T> function, final Map<String, String> mdcContext) {
         return i -> {
             final var previous = startMdcSection(mdcContext);
             final var result = function.apply(i);
@@ -172,7 +167,7 @@ public final class MdcUtils {
     }
 
     private static Map<String, String> startMdcSection(
-             final @Nullable  Map<String, String> mdcContext) {
+            final @Nullable Map<String, String> mdcContext) {
         final var previous = MDC.getCopyOfContextMap();
         if (mdcContext != null) {
             MDC.setContextMap(mdcContext);
@@ -180,7 +175,7 @@ public final class MdcUtils {
         return previous;
     }
 
-    private static void endMdcSection( final @Nullable  Map<String, String> previousMdcContext) {
+    private static void endMdcSection(final @Nullable Map<String, String> previousMdcContext) {
         MDC.clear();
         if (previousMdcContext != null) {
             MDC.setContextMap(previousMdcContext);

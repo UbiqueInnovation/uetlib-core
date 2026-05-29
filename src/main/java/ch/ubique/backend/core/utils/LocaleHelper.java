@@ -27,6 +27,10 @@ public final class LocaleHelper {
         if (null == localeCode) {
             return null;
         }
+        return fromNonNullLanguageTagThenPosix(localeCode);
+    }
+
+    public static Locale fromNonNullLanguageTagThenPosix(final String localeCode) {
         final var byLanguageTag = Locale.forLanguageTag(localeCode);
         if (!EMPTY.equals(byLanguageTag)) {
             return byLanguageTag;
@@ -37,7 +41,7 @@ public final class LocaleHelper {
 
     @Nullable
     public static Locale findBestMatchLocale(
-             final @Nullable  Locale locale, final Iterable<Locale> candidates) {
+            final @Nullable Locale locale, final Iterable<Locale> candidates) {
         if (locale == null) {
             return null;
         }

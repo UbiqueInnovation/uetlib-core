@@ -11,8 +11,8 @@ import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
 @SuppressWarnings("unused")
-public abstract class ObjectMapperToStringConverter<T>
-        implements AttributeConverter<@Nullable T, String> {
+public abstract class ObjectMapperToStringConverter<T extends @Nullable Object>
+        implements AttributeConverter<T, String> {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -27,8 +27,7 @@ public abstract class ObjectMapperToStringConverter<T>
     }
 
     @Override
-    @Nullable
-    public String convertToDatabaseColumn(final @Nullable T attributes) {
+    public @Nullable String convertToDatabaseColumn(final T attributes) {
         if (attributes == null) {
             return null;
         }
@@ -36,8 +35,7 @@ public abstract class ObjectMapperToStringConverter<T>
     }
 
     @Override
-    @Nullable
-    public T convertToEntityAttribute(final @Nullable String dbData) {
+    public @Nullable T convertToEntityAttribute(final @Nullable String dbData) {
         if (dbData == null) {
             return null;
         }

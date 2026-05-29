@@ -23,7 +23,7 @@ public final class ArrayUtils {
         return array[array.length - 1];
     }
 
-    public static <T> T lastElement(final T[] array) {
+    public static <T extends @Nullable Object> T lastElement(final T[] array) {
         return array[array.length - 1];
     }
 
@@ -67,9 +67,8 @@ public final class ArrayUtils {
         return array[0];
     }
 
-    @Nullable
-    public static <T extends @Nullable Object> T singletonOrNull(
-            final @Nullable T @Nullable [] array) {
+    public static <T extends @Nullable Object> @Nullable T singletonOrNull(
+            final T @Nullable [] array) {
         if (array == null || array.length == 0) {
             return null;
         }
