@@ -190,6 +190,19 @@
         </dependency>
     </dependencies>
 
+    <dependencyManagement>
+        <!-- TODO: remove once we hava a working jackson unwrap version again (3.1.4) -->
+        <dependencies>
+            <dependency>
+                <groupId>tools.jackson</groupId>
+                <artifactId>jackson-bom</artifactId>
+                <version>3.0.4</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <build>
         <plugins>
             <plugin>
