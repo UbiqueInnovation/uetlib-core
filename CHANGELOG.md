@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2.3
+
+### Improvements
+
+- Marked everything with jspecify
+
 ## 2.2.2
 
 ### Bugfixes
