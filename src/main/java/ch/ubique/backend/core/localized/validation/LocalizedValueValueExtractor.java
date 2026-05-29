@@ -5,7 +5,6 @@ import ch.ubique.backend.core.localized.LocalizedValue;
 import jakarta.validation.valueextraction.ExtractedValue;
 import jakarta.validation.valueextraction.ValueExtractor;
 
-import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -19,13 +18,12 @@ import org.jspecify.annotations.Nullable;
  * @see ValueExtractor
  * @see LocalizedValue
  */
-@NullMarked
 public class LocalizedValueValueExtractor
         implements ValueExtractor<LocalizedValue<@ExtractedValue ?>> {
 
     @Override
     public void extractValues(
-             final @Nullable  LocalizedValue<?> originalValue,
+            final @Nullable LocalizedValue<?> originalValue,
             final ValueExtractor.ValueReceiver receiver) {
         if (originalValue != null) {
             // Here, we extract all values for validation

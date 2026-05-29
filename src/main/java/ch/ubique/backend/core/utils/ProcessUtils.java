@@ -8,7 +8,6 @@ import ch.ubique.backend.core.process.UnfinishedProcessResult;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.pivovarit.function.exception.WrappedException;
 
-import org.jspecify.annotations.NullMarked;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
@@ -25,7 +24,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-@NullMarked
 public final class ProcessUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(ProcessUtils.class);
