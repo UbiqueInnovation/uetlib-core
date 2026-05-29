@@ -3,12 +3,10 @@ package ch.ubique.backend.core.utils;
 import static java.util.Map.entry;
 import static java.util.stream.Collectors.*;
 
-import jakarta.annotation.Nullable;
-import jakarta.validation.constraints.NotNull;
-
 import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.lang3.LocaleUtils;
 import org.jetbrains.annotations.Contract;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -24,10 +22,15 @@ public final class LocaleHelper {
      * using {@link LocaleUtils#toLocale(Locale)}.
      */
     @Contract("null -> null; !null -> new")
-    public static Locale fromLanguageTagThenPosix(final String localeCode) {
+    @Nullable
+    public static Locale fromLanguageTagThenPosix(final @Nullable String localeCode) {
         if (null == localeCode) {
             return null;
         }
+        return fromNonNullLanguageTagThenPosix(localeCode);
+    }
+
+    public static Locale fromNonNullLanguageTagThenPosix(final String localeCode) {
         final var byLanguageTag = Locale.forLanguageTag(localeCode);
         if (!EMPTY.equals(byLanguageTag)) {
             return byLanguageTag;
@@ -38,12 +41,12 @@ public final class LocaleHelper {
 
     @Nullable
     public static Locale findBestMatchLocale(
-            final Locale locale, final @NotNull Iterable<Locale> candidates) {
+            final @Nullable Locale locale, final Iterable<Locale> candidates) {
         if (locale == null) {
             return null;
         }
         final var lookupList = LocaleUtils.localeLookupList(locale);
-        return lookupList.stream()
+        return lookupList.<@Nullable Locale>stream()
                 .map(lookupLocale -> IterableUtils.find(candidates, lookupLocale::equals))
                 .filter(Objects::nonNull)
                 .findFirst()
@@ -52,21 +55,19 @@ public final class LocaleHelper {
 
     @Nullable
     public static String findBestMatchLocaleString(
-            final Locale locale, final @NotNull Collection<String> candidateStrings) {
+            final Locale locale, final Collection<String> candidateStrings) {
         final var candidates = candidateStrings.stream().map(Locale::forLanguageTag).toList();
         return Optional.ofNullable(findBestMatchLocale(locale, candidates))
                 .map(Locale::toLanguageTag)
                 .orElse(null);
     }
 
-    @NotNull
     public static Optional<String> localValue(
             final Map<Locale, String> values, final Locale locale) {
         final var matchedLocale = findBestMatchLocale(locale, values.keySet());
         return Optional.ofNullable(values.get(matchedLocale));
     }
 
-    @NotNull
     public static Optional<Locale> getLocale(final String key) {
         try {
             return Optional.ofNullable(LocaleUtils.toLocale(key))
@@ -76,7 +77,6 @@ public final class LocaleHelper {
         }
     }
 
-    @NotNull
     public static Map<Locale, String> getLocalizedStrings(
             final Map<String, ?> dictionary, final String keyPrefix, final String separator) {
         return dictionary.entrySet().stream()
@@ -86,7 +86,6 @@ public final class LocaleHelper {
                 .collect(toMap(Entry::getKey, Entry::getValue, (existing, other) -> existing));
     }
 
-    @NotNull
     private static Optional<Map.Entry<Locale, String>> tryToGetLocalizedString(
             final Map.Entry<String, ?> entry, final String prefix, final String separator) {
 

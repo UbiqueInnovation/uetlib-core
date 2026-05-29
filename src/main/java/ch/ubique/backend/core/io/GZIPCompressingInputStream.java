@@ -44,8 +44,7 @@ public class GZIPCompressingInputStream extends InputStream {
                             }
 
                             @Override
-                            public void write(
-                                    final byte @NotNull [] b, final int off, final int len) {
+                            public void write(final byte[] b, final int off, final int len) {
                                 growBufferIfNeeded(len);
                                 System.arraycopy(b, off, buf, write, len);
                                 write += len;
@@ -61,7 +60,7 @@ public class GZIPCompressingInputStream extends InputStream {
     }
 
     @Override
-    public int read(final byte @NotNull [] b, final int off, final int len) throws IOException {
+    public int read(final byte[] b, final int off, final int len) throws IOException {
         compressStream();
         final var numBytes = Math.min(len, write - read);
         if (numBytes > 0) {

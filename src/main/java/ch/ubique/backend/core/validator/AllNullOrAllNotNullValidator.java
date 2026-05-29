@@ -5,17 +5,20 @@ import ch.ubique.backend.core.reflection.IntrospectionWrapper;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class AllNullOrAllNotNullValidator
         implements ConstraintValidator<AllNullOrAllNotNull, Object> {
 
-    private String[] fields;
+    private final List<String> fields = new ArrayList<>();
 
     @Override
     public void initialize(final AllNullOrAllNotNull allNullOrAllNotNull) {
-        fields = allNullOrAllNotNull.fields();
+        fields.clear();
+        fields.addAll(Arrays.asList(allNullOrAllNotNull.fields()));
     }
 
     @Override
@@ -25,9 +28,9 @@ public class AllNullOrAllNotNullValidator
         final var beanWrapper = new IntrospectionWrapper(object);
 
         final var allNull =
-                Arrays.stream(fields).map(beanWrapper::getPropertyValue).allMatch(Objects::isNull);
+                fields.stream().map(beanWrapper::getPropertyValue).allMatch(Objects::isNull);
         final var allNotNull =
-                Arrays.stream(fields).map(beanWrapper::getPropertyValue).allMatch(Objects::nonNull);
+                fields.stream().map(beanWrapper::getPropertyValue).allMatch(Objects::nonNull);
 
         return allNull || allNotNull;
     }

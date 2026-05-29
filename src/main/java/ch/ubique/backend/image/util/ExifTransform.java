@@ -7,6 +7,7 @@ import com.drew.metadata.exif.ExifDirectoryBase;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.jpeg.JpegDirectory;
 
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +45,7 @@ public final class ExifTransform {
         return new ImageInformation(orientation, 0, 0);
     }
 
-    private static int getOrientation(final ExifIFD0Directory directory) {
+    private static int getOrientation( final @Nullable  ExifIFD0Directory directory) {
         try {
             // directory can be null if no exif data is set.
             if (directory != null) {

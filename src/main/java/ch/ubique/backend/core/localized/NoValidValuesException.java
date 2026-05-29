@@ -1,12 +1,14 @@
 package ch.ubique.backend.core.localized;
 
+import org.jspecify.annotations.Nullable;
+
 import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class NoValidValuesException extends RuntimeException {
 
-    public NoValidValuesException(final Map<Locale, ?> values) {
+    public <T extends @Nullable Object> NoValidValuesException(final Map<Locale, T> values) {
         super(
                 "No valid values specified. Values: "
                         + values.entrySet().stream()

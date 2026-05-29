@@ -1,7 +1,6 @@
 package ch.ubique.backend.core.utils;
 
 import static ch.ubique.backend.core.utils.TimeUtils.TIME_UTILS_GMT;
-import static ch.ubique.backend.core.utils.TimeUtils.ZONE_ID_GMT;
 
 import org.apache.commons.lang3.math.NumberUtils;
 

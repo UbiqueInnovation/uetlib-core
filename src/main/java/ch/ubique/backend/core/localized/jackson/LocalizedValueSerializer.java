@@ -10,6 +10,8 @@ import ch.ubique.backend.core.localized.annotation.JsonLocalizedValue.Serializat
 
 import com.pivovarit.function.ThrowingBiConsumer;
 
+import org.jspecify.annotations.Nullable;
+
 import tools.jackson.core.JsonGenerator;
 import tools.jackson.databind.BeanProperty;
 import tools.jackson.databind.SerializationContext;
@@ -35,8 +37,8 @@ import java.util.Map;
 public class LocalizedValueSerializer
         extends ValueSerializer<LocalizedValue<? extends Serializable>> {
 
-    private final JsonLocalizedValue jsonLocalizedValue;
-    private final NameTransformer unwrapper;
+    @Nullable private final JsonLocalizedValue jsonLocalizedValue;
+    @Nullable private final NameTransformer unwrapper;
     private final NameTransformer effectiveTransformer;
 
     public LocalizedValueSerializer() {
@@ -44,7 +46,8 @@ public class LocalizedValueSerializer
     }
 
     public LocalizedValueSerializer(
-            final JsonLocalizedValue jsonLocalizedValue, final NameTransformer unwrapper) {
+             final @Nullable  JsonLocalizedValue jsonLocalizedValue,
+             final @Nullable  NameTransformer unwrapper) {
         this.jsonLocalizedValue = jsonLocalizedValue;
         this.unwrapper = unwrapper;
         this.effectiveTransformer = buildEffectiveTransformer(jsonLocalizedValue, unwrapper);
@@ -81,7 +84,7 @@ public class LocalizedValueSerializer
 
     @Override
     public ValueSerializer<?> createContextual(
-            final SerializationContext ctxt, final BeanProperty property) {
+            final SerializationContext ctxt,  final @Nullable  BeanProperty property) {
         if (property == null) {
             return new LocalizedValueSerializer();
         }
@@ -97,7 +100,8 @@ public class LocalizedValueSerializer
     }
 
     private static NameTransformer buildEffectiveTransformer(
-            final JsonLocalizedValue jsonLocalizedValue, final NameTransformer unwrapper) {
+             final @Nullable  JsonLocalizedValue jsonLocalizedValue,
+             final @Nullable  NameTransformer unwrapper) {
         final var keySerializationMethod =
                 jsonLocalizedValue != null
                         ? jsonLocalizedValue.keySerialization()

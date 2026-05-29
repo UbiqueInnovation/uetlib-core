@@ -2,9 +2,7 @@ package ch.ubique.backend.core.io;
 
 import com.pivovarit.function.ThrowingSupplier;
 
-import jakarta.annotation.Nullable;
-
-import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.io.*;
 import java.nio.file.Path;
@@ -14,7 +12,6 @@ import java.nio.file.Path;
  * this class have to make sure that the {@link #close()} method is called when the file is no
  * longer needed., either directly or with try-with-resources.
  */
-@NullMarked
 public interface FileProvider extends AutoCloseable, InputStreamProvider {
 
     /**
@@ -36,7 +33,7 @@ public interface FileProvider extends AutoCloseable, InputStreamProvider {
      * @return a {@link FileProvider} that provides a temporary file
      */
     static FileProvider emptyTempFile(
-            @Nullable final String filePrefix, @Nullable final String fileSuffix) {
+             final @Nullable  String filePrefix,  final @Nullable  String fileSuffix) {
         return new TempFileProvider(filePrefix, fileSuffix);
     }
 
@@ -95,8 +92,8 @@ public interface FileProvider extends AutoCloseable, InputStreamProvider {
      */
     static FileProvider of(
             final ThrowingSupplier<InputStream, IOException> inputStreamSupplier,
-            @Nullable final String filePrefix,
-            @Nullable final String fileSuffix) {
+             final @Nullable  String filePrefix,
+             final @Nullable  String fileSuffix) {
         return new InputStreamSupplierFileProvider(inputStreamSupplier, filePrefix, fileSuffix);
     }
 

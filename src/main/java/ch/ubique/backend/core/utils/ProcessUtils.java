@@ -8,8 +8,6 @@ import ch.ubique.backend.core.process.UnfinishedProcessResult;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.pivovarit.function.exception.WrappedException;
 
-import jakarta.validation.constraints.NotNull;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
@@ -43,29 +41,32 @@ public final class ProcessUtils {
      */
     @SuppressWarnings("java:S2095")
     public static ProcessResult executeProcess(final ProcessConfig config) throws IOException {
-        try {
+        try (final var stdOutExecutor =
+                        Executors.newSingleThreadExecutor(threadFactory("process-stdout"));
+                final var stdErrExecutor =
+                        Executors.newSingleThreadExecutor(threadFactory("process-stderr"))) {
+
             if (logger.isDebugEnabled()) {
                 logger.debug("Running command '{}'", String.join(" ", config.command()));
             }
             final var builder = new ProcessBuilder(config.command());
             Optional.ofNullable(config.directory()).map(Path::toFile).ifPresent(builder::directory);
             final var process = builder.start();
+
             final var stdoutFuture =
-                    Executors.newSingleThreadExecutor(threadFactory("process-stdout"))
-                            .submit(
-                                    () ->
-                                            processOutputLines(
-                                                    process::inputReader,
-                                                    config.logLevelStdout(),
-                                                    "stdout"));
+                    stdOutExecutor.submit(
+                            () ->
+                                    processOutputLines(
+                                            process::inputReader,
+                                            config.logLevelStdout(),
+                                            "stdout"));
             final var stderrFuture =
-                    Executors.newSingleThreadExecutor(threadFactory("process-stderr"))
-                            .submit(
-                                    () ->
-                                            processOutputLines(
-                                                    process::errorReader,
-                                                    config.logLevelStderr(),
-                                                    "stderr"));
+                    stdErrExecutor.submit(
+                            () ->
+                                    processOutputLines(
+                                            process::errorReader,
+                                            config.logLevelStderr(),
+                                            "stderr"));
             final var didProcessFinish =
                     process.waitFor(config.timeout().toSeconds(), TimeUnit.SECONDS);
 
@@ -86,7 +87,6 @@ public final class ProcessUtils {
         }
     }
 
-    @NotNull
     private static Stream<?> processOutputLines(
             final Supplier<BufferedReader> readerSupplier,
             final Level level,
@@ -101,7 +101,7 @@ public final class ProcessUtils {
                         });
     }
 
-    private static @NotNull ThreadFactory threadFactory(final String name) {
+    private static ThreadFactory threadFactory(final String name) {
         return new ThreadFactoryBuilder().setNameFormat(name).build();
     }
 }

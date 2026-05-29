@@ -21,12 +21,12 @@ public class ResourceNotFoundException extends RuntimeException {
     }
 
     public static ResourceNotFoundException withMessage(
-            @NotNull final String pattern, final Object... arguments) {
+            final String pattern, final Object... arguments) {
         return new ResourceNotFoundException(MessageFormat.format(pattern, arguments));
     }
 
     public static Supplier<ResourceNotFoundException> supplierWithMessage(
-            @NotNull final String pattern, final Object... arguments) {
+            final String pattern, final Object... arguments) {
         return () -> withMessage(pattern, arguments);
     }
 }

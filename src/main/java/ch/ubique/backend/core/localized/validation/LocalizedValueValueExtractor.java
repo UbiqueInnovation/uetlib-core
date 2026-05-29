@@ -5,6 +5,8 @@ import ch.ubique.backend.core.localized.LocalizedValue;
 import jakarta.validation.valueextraction.ExtractedValue;
 import jakarta.validation.valueextraction.ValueExtractor;
 
+import org.jspecify.annotations.Nullable;
+
 /**
  * A {@link ValueExtractor} for {@link LocalizedValue}, enabling bean validation on each localized
  * value within the container.
@@ -21,7 +23,8 @@ public class LocalizedValueValueExtractor
 
     @Override
     public void extractValues(
-            final LocalizedValue<?> originalValue, final ValueExtractor.ValueReceiver receiver) {
+            final @Nullable LocalizedValue<?> originalValue,
+            final ValueExtractor.ValueReceiver receiver) {
         if (originalValue != null) {
             // Here, we extract all values for validation
             originalValue

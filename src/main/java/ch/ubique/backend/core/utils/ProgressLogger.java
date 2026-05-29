@@ -3,6 +3,7 @@ package ch.ubique.backend.core.utils;
 import static java.lang.Math.max;
 import static java.lang.Math.round;
 
+import org.jspecify.annotations.Nullable;
 import org.slf4j.MDC;
 
 import java.util.Map;
@@ -15,17 +16,17 @@ public final class ProgressLogger extends AbstractProgressLogger {
         this(null, total);
     }
 
-    public ProgressLogger(final String prefix, final long total) {
+    public ProgressLogger( final @Nullable  String prefix, final long total) {
         this(prefix, total, MDC.getCopyOfContextMap());
     }
 
     public ProgressLogger(
-            final String prefix, final long total, final Map<String, String> mdcContextMap) {
+             final @Nullable  String prefix, final long total, final Map<String, String> mdcContextMap) {
         this(prefix, total, mdcContextMap, 100);
     }
 
     public ProgressLogger(
-            final String prefix,
+            @Nullable  final String prefix,
             final long total,
             final Map<String, String> mdcContextMap,
             final long numSteps) {

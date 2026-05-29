@@ -2,13 +2,10 @@ package ch.ubique.backend.core.service;
 
 import ch.ubique.backend.core.io.FileProvider;
 
-import org.jspecify.annotations.NullMarked;
-
 import java.io.IOException;
 import java.util.Map;
 import java.util.function.Function;
 
-@NullMarked
 public final class DataAndFileProvider<T> implements AutoCloseable {
 
     private final T data;

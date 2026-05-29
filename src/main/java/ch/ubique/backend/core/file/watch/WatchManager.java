@@ -10,9 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.file.ClosedWatchServiceException;
 import java.nio.file.Path;
-import java.nio.file.WatchEvent;
 import java.nio.file.WatchEvent.Kind;
-import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 
 public class WatchManager implements Runnable {
@@ -22,11 +20,13 @@ public class WatchManager implements Runnable {
     private final WatchService watchService;
     private final FileEventListener listener;
 
-    private Thread thread;
+    private final Thread thread;
 
     public WatchManager(final WatchService watchService, final FileEventListener listener) {
         this.watchService = watchService;
         this.listener = listener;
+        thread = new Thread(this);
+        thread.setDaemon(true);
     }
 
     public void destroy() {
@@ -40,14 +40,12 @@ public class WatchManager implements Runnable {
 
     public void watch() {
         logger.info("Start watch manager: {}", watchService);
-        thread = new Thread(this);
-        thread.setDaemon(true);
         thread.start();
     }
 
     @Override
     public void run() {
-        boolean poll = true;
+        var poll = true;
         while (poll) {
             try {
                 poll = pollEvents(watchService);
@@ -58,9 +56,9 @@ public class WatchManager implements Runnable {
     }
 
     private boolean pollEvents(final WatchService watchService) throws InterruptedException {
-        final WatchKey key = watchService.take();
-        final Path path = (Path) key.watchable();
-        for (final WatchEvent<?> event : key.pollEvents()) {
+        final var key = watchService.take();
+        final var path = (Path) key.watchable();
+        for (final var event : key.pollEvents()) {
             notifyListeners(event.kind(), path.resolve((Path) event.context()));
         }
         return key.reset();
