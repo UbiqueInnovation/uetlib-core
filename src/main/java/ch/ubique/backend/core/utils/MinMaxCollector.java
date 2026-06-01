@@ -1,6 +1,5 @@
 package ch.ubique.backend.core.utils;
 
-
 import org.apache.commons.collections4.ComparatorUtils;
 import org.jspecify.annotations.Nullable;
 
@@ -26,8 +25,7 @@ public final class MinMaxCollector {
      * @return MinMax<T> NotNull with {@link MinMax#min} and {@link MinMax#max} set
      * @throws NoSuchElementException if the stream did not contain any elements
      */
-    public static <T extends Comparable<? super T>> Collector<T, ?, MinMax<T>> collect(
-            final Comparator<T> comparator) {
+    public static <T> Collector<T, ?, MinMax<T>> collect(final Comparator<T> comparator) {
         return Collectors.collectingAndThen(
                 collectMinMaxAccumulator(comparator), it -> it.minMaxMaybe().orElseThrow());
     }
@@ -51,14 +49,13 @@ public final class MinMaxCollector {
                 collectMinMaxAccumulator(comparator), MinMaxAccumulator::minMaxMaybe);
     }
 
-    private static <T extends Comparable<? super T>>
-            Collector<T, ?, MinMaxAccumulator<T>> collectMinMaxAccumulator(
-                    final Comparator<T> comparator) {
+    private static <T> Collector<T, ?, MinMaxAccumulator<T>> collectMinMaxAccumulator(
+            final Comparator<T> comparator) {
         return Collectors.reducing(
                 new EmptyAccumulator<>(), MinMaxAccumulator::of, (a, b) -> a.merge(b, comparator));
     }
 
-    public record MinMax<T extends @Nullable Object>(T min, T max) {}
+    public record MinMax<T>(T min, T max) {}
 
     sealed interface MinMaxAccumulator<T> permits EmptyAccumulator, NonEmptyAccumulator {
 
