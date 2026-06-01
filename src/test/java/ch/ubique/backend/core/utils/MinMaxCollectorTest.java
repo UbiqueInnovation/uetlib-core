@@ -1,6 +1,7 @@
 package ch.ubique.backend.core.utils;
 
 import ch.ubique.backend.core.utils.MinMaxCollector.MinMax;
+import ch.ubique.backend.core.utils.MinMaxCollector.MinMaxAccumulator;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -123,59 +124,103 @@ class MinMaxCollectorTest {
     }
 
     @Test
-    void testMinNullable() {
-        Assertions.assertNull(MinMaxCollector.minNullable(null, null));
-        Assertions.assertEquals(2, MinMaxCollector.minNullable(2, null));
-        Assertions.assertEquals(5, MinMaxCollector.minNullable(null, 5));
-        Assertions.assertEquals(4, MinMaxCollector.minNullable(4, 5));
-        Assertions.assertEquals(5, MinMaxCollector.minNullable(5, 5));
-        Assertions.assertEquals(-10, MinMaxCollector.minNullable(-10, 5));
-        Assertions.assertEquals(-10, MinMaxCollector.minNullable(10, -10));
+    void testMerge() {
+        final Comparator<Integer> comparator = Comparator.naturalOrder();
         Assertions.assertEquals(
-                Integer.MIN_VALUE,
-                MinMaxCollector.minNullable(Integer.MIN_VALUE, Integer.MAX_VALUE));
+                Optional.empty(),
+                MinMaxAccumulator.<Integer>of(null)
+                        .merge(MinMaxAccumulator.of(null), comparator)
+                        .minMaxMaybe());
+        Assertions.assertEquals(
+                new MinMax<>(2, 2),
+                MinMaxAccumulator.of(2)
+                        .merge(MinMaxAccumulator.of(null), comparator)
+                        .minMaxMaybe()
+                        .orElseThrow());
+        Assertions.assertEquals(
+                new MinMax<>(5, 5),
+                MinMaxAccumulator.<Integer>of(null)
+                        .merge(MinMaxAccumulator.of(5), comparator)
+                        .minMaxMaybe()
+                        .orElseThrow());
+        Assertions.assertEquals(
+                new MinMax<>(4, 5),
+                MinMaxAccumulator.of(4)
+                        .merge(MinMaxAccumulator.of(5), comparator)
+                        .minMaxMaybe()
+                        .orElseThrow());
+        Assertions.assertEquals(
+                new MinMax<>(5, 5),
+                MinMaxAccumulator.of(5)
+                        .merge(MinMaxAccumulator.of(5), comparator)
+                        .minMaxMaybe()
+                        .orElseThrow());
+        Assertions.assertEquals(
+                new MinMax<>(-10, 5),
+                MinMaxAccumulator.of(-10)
+                        .merge(MinMaxAccumulator.of(5), comparator)
+                        .minMaxMaybe()
+                        .orElseThrow());
+        Assertions.assertEquals(
+                new MinMax<>(-10, 10),
+                MinMaxAccumulator.of(10)
+                        .merge(MinMaxAccumulator.of(-10), comparator)
+                        .minMaxMaybe()
+                        .orElseThrow());
+        Assertions.assertEquals(
+                new MinMax<>(Integer.MIN_VALUE, Integer.MAX_VALUE),
+                MinMaxAccumulator.of(Integer.MIN_VALUE)
+                        .merge(MinMaxAccumulator.of(Integer.MAX_VALUE), comparator)
+                        .minMaxMaybe()
+                        .orElseThrow());
 
-        Assertions.assertNull(
-                MinMaxCollector.minNullable(null, null, Comparator.<Integer>reverseOrder()));
-        Assertions.assertEquals(2, MinMaxCollector.minNullable(2, null, Comparator.reverseOrder()));
-        Assertions.assertEquals(5, MinMaxCollector.minNullable(null, 5, Comparator.reverseOrder()));
-        Assertions.assertEquals(5, MinMaxCollector.minNullable(4, 5, Comparator.reverseOrder()));
-        Assertions.assertEquals(5, MinMaxCollector.minNullable(5, 5, Comparator.reverseOrder()));
-        Assertions.assertEquals(5, MinMaxCollector.minNullable(-10, 5, Comparator.reverseOrder()));
+        final Comparator<Integer> reverseComparator = Comparator.reverseOrder();
         Assertions.assertEquals(
-                10, MinMaxCollector.minNullable(10, -10, Comparator.reverseOrder()));
+                Optional.empty(),
+                MinMaxAccumulator.<Integer>of(null)
+                        .merge(MinMaxAccumulator.of(null), reverseComparator)
+                        .minMaxMaybe());
         Assertions.assertEquals(
-                Integer.MAX_VALUE,
-                MinMaxCollector.minNullable(
-                        Integer.MIN_VALUE, Integer.MAX_VALUE, Comparator.reverseOrder()));
-    }
-
-    @Test
-    void testMaxNullable() {
-        Assertions.assertNull(MinMaxCollector.maxNullable(null, null));
-        Assertions.assertEquals(2, MinMaxCollector.maxNullable(2, null));
-        Assertions.assertEquals(5, MinMaxCollector.maxNullable(null, 5));
-        Assertions.assertEquals(5, MinMaxCollector.maxNullable(4, 5));
-        Assertions.assertEquals(5, MinMaxCollector.maxNullable(5, 5));
-        Assertions.assertEquals(5, MinMaxCollector.maxNullable(-10, 5));
-        Assertions.assertEquals(10, MinMaxCollector.maxNullable(10, -10));
+                new MinMax<>(2, 2),
+                MinMaxAccumulator.of(2)
+                        .merge(MinMaxAccumulator.of(null), reverseComparator)
+                        .minMaxMaybe()
+                        .orElseThrow());
         Assertions.assertEquals(
-                Integer.MAX_VALUE,
-                MinMaxCollector.maxNullable(Integer.MIN_VALUE, Integer.MAX_VALUE));
-
-        Assertions.assertNull(
-                MinMaxCollector.maxNullable(null, null, Comparator.<Integer>reverseOrder()));
-        Assertions.assertEquals(2, MinMaxCollector.maxNullable(2, null, Comparator.reverseOrder()));
-        Assertions.assertEquals(5, MinMaxCollector.maxNullable(null, 5, Comparator.reverseOrder()));
-        Assertions.assertEquals(4, MinMaxCollector.maxNullable(4, 5, Comparator.reverseOrder()));
-        Assertions.assertEquals(5, MinMaxCollector.maxNullable(5, 5, Comparator.reverseOrder()));
+                new MinMax<>(5, 5),
+                MinMaxAccumulator.<Integer>of(null)
+                        .merge(MinMaxAccumulator.of(5), reverseComparator)
+                        .minMaxMaybe()
+                        .orElseThrow());
         Assertions.assertEquals(
-                -10, MinMaxCollector.maxNullable(-10, 5, Comparator.reverseOrder()));
+                new MinMax<>(5, 4),
+                MinMaxAccumulator.of(4)
+                        .merge(MinMaxAccumulator.of(5), reverseComparator)
+                        .minMaxMaybe()
+                        .orElseThrow());
         Assertions.assertEquals(
-                -10, MinMaxCollector.maxNullable(10, -10, Comparator.reverseOrder()));
+                new MinMax<>(5, 5),
+                MinMaxAccumulator.of(5)
+                        .merge(MinMaxAccumulator.of(5), reverseComparator)
+                        .minMaxMaybe()
+                        .orElseThrow());
         Assertions.assertEquals(
-                Integer.MIN_VALUE,
-                MinMaxCollector.maxNullable(
-                        Integer.MIN_VALUE, Integer.MAX_VALUE, Comparator.reverseOrder()));
+                new MinMax<>(5, -10),
+                MinMaxAccumulator.of(-10)
+                        .merge(MinMaxAccumulator.of(5), reverseComparator)
+                        .minMaxMaybe()
+                        .orElseThrow());
+        Assertions.assertEquals(
+                new MinMax<>(10, -10),
+                MinMaxAccumulator.of(10)
+                        .merge(MinMaxAccumulator.of(-10), reverseComparator)
+                        .minMaxMaybe()
+                        .orElseThrow());
+        Assertions.assertEquals(
+                new MinMax<>(Integer.MAX_VALUE, Integer.MIN_VALUE),
+                MinMaxAccumulator.of(Integer.MIN_VALUE)
+                        .merge(MinMaxAccumulator.of(Integer.MAX_VALUE), reverseComparator)
+                        .minMaxMaybe()
+                        .orElseThrow());
     }
 }

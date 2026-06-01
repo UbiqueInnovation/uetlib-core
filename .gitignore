@@ -5,6 +5,7 @@
 **/*.idea
 !**/*.idea/google-java-format.xml
 *.iml
+.junie
 
 # generated
 **/target

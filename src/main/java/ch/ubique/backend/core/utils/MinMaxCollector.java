@@ -2,7 +2,7 @@ package ch.ubique.backend.core.utils;
 
 import static java.util.Objects.requireNonNull;
 
-import org.jetbrains.annotations.Contract;
+import org.apache.commons.collections4.ComparatorUtils;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Comparator;
@@ -30,13 +30,7 @@ public final class MinMaxCollector {
     public static <T extends Comparable<? super T>> Collector<T, ?, MinMax<T>> collect(
             final Comparator<T> comparator) {
         return Collectors.collectingAndThen(
-                collectMinMaxAccumulator(comparator),
-                acc -> {
-                    if (acc.min() == null || acc.max() == null) {
-                        throw new NoSuchElementException();
-                    }
-                    return acc.toMinMax();
-                });
+                collectMinMaxAccumulator(comparator), it -> it.minMaxMaybe().orElseThrow());
     }
 
     /**
@@ -55,75 +49,61 @@ public final class MinMaxCollector {
     public static <T extends Comparable<? super T>>
             Collector<T, ?, Optional<MinMax<T>>> collectOptional(final Comparator<T> comparator) {
         return Collectors.collectingAndThen(
-                collectMinMaxAccumulator(comparator),
-                acc ->
-                        acc.min() == null || acc.max() == null
-                                ? Optional.empty()
-                                : Optional.of(acc.toMinMax()));
+                collectMinMaxAccumulator(comparator), MinMaxAccumulator::minMaxMaybe);
     }
 
     private static <T extends Comparable<? super T>>
             Collector<T, ?, MinMaxAccumulator<T>> collectMinMaxAccumulator(
                     final Comparator<T> comparator) {
         return Collectors.reducing(
-                new MinMaxAccumulator<>(),
-                a -> new MinMaxAccumulator<>(a, a),
-                (a, b) ->
-                        new MinMaxAccumulator<>(
-                                minNullable(a.min(), b.min(), comparator),
-                                maxNullable(a.max(), b.max(), comparator)));
+                new EmptyAccumulator<>(), MinMaxAccumulator::of, (a, b) -> a.merge(b, comparator));
     }
 
-    @Nullable
-    @Contract("null, _ -> param2; _, null -> param2; !null, !null -> !null")
-    static <T extends Comparable<? super T>> T minNullable(
-             final @Nullable  T a,  final @Nullable  T b) {
-        return minNullable(a, b, Comparator.naturalOrder());
+    public record MinMax<T extends @Nullable Object>(T min, T max) {}
+
+    sealed interface MinMaxAccumulator<T> permits EmptyAccumulator, NonEmptyAccumulator {
+
+        Optional<MinMax<T>> minMaxMaybe();
+
+        MinMaxAccumulator<T> merge(MinMaxAccumulator<T> other, Comparator<T> comparator);
+
+        static <T> MinMaxAccumulator<T> of(final @Nullable T value) {
+            if (value == null) {
+                return new EmptyAccumulator<>();
+            }
+            return new NonEmptyAccumulator<>(value, value);
+        }
     }
 
-    @Nullable
-    @Contract("null, _, _ -> param2; _, null, _ -> param2")
-    static <T extends Comparable<? super T>> T minNullable(
-             final @Nullable  T a,  final @Nullable  T b, final Comparator<T> comparator) {
-        if (a == null) {
-            return b;
+    record EmptyAccumulator<T>() implements MinMaxAccumulator<T> {
+
+        public Optional<MinMax<T>> minMaxMaybe() {
+            return Optional.empty();
         }
-        if (b == null) {
-            return a;
+
+        @Override
+        public MinMaxAccumulator<T> merge(
+                final MinMaxAccumulator<T> other, final Comparator<T> comparator) {
+            return other;
         }
-        return comparator.compare(a, b) <= 0 ? a : b;
     }
 
-    @Nullable
-    @Contract("null, _ -> param2; _, null -> param2; !null, !null -> !null")
-    static <T extends Comparable<? super T>> T maxNullable(
-             final @Nullable  T a,  final @Nullable  T b) {
-        return maxNullable(a, b, Comparator.naturalOrder());
-    }
+    record NonEmptyAccumulator<T>(T min, T max) implements MinMaxAccumulator<T> {
 
-    @Nullable
-    @Contract("null, _, _ -> param2; _, null, _ -> param2")
-    static <T extends Comparable<? super T>> T maxNullable(
-             final @Nullable  T a,  final @Nullable  T b, final Comparator<T> comparator) {
-        if (a == null) {
-            return b;
-        }
-        if (b == null) {
-            return a;
-        }
-        return comparator.compare(a, b) > 0 ? a : b;
-    }
-
-    public record MinMax<T>(@Nullable T min, @Nullable T max) {}
-
-    private record MinMaxAccumulator<T>(@Nullable T min, @Nullable T max) {
-
-        MinMaxAccumulator() {
-            this(null, null);
+        public Optional<MinMax<T>> minMaxMaybe() {
+            return Optional.of(new MinMax<>(requireNonNull(min), requireNonNull(max)));
         }
 
-        MinMax<T> toMinMax() {
-            return new MinMax<>(requireNonNull(min), requireNonNull(max));
+        @Override
+        public MinMaxAccumulator<T> merge(
+                final MinMaxAccumulator<T> other, final Comparator<T> comparator) {
+            return switch (other) {
+                case final EmptyAccumulator<T> ignored -> this;
+                case NonEmptyAccumulator<T>(final var otherMin, final var otherMax) ->
+                        new NonEmptyAccumulator<>(
+                                ComparatorUtils.min(min, otherMin, comparator),
+                                ComparatorUtils.max(max, otherMax, comparator));
+            };
         }
     }
 }
