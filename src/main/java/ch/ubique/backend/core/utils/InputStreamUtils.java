@@ -152,8 +152,8 @@ public final class InputStreamUtils {
 
     public static InputStream uncompress(
             final InputStream inputStream,
-            final String contentEncoding,
-             final @Nullable  String path)
+            final @Nullable String contentEncoding,
+            final @Nullable String path)
             throws IOException {
 
         final var compressionAlgorithm =
@@ -203,7 +203,7 @@ public final class InputStreamUtils {
 
     @Nullable
     public static CompressionAlgorithm findCompressionByContentEncoding(
-            final String contentEncoding) {
+            final @Nullable String contentEncoding) {
         if (StringUtils.isBlank(contentEncoding)) {
             logger.debug("Content encoding is not set.");
             return null;
@@ -226,7 +226,7 @@ public final class InputStreamUtils {
     }
 
     @Nullable
-    public static CompressionAlgorithm findCompressionByFilePath( final @Nullable  String filePath) {
+    public static CompressionAlgorithm findCompressionByFilePath(final @Nullable String filePath) {
         final var extension = FilenameUtils.getExtension(filePath);
         if (StringUtils.isBlank(extension)) {
             logger.debug("No file extension found for path {}", filePath);
