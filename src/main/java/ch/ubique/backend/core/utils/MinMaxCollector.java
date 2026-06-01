@@ -43,8 +43,8 @@ public final class MinMaxCollector {
      * @return Optional that is an {@link Optional#empty()} if the stream did not contain any
      *     elements
      */
-    public static <T extends Comparable<? super T>>
-            Collector<T, ?, Optional<MinMax<T>>> collectOptional(final Comparator<T> comparator) {
+    public static <T> Collector<T, ?, Optional<MinMax<T>>> collectOptional(
+            final Comparator<T> comparator) {
         return Collectors.collectingAndThen(
                 collectMinMaxAccumulator(comparator), MinMaxAccumulator::minMaxMaybe);
     }
