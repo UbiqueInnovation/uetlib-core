@@ -1,6 +1,5 @@
 package ch.ubique.backend.core.utils;
 
-import static java.util.Objects.requireNonNull;
 
 import org.apache.commons.collections4.ComparatorUtils;
 import org.jspecify.annotations.Nullable;
@@ -91,7 +90,7 @@ public final class MinMaxCollector {
     record NonEmptyAccumulator<T>(T min, T max) implements MinMaxAccumulator<T> {
 
         public Optional<MinMax<T>> minMaxMaybe() {
-            return Optional.of(new MinMax<>(requireNonNull(min), requireNonNull(max)));
+            return Optional.of(new MinMax<>(min, max));
         }
 
         @Override
