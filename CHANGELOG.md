@@ -1,5 +1,12 @@
 # CHANGELOG
 
+
+## 2.3.1
+
+### Fixes
+
+- Fixed nullability annotations for `MinMaxCollector`
+
 ## 2.3.0
 
 ### Improvements
