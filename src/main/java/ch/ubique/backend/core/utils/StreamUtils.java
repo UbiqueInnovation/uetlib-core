@@ -1,6 +1,7 @@
 package ch.ubique.backend.core.utils;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,7 +24,8 @@ public final class StreamUtils {
      * @return a stream of chunks
      * @param <T> The type of the list elements
      */
-    public static <T> Stream<List<T>> chunked(final List<T> list, final int chunkSize) {
+    public static <T extends @Nullable Object> Stream<List<T>> chunked(
+            final @Nullable List<T> list, final int chunkSize) {
         if (list == null || chunkSize <= 0) {
             return Stream.empty();
         }
@@ -40,7 +42,8 @@ public final class StreamUtils {
      * @return a stream of chunks
      * @param <T> The type of the stream elements
      */
-    public static <T> Stream<List<T>> chunked(final Stream<T> stream, final int chunkSize) {
+    public static <T extends @Nullable Object> Stream<List<T>> chunked(
+            final @Nullable Stream<T> stream, final int chunkSize) {
         if (stream == null || chunkSize <= 0) {
             return Stream.empty();
         }
@@ -76,13 +79,15 @@ public final class StreamUtils {
      * @param <K> the type of the key
      * @return a predicate that returns if the key already exists
      */
-    public static <T, K> Predicate<T> distinctByKey(final Function<T, K> keyExtractor) {
+    public static <T extends @Nullable Object, K> Predicate<T> distinctByKey(
+            final Function<T, K> keyExtractor) {
         final Set<K> seen = ConcurrentHashMap.newKeySet();
         return t -> seen.add(keyExtractor.apply(t));
     }
 
     /** Returns a {@link Stream#empty()} if {@code s == null || size <= 0 || size > s.length()} */
-    public static <T> Stream<List<T>> windows(final List<T> list, final int size) {
+    public static <T extends @Nullable Object> Stream<List<T>> windows(
+            final @Nullable List<T> list, final int size) {
         if (list == null || size <= 0 || size > list.size()) {
             return Stream.empty();
         }
@@ -94,7 +99,8 @@ public final class StreamUtils {
      * Returns a {@link Stream<T>} containing the elements from {@code collection}, or an empty
      * {@link Stream<T>} if {@code collection} is empty or {@code null}
      */
-    public static <T> Stream<T> emptyIfNull(final Collection<T> collection) {
+    public static <T extends @Nullable Object> Stream<T> emptyIfNull(
+            final @Nullable Collection<T> collection) {
         return CollectionUtils.emptyIfNull(collection).stream();
     }
 
@@ -102,7 +108,7 @@ public final class StreamUtils {
      * Returns a {@link Stream<T>} containing the elements from {@code array}, or an empty {@link
      * Stream<T>} if {@code array} is empty or {@code null}
      */
-    public static <T> Stream<T> emptyIfNull(final T[] array) {
+    public static <T extends @Nullable Object> Stream<T> emptyIfNull(final T @Nullable [] array) {
         return array == null ? Stream.empty() : Arrays.stream(array);
     }
 
@@ -110,7 +116,7 @@ public final class StreamUtils {
      * Returns a {@link IntStream} containing the elements from {@code array}, or an empty {@link
      * IntStream} if {@code array} is empty or {@code null}
      */
-    public static IntStream emptyIfNull(final int[] array) {
+    public static IntStream emptyIfNull(final int @Nullable [] array) {
         return array == null ? IntStream.empty() : Arrays.stream(array);
     }
 
@@ -118,7 +124,7 @@ public final class StreamUtils {
      * Returns a {@link LongStream} containing the elements from {@code array}, or an empty {@link
      * LongStream} if {@code array} is empty or {@code null}
      */
-    public static LongStream emptyIfNull(final long[] array) {
+    public static LongStream emptyIfNull(final long @Nullable [] array) {
         return array == null ? LongStream.empty() : Arrays.stream(array);
     }
 
@@ -126,7 +132,7 @@ public final class StreamUtils {
      * Returns a {@link DoubleStream} containing the elements from {@code array}, or an empty {@link
      * DoubleStream} if {@code array} is empty or {@code null}
      */
-    public static DoubleStream emptyIfNull(final double[] array) {
+    public static DoubleStream emptyIfNull(final double @Nullable [] array) {
         return array == null ? DoubleStream.empty() : Arrays.stream(array);
     }
 }
