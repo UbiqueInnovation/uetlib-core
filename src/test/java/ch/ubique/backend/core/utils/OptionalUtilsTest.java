@@ -10,6 +10,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 class OptionalUtilsTest {
 
     @Test
+    void testOfNullable() {
+        final var value = "test";
+        final var optional = OptionalUtils.ofNullable(value);
+        assertTrue(optional.isPresent());
+        assertEquals(value, optional.get());
+
+        final var nullOptional = OptionalUtils.ofNullable(null);
+        assertTrue(nullOptional.isEmpty());
+    }
+
+    @Test
     void testTryGet() {
         assertEquals(4.0, OptionalUtils.tryGet(() -> Double.parseDouble("4.0")).orElseThrow());
         assertFalse(OptionalUtils.tryGet(() -> Double.parseDouble("abc")).isPresent());
