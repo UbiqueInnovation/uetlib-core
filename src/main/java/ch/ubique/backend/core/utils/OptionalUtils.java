@@ -3,6 +3,8 @@ package ch.ubique.backend.core.utils;
 import com.pivovarit.function.ThrowingSupplier;
 import com.pivovarit.function.exception.WrappedException;
 
+import org.jspecify.annotations.Nullable;
+
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
@@ -12,6 +14,26 @@ import java.util.stream.Stream;
 public final class OptionalUtils {
 
     private OptionalUtils() {}
+
+    /**
+     * Creates an {@link Optional} describing the given value, if non-null, otherwise returns an
+     * empty {@link Optional}.
+     *
+     * <p>This method is a replacement for {@link Optional#ofNullable(Object)} to better support
+     * JSpecify nullability annotations. Standard {@code Optional.ofNullable(@Nullable T)} often
+     * results in {@code Optional<@Nullable T>}, whereas this method ensures {@code Optional<T>}.
+     *
+     * @param value the possibly null value
+     * @param <T> the type of the value
+     * @return an {@code Optional} with a present value if the specified value is non-null,
+     *     otherwise an empty {@code Optional}
+     */
+    public static <T> Optional<T> ofNullable(final @Nullable T value) {
+        if (value == null) {
+            return Optional.empty();
+        }
+        return Optional.of(value);
+    }
 
     @SafeVarargs
     public static <T, E extends Exception> Optional<T> tryGet(
