@@ -2,9 +2,11 @@ package ch.ubique.backend.core.hibernate.converter;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Set;
+import java.util.stream.Stream;
 
 class SetOfEnumToStringConverterTest {
 
@@ -15,21 +17,38 @@ class SetOfEnumToStringConverterTest {
     }
 
     /** An actual instantiation of the abstract converter for {@link Colour}. */
-    private static final class ColourConverter extends SetOfEnumToStringConverter<Colour> {
-        private ColourConverter() {
+    private static final class TwoFunctionConstructorColourConverter
+            extends SetOfEnumToStringConverter<Colour> {
+        private TwoFunctionConstructorColourConverter() {
             super(Colour::name, Colour::valueOf);
         }
     }
 
-    private final ColourConverter converter = new ColourConverter();
+    /** An actual instantiation using the {@code Class<E>} convenience constructor. */
+    private static final class ClassConstructorColourConverter
+            extends SetOfEnumToStringConverter<Colour> {
+        private ClassConstructorColourConverter() {
+            super(Colour.class);
+        }
+    }
 
-    @Test
-    void convertToDatabaseColumn_SingleValue_ShouldReturnName() {
+    /** Both instantiations must behave identically. */
+    static Stream<SetOfEnumToStringConverter<Colour>> converters() {
+        return Stream.of(
+                new TwoFunctionConstructorColourConverter(), new ClassConstructorColourConverter());
+    }
+
+    @ParameterizedTest
+    @MethodSource("converters")
+    void convertToDatabaseColumn_SingleValue_ShouldReturnName(
+            final SetOfEnumToStringConverter<Colour> converter) {
         assertEquals("RED", converter.convertToDatabaseColumn(Set.of(Colour.RED)));
     }
 
-    @Test
-    void convertToDatabaseColumn_MultipleValues_ShouldJoinWithComma() {
+    @ParameterizedTest
+    @MethodSource("converters")
+    void convertToDatabaseColumn_MultipleValues_ShouldJoinWithComma(
+            final SetOfEnumToStringConverter<Colour> converter) {
         final var joined = converter.convertToDatabaseColumn(Set.of(Colour.RED, Colour.BLUE));
 
         assertNotNull(joined);
@@ -37,48 +56,63 @@ class SetOfEnumToStringConverterTest {
         assertEquals(Set.of("RED", "BLUE"), Set.of(joined.split(",")));
     }
 
-    @Test
-    void convertToDatabaseColumn_EmptySet_ShouldReturnEmptyString() {
+    @ParameterizedTest
+    @MethodSource("converters")
+    void convertToDatabaseColumn_EmptySet_ShouldReturnEmptyString(
+            final SetOfEnumToStringConverter<Colour> converter) {
         assertEquals("", converter.convertToDatabaseColumn(Set.of()));
     }
 
-    @Test
-    void convertToDatabaseColumn_Null_ShouldReturnNull() {
+    @ParameterizedTest
+    @MethodSource("converters")
+    void convertToDatabaseColumn_Null_ShouldReturnNull(
+            final SetOfEnumToStringConverter<Colour> converter) {
         assertNull(converter.convertToDatabaseColumn(null));
     }
 
-    @Test
-    void convertToEntityAttribute_Joined_ShouldParseToEnumSet() {
+    @ParameterizedTest
+    @MethodSource("converters")
+    void convertToEntityAttribute_Joined_ShouldParseToEnumSet(
+            final SetOfEnumToStringConverter<Colour> converter) {
         assertEquals(
                 Set.of(Colour.RED, Colour.GREEN), converter.convertToEntityAttribute("RED,GREEN"));
     }
 
-    @Test
-    void convertToEntityAttribute_SingleValue_ShouldParse() {
+    @ParameterizedTest
+    @MethodSource("converters")
+    void convertToEntityAttribute_SingleValue_ShouldParse(
+            final SetOfEnumToStringConverter<Colour> converter) {
         assertEquals(Set.of(Colour.BLUE), converter.convertToEntityAttribute("BLUE"));
     }
 
-    @Test
-    void convertToEntityAttribute_Null_ShouldReturnNull() {
+    @ParameterizedTest
+    @MethodSource("converters")
+    void convertToEntityAttribute_Null_ShouldReturnNull(
+            final SetOfEnumToStringConverter<Colour> converter) {
         assertNull(converter.convertToEntityAttribute(null));
     }
 
-    @Test
-    void convertToEntityAttribute_UnknownValue_ShouldThrow() {
+    @ParameterizedTest
+    @MethodSource("converters")
+    void convertToEntityAttribute_UnknownValue_ShouldThrow(
+            final SetOfEnumToStringConverter<Colour> converter) {
         assertThrows(
                 IllegalArgumentException.class, () -> converter.convertToEntityAttribute("PURPLE"));
     }
 
-    @Test
-    void convertToEntityAttribute_ShouldReturnUnmodifiableSet() {
+    @ParameterizedTest
+    @MethodSource("converters")
+    void convertToEntityAttribute_ShouldReturnUnmodifiableSet(
+            final SetOfEnumToStringConverter<Colour> converter) {
         final var result = converter.convertToEntityAttribute("RED");
 
         assertNotNull(result);
         assertThrows(UnsupportedOperationException.class, () -> result.add(Colour.GREEN));
     }
 
-    @Test
-    void roundTrip_ShouldPreserveSet() {
+    @ParameterizedTest
+    @MethodSource("converters")
+    void roundTrip_ShouldPreserveSet(final SetOfEnumToStringConverter<Colour> converter) {
         final var original = Set.of(Colour.RED, Colour.GREEN, Colour.BLUE);
 
         final var joined = converter.convertToDatabaseColumn(original);
