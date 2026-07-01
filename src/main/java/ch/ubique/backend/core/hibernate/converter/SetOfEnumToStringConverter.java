@@ -19,6 +19,10 @@ public abstract class SetOfEnumToStringConverter<E extends Enum<E>>
     private final Function<E, String> enum2String;
     private final Function<String, E> string2Enum;
 
+    protected SetOfEnumToStringConverter(final Class<E> enumClass) {
+        this(Enum::name, e -> Enum.valueOf(enumClass, e));
+    }
+
     protected SetOfEnumToStringConverter(
             final Function<E, String> enum2String, final Function<String, E> string2Enum) {
         this.enum2String = enum2String;
