@@ -7,7 +7,7 @@
     <parent>
         <groupId>ch.ubique</groupId>
         <artifactId>uetlib-parent</artifactId>
-        <version>2026.05.0</version>
+        <version>2026.06.0</version>
     </parent>
 
     <artifactId>uetlib-core</artifactId>
@@ -16,7 +16,7 @@
     <packaging>jar</packaging>
 
     <properties>
-        <uetlib-test.version>2.0.1</uetlib-test.version>
+        <uetlib-test.version>2.1.0</uetlib-test.version>
 
         <explicit-null-marking-level>ERROR</explicit-null-marking-level>
         <westemeyer-version-package-name>ch.ubique.backend.core.version</westemeyer-version-package-name>
