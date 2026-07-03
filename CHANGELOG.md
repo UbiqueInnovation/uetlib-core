@@ -7,6 +7,12 @@
 - Update `uetlib-parent` and `uetlib-test` to their latest versions
 - new `SetOfEnumToStringConverter` for persistence of enums as a comma-separated list in a single text column in DB
 
+## 3.0.0
+
+### Improvements
+
+- New `ResumableDownload#copyURLToFile` that survives dropped connections by resuming via HTTP range requests
+
 ## 2.3.1
 
 ### Fixes
