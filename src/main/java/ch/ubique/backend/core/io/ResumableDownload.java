@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 
@@ -22,21 +23,26 @@ public final class ResumableDownload {
     private ResumableDownload() {}
 
     /**
-     * Copies the content of the given URL to the given file, overwriting the file if it exists.
-     * Implementation follows: "www.baeldung.com/java-download-file"
+     * Copies the content of the given URL to the given file. The destination file must not already
+     * exist. Implementation follows <a href="https://www.baeldung.com/java-download-file">Baeldung:
+     * Download a File From an URL in Java</a>.
+     *
      * <p>If the connection drops mid-transfer, the download resumes from the last received byte
-     * with an HTTP {@code Range} request instead of restarting from scratch. If the server does
-     * not support range requests (plain {@code 200 OK} response), the download restarts from the
+     * with an HTTP {@code Range} request instead of restarting from scratch. If the server does not
+     * support range requests (plain {@code 200 OK} response), the download restarts from the
      * beginning on each retry instead. Gives up once {@value #MAX_RETRIES_WITHOUT_PROGRESS}
      * consecutive attempts have made no progress.
      *
      * @param url the URL to download from
-     * @param file the destination file
+     * @param file the destination file; must not already exist
+     * @throws FileAlreadyExistsException if the destination file already exists
      * @throws IOException if the download did not complete
      */
     public static void copyURLToFile(final URL url, final File file) throws IOException {
         final var target = file.toPath();
-        if (file already exists) { throw IllegalOperation }
+        if (Files.exists(target)) {
+            throw new FileAlreadyExistsException(target.toString());
+        }
         for (var stalls = 0; stalls <= MAX_RETRIES_WITHOUT_PROGRESS; ) {
             final var have = Files.exists(target) ? Files.size(target) : 0L;
             try {
