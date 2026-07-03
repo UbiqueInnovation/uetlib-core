@@ -7,7 +7,7 @@
 - Update `uetlib-parent` and `uetlib-test` to their latest versions
 - new `SetOfEnumToStringConverter` for persistence of enums as a comma-separated list in a single text column in DB
 
-## 3.0.0
+## 2.4.0
 
 ### Improvements
 
