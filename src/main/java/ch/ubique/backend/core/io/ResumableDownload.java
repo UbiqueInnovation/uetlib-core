@@ -62,7 +62,7 @@ public final class ResumableDownload {
                 }
             } catch (final IOException e) {
                 stalls = Files.exists(target) && Files.size(target) > have ? 0 : stalls + 1;
-                logger.warn(
+                logger.info(
                         "Download of {} interrupted at byte {}, retrying",
                         urlWithoutQuery(url),
                         have,
