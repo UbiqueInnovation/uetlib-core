@@ -47,8 +47,8 @@ public class LocalizedValueDeserializer
     }
 
     public LocalizedValueDeserializer(
-             final @Nullable  JsonLocalizedValue jsonLocalizedValue,
-             final @Nullable  NameTransformer unwrapper) {
+            final @Nullable JsonLocalizedValue jsonLocalizedValue,
+            final @Nullable NameTransformer unwrapper) {
         this.jsonLocalizedValue = jsonLocalizedValue;
         this.unwrapper = unwrapper;
         this.effectiveUnwrapper = buildEffectiveUnwrapper(jsonLocalizedValue, unwrapper);
@@ -83,12 +83,13 @@ public class LocalizedValueDeserializer
 
     @Override
     public ValueDeserializer<?> createContextual(
-             final @Nullable  DeserializationContext context,  final @Nullable  BeanProperty property) {
+            final @Nullable DeserializationContext context, final @Nullable BeanProperty property) {
         if (property == null) {
             return this;
         }
 
         final var annotationFromProperty = property.getAnnotation(JsonLocalizedValue.class);
+        //noinspection ConstantValue
         final var effectiveAnnotation =
                 annotationFromProperty != null ? annotationFromProperty : jsonLocalizedValue;
         return new LocalizedValueDeserializer(effectiveAnnotation, unwrapper);
@@ -103,8 +104,8 @@ public class LocalizedValueDeserializer
     }
 
     private static NameTransformer buildEffectiveUnwrapper(
-             final @Nullable  JsonLocalizedValue jsonLocalizedValue,
-             final @Nullable  NameTransformer unwrapper) {
+            final @Nullable JsonLocalizedValue jsonLocalizedValue,
+            final @Nullable NameTransformer unwrapper) {
         final var keySerializationMethod =
                 jsonLocalizedValue != null
                         ? jsonLocalizedValue.keySerialization()
