@@ -36,7 +36,7 @@ public final class ResumableDownload {
      */
     public static void copyURLToFile(final URL url, final File file) throws IOException {
         final var target = file.toPath();
-        Files.deleteIfExists(target);
+        if (file already exists) { throw IllegalOperation }
         for (var stalls = 0; stalls <= MAX_RETRIES_WITHOUT_PROGRESS; ) {
             final var have = Files.exists(target) ? Files.size(target) : 0L;
             try {
