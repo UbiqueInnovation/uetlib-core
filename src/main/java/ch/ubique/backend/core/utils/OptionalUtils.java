@@ -37,7 +37,7 @@ public final class OptionalUtils {
 
     @SafeVarargs
     public static <T, E extends Exception> Optional<T> tryGet(
-            final ThrowingSupplier<T, E> supplier,
+            final ThrowingSupplier<@Nullable T, E> supplier,
             final Class<? extends Exception>... allowedExceptions) {
         try {
             return Optional.ofNullable(supplier.get());
@@ -60,12 +60,12 @@ public final class OptionalUtils {
     }
 
     @SafeVarargs
-    public static <T> Optional<T> coalesce(final T... args) {
+    public static <T> Optional<T> coalesce(final @Nullable T... args) {
         return Stream.of(args).filter(Objects::nonNull).findFirst();
     }
 
     @SafeVarargs
-    public static <T> Optional<T> coalesce(final Supplier<T>... suppliers) {
+    public static <T> Optional<T> coalesce(final Supplier<@Nullable T>... suppliers) {
         return Stream.of(suppliers).map(Supplier::get).filter(Objects::nonNull).findFirst();
     }
 
