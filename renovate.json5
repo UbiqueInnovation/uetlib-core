@@ -1,18 +1,10 @@
 {
-    $schema: 'https://docs.renovatebot.com/renovate-schema.json',
-    extends: [
-        'github>UbiqueInnovation/renovate-config-backend:base.json5',
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": [
+        "github>UbiqueInnovation/uetlib:renovate-base.json5"
     ],
     "reviewers": [
         "dsparber",
         "kistlers"
-    ],
-    packageRules: [
-        {
-            enabled: false,
-            matchPackageNames: [
-                'ch.ubique.backend.core:uetlib{/,}**',
-            ],
-        },
-    ],
+    ]
 }
