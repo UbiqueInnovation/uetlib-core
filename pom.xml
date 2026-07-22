@@ -18,6 +18,9 @@
     <properties>
         <explicit-null-marking-level>ERROR</explicit-null-marking-level>
         <westemeyer-version-package-name>ch.ubique.backend.core.version</westemeyer-version-package-name>
+        <!-- Sonar -->
+        <sonar.projectName>uetlib-core</sonar.projectName>
+        <sonar.coverage.module>uetlib-core</sonar.coverage.module>
     </properties>
 
     <dependencies>
