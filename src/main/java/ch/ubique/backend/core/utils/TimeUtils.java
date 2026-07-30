@@ -137,21 +137,21 @@ public final class TimeUtils {
     }
 
     /**
-     * @return true iff temporal1 >= temporal2
+     * @return {@code true iff temporal1 >= temporal2}
      */
     public static boolean isAfterOrEqual(final Instant temporal1, final Instant temporal2) {
         return !temporal1.isBefore(temporal2);
     }
 
     /**
-     * @return true iff temporal1 <= temporal2
+     * @return {@code true iff temporal1 <= temporal2}
      */
     public static boolean isBeforeOrEqual(final Instant temporal1, final Instant temporal2) {
         return !temporal1.isAfter(temporal2);
     }
 
     /**
-     * @return true iff temporal1 >= temporal2
+     * @return {@code true iff temporal1 >= temporal2}
      */
     public static boolean isAfterOrEqual(
             final ZonedDateTime temporal1, final ZonedDateTime temporal2) {
@@ -159,7 +159,7 @@ public final class TimeUtils {
     }
 
     /**
-     * @return true iff temporal1 <= temporal2
+     * @return {@code true iff temporal1 <= temporal2}
      */
     public static boolean isBeforeOrEqual(
             final ZonedDateTime temporal1, final ZonedDateTime temporal2) {
@@ -167,7 +167,7 @@ public final class TimeUtils {
     }
 
     /**
-     * @return true iff temporal1 >= temporal2
+     * @return {@code true iff temporal1 >= temporal2}
      */
     public static boolean isAfterOrEqual(
             final OffsetDateTime temporal1, final OffsetDateTime temporal2) {
@@ -175,7 +175,7 @@ public final class TimeUtils {
     }
 
     /**
-     * @return true iff temporal1 <= temporal2
+     * @return {@code true iff temporal1 <= temporal2}
      */
     public static boolean isBeforeOrEqual(
             final OffsetDateTime temporal1, final OffsetDateTime temporal2) {
@@ -183,7 +183,7 @@ public final class TimeUtils {
     }
 
     /**
-     * @return true iff temporal1 >= temporal2
+     * @return {@code true iff temporal1 >= temporal2}
      */
     public static boolean isAfterOrEqual(
             final LocalDateTime temporal1, final LocalDateTime temporal2) {
@@ -191,7 +191,7 @@ public final class TimeUtils {
     }
 
     /**
-     * @return true iff temporal1 <= temporal2
+     * @return {@code true iff temporal1 <= temporal2}
      */
     public static boolean isBeforeOrEqual(
             final LocalDateTime temporal1, final LocalDateTime temporal2) {
@@ -199,21 +199,21 @@ public final class TimeUtils {
     }
 
     /**
-     * @return true iff temporal1 >= temporal2
+     * @return {@code true iff temporal1 >= temporal2}
      */
     public static boolean isAfterOrEqual(final LocalDate temporal1, final LocalDate temporal2) {
         return !temporal1.isBefore(temporal2);
     }
 
     /**
-     * @return true iff temporal1 <= temporal2
+     * @return {@code true iff temporal1 <= temporal2}
      */
     public static boolean isBeforeOrEqual(final LocalDate temporal1, final LocalDate temporal2) {
         return !temporal1.isAfter(temporal2);
     }
 
     /**
-     * @return true iff temporal1 >= temporal2
+     * @return {@code true iff temporal1 >= temporal2}
      */
     public static boolean isAfterOrEqual(final LocalTime temporal1, final LocalTime temporal2) {
         return !temporal1.isBefore(temporal2);
@@ -230,7 +230,7 @@ public final class TimeUtils {
      * @param time the time to check
      * @param start of the valid interval [start, end)
      * @param end of the valid interval [start, end)
-     * @return true <=> start <= time < end <=> time \in [start, end)
+     * @return {@code true <=> start <= time < end <=> time \in [start, end)}
      */
     public static boolean isBetween(final Instant time, final Instant start, final Instant end) {
         return !time.isBefore(start) && time.isBefore(end);
@@ -240,7 +240,7 @@ public final class TimeUtils {
      * @param time the time to check
      * @param start of the valid interval [start, end)
      * @param end of the valid interval [start, end)
-     * @return true <=> start <= time < end <=> time \in [start, end)
+     * @return {@code true <=> start <= time < end <=> time \in [start, end)}
      */
     public static boolean isBetween(
             final ZonedDateTime time, final ZonedDateTime start, final ZonedDateTime end) {
@@ -251,7 +251,7 @@ public final class TimeUtils {
      * @param time the time to check
      * @param start of the valid interval [start, end)
      * @param end of the valid interval [start, end)
-     * @return true <=> start <= time < end <=> time \in [start, end)
+     * @return {@code true <=> start <= time < end <=> time \in [start, end)}
      */
     public static boolean isBetween(
             final OffsetDateTime time, final OffsetDateTime start, final OffsetDateTime end) {
@@ -262,7 +262,7 @@ public final class TimeUtils {
      * @param time the time to check
      * @param start of the valid interval [start, end)
      * @param end of the valid interval [start, end)
-     * @return true <=> start <= time < end <=> time \in [start, end)
+     * @return {@code true <=> start <= time < end <=> time \in [start, end)}
      */
     public static boolean isBetween(
             final LocalDateTime time, final LocalDateTime start, final LocalDateTime end) {
@@ -273,7 +273,7 @@ public final class TimeUtils {
      * @param time the time to check
      * @param start of the valid interval [start, end)
      * @param end of the valid interval [start, end)
-     * @return true <=> start <= time < end <=> time \in [start, end)
+     * @return {@code true <=> start <= time < end <=> time \in [start, end)}
      */
     public static boolean isBetween(
             final LocalDate time, final LocalDate start, final LocalDate end) {
@@ -284,7 +284,7 @@ public final class TimeUtils {
      * @param time the time to check
      * @param start of the valid interval [start, end)
      * @param end of the valid interval [start, end)
-     * @return true <=> start <= time < end <=> time \in [start, end)
+     * @return {@code true <=> start <= time < end <=> time \in [start, end)}
      */
     public static boolean isBetween(
             final LocalTime time, final LocalTime start, final LocalTime end) {
