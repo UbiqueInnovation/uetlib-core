@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.4.2
+
+- updated actions to not run tests twice for sonar
+
 ## 2.4.1
 
 ### Improvements
