@@ -8,6 +8,7 @@
         <groupId>ch.ubique</groupId>
         <artifactId>uetlib-parent</artifactId>
         <version>2026.07.3</version>
+        <relativePath/>
     </parent>
 
     <artifactId>uetlib-core</artifactId>
@@ -16,11 +17,11 @@
     <packaging>jar</packaging>
 
     <properties>
-        <explicit-null-marking-level>ERROR</explicit-null-marking-level>
         <westemeyer-version-package-name>ch.ubique.backend.core.version</westemeyer-version-package-name>
+
         <!-- Sonar -->
         <sonar.projectName>uetlib-core</sonar.projectName>
-        <sonar.coverage.module>uetlib-core</sonar.coverage.module>
+        <sonar.coverage.module>.</sonar.coverage.module>
     </properties>
 
     <dependencies>
@@ -215,15 +216,17 @@
     </build>
 
     <repositories>
+        <!-- ubique artifactory are necessary for resolution of the parent. -->
+        <!-- Other repositories are resolved in the parent repositories. -->
+        <repository>
+            <id>ubique-artifactory</id>
+            <name>backend</name>
+            <url>https://artifactory.ubique.ch/artifactory/backend</url>
+        </repository>
         <repository>
             <id>ubique-artifactory-virtual</id>
             <name>ubique</name>
             <url>https://artifactory.ubique.ch/artifactory/ubique</url>
-        </repository>
-        <repository>
-            <id>osgeo</id>
-            <name>Open Source Geospatial Foundation Repository</name>
-            <url>https://repo.osgeo.org/repository/release/</url>
         </repository>
     </repositories>
 
