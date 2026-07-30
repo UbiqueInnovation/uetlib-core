@@ -1,5 +1,7 @@
 package ch.ubique.backend.core.localized;
 
+import static ch.ubique.backend.core.utils.OptionalUtils.ofNullable;
+
 import static java.util.Map.Entry;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.*;
@@ -185,7 +187,7 @@ public class LocalizedValue<T extends Serializable> {
      * @return T value given best matching key
      * @throws NoSuchElementException if the given key does not match any entry
      */
-    public T get( final @Nullable  String key) {
+    public T get(final @Nullable String key) {
         return getOptional(key).orElseThrow();
     }
 
@@ -199,7 +201,7 @@ public class LocalizedValue<T extends Serializable> {
      * @return T value given best matching key or null if the given key does match any entry
      */
     @Nullable
-    public T getNullable( final @Nullable  String key) {
+    public T getNullable(final @Nullable String key) {
         return getOptional(key).orElse(null);
     }
 
@@ -213,7 +215,7 @@ public class LocalizedValue<T extends Serializable> {
      * @return T value given best matching key or {@link Optional#empty()} if the given key does
      *     match any entry
      */
-    public Optional<T> getOptional( final @Nullable  String key) {
+    public Optional<T> getOptional(final @Nullable String key) {
         return getOptional(LocaleHelper.fromLanguageTagThenPosix(key));
     }
 
@@ -225,7 +227,7 @@ public class LocalizedValue<T extends Serializable> {
      * @return T value given best matching key
      * @throws NoSuchElementException if the given key does not match any key any entry
      */
-    public T get( final @Nullable  Locale locale) {
+    public T get(final @Nullable Locale locale) {
         return getOptional(locale).orElseThrow();
     }
 
@@ -237,7 +239,7 @@ public class LocalizedValue<T extends Serializable> {
      * @return T value given best matching key or null if the given key does match any entry
      */
     @Nullable
-    public T getNullable( final @Nullable  Locale locale) {
+    public T getNullable(final @Nullable Locale locale) {
         return getOptional(locale).orElse(null);
     }
 
@@ -249,9 +251,13 @@ public class LocalizedValue<T extends Serializable> {
      * @return T value given best matching key or {@link Optional#empty()} if the given key does
      *     match any entry
      */
-    public Optional<T> getOptional( final @Nullable  Locale locale) {
+    public Optional<T> getOptional(final @Nullable Locale locale) {
         final var matchedKey = LocaleHelper.findBestMatchLocale(locale, values.keySet());
-        return Optional.ofNullable(matchedKey).map(values::get);
+        // return Optional.ofNullable(matchedKey).map(values::get); currently is shown to be incorrect by NullAway
+        if (matchedKey == null) {
+            return Optional.empty();
+        }
+        return ofNullable(values.get(matchedKey));
     }
 
     /**
