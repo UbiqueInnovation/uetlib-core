@@ -30,10 +30,6 @@ import java.util.LinkedHashMap;
  * unwrapping {@link NameTransformer} if present, then reverses the key-serialization transformer,
  * resulting in canonical lower-hyphen language-tag keys that can be passed to {@code
  * builder().fullLocale().fromStringMap(...)}.
- *
- * <p>TODO with jackson 3.2: Checkout new {@link ValueDeserializer#collectAllPropertyNamesTo()}
- * because of <a
- * href="https://github.com/FasterXML/jackson-databind/issues/6001">jackson/issue/6001</a>
  */
 public class LocalizedValueDeserializer
         extends ValueDeserializer<LocalizedValue<? extends Serializable>> {
