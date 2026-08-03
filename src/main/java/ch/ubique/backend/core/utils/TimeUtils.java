@@ -220,7 +220,7 @@ public final class TimeUtils {
     }
 
     /**
-     * @return true iff temporal1 <= temporal2
+     * @return {@code true iff temporal1 <= temporal2}
      */
     public static boolean isBeforeOrEqual(final LocalTime temporal1, final LocalTime temporal2) {
         return !temporal1.isAfter(temporal2);
