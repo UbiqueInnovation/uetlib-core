@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.4.3
+
+### Fixes
+
+- Fixed `LocalizedValueSerializer#serializeWithType` throwing `InvalidDefinitionException` when
+  Jackson embeds a type id (e.g. Spring Data Redis's `GenericJacksonJsonRedisSerializer` with
+  default typing enabled). Unwrapped (`@JsonUnwrapped`) properties now embed the type id as a
+  flattened property alongside the locale keys instead of failing.
+
 ## 2.4.2
 
 - updated actions to not run tests twice for sonar

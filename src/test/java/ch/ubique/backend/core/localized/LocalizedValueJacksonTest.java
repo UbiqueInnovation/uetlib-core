@@ -4,6 +4,7 @@ import static ch.ubique.backend.core.localized.AdditionalLocales.ENGLISH_SWITZER
 import static ch.ubique.backend.core.localized.AdditionalLocales.GERMAN_SWITZERLAND;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.skyscreamer.jsonassert.JSONCompareMode.LENIENT;
 import static org.skyscreamer.jsonassert.JSONCompareMode.STRICT;
 
 import ch.ubique.backend.core.localized.annotation.JsonLocalizedValue;
@@ -18,10 +19,12 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.skyscreamer.jsonassert.JSONAssert;
 
+import tools.jackson.databind.DefaultTyping;
 import tools.jackson.databind.MapperFeature;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.SerializationFeature;
 import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
 
 import java.util.Locale;
 import java.util.Map;
@@ -62,6 +65,57 @@ class LocalizedValueJacksonTest {
         final var localizedValue = objectMapper.readValue(inputJson, LocalizedValue.class);
         assertEquals(
                 Map.of(expectedLanguageTag, "Literal"), localizedValue.toMapWithLanguageTagKeys());
+    }
+
+    @Test
+    void serializeWithDefaultTypingRoundTrips() {
+        // Mirrors how Spring Data Redis's GenericJacksonJsonRedisSerializer configures its
+        // ObjectMapper, which embeds a type id ("@class") next to every non-final property and
+        // triggers LocalizedValueSerializer#serializeWithType / #handledType.
+        final ObjectMapper typedMapper =
+                JsonMapper.builder()
+                        .activateDefaultTypingAsProperty(
+                                BasicPolymorphicTypeValidator.builder()
+                                        .allowIfBaseType(Object.class)
+                                        .build(),
+                                DefaultTyping.NON_FINAL,
+                                "@class")
+                        .build();
+
+        final var original = new Untouched(testLocalizedValue());
+        final var json = typedMapper.writeValueAsString(original);
+        final var roundTripped = typedMapper.readValue(json, Untouched.class);
+
+        assertEquals(original, roundTripped);
+    }
+
+    @Test
+    void unwrappedPropertySerializeWithDefaultTypingEmbedsFlattenedTypeIdAndRoundTrips()
+            throws JSONException {
+        // An unwrapped property is merged into the parent object, so there's no dedicated object
+        // boundary to attach a type prefix/suffix to. For "@class"-as-property inclusion (what
+        // Spring Data Redis's GenericJacksonJsonRedisSerializer uses), the serializer instead
+        // writes the type id as one more flattened property alongside the locale keys, keeping
+        // the value genuinely flat -- and round-trippable, since Jackson's own unwrapped-property
+        // deserialization buffers a class's unmatched properties together and scans that buffer
+        // for the type id property by name.
+        final ObjectMapper typedMapper =
+                JsonMapper.builder()
+                        .activateDefaultTypingAsProperty(
+                                BasicPolymorphicTypeValidator.builder()
+                                        .allowIfBaseType(Object.class)
+                                        .build(),
+                                DefaultTyping.NON_FINAL,
+                                "@class")
+                        .build();
+
+        final var original = new Unwrapped1(testLocalizedValue());
+        final var json = typedMapper.writeValueAsString(original);
+
+        JSONAssert.assertEquals(
+                "{\"de-CH\":\"value_deCh\",\"en-CH\":\"value_enCh\"}", json, LENIENT);
+        final var roundTripped = typedMapper.readValue(json, Unwrapped1.class);
+        assertEquals(original, roundTripped);
     }
 
     @Test
