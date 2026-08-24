@@ -7,7 +7,7 @@
     <parent>
         <groupId>ch.ubique</groupId>
         <artifactId>uetlib-parent</artifactId>
-        <version>2026.7.6</version>
+        <version>2026.8.1</version>
         <relativePath/>
     </parent>
 
@@ -15,14 +15,6 @@
     <version>3.0.0-SNAPSHOT</version>
 
     <packaging>jar</packaging>
-
-    <properties>
-        <westemeyer-version-package-name>ch.ubique.backend.core.version</westemeyer-version-package-name>
-
-        <!-- Sonar -->
-        <sonar.projectName>uetlib-core</sonar.projectName>
-        <sonar.coverage.module>.</sonar.coverage.module>
-    </properties>
 
     <dependencies>
         <dependency>
