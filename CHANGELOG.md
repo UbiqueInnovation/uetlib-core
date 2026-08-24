@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2.4.4
+
+- Latest uetlib parent and dependencies
+- Java 25
+- Fix `sonar.coverage.module`
+
 ## 2.4.3
 
 ### Fixes

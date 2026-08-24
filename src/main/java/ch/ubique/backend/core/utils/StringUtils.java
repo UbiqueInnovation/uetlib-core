@@ -95,7 +95,7 @@ public final class StringUtils {
     /**
      * normalizes the String by replacing whitespace by a normal space. Uses {@link
      * org.apache.commons.lang3.StringUtils#normalizeSpace} but additionally replaces non-breaking
-     * spaces {@code   (\u00A0)} by spaces.
+     * spaces {@code (\u00A0)} by spaces.
      */
     @Contract("null -> null")
     public static @Nullable String normalizeSpaceAndNonBreakingSpace(final @Nullable String input) {
