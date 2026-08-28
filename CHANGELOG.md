@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.5.0
+
+- Add `jackson-module-kotlin` as `uetlib-core` has Kotlin support
+
 ## 2.4.4
 
 - Latest uetlib parent and dependencies
