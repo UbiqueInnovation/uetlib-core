@@ -17,7 +17,7 @@ jobs:
           ref: ${{ github.ref_name }}
 
       - name: Maven prepare
-        uses: UbiqueInnovation/action-systems-mvn-prepare@8b963b43301ebbd07fa0afd975c4de007c22c0da # v2.0.0-alpha.1
+        uses: UbiqueInnovation/action-systems-mvn-prepare@bfeb86b8129a37da7d062487cc1dfb60718836cc # v2.0.0
         with:
           mvn_servers: >-
             [
