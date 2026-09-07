@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2.5.1
+
+- Fix deserialization of `LocalizedValue<T>` where T is some record and anything else than a `String` or plain `Object`
+- update uetlib version
+- update actions
+
 ## 2.5.0
 
 - Add `jackson-module-kotlin` as `uetlib-core` has Kotlin support
@@ -64,7 +70,7 @@
 ## 2.2.0
 
 - All features and fixes from [1.4.3](#143), [1.4.4](#144) and [1.5.0](#150)
-- Remove `JsonLocalizedValue` serialization method `POSIX` and `LocalizedValue#toMapWithPosixLocaleKeys(unused and
+- Remove `JsonLocalizedValue` serialization method `POSIX` and `LocalizedValue#toMapWithPosixLocaleKeys (unused and
   annoying)
 - Remove `LocalizedValue#toMapWithUppercaseKeys` (unused and can be achieved with
   `@JsonLocalizedValue(keySerialization = SerializationMethod.UPPERCASE)`)
