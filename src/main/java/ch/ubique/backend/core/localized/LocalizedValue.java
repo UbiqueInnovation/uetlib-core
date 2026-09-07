@@ -261,7 +261,7 @@ public class LocalizedValue<T extends Serializable> {
     }
 
     /**
-     * @return T value best matching end
+     * @return T value best matching en
      * @throws NoSuchElementException if there is no entry matching en
      */
     public T en() {
