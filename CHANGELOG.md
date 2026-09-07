@@ -70,7 +70,7 @@
 ## 2.2.0
 
 - All features and fixes from [1.4.3](#143), [1.4.4](#144) and [1.5.0](#150)
-- Remove `JsonLocalizedValue` serialization method `POSIX` and `LocalizedValue#toMapWithPosixLocaleKeys (unused and
+- Remove `JsonLocalizedValue` serialization method `POSIX` and `LocalizedValue#toMapWithPosixLocaleKeys` (unused and
   annoying)
 - Remove `LocalizedValue#toMapWithUppercaseKeys` (unused and can be achieved with
   `@JsonLocalizedValue(keySerialization = SerializationMethod.UPPERCASE)`)
