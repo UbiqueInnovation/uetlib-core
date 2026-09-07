@@ -4,6 +4,7 @@ import static ch.ubique.backend.core.localized.AdditionalLocales.ENGLISH_SWITZER
 import static ch.ubique.backend.core.localized.AdditionalLocales.GERMAN_SWITZERLAND;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.skyscreamer.jsonassert.JSONCompareMode.LENIENT;
 import static org.skyscreamer.jsonassert.JSONCompareMode.STRICT;
 
@@ -19,6 +20,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.skyscreamer.jsonassert.JSONAssert;
 
+import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.DefaultTyping;
 import tools.jackson.databind.MapperFeature;
 import tools.jackson.databind.ObjectMapper;
@@ -26,6 +28,8 @@ import tools.jackson.databind.SerializationFeature;
 import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
 
+import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -65,6 +69,124 @@ class LocalizedValueJacksonTest {
         final var localizedValue = objectMapper.readValue(inputJson, LocalizedValue.class);
         assertEquals(
                 Map.of(expectedLanguageTag, "Literal"), localizedValue.toMapWithLanguageTagKeys());
+    }
+
+    @Test
+    void typedObjectBeanPropertyDeserialization() {
+        final var json =
+                """
+                {
+                    "content": {
+                        "de": {"subtitle": "Untertitel", "teaser": "Anreisser"},
+                        "en": {"subtitle": "Subtitle", "teaser": "Teaser"}
+                    }
+                }
+                """;
+
+        final var holder = objectMapper.readValue(json, PayloadHolder.class);
+        final var content = holder.content();
+
+        assertEquals(new Payload("Untertitel", "Anreisser"), content.de());
+        assertEquals(new Payload("Subtitle", "Teaser"), content.en());
+
+        // Verifies no ClassCastException occurs when iterating typed entries (reproducing the flesk
+        // bug)
+        final var collected = new HashMap<>(content.toMapWithLocaleKeys());
+        assertEquals(2, collected.size());
+        assertEquals(new Payload("Untertitel", "Anreisser"), collected.get(Locale.GERMAN));
+        assertEquals(new Payload("Subtitle", "Teaser"), collected.get(Locale.ENGLISH));
+    }
+
+    @Test
+    void typedObjectRootLevelDeserialization() {
+        final var json =
+                """
+                {
+                    "de": {"subtitle": "Untertitel", "teaser": "Anreisser"},
+                    "en": {"subtitle": "Subtitle", "teaser": "Teaser"}
+                }
+                """;
+
+        final LocalizedValue<Payload> content =
+                objectMapper.readValue(json, new TypeReference<>() {});
+
+        assertEquals(new Payload("Untertitel", "Anreisser"), content.de());
+        assertEquals(new Payload("Subtitle", "Teaser"), content.en());
+
+        final var collected = new HashMap<>(content.toMapWithLocaleKeys());
+        assertEquals(2, collected.size());
+        assertEquals(new Payload("Untertitel", "Anreisser"), collected.get(Locale.GERMAN));
+        assertEquals(new Payload("Subtitle", "Teaser"), collected.get(Locale.ENGLISH));
+    }
+
+    @Test
+    void typedObjectUnwrappedDeserialization() {
+        final var json =
+                """
+                {
+                    "de": {"subtitle": "Untertitel", "teaser": "Anreisser"},
+                    "en": {"subtitle": "Subtitle", "teaser": "Teaser"}
+                }
+                """;
+
+        final var holder = objectMapper.readValue(json, UnwrappedPayloadHolder.class);
+        assertEquals(new Payload("Untertitel", "Anreisser"), holder.content().de());
+        assertEquals(new Payload("Subtitle", "Teaser"), holder.content().en());
+    }
+
+    @Test
+    void typedObjectUnwrappedPrefixedDeserialization() {
+        final var json =
+                """
+                {
+                    "content:de": {"subtitle": "Untertitel", "teaser": "Anreisser"},
+                    "content:en": {"subtitle": "Subtitle", "teaser": "Teaser"}
+                }
+                """;
+
+        final var holder = objectMapper.readValue(json, UnwrappedPrefixedPayloadHolder.class);
+        assertEquals(new Payload("Untertitel", "Anreisser"), holder.content().de());
+        assertEquals(new Payload("Subtitle", "Teaser"), holder.content().en());
+    }
+
+    @Test
+    void typedObjectKeySerializationMethodDeserialization() {
+        final var json =
+                """
+                {
+                    "content": {
+                        "DE": {"subtitle": "Untertitel", "teaser": "Anreisser"},
+                        "EN": {"subtitle": "Subtitle", "teaser": "Teaser"}
+                    }
+                }
+                """;
+
+        final var holder = objectMapper.readValue(json, KeySerializedPayloadHolder.class);
+        assertEquals(new Payload("Untertitel", "Anreisser"), holder.content().de());
+        assertEquals(new Payload("Subtitle", "Teaser"), holder.content().en());
+    }
+
+    @Test
+    void typedObjectRoundTrip() {
+        final var original =
+                new PayloadHolder(
+                        LocalizedValue.<Payload>builder()
+                                .de(new Payload("Untertitel", "Anreisser"))
+                                .en(new Payload("Subtitle", "Teaser"))
+                                .build());
+
+        final var json = objectMapper.writeValueAsString(original);
+        final var deserialized = objectMapper.readValue(json, PayloadHolder.class);
+
+        assertEquals(original, deserialized);
+    }
+
+    @Test
+    void rawLocalizedValueDeserializationWithObjectPayloadLeavesMap() {
+        final var json = "{\"de\":{\"subtitle\":\"Untertitel\",\"teaser\":\"Anreisser\"}}";
+        final var raw = objectMapper.readValue(json, LocalizedValue.class);
+        final var deVal = raw.de();
+        assertInstanceOf(Map.class, deVal);
     }
 
     @Test
@@ -351,4 +473,17 @@ class LocalizedValueJacksonTest {
             return name;
         }
     }
+
+    record Payload(String subtitle, String teaser) implements Serializable {}
+
+    record PayloadHolder(LocalizedValue<Payload> content) {}
+
+    record UnwrappedPayloadHolder(@JsonUnwrapped LocalizedValue<Payload> content) {}
+
+    record UnwrappedPrefixedPayloadHolder(
+            @JsonUnwrapped(prefix = "content:") LocalizedValue<Payload> content) {}
+
+    record KeySerializedPayloadHolder(
+            @JsonLocalizedValue(keySerialization = SerializationMethod.UPPERCASE)
+                    LocalizedValue<Payload> content) {}
 }

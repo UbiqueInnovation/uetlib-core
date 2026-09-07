@@ -14,6 +14,7 @@ import org.jspecify.annotations.Nullable;
 import tools.jackson.core.JsonParser;
 import tools.jackson.databind.BeanProperty;
 import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.JavaType;
 import tools.jackson.databind.ValueDeserializer;
 import tools.jackson.databind.node.ObjectNode;
 import tools.jackson.databind.util.NameTransformer;
@@ -34,20 +35,23 @@ import java.util.LinkedHashMap;
 public class LocalizedValueDeserializer
         extends ValueDeserializer<LocalizedValue<? extends Serializable>> {
 
-    @Nullable private final JsonLocalizedValue jsonLocalizedValue;
-    @Nullable private final NameTransformer unwrapper;
+    private final @Nullable JsonLocalizedValue jsonLocalizedValue;
+    private final @Nullable NameTransformer unwrapper;
     private final NameTransformer effectiveUnwrapper;
+    private final @Nullable JavaType valueType; // resolved T, null when unknown
 
     public LocalizedValueDeserializer() {
-        this(null, null);
+        this(null, null, null);
     }
 
     public LocalizedValueDeserializer(
             final @Nullable JsonLocalizedValue jsonLocalizedValue,
-            final @Nullable NameTransformer unwrapper) {
+            final @Nullable NameTransformer unwrapper,
+            final @Nullable JavaType valueType) {
         this.jsonLocalizedValue = jsonLocalizedValue;
         this.unwrapper = unwrapper;
         this.effectiveUnwrapper = buildEffectiveUnwrapper(jsonLocalizedValue, unwrapper);
+        this.valueType = valueType;
     }
 
     @Override
@@ -68,7 +72,10 @@ public class LocalizedValueDeserializer
                 continue;
             }
 
-            final var value = context.readTreeAsValue(entry.getValue(), Object.class);
+            final var value =
+                    valueType != null
+                            ? context.readTreeAsValue(entry.getValue(), valueType)
+                            : context.readTreeAsValue(entry.getValue(), Object.class);
             if (value instanceof final Serializable serializableValue) {
                 values.put(unwrappedKey, serializableValue);
             }
@@ -80,15 +87,38 @@ public class LocalizedValueDeserializer
     @Override
     public ValueDeserializer<?> createContextual(
             final @Nullable DeserializationContext context, final @Nullable BeanProperty property) {
-        if (property == null) {
-            return this;
-        }
-
-        final var annotationFromProperty = property.getAnnotation(JsonLocalizedValue.class);
-        //noinspection ConstantValue
+        final var annotationFromProperty =
+                property != null ? property.getAnnotation(JsonLocalizedValue.class) : null;
         final var effectiveAnnotation =
                 annotationFromProperty != null ? annotationFromProperty : jsonLocalizedValue;
-        return new LocalizedValueDeserializer(effectiveAnnotation, unwrapper);
+
+        final var resolvedValueType = resolveValueType(context, property);
+
+        return new LocalizedValueDeserializer(
+                effectiveAnnotation, unwrapper, resolvedValueType != null ? resolvedValueType : valueType);
+    }
+
+    private static @Nullable JavaType resolveValueType(
+            final @Nullable DeserializationContext context, final @Nullable BeanProperty property) {
+        // property type for bean properties; contextual type for root-level reads
+        final JavaType declaredType;
+        if (property != null) {
+            declaredType = property.getType();
+        } else if (context != null) {
+            declaredType = context.getContextualType();
+        } else {
+            declaredType = null;
+        }
+
+        if (declaredType == null
+                || !LocalizedValue.class.isAssignableFrom(declaredType.getRawClass())) {
+            return null;
+        }
+        final var contained = declaredType.containedTypeOrUnknown(0);
+        // Raw LocalizedValue binds T to Object/its bound — nothing more specific to deserialize as.
+        return contained.isJavaLangObject() || contained.hasRawClass(Serializable.class)
+                ? null
+                : contained;
     }
 
     @Override
@@ -96,7 +126,7 @@ public class LocalizedValueDeserializer
             final DeserializationContext ctxt, final NameTransformer newUnwrapper) {
         final var combinedUnwrapper =
                 unwrapper == null ? newUnwrapper : chainedTransformer(newUnwrapper, unwrapper);
-        return new LocalizedValueDeserializer(jsonLocalizedValue, combinedUnwrapper);
+        return new LocalizedValueDeserializer(jsonLocalizedValue, combinedUnwrapper, valueType);
     }
 
     private static NameTransformer buildEffectiveUnwrapper(
