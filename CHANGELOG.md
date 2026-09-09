@@ -1,8 +1,14 @@
 # CHANGELOG
 
+## 2.5.2
+
+- Fixed: AbstractProgressLogger now only sets MDC context for logging progress, instead of for every
+  step
+
 ## 2.5.1
 
-- Fix deserialization of `LocalizedValue<T>` where T is some record and anything else than a `String` or plain `Object`
+- Fix deserialization of `LocalizedValue<T>` where T is some record and anything else than a
+  `String` or plain `Object`
 - update uetlib version
 - update actions
 
@@ -34,14 +40,16 @@
 
 ### Improvements
 
-- New `ResumableDownload#copyURLToFile` that survives dropped connections by resuming via HTTP range requests
+- New `ResumableDownload#copyURLToFile` that survives dropped connections by resuming via HTTP range
+  requests
 
 ## 2.4.0
 
 ## Improvements
 
 - Update `uetlib-parent` and `uetlib-test` to their latest versions
-- new `SetOfEnumToStringConverter` for persistence of enums as a comma-separated list in a single text column in DB
+- new `SetOfEnumToStringConverter` for persistence of enums as a comma-separated list in a single
+  text column in DB
 
 ## 2.3.1
 
@@ -65,12 +73,14 @@
 
 ### Improvements
 
-- New `LocalizedValue#mapValues` to map only the values of a `LocalizedValue` (Ported from [1.5.2](#152))
+- New `LocalizedValue#mapValues` to map only the values of a `LocalizedValue` (Ported
+  from [1.5.2](#152))
 
 ## 2.2.0
 
 - All features and fixes from [1.4.3](#143), [1.4.4](#144) and [1.5.0](#150)
-- Remove `JsonLocalizedValue` serialization method `POSIX` and `LocalizedValue#toMapWithPosixLocaleKeys` (unused and
+- Remove `JsonLocalizedValue` serialization method `POSIX` and
+  `LocalizedValue#toMapWithPosixLocaleKeys` (unused and
   annoying)
 - Remove `LocalizedValue#toMapWithUppercaseKeys` (unused and can be achieved with
   `@JsonLocalizedValue(keySerialization = SerializationMethod.UPPERCASE)`)
@@ -82,16 +92,19 @@
 ## 2.1.0
 
 - deprecate `AutoClosableTempFileProvider` for removal
-- add new `DataAndFileProvder`, analogous to `DataAndInput` but for `FileProvder` instead of `ByteFile` and deprecate
+- add new `DataAndFileProvder`, analogous to `DataAndInput` but for `FileProvder` instead of
+  `ByteFile` and deprecate
   `DataAndInput` and `ByteFile` while at it
-- New `TempFileProvider` that creates an empty temporary file and deletes it after use (ported to [2.1.0](#210)
+- New `TempFileProvider` that creates an empty temporary file and deletes it after use (ported
+  to [2.1.0](#210)
   from [1.4.1](#141))
 
 ## 2.0.1
 
 ### Bugfixes
 
-- Extend `JsonMapperUtils` to make sure some `java.time` types are serialized as ISO-8601 strings by default.
+- Extend `JsonMapperUtils` to make sure some `java.time` types are serialized as ISO-8601 strings by
+  default.
 
 ## 2.0.0
 
@@ -102,7 +115,8 @@
 - Removed all `MdcUtils::runWithContext`-overloads, renamed to `call`, `supply`, `consume` etc.
 - Removed `TimeFormatUtils::parseLocalDate/parseLocalTime/parseLocalDateTime` replaced by
   `TimeFormatUtils::parsePrettyLocalDate/parsePrettyLocalTime/parsePrettyLocalDateTime`
-- Removed constructors of `BlurHashClient` without an explicit user agent. Use constructors with user agent.
+- Removed constructors of `BlurHashClient` without an explicit user agent. Use constructors with
+  user agent.
 - Added `JsonMapper` as the first constructor argument to `ObjectMapperToStringConverter`.
 
 #### Jackson 3 support
@@ -111,16 +125,19 @@
   `mvn -U org.openrewrite.maven:rewrite-maven-plugin:run -Drewrite.recipeArtifactCoordinates=org.openrewrite.recipe:rewrite-jackson:RELEASE -Drewrite.activeRecipes=org.openrewrite.java.jackson.UpgradeJackson_2_3 -Drewrite.exportDatatables=true`
 - And follow https://github.com/FasterXML/jackson/blob/main/jackson3/MIGRATING_TO_JACKSON_3.md
 - Removed `ObjectMapperUtils`:
-    - Usages of default `ObjectMapper.objectMapper()` are replaced with Spring Boot Autoconfiguration in
+    - Usages of default `ObjectMapper.objectMapper()` are replaced with Spring Boot
+      Autoconfiguration in
       `ch.ubique.backend.spring.boot.jackson.autoconfigure.UetlibSpringBootJacksonAutoConfiguration`.
     - Usages of `ObjectMapperUtils.objectMapper(customizer)` have to be replaced with your own
-      `org.springframework.boot.jackson.autoconfigure.JsonMapperBuilderCustomizer` bean, which will be applied to the
+      `org.springframework.boot.jackson.autoconfigure.JsonMapperBuilderCustomizer` bean, which will
+      be applied to the
       autoconfigured `ObjectMapper`.
     - Kept `JsonMapperUtils` for some reusable standard `JsonMapper.Builder` customizations.
 
 ### Improvements
 
-- Add method variants that either a custom error `message` or a `messageSupplier` for all `NumberUtils.require*`
+- Add method variants that either a custom error `message` or a `messageSupplier` for all
+  `NumberUtils.require*`
   methods.
 
 ## 1.5.2
@@ -170,13 +187,15 @@
 ### Improvements
 
 - Add `ZONE_NAME_GMT`/`ZONE_ID_GMT`/`TIME_UTILS_GMT` to `TimeUtils`.
-- Extract http header relevant code from uetlib-spring-boot `HeaderUtility` to new `HttpHeaderUtils`.
+- Extract http header relevant code from uetlib-spring-boot `HeaderUtility` to new
+  `HttpHeaderUtils`.
 
 ## 1.3.0
 
 ### Breaking Changes
 
-- Any usage of `MdcUtils.runWithContext` with a lambda that is auto-cast to a `Supplier` must now explicitly be cast to
+- Any usage of `MdcUtils.runWithContext` with a lambda that is auto-cast to a `Supplier` must now
+  explicitly be cast to
   either a `Supplier` or `Callable`.
 
 ### Improvements
