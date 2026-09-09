@@ -33,9 +33,9 @@ public abstract sealed class AbstractProgressLogger
     private long lastTime;
 
     protected AbstractProgressLogger(
-             final @Nullable  String prefix,
+            final @Nullable String prefix,
             @Positive final long stepSize,
-             final @Nullable  Map<String, String> mdcContextMap) {
+            final @Nullable Map<String, String> mdcContextMap) {
 
         this.prefix = requireNonNullElse(prefix, "");
         this.stepSize = stepSize;
@@ -57,7 +57,9 @@ public abstract sealed class AbstractProgressLogger
             final var overallDeltaMillis = currentTime - startTime;
             final var overallElementsPerSecond = 1000.0 * currentCount / overallDeltaMillis;
 
-            logProgress(currentCount, elementsPerSecond, overallElementsPerSecond);
+            MdcUtils.runWithContext(
+                    () -> logProgress(currentCount, elementsPerSecond, overallElementsPerSecond),
+                    mdcContextMap);
         }
         onCount(currentCount);
     }
@@ -68,93 +70,73 @@ public abstract sealed class AbstractProgressLogger
             final long currentCount, double elementsPerSecond, double overallElementsPerSecond);
 
     public void step() {
-        MdcUtils.runWithContext(this::stepInternal, mdcContextMap);
+        stepInternal();
     }
 
     public void watch(final Runnable runnable) {
-        MdcUtils.runWithContext(
-                () -> {
-                    runnable.run();
-                    stepInternal();
-                },
-                mdcContextMap);
+        runnable.run();
+        stepInternal();
     }
 
     public Runnable watchRunnable(final Runnable runnable) {
-        return MdcUtils.runnableWithContext(
-                () -> {
-                    runnable.run();
-                    stepInternal();
-                },
-                mdcContextMap);
+        return () -> {
+            runnable.run();
+            stepInternal();
+        };
     }
 
     public <T> Consumer<T> watch(final Consumer<T> consumer) {
-        return MdcUtils.consumeWithContext(
-                t -> {
-                    consumer.accept(t);
-                    stepInternal();
-                },
-                mdcContextMap);
+        return t -> {
+            consumer.accept(t);
+            stepInternal();
+        };
     }
 
     public <T, U> BiConsumer<T, U> watch(final BiConsumer<T, U> consumer) {
-        return MdcUtils.biConsumeWithContext(
-                (t, u) -> {
-                    consumer.accept(t, u);
-                    stepInternal();
-                },
-                mdcContextMap);
+        return (t, u) -> {
+            consumer.accept(t, u);
+            stepInternal();
+        };
     }
 
     public <T, R> Function<T, R> watch(final Function<T, R> function) {
-        return MdcUtils.applyWithContext(
-                t -> {
-                    final var result = function.apply(t);
-                    stepInternal();
-                    return result;
-                },
-                mdcContextMap);
+        return t -> {
+            final var result = function.apply(t);
+            stepInternal();
+            return result;
+        };
     }
 
     public <E extends Exception> ThrowingRunnable<E> watchThrowing(
             final ThrowingRunnable<E> runnable) {
-        return MdcUtils.runThrowingWithContext(
-                () -> {
-                    runnable.run();
-                    stepInternal();
-                },
-                mdcContextMap);
+        return () -> {
+            runnable.run();
+            stepInternal();
+        };
     }
 
     public <T, E extends Exception> ThrowingConsumer<T, E> watchThrowing(
             final ThrowingConsumer<T, E> consumer) {
-        return MdcUtils.consumeThrowingWithContext(
-                t -> {
-                    consumer.accept(t);
-                    stepInternal();
-                },
-                mdcContextMap);
+        return t -> {
+            consumer.accept(t);
+            stepInternal();
+        };
     }
 
     public <T, U, E extends Exception> ThrowingBiConsumer<T, U, E> watchThrowing(
             final ThrowingBiConsumer<T, U, E> consumer) {
-        return MdcUtils.biConsumeThrowingWithContext(
-                (t, u) -> {
-                    consumer.accept(t, u);
-                    stepInternal();
-                },
-                mdcContextMap);
+        return (t, u) -> {
+            consumer.accept(t, u);
+            stepInternal();
+        };
     }
 
     public <T, R, E extends Exception> ThrowingFunction<T, R, E> watchThrowing(
             final ThrowingFunction<T, R, E> function) {
-        return MdcUtils.applyThrowingWithContext(
-                t -> {
-                    final var result = function.apply(t);
-                    stepInternal();
-                    return result;
-                },
-                mdcContextMap);
+        return t -> {
+            final var result = function.apply(t);
+            stepInternal();
+            return result;
+        };
     }
 }
