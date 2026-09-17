@@ -1,9 +1,5 @@
 # CHANGELOG
 
-## 2.5.3
-
-- Make the key type of `StreamUtils.distinctByKey` nullable
-
 ## 2.5.2
 
 - Fixed: AbstractProgressLogger now only sets MDC context for logging progress, instead of for every

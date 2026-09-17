@@ -76,11 +76,12 @@ public final class StreamUtils {
      *
      * @param keyExtractor the extract the key
      * @param <T> the type of the elements
-     * @param <K> the type of the key
+     * @param <K> the type of the key, non-null as {@link ConcurrentHashMap#putVal(Object, Object,
+     *     boolean)} does not allow null keys
      * @return a predicate that returns if the key already exists
      */
-    public static <T extends @Nullable Object, K extends @Nullable Object>
-            Predicate<T> distinctByKey(final Function<T, K> keyExtractor) {
+    public static <T extends @Nullable Object, K> Predicate<T> distinctByKey(
+            final Function<T, K> keyExtractor) {
         final Set<K> seen = ConcurrentHashMap.newKeySet();
         return t -> seen.add(keyExtractor.apply(t));
     }
