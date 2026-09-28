@@ -2,8 +2,9 @@
 
 ## 2.5.3
 
-- Added `LocalizedValue::cascadeMissing` that contains all existing entries, plus new ones according to the cascade for
-  all given elements in the argument list.
+- Added `LocalizedValue#cascadeMissing(Locale...)`: retains all existing locale entries and fills
+  each requested locale from the first matching value in the ordered cascade, or from any existing
+  value if none match. Rejects an empty cascade and ignores duplicate locales.
 
 ## 2.5.2
 
@@ -244,11 +245,16 @@
 
 ### Improvements
 
-- Added `VersionToStringSerializer/StringToVersionSerializer` to read write `com.github.zafarkhaja.semver.Version`
+- Added `VersionToStringSerializer/StringToVersionSerializer` to read write
+  `com.github.zafarkhaja.semver.Version`
   SemVer Strings to/from JSON.
 - Registered `VersionToStringSerializer/StringToVersionSerializer` with the default object mapper in
   `ObjectMapperUtils`.
-- Added `LocalizedValueValueExtractor` to validate annotations on the generic type `T` of `LocalizedValue<T>`
+- Added `LocalizedValueValueExtractor` to validate annotations on the generic type `T` of
+  `LocalizedValue<T>`
+- `NumberUtils` with `requirePositive`/`requireNegative`/`requireNonPositive`/`requireNonNegative`
+  methods like
+  `Objects::requireNonNull`.
 
 ## 1.1.1
 
@@ -260,14 +266,16 @@
 
 ### Improvements
 
-- Fix `MapCollectors::entriesToMapWithValueMapper` to allow mapping values to a new type and expect the map value
+- Fix `MapCollectors::entriesToMapWithValueMapper` to allow mapping values to a new type and expect
+  the map value
   instead of the map entry as the mapping function argument
 
 ## 1.0.1
 
 ### Improvements
 
-- Added support for different key serialization (`DEFAULT`/`POSIX`/`UPPERCASE`) methods of `LocalizedValue` objects
+- Added support for different key serialization (`DEFAULT`/`POSIX`/`UPPERCASE`) methods of
+  `LocalizedValue` objects
   using jackson annotation, e.g.:
     ```
     record KeySerialization(
@@ -284,7 +292,8 @@
 
 ### Breaking Changes
 
-- Removed `JsonUnwrappedLocalizedValueSerializer`. The functionality is unchange, but you do not need to set the
+- Removed `JsonUnwrappedLocalizedValueSerializer`. The functionality is unchange, but you do not
+  need to set the
   serializer explicitly anymore, see the improvements above and:
     ```diff
     record Unwrapped(
@@ -297,4 +306,3 @@
 
 First release. The code was moved
 from [UbiqueInnovation/backend-jvm-lib](https://github.com/UbiqueInnovation/backend-jvm-lib).
-
