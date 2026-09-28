@@ -3,8 +3,8 @@
 ## 2.6.0
 
 - Added `LocalizedValue#cascadeMissing(Locale...)`: retains all existing locale entries and fills
-  each requested locale from the first matching value in the ordered cascade, or from any existing
-  value if none match. Rejects an empty cascade and ignores duplicate locales.
+  each requested locale using its best existing match, the first matching value in the ordered
+  cascade, or any existing value if none match. Rejects an empty cascade and ignores duplicates.
 
 ## 2.5.2
 
