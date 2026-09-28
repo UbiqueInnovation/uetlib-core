@@ -16,17 +16,19 @@ public final class ProgressLogger extends AbstractProgressLogger {
         this(null, total);
     }
 
-    public ProgressLogger( final @Nullable  String prefix, final long total) {
+    public ProgressLogger(final @Nullable String prefix, final long total) {
         this(prefix, total, MDC.getCopyOfContextMap());
     }
 
     public ProgressLogger(
-             final @Nullable  String prefix, final long total, final Map<String, String> mdcContextMap) {
+            final @Nullable String prefix,
+            final long total,
+            final Map<String, String> mdcContextMap) {
         this(prefix, total, mdcContextMap, 100);
     }
 
     public ProgressLogger(
-            @Nullable  final String prefix,
+            @Nullable final String prefix,
             final long total,
             final Map<String, String> mdcContextMap,
             final long numSteps) {

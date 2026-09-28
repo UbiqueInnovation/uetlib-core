@@ -33,7 +33,7 @@ public interface FileProvider extends AutoCloseable, InputStreamProvider {
      * @return a {@link FileProvider} that provides a temporary file
      */
     static FileProvider emptyTempFile(
-             final @Nullable  String filePrefix,  final @Nullable  String fileSuffix) {
+            final @Nullable String filePrefix, final @Nullable String fileSuffix) {
         return new TempFileProvider(filePrefix, fileSuffix);
     }
 
@@ -92,8 +92,8 @@ public interface FileProvider extends AutoCloseable, InputStreamProvider {
      */
     static FileProvider of(
             final ThrowingSupplier<InputStream, IOException> inputStreamSupplier,
-             final @Nullable  String filePrefix,
-             final @Nullable  String fileSuffix) {
+            final @Nullable String filePrefix,
+            final @Nullable String fileSuffix) {
         return new InputStreamSupplierFileProvider(inputStreamSupplier, filePrefix, fileSuffix);
     }
 

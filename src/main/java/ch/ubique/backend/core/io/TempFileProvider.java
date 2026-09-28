@@ -37,7 +37,7 @@ public class TempFileProvider implements FileProvider {
      * @param fileSuffix an optional suffix for naming the temporary file. If {@code null}, a
      *     default suffix ".tmp" will be used.
      */
-    TempFileProvider( final @Nullable  String filePrefix,  final @Nullable  String fileSuffix) {
+    TempFileProvider(final @Nullable String filePrefix, final @Nullable String fileSuffix) {
         this.filePrefix = requireNonNullElse(filePrefix, "file-provider-");
         this.fileSuffix = requireNonNullElse(fileSuffix, ".tmp");
     }

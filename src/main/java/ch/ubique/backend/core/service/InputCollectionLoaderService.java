@@ -1,7 +1,5 @@
 package ch.ubique.backend.core.service;
 
-import jakarta.validation.constraints.NotNull;
-
 import java.util.Collection;
 import java.util.function.Function;
 
