@@ -37,8 +37,8 @@ public class InputStreamSupplierFileProvider extends TempFileProvider {
      */
     InputStreamSupplierFileProvider(
             final ThrowingSupplier<InputStream, IOException> inputStreamSupplier,
-             final @Nullable  String filePrefix,
-             final @Nullable  String fileSuffix) {
+            final @Nullable String filePrefix,
+            final @Nullable String fileSuffix) {
         super(filePrefix, fileSuffix);
         this.inputStreamSupplier = inputStreamSupplier;
     }

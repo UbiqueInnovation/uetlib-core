@@ -3,6 +3,7 @@ package ch.ubique.backend.core.jackson;
 import com.github.zafarkhaja.semver.Version;
 
 import org.jspecify.annotations.Nullable;
+
 import tools.jackson.core.JsonParser;
 import tools.jackson.databind.DeserializationContext;
 import tools.jackson.databind.ValueDeserializer;

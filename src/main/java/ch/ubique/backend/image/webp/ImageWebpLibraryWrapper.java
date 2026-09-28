@@ -3,6 +3,11 @@ package ch.ubique.backend.image.webp;
 import ch.ubique.backend.core.process.ProcessConfig;
 import ch.ubique.backend.core.process.ProcessResult;
 import ch.ubique.backend.core.utils.ProcessUtils;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,9 +15,6 @@ import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.event.Level;
 
 final class ImageWebpLibraryWrapper {
 
@@ -21,8 +23,7 @@ final class ImageWebpLibraryWrapper {
     private static final String IMG2WEBP_BIN_PATH = "img2webp";
     private static final String WEBPMUX_BIN_PATH = "webpmux";
 
-    private ImageWebpLibraryWrapper() {
-    }
+    private ImageWebpLibraryWrapper() {}
 
     public static boolean isCWebPAvailable() {
         return isLibAvailable(CWEBP_BIN_PATH);
@@ -38,7 +39,7 @@ final class ImageWebpLibraryWrapper {
 
     public static boolean isLibAvailable(final String binPath) {
         try {
-            Runtime.getRuntime().exec(new String[]{binPath, "-version"});
+            Runtime.getRuntime().exec(new String[] {binPath, "-version"});
             return true;
         } catch (final IOException e) {
             logger.error("Failed to execute {}", binPath, e);
@@ -47,7 +48,9 @@ final class ImageWebpLibraryWrapper {
     }
 
     public static byte[] convertToWebP(
-            final Path imageFile, final Path targetFile, final int quality,
+            final Path imageFile,
+            final Path targetFile,
+            final int quality,
             final Duration processTimeout) {
         try {
             final var command =
@@ -100,8 +103,8 @@ final class ImageWebpLibraryWrapper {
      * @param processTimeout Timeout for the conversion process
      */
     public static ProcessResult convertPartialImagesToWebP(
-            final List<PartialImage> frames, final Path targetPath,
-            final Duration processTimeout) throws IOException {
+            final List<PartialImage> frames, final Path targetPath, final Duration processTimeout)
+            throws IOException {
         final var perImageArguments =
                 frames.stream().flatMap(ImageWebpLibraryWrapper::perImageArguments);
         final var command = createWebAnimationCommand(targetPath, perImageArguments);
@@ -117,7 +120,8 @@ final class ImageWebpLibraryWrapper {
      * @return The byte array of the WebP animation
      */
     public static byte[] convertListToWebP(
-            final Collection<PartialImage> imageFiles, final Path tmpFileOutputPath,
+            final Collection<PartialImage> imageFiles,
+            final Path tmpFileOutputPath,
             final Duration processTimeout) {
         if (imageFiles.stream().anyMatch(f -> !f.file().exists())) {
             throw new IllegalArgumentException("Not all files exist");

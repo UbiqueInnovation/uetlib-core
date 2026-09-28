@@ -5,6 +5,10 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import ch.ubique.backend.image.webp.Frame.BufferedImageFrame;
 import ch.ubique.backend.image.webp.Frame.PathFrame;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -14,9 +18,8 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+
 import javax.imageio.ImageIO;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 
 class WebpWriterTest {
 
@@ -33,10 +36,14 @@ class WebpWriterTest {
     @Test
     void perFrameDurationsAreWrittenToWebp() throws IOException {
         try (final var writer = new WebpWriter()) {
-            final var frames = List.<Frame>of(
-                    new BufferedImageFrame(createTestImage(Color.RED), Duration.ofMillis(100)),
-                    new BufferedImageFrame(createTestImage(Color.GREEN), Duration.ofMillis(300)),
-                    new BufferedImageFrame(createTestImage(Color.BLUE), Duration.ofMillis(750)));
+            final var frames =
+                    List.<Frame>of(
+                            new BufferedImageFrame(
+                                    createTestImage(Color.RED), Duration.ofMillis(100)),
+                            new BufferedImageFrame(
+                                    createTestImage(Color.GREEN), Duration.ofMillis(300)),
+                            new BufferedImageFrame(
+                                    createTestImage(Color.BLUE), Duration.ofMillis(750)));
 
             final var webp = writer.encodeFrames(frames);
             final var durations = readFrameDurations(webp);
@@ -51,9 +58,10 @@ class WebpWriterTest {
         final var config = WebpEncodingConfig.builder().duration(defaultDuration).build();
 
         try (final var writer = new WebpWriter(config)) {
-            final var frames = List.<Frame>of(
-                    new BufferedImageFrame(createTestImage(Color.RED)),
-                    new BufferedImageFrame(createTestImage(Color.BLUE)));
+            final var frames =
+                    List.<Frame>of(
+                            new BufferedImageFrame(createTestImage(Color.RED)),
+                            new BufferedImageFrame(createTestImage(Color.BLUE)));
 
             final var webp = writer.encodeFrames(frames);
             final var durations = readFrameDurations(webp);
@@ -68,10 +76,13 @@ class WebpWriterTest {
         final var config = WebpEncodingConfig.builder().duration(defaultDuration).build();
 
         try (final var writer = new WebpWriter(config)) {
-            final var frames = List.<Frame>of(
-                    new BufferedImageFrame(createTestImage(Color.RED), Duration.ofMillis(150)),
-                    new BufferedImageFrame(createTestImage(Color.GREEN)),
-                    new BufferedImageFrame(createTestImage(Color.BLUE), Duration.ofMillis(500)));
+            final var frames =
+                    List.<Frame>of(
+                            new BufferedImageFrame(
+                                    createTestImage(Color.RED), Duration.ofMillis(150)),
+                            new BufferedImageFrame(createTestImage(Color.GREEN)),
+                            new BufferedImageFrame(
+                                    createTestImage(Color.BLUE), Duration.ofMillis(500)));
 
             final var webp = writer.encodeFrames(frames);
             final var durations = readFrameDurations(webp);
@@ -88,9 +99,10 @@ class WebpWriterTest {
             final var png2 = writeTempPng(tmpDir, "frame2.png", Color.BLUE);
 
             try (final var writer = new WebpWriter()) {
-                final var frames = List.<Frame>of(
-                        new PathFrame(png1, Duration.ofMillis(200)),
-                        new PathFrame(png2, Duration.ofMillis(800)));
+                final var frames =
+                        List.<Frame>of(
+                                new PathFrame(png1, Duration.ofMillis(200)),
+                                new PathFrame(png2, Duration.ofMillis(800)));
 
                 final var webp = writer.encodeFrames(frames);
                 final var durations = readFrameDurations(webp);
@@ -109,10 +121,13 @@ class WebpWriterTest {
             final var png = writeTempPng(tmpDir, "frame.png", Color.GREEN);
 
             try (final var writer = new WebpWriter()) {
-                final var frames = List.<Frame>of(
-                        new BufferedImageFrame(createTestImage(Color.RED), Duration.ofMillis(100)),
-                        new PathFrame(png, Duration.ofMillis(400)),
-                        new BufferedImageFrame(createTestImage(Color.BLUE), Duration.ofMillis(900)));
+                final var frames =
+                        List.<Frame>of(
+                                new BufferedImageFrame(
+                                        createTestImage(Color.RED), Duration.ofMillis(100)),
+                                new PathFrame(png, Duration.ofMillis(400)),
+                                new BufferedImageFrame(
+                                        createTestImage(Color.BLUE), Duration.ofMillis(900)));
 
                 final var webp = writer.encodeFrames(frames);
                 final var durations = readFrameDurations(webp);
@@ -128,19 +143,21 @@ class WebpWriterTest {
      * Reads the per-frame durations from a WebP animation file using {@code webpmux -info}.
      *
      * <p>The output contains one line per frame with columns including duration in milliseconds:
+     *
      * <pre>
      *   1:    10    10    no        0        0      100       none    no         34    lossless
      * </pre>
      */
     private static List<Integer> readFrameDurations(final Path webpFile) throws IOException {
-        final var process = new ProcessBuilder("webpmux", "-info", webpFile.toString())
-                .redirectErrorStream(true)
-                .start();
+        final var process =
+                new ProcessBuilder("webpmux", "-info", webpFile.toString())
+                        .redirectErrorStream(true)
+                        .start();
         final var output = new String(process.getInputStream().readAllBytes());
 
         final var durations = new ArrayList<Integer>();
-        final var frameLinePattern = Pattern.compile(
-                "^\\s*\\d+:\\s+\\d+\\s+\\d+\\s+\\S+\\s+\\d+\\s+\\d+\\s+(\\d+)");
+        final var frameLinePattern =
+                Pattern.compile("^\\s*\\d+:\\s+\\d+\\s+\\d+\\s+\\S+\\s+\\d+\\s+\\d+\\s+(\\d+)");
         for (final var line : output.lines().toList()) {
             final var matcher = frameLinePattern.matcher(line);
             if (matcher.find()) {

@@ -411,8 +411,8 @@ class TimeUtilsTest {
                 NullPointerException.class,
                 () -> isAfterOrEqual(null, time1),
                 "Cannot invoke"
-                    + " \"java.time.ZonedDateTime.isBefore(java.time.chrono.ChronoZonedDateTime)\""
-                    + " because \"temporal1\" is null");
+                        + " \"java.time.ZonedDateTime.isBefore(java.time.chrono.ChronoZonedDateTime)\""
+                        + " because \"temporal1\" is null");
     }
 
     @Test
@@ -460,8 +460,8 @@ class TimeUtilsTest {
                 NullPointerException.class,
                 () -> isAfterOrEqual(null, time1),
                 "Cannot invoke"
-                    + " \"java.time.LocalDateTime.isBefore(java.time.chrono.ChronoLocalDateTime)\""
-                    + " because \"temporal1\" is null");
+                        + " \"java.time.LocalDateTime.isBefore(java.time.chrono.ChronoLocalDateTime)\""
+                        + " because \"temporal1\" is null");
     }
 
     @Test
@@ -558,8 +558,8 @@ class TimeUtilsTest {
                 NullPointerException.class,
                 () -> isBeforeOrEqual(null, time1),
                 "Cannot invoke"
-                    + " \"java.time.ZonedDateTime.isAfter(java.time.chrono.ChronoZonedDateTime)\""
-                    + " because \"temporal1\" is null");
+                        + " \"java.time.ZonedDateTime.isAfter(java.time.chrono.ChronoZonedDateTime)\""
+                        + " because \"temporal1\" is null");
     }
 
     @Test
@@ -607,8 +607,8 @@ class TimeUtilsTest {
                 NullPointerException.class,
                 () -> isBeforeOrEqual(null, time1),
                 "Cannot invoke"
-                    + " \"java.time.LocalDateTime.isAfter(java.time.chrono.ChronoLocalDateTime)\""
-                    + " because \"temporal1\" is null");
+                        + " \"java.time.LocalDateTime.isAfter(java.time.chrono.ChronoLocalDateTime)\""
+                        + " because \"temporal1\" is null");
     }
 
     @Test
@@ -830,8 +830,8 @@ class TimeUtilsTest {
                 NullPointerException.class,
                 () -> isBetween(null, time1, time3),
                 "Cannot invoke"
-                    + " \"java.time.ZonedDateTime.isBefore(java.time.chrono.ChronoZonedDateTime)\""
-                    + " because \"time\" is null");
+                        + " \"java.time.ZonedDateTime.isBefore(java.time.chrono.ChronoZonedDateTime)\""
+                        + " because \"time\" is null");
     }
 
     @Test
@@ -892,8 +892,8 @@ class TimeUtilsTest {
                 NullPointerException.class,
                 () -> isBetween(null, time1, time3),
                 "Cannot invoke"
-                    + " \"java.time.LocalDateTime.isBefore(java.time.chrono.ChronoLocalDateTime)\""
-                    + " because \"time\" is null");
+                        + " \"java.time.LocalDateTime.isBefore(java.time.chrono.ChronoLocalDateTime)\""
+                        + " because \"time\" is null");
     }
 
     @Test

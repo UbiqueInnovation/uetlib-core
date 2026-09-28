@@ -1,6 +1,5 @@
 package ch.ubique.backend.core.utils;
 
-
 import java.util.Map;
 
 public record NumericCollectionStats(

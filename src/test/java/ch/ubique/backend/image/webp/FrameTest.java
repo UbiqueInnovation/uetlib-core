@@ -6,10 +6,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import ch.ubique.backend.image.webp.Frame.BufferedImageFrame;
 import ch.ubique.backend.image.webp.Frame.PathFrame;
+
+import org.junit.jupiter.api.Test;
+
 import java.awt.image.BufferedImage;
 import java.nio.file.Path;
 import java.time.Duration;
-import org.junit.jupiter.api.Test;
 
 class FrameTest {
 
@@ -70,8 +72,6 @@ class FrameTest {
 
     @Test
     void pathFrameWithDurationRejectsNullPath() {
-        assertThrows(
-                NullPointerException.class,
-                () -> new PathFrame(null, Duration.ofMillis(100)));
+        assertThrows(NullPointerException.class, () -> new PathFrame(null, Duration.ofMillis(100)));
     }
 }
