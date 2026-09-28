@@ -307,6 +307,16 @@ class LocalizedValueTest {
                 uncascaded.cascadeMissing(
                         GERMAN_SWITZERLAND, Locale.FRENCH, Locale.ITALIAN, Locale.ENGLISH);
 
+        assertEquals(
+                Set.of(
+                        Locale.GERMAN,
+                        GERMAN_SWITZERLAND,
+                        FRENCH_SWITZERLAND,
+                        Locale.FRENCH,
+                        Locale.ITALIAN,
+                        Locale.ENGLISH,
+                        ROMANSH),
+                cascaded1.toMapWithLocaleKeys().keySet());
         assertEquals("de", cascaded1.de());
         assertEquals("de", cascaded1.get(GERMAN_SWITZERLAND));
         assertEquals("fr-CH", cascaded1.get(FRENCH_SWITZERLAND));
@@ -319,6 +329,9 @@ class LocalizedValueTest {
 
         final var cascaded2 = uncascaded.cascadeMissing(Locale.CHINA);
 
+        assertEquals(
+                Set.of(Locale.GERMAN, FRENCH_SWITZERLAND, ROMANSH, Locale.CHINA),
+                cascaded2.toMapWithLocaleKeys().keySet());
         assertEquals("de", cascaded2.de());
         assertEquals("de", cascaded2.get(GERMAN_SWITZERLAND));
         assertEquals("fr-CH", cascaded2.get(FRENCH_SWITZERLAND));
@@ -329,6 +342,23 @@ class LocalizedValueTest {
         assertEquals("rm", cascaded2.get(ROMANSH));
         // Any value that existed is fine as fallback
         assertTrue(uncascaded.toMapWithLocaleKeys().containsValue(cascaded2.get(Locale.CHINA)));
+    }
+
+    @Test
+    void cascadeMissingRejectsEmptyLocales() {
+        final var value = LocalizedValue.de("de");
+
+        final var exception = assertThrows(IllegalArgumentException.class, value::cascadeMissing);
+        assertEquals("cascade must contain at least one locale", exception.getMessage());
+    }
+
+    @Test
+    void cascadeMissingIgnoresDuplicateLocales() {
+        final var value = LocalizedValue.de("de");
+
+        assertEquals(
+                value.cascadeMissing(Locale.FRENCH, Locale.ITALIAN),
+                value.cascadeMissing(Locale.FRENCH, Locale.FRENCH, Locale.ITALIAN));
     }
 
     @Test

@@ -423,10 +423,16 @@ public class LocalizedValue<T extends Serializable> {
      *
      * @param cascade Ordered Array of locales to cascade the entries
      * @return the new LocalizedValue
+     * @throws IllegalArgumentException if no locales are provided
      */
     public LocalizedValue<T> cascadeMissing(final Locale... cascade) {
+        if (cascade.length == 0) {
+            throw new IllegalArgumentException("cascade must contain at least one locale");
+        }
+
         final var cascadedEntries =
                 Arrays.stream(cascade)
+                        .distinct()
                         .map(
                                 locale -> {
                                     final var value =
