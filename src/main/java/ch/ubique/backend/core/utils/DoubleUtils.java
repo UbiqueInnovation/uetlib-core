@@ -7,7 +7,7 @@ public final class DoubleUtils {
     private DoubleUtils() {}
 
     @Nullable
-    public static Double nullIfNaN( final @Nullable  Double value) {
+    public static Double nullIfNaN(final @Nullable Double value) {
         if (null != value && value.isNaN()) {
             return null;
         }

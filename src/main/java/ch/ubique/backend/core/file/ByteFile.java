@@ -4,12 +4,10 @@ import static java.util.Objects.requireNonNullElse;
 
 import ch.ubique.backend.core.io.FileProvider;
 
-import org.jspecify.annotations.Nullable;
-import jakarta.validation.constraints.NotNull;
-
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.jspecify.annotations.Nullable;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -27,8 +25,8 @@ public class ByteFile {
 
     public static ByteFile fromBytes(
             final byte[] bytes,
-             final @Nullable  String fileName,
-             final @Nullable  String contentType) {
+            final @Nullable String fileName,
+            final @Nullable String contentType) {
 
         final var contentTypeOrOctetStream =
                 requireNonNullElse(contentType, "application/octet-stream");
@@ -44,7 +42,7 @@ public class ByteFile {
         return fileName;
     }
 
-    public ByteFile setFileName( final @Nullable  String fileName) {
+    public ByteFile setFileName(final @Nullable String fileName) {
         this.fileName = fileName;
         return this;
     }
@@ -59,7 +57,7 @@ public class ByteFile {
         return contentType;
     }
 
-    public ByteFile setContentType( final @Nullable  String contentType) {
+    public ByteFile setContentType(final @Nullable String contentType) {
         this.contentType = contentType;
         return this;
     }

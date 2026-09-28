@@ -3,13 +3,13 @@ package ch.ubique.backend.image.webp;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.File;
 import org.junit.jupiter.api.Test;
+
+import java.io.File;
 
 class PartialImageTest {
 
-    private static final WebpEncodingConfig DEFAULT_CONFIG =
-            WebpEncodingConfig.builder().build();
+    private static final WebpEncodingConfig DEFAULT_CONFIG = WebpEncodingConfig.builder().build();
 
     @Test
     void twoArgConstructorDefaultsOwnedFileToFalse() {

@@ -45,7 +45,7 @@ public final class ExifTransform {
         return new ImageInformation(orientation, 0, 0);
     }
 
-    private static int getOrientation( final @Nullable  ExifIFD0Directory directory) {
+    private static int getOrientation(final @Nullable ExifIFD0Directory directory) {
         try {
             // directory can be null if no exif data is set.
             if (directory != null) {

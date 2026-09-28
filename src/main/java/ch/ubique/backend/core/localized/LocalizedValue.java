@@ -253,7 +253,8 @@ public class LocalizedValue<T extends Serializable> {
      */
     public Optional<T> getOptional(final @Nullable Locale locale) {
         final var matchedKey = LocaleHelper.findBestMatchLocale(locale, values.keySet());
-        // return Optional.ofNullable(matchedKey).map(values::get); currently is shown to be incorrect by NullAway
+        // return Optional.ofNullable(matchedKey).map(values::get); currently is shown to be
+        // incorrect by NullAway
         if (matchedKey == null) {
             return Optional.empty();
         }

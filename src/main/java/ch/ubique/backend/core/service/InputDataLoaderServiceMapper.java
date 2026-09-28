@@ -1,6 +1,5 @@
 package ch.ubique.backend.core.service;
 
-
 import java.io.IOException;
 import java.util.function.Function;
 

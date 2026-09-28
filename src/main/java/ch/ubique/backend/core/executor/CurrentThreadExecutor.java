@@ -1,7 +1,5 @@
 package ch.ubique.backend.core.executor;
 
-import jakarta.validation.constraints.NotNull;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;

@@ -7,7 +7,6 @@ import com.github.benmanes.caffeine.cache.Weigher;
 import io.trbl.blurhash.BlurHash;
 
 import org.imgscalr.Scalr;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

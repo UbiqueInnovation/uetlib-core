@@ -95,7 +95,9 @@ public class LocalizedValueDeserializer
         final var resolvedValueType = resolveValueType(context, property);
 
         return new LocalizedValueDeserializer(
-                effectiveAnnotation, unwrapper, resolvedValueType != null ? resolvedValueType : valueType);
+                effectiveAnnotation,
+                unwrapper,
+                resolvedValueType != null ? resolvedValueType : valueType);
     }
 
     private static @Nullable JavaType resolveValueType(
