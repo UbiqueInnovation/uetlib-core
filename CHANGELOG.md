@@ -5,6 +5,7 @@
 - Added `LocalizedValue#cascadeMissing(Locale...)`: retains all existing locale entries and fills
   each requested locale using its best existing match, the first matching value in the ordered
   cascade, or any existing value if none match. Rejects an empty cascade and ignores duplicates.
+- New jackson `EmptyStringAsNullDeserializer`
 
 ## 2.5.2
 
