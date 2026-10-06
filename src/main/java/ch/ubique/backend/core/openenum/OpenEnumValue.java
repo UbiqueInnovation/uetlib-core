@@ -11,9 +11,10 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * treat them uniformly through {@link #value()}.
  *
  * <p>{@link #value()} is annotated {@code @JsonValue}, so any implementor serializes as its raw
- * value with plain Jackson — no module registration needed. Deserialization still needs a
- * domain-specific {@code @JsonCreator}, since resolving into known/unknown requires that domain's
- * {@link OpenEnumSet} (see the package README).
+ * value with plain Jackson — no registration needed, and no way to forget it. Deserialization is
+ * handled by {@code OpenEnumModule} instead, since resolving a raw value into known-or-unknown
+ * requires the domain's {@link OpenEnumSet}; a mapper without that module fails loudly on reads
+ * rather than quietly writing the wrong shape (see the package README).
  *
  * @param <V> the raw value type (e.g. {@code String} or {@code Integer})
  */

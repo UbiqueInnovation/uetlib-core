@@ -15,7 +15,6 @@ sealed interface Color extends OpenEnumValue<String> {
         return KNOWN_VALUES.values();
     }
 
-    @JsonCreator
     static Color valueOfOrUnknown(final String value) {
         return KNOWN_VALUES.valueOfOrUnknown(value);
     }
@@ -55,15 +54,27 @@ sealed interface Color extends OpenEnumValue<String> {
 
 ## Jackson
 
-No module or registration needed — plain Jackson annotations do the whole job:
+Nothing to annotate or register per domain type. The two directions are handled differently, on
+purpose:
 
-- `@JsonValue` on `OpenEnumValue#value()` covers **serialization** for every open-enum type
-  generically: any implementor (known constant or unknown carrier) serializes as its raw value.
-- `@JsonCreator` on each domain interface's `valueOfOrUnknown` (as in `Color` above) covers
-  **deserialization** for that specific type — it has to be per-type, since resolving into
-  known/unknown needs that domain's own `OpenEnumSet`.
+- **Serialization** — `@JsonValue` on `OpenEnumValue#value()`. Works on any mapper, including a
+  bare `new JsonMapper()`, and cannot be disabled by forgetting to configure something.
+- **Deserialization** — `OpenEnumModule`. It matches *any* `OpenEnumValue` and finds the domain's
+  `OpenEnumSet` via `OpenEnumSet.forType(...)`, which scans the type for a `static` field of that
+  type (matched on type, not name). So a new open enum works the moment it exists.
+
+The asymmetry is the point. A mapper without the module **fails loudly** on reads — Jackson cannot
+instantiate a sealed interface. Had serialization also lived in the module, an unconfigured mapper
+would instead write silently wrong JSON: the `Known` enum would fall back to `name()` (which
+differs from `value()` whenever the wire format isn't the constant name) and `Unknown` would
+serialize as a POJO `{"value":"cyan"}`.
+
+The module is registered by `JsonMapperUtils.configureBase(...)` and, in Spring Boot applications,
+by `uetlib-spring-boot`'s `UetlibJacksonOpenEnumJsonMapperBuilderCustomizer`. Jackson's
+ServiceLoader discovery is opt-in (`MapperBuilder.findAndAddModules()`), so it is not relied on.
 
 ```java
-JsonMapper.builder().build().writeValueAsString(KnownColor.RED); // "red"
-JsonMapper.builder().build().readValue("\"cyan\"", Color.class); // UnknownColor("cyan")
+var mapper = JsonMapperUtils.jsonMapper();
+mapper.writeValueAsString(Color.Known.RED);      // "red"
+mapper.readValue("\"cyan\"", Color.class);        // Color.Unknown("cyan")
 ```

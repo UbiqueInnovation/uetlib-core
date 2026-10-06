@@ -1,0 +1,9 @@
+# Discovered by MapperBuilder.findAndAddModules(). Jackson's discovery is opt-in, so uetlib's own
+# mappers still register these explicitly via JsonMapperUtils.configureBase(..); this entry is for
+# consumers that build their own mapper and opt into discovery.
+#
+# Only named modules can be listed. The DateTimeFeature/EnumFeature settings in JsonMapperUtils are
+# builder configuration, not modules, so discovery yields a subset of configureBase(..) -- never a
+# replacement for it.
+ch.ubique.backend.core.jackson.UetlibCoreJacksonVersionModule
+ch.ubique.backend.core.openenum.jackson.OpenEnumModule

@@ -9,7 +9,8 @@ import java.util.stream.Collectors;
  */
 public class DuplicateOpenEnumValueException extends RuntimeException {
 
-    public DuplicateOpenEnumValueException(final Class<? extends Enum<?>> knownType, final Object value) {
+    public DuplicateOpenEnumValueException(
+            final Class<? extends Enum<?>> knownType, final Object value) {
         super("Duplicate code value '%s' in %s".formatted(value, describe(knownType)));
     }
 
