@@ -2,6 +2,7 @@ package ch.ubique.backend.core.openenum;
 
 import org.jspecify.annotations.Nullable;
 
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -87,5 +88,42 @@ public final class OpenEnumSet<T extends OpenEnumValue<V>, V> {
      */
     public Collection<T> values() {
         return known.values();
+    }
+
+    /**
+     * The {@code OpenEnumSet} a domain type declares for itself, found by scanning {@code type} for
+     * a {@code static} field of this class. This lets integrations (Jackson, persistence, OpenAPI)
+     * resolve values for any open enum without being told about each domain type individually.
+     *
+     * <p>The field is matched on its <em>type</em>, not its name, so a domain type is free to call
+     * it whatever it likes.
+     *
+     * @throws IllegalArgumentException if {@code type} declares no such field — failing loudly here
+     *     beats silently falling back to a representation that would not round-trip
+     */
+    @SuppressWarnings("unchecked")
+    public static <T extends OpenEnumValue<V>, V> OpenEnumSet<T, V> forType(final Class<T> type) {
+        for (final var field : type.getDeclaredFields()) {
+            if (Modifier.isStatic(field.getModifiers())
+                    && OpenEnumSet.class.isAssignableFrom(field.getType())) {
+                // The field is implicitly public on an interface, but the declaring type may not
+                // be (a package-private domain type, or one nested in a test).
+                field.trySetAccessible();
+
+                try {
+                    return (OpenEnumSet<T, V>) Objects.requireNonNull(field.get(null));
+                } catch (final IllegalAccessException e) {
+                    throw new IllegalArgumentException(
+                            "%s declares an inaccessible OpenEnumSet field '%s'"
+                                    .formatted(type.getName(), field.getName()),
+                            e);
+                }
+            }
+        }
+
+        throw new IllegalArgumentException(
+                "%s declares no static OpenEnumSet field; an open enum must expose one so its known"
+                                .formatted(type.getName())
+                        + " values can be resolved");
     }
 }

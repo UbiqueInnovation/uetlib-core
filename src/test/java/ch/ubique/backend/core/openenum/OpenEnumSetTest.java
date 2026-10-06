@@ -18,7 +18,8 @@ class OpenEnumSetTest {
 
     sealed interface Color extends OpenEnumValue<String> {
 
-        OpenEnumSet<Color, String> KNOWN_VALUES = OpenEnumSet.of(KnownColor.class, UnknownColor::new);
+        OpenEnumSet<Color, String> KNOWN_VALUES =
+                OpenEnumSet.of(KnownColor.class, UnknownColor::new);
 
         static Collection<Color> values() {
             return KNOWN_VALUES.values();
