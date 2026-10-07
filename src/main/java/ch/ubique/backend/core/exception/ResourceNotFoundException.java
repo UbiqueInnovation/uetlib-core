@@ -1,5 +1,7 @@
 package ch.ubique.backend.core.exception;
 
+import org.jspecify.annotations.Nullable;
+
 import java.io.Serial;
 import java.text.MessageFormat;
 import java.util.function.Supplier;
@@ -19,12 +21,12 @@ public class ResourceNotFoundException extends RuntimeException {
     }
 
     public static ResourceNotFoundException withMessage(
-            final String pattern, final Object... arguments) {
+            final String pattern, final @Nullable Object... arguments) {
         return new ResourceNotFoundException(MessageFormat.format(pattern, arguments));
     }
 
     public static Supplier<ResourceNotFoundException> supplierWithMessage(
-            final String pattern, final Object... arguments) {
+            final String pattern, final @Nullable Object... arguments) {
         return () -> withMessage(pattern, arguments);
     }
 }

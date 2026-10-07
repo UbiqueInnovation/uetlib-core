@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 2.6.1
+
+- Allow null in ResourceNotFoundException methods for varargs parameters
+
 ## 2.6.0
 
 - Added `LocalizedValue#cascadeMissing(Locale...)`: retains all existing locale entries and fills
