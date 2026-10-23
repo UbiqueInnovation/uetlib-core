@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2.7.0
+
+- Add automatic Hibernate Validator support for `@Positive`, `@PositiveOrZero`, `@Negative`,
+  and `@NegativeOrZero` on `Duration`, and `@Min` / `@Max` on `Year`.
+
 # 2.6.1
 
 - Allow null in ResourceNotFoundException methods for varargs parameters
