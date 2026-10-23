@@ -1,0 +1,6 @@
+ch.ubique.backend.core.validator.PositiveDurationValidator
+ch.ubique.backend.core.validator.PositiveOrZeroDurationValidator
+ch.ubique.backend.core.validator.NegativeDurationValidator
+ch.ubique.backend.core.validator.NegativeOrZeroDurationValidator
+ch.ubique.backend.core.validator.MinYearValidator
+ch.ubique.backend.core.validator.MaxYearValidator
