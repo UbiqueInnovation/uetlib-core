@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 3.0.0 (unreleased)
+
+### Breaking changes
+
+- Move Maven coordinates from `ch.ubique:uetlib-*` to `ch.ubique.uetlib:uetlib-*`.
+- Align uetlib parent, BOM and library references with the migration releases.
+
 ## 2.7.0
 
 - Add automatic Hibernate Validator support for `@Positive`, `@PositiveOrZero`, `@Negative`,
