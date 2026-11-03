@@ -2,6 +2,8 @@
 
 ## 3.0.0 (unreleased)
 
+- Move image helpers to `ch.ubique.uetlib.core.image.*`; standalone WebP codec packages are unchanged.
+
 ### Breaking changes
 
 - Move Java packages from `ch.ubique.backend` to `ch.ubique.uetlib`, including class-name resources. Existing Spring configuration property keys are unchanged.
