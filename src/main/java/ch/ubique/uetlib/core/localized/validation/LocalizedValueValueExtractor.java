@@ -1,8 +1,10 @@
 package ch.ubique.uetlib.core.localized.validation;
 
 import ch.ubique.uetlib.core.localized.LocalizedValue;
+
 import jakarta.validation.valueextraction.ExtractedValue;
 import jakarta.validation.valueextraction.ValueExtractor;
+
 import org.jspecify.annotations.Nullable;
 
 /**

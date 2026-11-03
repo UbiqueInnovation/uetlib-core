@@ -1,4 +1,4 @@
 @NullMarked
-package ch.ubique.uetlib.image.webp;
+package ch.ubique.uetlib.core.image.blurhash;
 
 import org.jspecify.annotations.NullMarked;

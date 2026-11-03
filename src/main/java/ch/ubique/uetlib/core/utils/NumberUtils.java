@@ -2,9 +2,10 @@ package ch.ubique.uetlib.core.utils;
 
 import static java.util.Objects.requireNonNull;
 
-import java.util.function.Supplier;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.Nullable;
+
+import java.util.function.Supplier;
 
 public final class NumberUtils {
 

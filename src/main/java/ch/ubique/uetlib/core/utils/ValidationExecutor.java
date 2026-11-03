@@ -3,6 +3,7 @@ package ch.ubique.uetlib.core.utils;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ValidationException;
 import jakarta.validation.Validator;
+
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Set;

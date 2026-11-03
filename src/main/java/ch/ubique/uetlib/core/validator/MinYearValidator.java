@@ -3,8 +3,10 @@ package ch.ubique.uetlib.core.validator;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.constraints.Min;
-import java.time.Year;
+
 import org.jspecify.annotations.Nullable;
+
+import java.time.Year;
 
 /** Validates {@link Min} constraints against the numeric year. */
 public class MinYearValidator implements ConstraintValidator<Min, Year> {

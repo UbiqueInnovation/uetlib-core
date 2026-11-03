@@ -3,12 +3,13 @@ package ch.ubique.uetlib.core.utils;
 import static java.util.Map.entry;
 import static java.util.Map.ofEntries;
 
+import org.apache.commons.lang3.ObjectUtils;
+import org.jetbrains.annotations.Contract;
+
 import java.time.*;
 import java.time.temporal.*;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.commons.lang3.ObjectUtils;
-import org.jetbrains.annotations.Contract;
 
 /**
  * Access instances of {@link TimeUtils} via the provided static fields {@link

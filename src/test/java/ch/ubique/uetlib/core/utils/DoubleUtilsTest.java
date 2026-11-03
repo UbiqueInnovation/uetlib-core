@@ -1,6 +1,7 @@
 package ch.ubique.uetlib.core.utils;
 
 import static ch.ubique.uetlib.core.utils.DoubleUtils.nullIfNaN;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;

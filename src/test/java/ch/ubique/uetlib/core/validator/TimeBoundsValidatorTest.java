@@ -5,9 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import jakarta.validation.Validation;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import java.time.Year;
+
 import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.Test;
+
+import java.time.Year;
 
 @SuppressWarnings("DataFlowIssue")
 class TimeBoundsValidatorTest {

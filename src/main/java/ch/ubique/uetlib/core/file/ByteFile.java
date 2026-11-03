@@ -3,12 +3,14 @@ package ch.ubique.uetlib.core.file;
 import static java.util.Objects.requireNonNullElse;
 
 import ch.ubique.uetlib.core.io.FileProvider;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.jspecify.annotations.Nullable;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 /**
  * @deprecated since 2.1.0, use {@link FileProvider} instead

@@ -3,10 +3,12 @@ package ch.ubique.uetlib.core.validator;
 import static ch.ubique.uetlib.core.validator.ValidationTestUtils.*;
 
 import jakarta.validation.Valid;
+
+import org.junit.jupiter.api.Test;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.junit.jupiter.api.Test;
 
 class NullOrNotEmptyValidatorTest {
 

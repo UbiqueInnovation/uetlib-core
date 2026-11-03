@@ -1,8 +1,11 @@
 package ch.ubique.uetlib.core.service;
 
 import ch.ubique.uetlib.core.file.ByteFile;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.validation.constraints.NotNull;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;

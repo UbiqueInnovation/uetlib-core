@@ -1,9 +1,11 @@
 package ch.ubique.uetlib.core.hibernate.converter;
 
 import jakarta.persistence.AttributeConverter;
+
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;

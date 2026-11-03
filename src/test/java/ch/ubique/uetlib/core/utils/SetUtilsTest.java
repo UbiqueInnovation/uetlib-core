@@ -2,10 +2,11 @@ package ch.ubique.uetlib.core.utils;
 
 import static java.util.function.Function.identity;
 
-import java.util.Set;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.Set;
 
 class SetUtilsTest {
 

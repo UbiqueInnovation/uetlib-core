@@ -1,16 +1,18 @@
 package ch.ubique.uetlib.core.localized.jackson;
 
 import static ch.ubique.uetlib.core.localized.jackson.LocalizedValueKeyTransformers.keySerializationTransformer;
+
 import static tools.jackson.databind.util.NameTransformer.chainedTransformer;
 
 import ch.ubique.uetlib.core.localized.LocalizedValue;
 import ch.ubique.uetlib.core.localized.annotation.JsonLocalizedValue;
 import ch.ubique.uetlib.core.localized.annotation.JsonLocalizedValue.SerializationMethod;
+
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.pivovarit.function.ThrowingBiConsumer;
-import java.io.Serializable;
-import java.util.Map;
+
 import org.jspecify.annotations.Nullable;
+
 import tools.jackson.core.JsonGenerator;
 import tools.jackson.core.JsonToken;
 import tools.jackson.databind.BeanProperty;
@@ -19,6 +21,9 @@ import tools.jackson.databind.SerializationFeature;
 import tools.jackson.databind.ValueSerializer;
 import tools.jackson.databind.jsontype.TypeSerializer;
 import tools.jackson.databind.util.NameTransformer;
+
+import java.io.Serializable;
+import java.util.Map;
 
 /**
  * Serializes a {@link LocalizedValue} to a JSON object. It supports both unwrapped properties and

@@ -3,9 +3,10 @@ package ch.ubique.uetlib.core.utils;
 import static java.lang.Math.max;
 import static java.lang.Math.round;
 
-import java.util.Map;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.MDC;
+
+import java.util.Map;
 
 public final class ProgressLogger extends AbstractProgressLogger {
 

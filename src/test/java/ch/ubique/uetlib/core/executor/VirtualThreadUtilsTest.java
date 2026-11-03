@@ -2,10 +2,11 @@ package ch.ubique.uetlib.core.executor;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.Test;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Stream;
-import org.junit.jupiter.api.Test;
 
 class VirtualThreadUtilsTest {
 

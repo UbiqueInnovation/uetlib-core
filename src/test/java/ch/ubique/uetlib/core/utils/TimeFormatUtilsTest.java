@@ -4,11 +4,13 @@ import static ch.ubique.uetlib.core.utils.TimeFormatUtils.TIME_FORMAT_UTILS_EURO
 import static ch.ubique.uetlib.core.utils.TimeFormatUtils.TIME_FORMAT_UTILS_UTC;
 import static ch.ubique.uetlib.core.utils.TimeUtils.*;
 import static ch.ubique.uetlib.test.assertion.AssertionUtils.assertThrowsWithMessage;
+
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
 
 import java.time.*;
 import java.time.format.DateTimeParseException;
-import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 class TimeFormatUtilsTest {

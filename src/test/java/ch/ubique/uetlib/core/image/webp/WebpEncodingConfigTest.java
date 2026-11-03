@@ -1,9 +1,10 @@
-package ch.ubique.uetlib.image.webp;
+package ch.ubique.uetlib.core.image.webp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.time.Duration;
 import org.junit.jupiter.api.Test;
+
+import java.time.Duration;
 
 class WebpEncodingConfigTest {
 

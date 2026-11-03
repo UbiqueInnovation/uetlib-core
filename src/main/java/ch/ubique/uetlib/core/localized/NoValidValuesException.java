@@ -1,9 +1,10 @@
 package ch.ubique.uetlib.core.localized;
 
+import org.jspecify.annotations.Nullable;
+
 import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
-import org.jspecify.annotations.Nullable;
 
 public class NoValidValuesException extends RuntimeException {
 

@@ -2,10 +2,11 @@ package ch.ubique.uetlib.core.utils;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.List;
-import java.util.Locale;
 import org.apache.commons.lang3.LocaleUtils;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+import java.util.Locale;
 
 @SuppressWarnings("DataFlowIssue")
 class LocaleHelperTest {

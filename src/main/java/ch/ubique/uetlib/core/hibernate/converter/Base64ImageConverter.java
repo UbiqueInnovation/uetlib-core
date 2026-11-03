@@ -1,6 +1,7 @@
 package ch.ubique.uetlib.core.hibernate.converter;
 
 import jakarta.persistence.AttributeConverter;
+
 import java.util.Base64;
 
 @SuppressWarnings("com.haulmont.jpb.ConverterNotAnnotatedInspection")

@@ -1,4 +1,4 @@
-package ch.ubique.uetlib.image.webp;
+package ch.ubique.uetlib.core.image.webp;
 
 import java.io.File;
 

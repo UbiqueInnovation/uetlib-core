@@ -4,10 +4,12 @@ import static ch.ubique.uetlib.core.utils.HttpHeaderUtils.formatHttpHeaderDate;
 import static ch.ubique.uetlib.core.utils.HttpHeaderUtils.parseHttpDateOrOffsetHeader;
 import static ch.ubique.uetlib.core.utils.TimeUtils.ZONE_ID_EUROPE_ZURICH;
 import static ch.ubique.uetlib.core.utils.TimeUtils.ZONE_ID_GMT;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.time.ZonedDateTime;
 import org.junit.jupiter.api.Test;
+
+import java.time.ZonedDateTime;
 
 class HttpHeaderUtilsTest {
 

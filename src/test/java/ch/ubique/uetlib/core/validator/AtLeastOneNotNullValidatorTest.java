@@ -2,8 +2,9 @@ package ch.ubique.uetlib.core.validator;
 
 import static ch.ubique.uetlib.core.validator.ValidationTestUtils.*;
 
-import java.util.Set;
 import org.junit.jupiter.api.Test;
+
+import java.util.Set;
 
 @SuppressWarnings("java:S5961")
 class AtLeastOneNotNullValidatorTest {

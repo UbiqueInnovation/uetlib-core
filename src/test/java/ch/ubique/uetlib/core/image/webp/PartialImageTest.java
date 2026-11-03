@@ -1,10 +1,11 @@
-package ch.ubique.uetlib.image.webp;
+package ch.ubique.uetlib.core.image.webp;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.File;
 import org.junit.jupiter.api.Test;
+
+import java.io.File;
 
 class PartialImageTest {
 

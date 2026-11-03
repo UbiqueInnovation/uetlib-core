@@ -1,9 +1,11 @@
 package ch.ubique.uetlib.core.utils;
 
 import static ch.ubique.uetlib.core.utils.VersionUtils.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.github.zafarkhaja.semver.Version;
+
 import org.junit.jupiter.api.Test;
 
 class VersionUtilsTest {

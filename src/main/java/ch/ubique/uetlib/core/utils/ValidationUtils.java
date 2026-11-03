@@ -2,6 +2,7 @@ package ch.ubique.uetlib.core.utils;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
+
 import java.util.Set;
 
 public final class ValidationUtils {

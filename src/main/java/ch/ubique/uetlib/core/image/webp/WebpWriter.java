@@ -1,18 +1,21 @@
-package ch.ubique.uetlib.image.webp;
+package ch.ubique.uetlib.core.image.webp;
 
-import static ch.ubique.uetlib.image.webp.ImageWebpLibraryWrapper.convertListToWebP;
-import static ch.ubique.uetlib.image.webp.ImageWebpLibraryWrapper.convertPartialImagesToWebP;
+import static ch.ubique.uetlib.core.image.webp.ImageWebpLibraryWrapper.convertListToWebP;
+import static ch.ubique.uetlib.core.image.webp.ImageWebpLibraryWrapper.convertPartialImagesToWebP;
 
 import ch.ubique.uetlib.core.executor.VirtualThreadUtils;
-import ch.ubique.uetlib.image.webp.Frame.BufferedImageFrame;
+import ch.ubique.uetlib.core.image.webp.Frame.BufferedImageFrame;
+
+import org.apache.commons.io.FileUtils;
+
 import java.awt.image.BufferedImage;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+
 import javax.imageio.ImageIO;
-import org.apache.commons.io.FileUtils;
 
 @SuppressWarnings("unused")
 public class WebpWriter implements AutoCloseable {

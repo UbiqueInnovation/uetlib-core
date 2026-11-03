@@ -1,11 +1,13 @@
 package ch.ubique.uetlib.core.utils;
 
 import static ch.ubique.uetlib.core.utils.TimeUtils.*;
+
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
-import org.junit.jupiter.api.Test;
 
 class DurationUtilsTest {
 

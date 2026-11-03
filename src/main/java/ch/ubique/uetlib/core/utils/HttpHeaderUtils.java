@@ -2,6 +2,8 @@ package ch.ubique.uetlib.core.utils;
 
 import static ch.ubique.uetlib.core.utils.TimeUtils.TIME_UTILS_GMT;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -9,7 +11,6 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.Temporal;
 import java.util.Locale;
-import org.apache.commons.lang3.math.NumberUtils;
 
 public final class HttpHeaderUtils {
 

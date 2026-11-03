@@ -1,4 +1,4 @@
-package ch.ubique.uetlib.image.util;
+package ch.ubique.uetlib.core.image.util;
 
 public enum ImageType {
     JPEG,

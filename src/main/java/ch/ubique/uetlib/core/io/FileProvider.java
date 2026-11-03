@@ -1,9 +1,11 @@
 package ch.ubique.uetlib.core.io;
 
 import com.pivovarit.function.ThrowingSupplier;
+
+import org.jspecify.annotations.Nullable;
+
 import java.io.*;
 import java.nio.file.Path;
-import org.jspecify.annotations.Nullable;
 
 /**
  * All temp files created by instances of {@link FileProvider} will be deleted on close. Users of

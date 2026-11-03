@@ -5,10 +5,12 @@ import static java.util.stream.Collectors.toUnmodifiableSet;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
+
+import org.jspecify.annotations.Nullable;
+
 import java.util.Arrays;
 import java.util.Set;
 import java.util.function.Function;
-import org.jspecify.annotations.Nullable;
 
 @Converter
 public abstract class SetOfEnumToStringConverter<E extends Enum<E>>

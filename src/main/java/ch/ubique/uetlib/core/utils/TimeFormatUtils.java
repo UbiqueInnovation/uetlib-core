@@ -1,14 +1,16 @@
 package ch.ubique.uetlib.core.utils;
 
 import static ch.ubique.uetlib.core.utils.TimeUtils.*;
+
 import static java.util.Map.entry;
 import static java.util.Map.ofEntries;
+
+import org.jetbrains.annotations.Contract;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
-import org.jetbrains.annotations.Contract;
 
 public final class TimeFormatUtils {
 

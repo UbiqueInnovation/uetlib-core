@@ -1,8 +1,13 @@
-package ch.ubique.uetlib.image.webp;
+package ch.ubique.uetlib.core.image.webp;
 
 import ch.ubique.uetlib.core.file.temp.TempFileManager;
-import ch.ubique.uetlib.image.util.ImageType;
-import ch.ubique.uetlib.image.util.ImageUtils;
+import ch.ubique.uetlib.core.image.util.ImageType;
+import ch.ubique.uetlib.core.image.util.ImageUtils;
+
+import org.apache.commons.lang3.tuple.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.awt.image.BufferedImage;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -12,10 +17,8 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
+
 import javax.imageio.ImageIO;
-import org.apache.commons.lang3.tuple.Pair;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public final class WebpUtils {
 

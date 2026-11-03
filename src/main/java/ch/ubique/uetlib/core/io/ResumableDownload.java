@@ -1,5 +1,8 @@
 package ch.ubique.uetlib.core.io;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -7,8 +10,6 @@ import java.net.URL;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /** Downloads that survive dropped connections by resuming via HTTP range requests. */
 public final class ResumableDownload {

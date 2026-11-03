@@ -1,18 +1,20 @@
 package ch.ubique.uetlib.core.utils;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import static java.util.Map.entry;
 import static java.util.Map.ofEntries;
 import static java.util.function.Function.identity;
-import static org.junit.jupiter.api.Assertions.*;
+
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.collections4.SetUtils;
+import org.apache.commons.lang3.tuple.Pair;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.collections4.SetUtils;
-import org.apache.commons.lang3.tuple.Pair;
-import org.junit.jupiter.api.Test;
 
 class MapCollectorsTest {
 

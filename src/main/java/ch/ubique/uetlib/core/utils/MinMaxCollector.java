@@ -1,12 +1,13 @@
 package ch.ubique.uetlib.core.utils;
 
+import org.apache.commons.collections4.ComparatorUtils;
+import org.jspecify.annotations.Nullable;
+
 import java.util.Comparator;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
-import org.apache.commons.collections4.ComparatorUtils;
-import org.jspecify.annotations.Nullable;
 
 public final class MinMaxCollector {
 

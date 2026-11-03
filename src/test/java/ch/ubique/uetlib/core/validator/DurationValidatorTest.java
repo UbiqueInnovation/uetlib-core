@@ -6,11 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.constraints.*;
+
+import org.jspecify.annotations.Nullable;
+import org.junit.jupiter.api.Test;
+
 import java.time.Duration;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.jspecify.annotations.Nullable;
-import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("DataFlowIssue")
 class DurationValidatorTest {

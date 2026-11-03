@@ -4,8 +4,14 @@ import ch.ubique.uetlib.core.process.FinishedProcessResult;
 import ch.ubique.uetlib.core.process.ProcessConfig;
 import ch.ubique.uetlib.core.process.ProcessResult;
 import ch.ubique.uetlib.core.process.UnfinishedProcessResult;
+
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.pivovarit.function.exception.WrappedException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -17,9 +23,6 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.event.Level;
 
 public final class ProcessUtils {
 

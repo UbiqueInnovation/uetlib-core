@@ -1,11 +1,12 @@
 package ch.ubique.uetlib.core.process;
 
-import java.nio.file.Path;
-import java.time.Duration;
-import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.event.Level;
+
+import java.nio.file.Path;
+import java.time.Duration;
+import java.util.List;
 
 public class ProcessConfig {
     private final List<String> command;

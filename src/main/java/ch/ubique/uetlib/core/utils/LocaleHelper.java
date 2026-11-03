@@ -3,12 +3,13 @@ package ch.ubique.uetlib.core.utils;
 import static java.util.Map.entry;
 import static java.util.stream.Collectors.*;
 
-import java.util.*;
-import java.util.Map.Entry;
 import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.lang3.LocaleUtils;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.Nullable;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 public final class LocaleHelper {
 

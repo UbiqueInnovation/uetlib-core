@@ -1,7 +1,9 @@
 package ch.ubique.uetlib.core.http.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.validation.constraints.NotNull;
+
 import java.util.Arrays;
 import java.util.List;
 
