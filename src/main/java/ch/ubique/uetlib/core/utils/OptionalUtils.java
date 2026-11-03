@@ -2,12 +2,14 @@ package ch.ubique.uetlib.core.utils;
 
 import com.pivovarit.function.ThrowingSupplier;
 import com.pivovarit.function.exception.WrappedException;
+
+import org.jspecify.annotations.Nullable;
+
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-import org.jspecify.annotations.Nullable;
 
 public final class OptionalUtils {
 

@@ -3,11 +3,13 @@ package ch.ubique.uetlib.core.jackson;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-import java.util.List;
 import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.Test;
+
 import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.json.JsonMapper;
+
+import java.util.List;
 
 class EmptyStringAsNullDeserializerTest {
 

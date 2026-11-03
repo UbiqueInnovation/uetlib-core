@@ -1,12 +1,13 @@
 package ch.ubique.uetlib.core.utils;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.jspecify.annotations.Nullable;
+
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.*;
-import org.apache.commons.collections4.CollectionUtils;
-import org.jspecify.annotations.Nullable;
 
 @SuppressWarnings("unused")
 public final class StreamUtils {

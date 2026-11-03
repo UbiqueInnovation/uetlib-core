@@ -5,11 +5,13 @@ import static java.util.stream.Collectors.*;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import java.util.*;
-import java.util.function.DoubleFunction;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.util.*;
+import java.util.function.DoubleFunction;
 
 /**
  * This class provides utility methods for calculating statistics for a collection of numeric

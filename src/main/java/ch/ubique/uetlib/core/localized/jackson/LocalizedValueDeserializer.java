@@ -1,15 +1,16 @@
 package ch.ubique.uetlib.core.localized.jackson;
 
 import static ch.ubique.uetlib.core.localized.jackson.LocalizedValueKeyTransformers.keySerializationTransformer;
+
 import static tools.jackson.databind.util.NameTransformer.chainedTransformer;
 
 import ch.ubique.uetlib.core.localized.LocalizedValue;
 import ch.ubique.uetlib.core.localized.annotation.JsonLocalizedValue;
 import ch.ubique.uetlib.core.localized.annotation.JsonLocalizedValue.SerializationMethod;
-import java.io.Serializable;
-import java.util.LinkedHashMap;
+
 import org.apache.commons.lang3.StringUtils;
 import org.jspecify.annotations.Nullable;
+
 import tools.jackson.core.JsonParser;
 import tools.jackson.databind.BeanProperty;
 import tools.jackson.databind.DeserializationContext;
@@ -17,6 +18,9 @@ import tools.jackson.databind.JavaType;
 import tools.jackson.databind.ValueDeserializer;
 import tools.jackson.databind.node.ObjectNode;
 import tools.jackson.databind.util.NameTransformer;
+
+import java.io.Serializable;
+import java.util.LinkedHashMap;
 
 /**
  * Deserializes a {@link LocalizedValue} from a JSON object. It supports both unwrapped properties

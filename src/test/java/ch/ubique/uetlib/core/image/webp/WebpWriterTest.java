@@ -1,10 +1,14 @@
-package ch.ubique.uetlib.image.webp;
+package ch.ubique.uetlib.core.image.webp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-import ch.ubique.uetlib.image.webp.Frame.BufferedImageFrame;
-import ch.ubique.uetlib.image.webp.Frame.PathFrame;
+import ch.ubique.uetlib.core.image.webp.Frame.BufferedImageFrame;
+import ch.ubique.uetlib.core.image.webp.Frame.PathFrame;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -14,9 +18,8 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+
 import javax.imageio.ImageIO;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 
 class WebpWriterTest {
 

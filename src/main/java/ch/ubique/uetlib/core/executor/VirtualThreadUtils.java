@@ -1,8 +1,16 @@
 package ch.ubique.uetlib.core.executor;
 
 import ch.ubique.uetlib.core.utils.MdcUtils;
+
 import com.pivovarit.function.ThrowingConsumer;
 import com.pivovarit.function.ThrowingFunction;
+
+import org.apache.commons.lang3.exception.UncheckedException;
+import org.apache.commons.lang3.exception.UncheckedInterruptedException;
+import org.apache.commons.lang3.stream.Streams;
+import org.jspecify.annotations.Nullable;
+import org.slf4j.MDC;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -15,11 +23,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
-import org.apache.commons.lang3.exception.UncheckedException;
-import org.apache.commons.lang3.exception.UncheckedInterruptedException;
-import org.apache.commons.lang3.stream.Streams;
-import org.jspecify.annotations.Nullable;
-import org.slf4j.MDC;
 
 public final class VirtualThreadUtils {
 

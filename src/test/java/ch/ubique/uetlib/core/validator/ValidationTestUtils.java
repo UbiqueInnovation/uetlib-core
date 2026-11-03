@@ -1,10 +1,13 @@
 package ch.ubique.uetlib.core.validator;
 
 import ch.ubique.uetlib.core.utils.ValidationUtils;
+
 import jakarta.validation.ConstraintViolation;
+
+import org.junit.jupiter.api.Assertions;
+
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.junit.jupiter.api.Assertions;
 
 public final class ValidationTestUtils {
 

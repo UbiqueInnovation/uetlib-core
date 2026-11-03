@@ -3,7 +3,10 @@ package ch.ubique.uetlib.core.utils;
 import static ch.ubique.uetlib.core.io.CompressionAlgorithm.*;
 import static ch.ubique.uetlib.core.utils.InputStreamUtils.findCompressionByContentEncoding;
 import static ch.ubique.uetlib.core.utils.InputStreamUtils.findCompressionByFilePath;
+
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -11,7 +14,6 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("resource")
 class InputStreamUtilsTest {

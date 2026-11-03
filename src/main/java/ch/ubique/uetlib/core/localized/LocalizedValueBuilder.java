@@ -3,6 +3,10 @@ package ch.ubique.uetlib.core.localized;
 import static java.util.stream.Collectors.*;
 
 import ch.ubique.uetlib.core.utils.LocaleHelper;
+
+import org.apache.commons.lang3.StringUtils;
+import org.jspecify.annotations.Nullable;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
@@ -10,8 +14,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
-import org.apache.commons.lang3.StringUtils;
-import org.jspecify.annotations.Nullable;
 
 public final class LocalizedValueBuilder<T extends Serializable> {
 

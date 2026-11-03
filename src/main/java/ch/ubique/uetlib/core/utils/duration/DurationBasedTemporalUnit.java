@@ -1,12 +1,13 @@
 package ch.ubique.uetlib.core.utils.duration;
 
-import java.time.Duration;
-import java.time.temporal.Temporal;
-import java.time.temporal.TemporalUnit;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.time.Duration;
+import java.time.temporal.Temporal;
+import java.time.temporal.TemporalUnit;
 
 public final class DurationBasedTemporalUnit implements TemporalUnit {
 

@@ -2,13 +2,14 @@ package ch.ubique.uetlib.core.utils;
 
 import static java.util.Objects.requireNonNull;
 
+import org.apache.commons.lang3.math.NumberUtils;
+import org.jetbrains.annotations.Contract;
+import org.jspecify.annotations.Nullable;
+
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-import org.apache.commons.lang3.math.NumberUtils;
-import org.jetbrains.annotations.Contract;
-import org.jspecify.annotations.Nullable;
 
 public final class StringUtils {
 

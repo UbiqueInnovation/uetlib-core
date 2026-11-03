@@ -1,15 +1,17 @@
-package ch.ubique.uetlib.image.webp;
+package ch.ubique.uetlib.core.image.webp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import ch.ubique.uetlib.image.webp.Frame.BufferedImageFrame;
-import ch.ubique.uetlib.image.webp.Frame.PathFrame;
+import ch.ubique.uetlib.core.image.webp.Frame.BufferedImageFrame;
+import ch.ubique.uetlib.core.image.webp.Frame.PathFrame;
+
+import org.junit.jupiter.api.Test;
+
 import java.awt.image.BufferedImage;
 import java.nio.file.Path;
 import java.time.Duration;
-import org.junit.jupiter.api.Test;
 
 class FrameTest {
 

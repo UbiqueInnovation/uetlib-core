@@ -1,10 +1,12 @@
 package ch.ubique.uetlib.core.utils;
 
 import static ch.ubique.uetlib.test.assertion.AssertionUtils.assertThrowsWithMessage;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.List;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 @SuppressWarnings("DataFlowIssue")
 class StringUtilsTest {

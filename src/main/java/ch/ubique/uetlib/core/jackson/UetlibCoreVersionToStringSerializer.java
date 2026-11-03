@@ -1,6 +1,7 @@
 package ch.ubique.uetlib.core.jackson;
 
 import com.github.zafarkhaja.semver.Version;
+
 import tools.jackson.core.JsonGenerator;
 import tools.jackson.databind.SerializationContext;
 import tools.jackson.databind.ValueSerializer;

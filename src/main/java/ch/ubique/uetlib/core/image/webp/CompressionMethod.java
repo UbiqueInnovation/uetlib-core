@@ -1,4 +1,4 @@
-package ch.ubique.uetlib.image.webp;
+package ch.ubique.uetlib.core.image.webp;
 
 public enum CompressionMethod {
     M0(0),

@@ -1,15 +1,18 @@
 package ch.ubique.uetlib.core.localized;
 
 import static ch.ubique.uetlib.core.localized.AdditionalLocales.*;
-import static java.util.Map.entry;
-import static java.util.Map.ofEntries;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import static java.util.Map.entry;
+import static java.util.Map.ofEntries;
+
+import org.junit.jupiter.api.Test;
 
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.*;
-import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("DataFlowIssue")
 class LocalizedValueTest {

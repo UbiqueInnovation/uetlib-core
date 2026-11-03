@@ -2,9 +2,10 @@ package ch.ubique.uetlib.core.utils;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.Test;
+
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.junit.jupiter.api.Test;
 
 class OptionalUtilsTest {
 

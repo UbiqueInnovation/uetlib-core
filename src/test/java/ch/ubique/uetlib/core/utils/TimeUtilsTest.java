@@ -3,12 +3,14 @@ package ch.ubique.uetlib.core.utils;
 import static ch.ubique.uetlib.core.utils.TimeUtils.*;
 import static ch.ubique.uetlib.core.utils.TimeUtils.TIME_UTILS_EUROPE_BERLIN;
 import static ch.ubique.uetlib.test.assertion.AssertionUtils.assertThrowsWithMessage;
+
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
 
 import java.time.*;
 import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
-import org.junit.jupiter.api.Test;
 
 @SuppressWarnings({"ResultOfMethodCallIgnored", "DataFlowIssue"})
 class TimeUtilsTest {

@@ -3,9 +3,10 @@ package ch.ubique.uetlib.core.utils.duration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+import org.junit.jupiter.api.Test;
+
 import java.time.Duration;
 import java.time.Instant;
-import org.junit.jupiter.api.Test;
 
 class DurationBasedTemporalUnitTest {
     @Test

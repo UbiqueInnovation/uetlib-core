@@ -2,11 +2,12 @@ package ch.ubique.uetlib.core.utils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.jupiter.api.Test;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
-import org.junit.jupiter.api.Test;
 
 class StreamUtilsTest {
 

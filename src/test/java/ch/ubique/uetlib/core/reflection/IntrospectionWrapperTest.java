@@ -3,6 +3,7 @@ package ch.ubique.uetlib.core.reflection;
 import static org.junit.jupiter.api.Assertions.*;
 
 import ch.ubique.uetlib.core.reflection.ReflectionUtilsTest.TestRecord;
+
 import org.junit.jupiter.api.Test;
 
 class IntrospectionWrapperTest {

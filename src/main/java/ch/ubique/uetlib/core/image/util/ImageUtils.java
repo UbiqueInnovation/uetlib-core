@@ -1,6 +1,10 @@
-package ch.ubique.uetlib.image.util;
+package ch.ubique.uetlib.core.image.util;
 
 import com.drew.imaging.ImageProcessingException;
+
+import org.apache.commons.io.FileUtils;
+import org.imgscalr.Scalr;
+
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -9,9 +13,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
 import javax.imageio.ImageIO;
-import org.apache.commons.io.FileUtils;
-import org.imgscalr.Scalr;
 
 public final class ImageUtils {
 

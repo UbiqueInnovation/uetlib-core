@@ -3,13 +3,16 @@ package ch.ubique.uetlib.core.localized.validation;
 import static org.mockito.Mockito.*;
 
 import ch.ubique.uetlib.core.localized.LocalizedValue;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.valueextraction.ValueExtractor;
+
+import org.junit.jupiter.api.Test;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
-import org.junit.jupiter.api.Test;
 
 class LocalizedValueValueExtractorTest {
 

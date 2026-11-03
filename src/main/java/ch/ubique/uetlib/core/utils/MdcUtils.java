@@ -1,11 +1,13 @@
 package ch.ubique.uetlib.core.utils;
 
 import com.pivovarit.function.*;
+
+import org.jspecify.annotations.Nullable;
+import org.slf4j.MDC;
+
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.function.*;
-import org.jspecify.annotations.Nullable;
-import org.slf4j.MDC;
 
 public final class MdcUtils {
 

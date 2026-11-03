@@ -1,10 +1,11 @@
-package ch.ubique.uetlib.image.webp;
+package ch.ubique.uetlib.core.image.webp;
+
+import org.jspecify.annotations.Nullable;
 
 import java.awt.image.BufferedImage;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.Objects;
-import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a single frame in a WebP animation. Each frame can optionally specify its own

@@ -1,9 +1,11 @@
 package ch.ubique.uetlib.core.utils;
 
 import jakarta.validation.constraints.Positive;
-import java.util.Map;
+
 import org.jspecify.annotations.Nullable;
 import org.slf4j.MDC;
+
+import java.util.Map;
 
 public final class IndeterminateProgressLogger extends AbstractProgressLogger {
 

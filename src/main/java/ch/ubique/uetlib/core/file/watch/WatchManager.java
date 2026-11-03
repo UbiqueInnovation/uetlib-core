@@ -4,13 +4,14 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.nio.file.ClosedWatchServiceException;
 import java.nio.file.Path;
 import java.nio.file.WatchEvent.Kind;
 import java.nio.file.WatchService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class WatchManager implements Runnable {
 

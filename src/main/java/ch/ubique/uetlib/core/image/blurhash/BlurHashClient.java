@@ -1,19 +1,23 @@
-package ch.ubique.uetlib.image.blurhash;
+package ch.ubique.uetlib.core.image.blurhash;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.Weigher;
+
 import io.trbl.blurhash.BlurHash;
+
+import org.imgscalr.Scalr;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.awt.image.BufferedImage;
 import java.awt.image.ImagingOpException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+
 import javax.imageio.ImageIO;
-import org.imgscalr.Scalr;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /** A client to retrieve blur hashes and image dimensions for images. */
 public class BlurHashClient {

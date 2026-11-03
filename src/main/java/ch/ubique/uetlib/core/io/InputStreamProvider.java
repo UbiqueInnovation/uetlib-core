@@ -1,6 +1,7 @@
 package ch.ubique.uetlib.core.io;
 
 import com.pivovarit.function.ThrowingSupplier;
+
 import java.io.*;
 
 public interface InputStreamProvider {

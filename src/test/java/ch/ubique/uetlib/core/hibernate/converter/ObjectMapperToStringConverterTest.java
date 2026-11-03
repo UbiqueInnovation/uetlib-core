@@ -3,11 +3,13 @@ package ch.ubique.uetlib.core.hibernate.converter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-import java.util.List;
 import org.junit.jupiter.api.Test;
+
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
+
+import java.util.List;
 
 class ObjectMapperToStringConverterTest {
 

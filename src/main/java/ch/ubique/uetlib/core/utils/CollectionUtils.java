@@ -4,11 +4,13 @@ import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.*;
 
 import jakarta.validation.constraints.NotEmpty;
+
+import org.apache.commons.lang3.SerializationUtils;
+
 import java.io.Serializable;
 import java.util.*;
 import java.util.function.ToDoubleFunction;
 import java.util.stream.DoubleStream;
-import org.apache.commons.lang3.SerializationUtils;
 
 public final class CollectionUtils {
 

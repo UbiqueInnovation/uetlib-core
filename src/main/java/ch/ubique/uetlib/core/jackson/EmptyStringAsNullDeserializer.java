@@ -1,6 +1,7 @@
 package ch.ubique.uetlib.core.jackson;
 
 import org.jspecify.annotations.Nullable;
+
 import tools.jackson.core.JsonParser;
 import tools.jackson.core.JsonToken;
 import tools.jackson.databind.BeanProperty;

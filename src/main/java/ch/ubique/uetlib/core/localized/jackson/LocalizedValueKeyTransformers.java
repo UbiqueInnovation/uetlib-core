@@ -2,11 +2,15 @@ package ch.ubique.uetlib.core.localized.jackson;
 
 import ch.ubique.uetlib.core.localized.LocalizedValue;
 import ch.ubique.uetlib.core.localized.annotation.JsonLocalizedValue;
+
 import com.google.common.base.CaseFormat;
-import java.util.Locale;
+
 import org.apache.commons.lang3.StringUtils;
 import org.jspecify.annotations.Nullable;
+
 import tools.jackson.databind.util.NameTransformer;
+
+import java.util.Locale;
 
 /**
  * Shared {@link NameTransformer} helpers for {@link LocalizedValue} key serialization and

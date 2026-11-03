@@ -2,6 +2,7 @@ package ch.ubique.uetlib.core.localized;
 
 import static ch.ubique.uetlib.core.localized.AdditionalLocales.ENGLISH_SWITZERLAND;
 import static ch.ubique.uetlib.core.localized.AdditionalLocales.GERMAN_SWITZERLAND;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.skyscreamer.jsonassert.JSONCompareMode.LENIENT;
@@ -9,17 +10,16 @@ import static org.skyscreamer.jsonassert.JSONCompareMode.STRICT;
 
 import ch.ubique.uetlib.core.localized.annotation.JsonLocalizedValue;
 import ch.ubique.uetlib.core.localized.annotation.JsonLocalizedValue.SerializationMethod;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.skyscreamer.jsonassert.JSONAssert;
+
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.DefaultTyping;
 import tools.jackson.databind.MapperFeature;
@@ -27,6 +27,11 @@ import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.SerializationFeature;
 import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
+
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 class LocalizedValueJacksonTest {
 

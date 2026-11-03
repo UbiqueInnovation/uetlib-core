@@ -1,9 +1,10 @@
 package ch.ubique.uetlib.core.exception;
 
+import org.jspecify.annotations.Nullable;
+
 import java.io.Serial;
 import java.text.MessageFormat;
 import java.util.function.Supplier;
-import org.jspecify.annotations.Nullable;
 
 public class ResourceNotFoundException extends RuntimeException {
 

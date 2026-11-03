@@ -1,6 +1,7 @@
 package ch.ubique.uetlib.core.localized;
 
 import static ch.ubique.uetlib.core.utils.OptionalUtils.ofNullable;
+
 import static java.util.Map.Entry;
 import static java.util.Map.entry;
 import static java.util.Objects.requireNonNull;
@@ -11,13 +12,13 @@ import ch.ubique.uetlib.core.localized.jackson.LocalizedValueSerializer;
 import ch.ubique.uetlib.core.utils.CollectionUtils;
 import ch.ubique.uetlib.core.utils.LocaleHelper;
 import ch.ubique.uetlib.core.utils.MapCollectors;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
+
 import jakarta.validation.constraints.NotEmpty;
-import java.io.Serializable;
-import java.util.*;
-import java.util.function.Function;
+
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -25,8 +26,13 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.Nullable;
+
 import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.annotation.JsonSerialize;
+
+import java.io.Serializable;
+import java.util.*;
+import java.util.function.Function;
 
 /**
  * A LocalizedValue object does always contain at least one entry in its internal map. All

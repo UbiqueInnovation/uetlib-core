@@ -2,9 +2,11 @@ package ch.ubique.uetlib.core.utils;
 
 import static ch.ubique.uetlib.core.utils.ArrayUtils.lastElement;
 import static ch.ubique.uetlib.core.utils.ArrayUtils.singletonOrNull;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import ch.ubique.uetlib.test.assertion.AssertionUtils;
+
 import org.junit.jupiter.api.Test;
 
 class ArrayUtilsTest {

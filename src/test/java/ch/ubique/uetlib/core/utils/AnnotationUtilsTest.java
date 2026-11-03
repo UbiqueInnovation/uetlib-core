@@ -1,13 +1,16 @@
 package ch.ubique.uetlib.core.utils;
 
 import static ch.ubique.uetlib.core.utils.AnnotationUtils.findAnnotation;
-import static java.lang.annotation.ElementType.*;
+
 import static org.junit.jupiter.api.Assertions.*;
+
+import static java.lang.annotation.ElementType.*;
+
+import org.junit.jupiter.api.Test;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import org.junit.jupiter.api.Test;
 
 class AnnotationUtilsTest {
 

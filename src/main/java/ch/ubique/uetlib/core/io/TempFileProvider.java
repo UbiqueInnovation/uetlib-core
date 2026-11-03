@@ -3,14 +3,15 @@ package ch.ubique.uetlib.core.io;
 import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNullElse;
 
+import org.jspecify.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
-import org.jspecify.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class TempFileProvider implements FileProvider {
 

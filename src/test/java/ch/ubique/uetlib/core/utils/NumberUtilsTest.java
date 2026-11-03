@@ -2,6 +2,7 @@ package ch.ubique.uetlib.core.utils;
 
 import static ch.ubique.uetlib.core.utils.NumberUtils.*;
 import static ch.ubique.uetlib.test.assertion.AssertionUtils.assertThrowsWithMessage;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;

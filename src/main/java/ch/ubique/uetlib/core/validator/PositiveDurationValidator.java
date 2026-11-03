@@ -3,8 +3,10 @@ package ch.ubique.uetlib.core.validator;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.constraints.Positive;
-import java.time.Duration;
+
 import org.jspecify.annotations.Nullable;
+
+import java.time.Duration;
 
 /** Validates {@link Positive} constraints on durations at nanosecond precision. */
 public class PositiveDurationValidator implements ConstraintValidator<Positive, Duration> {

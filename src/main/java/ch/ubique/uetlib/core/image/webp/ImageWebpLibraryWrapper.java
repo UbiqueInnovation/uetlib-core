@@ -1,8 +1,13 @@
-package ch.ubique.uetlib.image.webp;
+package ch.ubique.uetlib.core.image.webp;
 
 import ch.ubique.uetlib.core.process.ProcessConfig;
 import ch.ubique.uetlib.core.process.ProcessResult;
 import ch.ubique.uetlib.core.utils.ProcessUtils;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,9 +15,6 @@ import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.event.Level;
 
 final class ImageWebpLibraryWrapper {
 
