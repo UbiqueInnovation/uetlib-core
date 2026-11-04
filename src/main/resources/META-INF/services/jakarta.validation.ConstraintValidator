@@ -1,6 +1,6 @@
-ch.ubique.uetlib.core.validator.PositiveDurationValidator
-ch.ubique.uetlib.core.validator.PositiveOrZeroDurationValidator
-ch.ubique.uetlib.core.validator.NegativeDurationValidator
-ch.ubique.uetlib.core.validator.NegativeOrZeroDurationValidator
-ch.ubique.uetlib.core.validator.MinYearValidator
-ch.ubique.uetlib.core.validator.MaxYearValidator
+ch.uetlib.core.validator.PositiveDurationValidator
+ch.uetlib.core.validator.PositiveOrZeroDurationValidator
+ch.uetlib.core.validator.NegativeDurationValidator
+ch.uetlib.core.validator.NegativeOrZeroDurationValidator
+ch.uetlib.core.validator.MinYearValidator
+ch.uetlib.core.validator.MaxYearValidator
