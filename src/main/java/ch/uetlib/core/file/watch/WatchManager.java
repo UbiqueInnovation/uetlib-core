@@ -66,12 +66,13 @@ public class WatchManager implements Runnable {
 
     private void notifyListeners(final Kind<?> kind, final Path file) {
         logger.info("New file event: {} Event: {}", file, kind);
-        if (kind == ENTRY_CREATE) {
-            listener.onCreated(file);
-        } else if (kind == ENTRY_MODIFY) {
-            listener.onModified(file);
-        } else if (kind == ENTRY_DELETE) {
-            listener.onDeleted(file);
+        switch (kind) {
+            case final Kind<?> k when k.equals(ENTRY_CREATE) -> listener.onCreated(file);
+            case final Kind<?> k when k.equals(ENTRY_MODIFY) -> listener.onModified(file);
+            case final Kind<?> k when k.equals(ENTRY_DELETE) -> listener.onDeleted(file);
+            default -> {
+                // noop
+            }
         }
     }
 }
