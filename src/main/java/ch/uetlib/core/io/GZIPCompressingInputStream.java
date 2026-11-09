@@ -1,0 +1,113 @@
+package ch.uetlib.core.io;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.zip.GZIPOutputStream;
+
+/**
+ * Compresses an InputStream in a memory-optimal, on-demand way only compressing enough to fill a
+ * buffer.
+ *
+ * <p>See <a
+ * href="https://stackoverflow.com/questions/11036280/compress-an-inputstream-with-gzip">Stack
+ * Overflow</a>
+ *
+ * @author Ben La Monica
+ */
+public class GZIPCompressingInputStream extends InputStream {
+
+    private final InputStream in;
+    private final GZIPOutputStream gz;
+    private final byte[] readBuf = new byte[8192];
+    private byte[] buf = new byte[8192];
+    int read;
+    int write;
+
+    public GZIPCompressingInputStream(final InputStream in) throws IOException {
+        this.in = in;
+        this.gz =
+                new GZIPOutputStream(
+                        new OutputStream() {
+
+                            private void growBufferIfNeeded(final int len) {
+                                if ((write + len) >= buf.length) {
+                                    // grow the array if we don't have enough space to fulfill the
+                                    // incoming
+                                    // data
+                                    final var newbuf = new byte[(buf.length + len) * 2];
+                                    System.arraycopy(buf, 0, newbuf, 0, buf.length);
+                                    buf = newbuf;
+                                }
+                            }
+
+                            @Override
+                            public void write(final byte[] b, final int off, final int len) {
+                                growBufferIfNeeded(len);
+                                System.arraycopy(b, off, buf, write, len);
+                                write += len;
+                            }
+
+                            @Override
+                            public void write(final int b) {
+                                growBufferIfNeeded(1);
+                                buf[write] = (byte) b;
+                                write++;
+                            }
+                        });
+    }
+
+    @Override
+    public int read(final byte[] b, final int off, final int len) throws IOException {
+        compressStream();
+        final var numBytes = Math.min(len, write - read);
+        if (numBytes > 0) {
+            System.arraycopy(buf, read, b, off, numBytes);
+            read += numBytes;
+        } else if (len > 0) {
+            // if bytes were requested, but we have none, then we're at the end of the stream
+            return -1;
+        }
+        return numBytes;
+    }
+
+    private void compressStream() throws IOException {
+        // if the reader has caught up with the writer, then zero the positions out
+        if (read == write) {
+            read = 0;
+            write = 0;
+        }
+
+        while (write == 0) {
+            // feed the gzip stream data until it spits out a block
+            final var val = in.read(readBuf);
+            if (val == -1) {
+                // nothing left to do, we've hit the end of the stream. finalize and break out
+                gz.close();
+                break;
+            } else if (val > 0) {
+                gz.write(readBuf, 0, val);
+            }
+        }
+    }
+
+    @Override
+    public int read() throws IOException {
+        compressStream();
+        if (write == 0) {
+            // write should not be 0 if we were able to get data from compress stream, must mean
+            // we're at the end
+            return -1;
+        } else {
+            // reading a single byte
+            final var i = buf[read] & 0xFF;
+            read++;
+            return i;
+        }
+    }
+
+    @Override
+    public void close() throws IOException {
+        in.close();
+    }
+}
