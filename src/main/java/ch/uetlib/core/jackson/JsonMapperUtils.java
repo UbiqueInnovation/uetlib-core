@@ -1,6 +1,6 @@
 package ch.uetlib.core.jackson;
 
-import ch.ubique.backend.core.openenum.jackson.OpenEnumModule;
+import ch.uetlib.core.openenum.jackson.OpenEnumModule;
 
 import tools.jackson.databind.JacksonModule;
 import tools.jackson.databind.cfg.DateTimeFeature;

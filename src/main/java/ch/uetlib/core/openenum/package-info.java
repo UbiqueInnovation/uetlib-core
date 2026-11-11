@@ -1,4 +1,4 @@
 @NullMarked
-package ch.ubique.backend.core.openenum.jackson;
+package ch.uetlib.core.openenum;
 
 import org.jspecify.annotations.NullMarked;

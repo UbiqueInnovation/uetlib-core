@@ -1,14 +1,14 @@
-package ch.ubique.backend.core.openenum.jackson;
+package ch.uetlib.core.openenum.jackson;
 
-import static ch.ubique.backend.core.openenum.jackson.OpenEnumModuleTest.Color.Known.GREEN;
-import static ch.ubique.backend.core.openenum.jackson.OpenEnumModuleTest.Color.Known.RED;
+import static ch.uetlib.core.openenum.jackson.OpenEnumModuleTest.Color.Known.GREEN;
+import static ch.uetlib.core.openenum.jackson.OpenEnumModuleTest.Color.Known.RED;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import ch.ubique.backend.core.jackson.JsonMapperUtils;
-import ch.ubique.backend.core.openenum.OpenEnumSet;
-import ch.ubique.backend.core.openenum.OpenEnumValue;
-import ch.ubique.backend.core.openenum.UnknownOpenEnumValue;
+import ch.uetlib.core.jackson.JsonMapperUtils;
+import ch.uetlib.core.openenum.OpenEnumSet;
+import ch.uetlib.core.openenum.OpenEnumValue;
+import ch.uetlib.core.openenum.UnknownOpenEnumValue;
 
 import org.junit.jupiter.api.Test;
 

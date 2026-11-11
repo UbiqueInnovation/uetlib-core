@@ -1,6 +1,6 @@
-package ch.ubique.backend.core.openenum.jackson;
+package ch.uetlib.core.openenum.jackson;
 
-import ch.ubique.backend.core.openenum.OpenEnumValue;
+import ch.uetlib.core.openenum.OpenEnumValue;
 
 import tools.jackson.databind.JacksonModule;
 import tools.jackson.databind.module.SimpleModule;
