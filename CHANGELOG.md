@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 3.0.2
+
+- Add open enums with known constants and lossless unknown values; see the
+  [package README](src/main/java/ch/uetlib/core/openenum/README.md).
+
 ## 3.0.1
 
 - Clarify configuration-property migration guidance for consumers.
