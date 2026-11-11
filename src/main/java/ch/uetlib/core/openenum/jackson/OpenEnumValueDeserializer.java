@@ -1,7 +1,7 @@
-package ch.ubique.backend.core.openenum.jackson;
+package ch.uetlib.core.openenum.jackson;
 
-import ch.ubique.backend.core.openenum.OpenEnumSet;
-import ch.ubique.backend.core.openenum.OpenEnumValue;
+import ch.uetlib.core.openenum.OpenEnumSet;
+import ch.uetlib.core.openenum.OpenEnumValue;
 
 import org.jspecify.annotations.Nullable;
 

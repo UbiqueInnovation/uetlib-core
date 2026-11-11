@@ -1,6 +1,6 @@
-package ch.ubique.backend.core.openenum;
+package ch.uetlib.core.openenum;
 
-import static ch.ubique.backend.core.openenum.OpenEnumSetTest.Color.KnownColor.*;
+import static ch.uetlib.core.openenum.OpenEnumSetTest.Color.KnownColor.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -1,4 +1,4 @@
-package ch.ubique.backend.core.openenum;
+package ch.uetlib.core.openenum;
 
 /**
  * Marker for the carrier of an unknown value. A domain type's {@code Unknown*} record implements

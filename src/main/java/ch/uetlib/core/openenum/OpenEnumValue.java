@@ -1,4 +1,4 @@
-package ch.ubique.backend.core.openenum;
+package ch.uetlib.core.openenum;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 

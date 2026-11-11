@@ -5,5 +5,5 @@
 # Only named modules can be listed. The DateTimeFeature/EnumFeature settings in JsonMapperUtils are
 # builder configuration, not modules, so discovery yields a subset of configureBase(..) -- never a
 # replacement for it.
-ch.ubique.backend.core.jackson.UetlibCoreJacksonVersionModule
-ch.ubique.backend.core.openenum.jackson.OpenEnumModule
+ch.uetlib.core.jackson.UetlibCoreJacksonVersionModule
+ch.uetlib.core.openenum.jackson.OpenEnumModule
