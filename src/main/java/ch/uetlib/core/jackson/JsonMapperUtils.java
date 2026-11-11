@@ -1,5 +1,7 @@
 package ch.uetlib.core.jackson;
 
+import ch.uetlib.core.openenum.jackson.OpenEnumModule;
+
 import tools.jackson.databind.JacksonModule;
 import tools.jackson.databind.cfg.DateTimeFeature;
 import tools.jackson.databind.cfg.EnumFeature;
@@ -57,10 +59,19 @@ public final class JsonMapperUtils {
         jsonMapperBuilder.addModule(new UetlibCoreJacksonVersionModule());
     }
 
+    /**
+     * Registers deserialization for open enums. Serialization needs no setup, so a mapper missing
+     * this still writes correct JSON — it just cannot read it back.
+     */
+    public static void configureOpenEnum(final JsonMapper.Builder jsonMapperBuilder) {
+        jsonMapperBuilder.addModule(new OpenEnumModule());
+    }
+
     public static void configureBase(final JsonMapper.Builder jsonMapperBuilder) {
         JsonMapperUtils.configureDateTime(jsonMapperBuilder);
         JsonMapperUtils.configureEnum(jsonMapperBuilder);
         JsonMapperUtils.configureVersion(jsonMapperBuilder);
+        JsonMapperUtils.configureOpenEnum(jsonMapperBuilder);
     }
 
     /**
