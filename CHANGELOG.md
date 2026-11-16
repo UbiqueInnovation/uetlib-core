@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 3.0.4
+
+- fix Nullability constraints in generic types for methods in AbstractProgressLogger and MdcUtils
+
 ## 3.0.3
 
 - Use shared Maven build and publish workflows at `v1.0.0` to enforce formatting checks in CI.
