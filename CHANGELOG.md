@@ -1,5 +1,51 @@
 # CHANGELOG
 
+## 3.0.3
+
+- Use shared Maven build and publish workflows at `v1.0.0` to enforce formatting checks in CI.
+
+## 3.0.2
+
+- Add open enums with known constants and lossless unknown values; see the
+  [package README](src/main/java/ch/uetlib/core/openenum/README.md).
+
+## 3.0.1
+
+- Clarify configuration-property migration guidance for consumers.
+
+## 3.0.0
+
+- Move Java packages and class references from `ch.ubique.uetlib` to `ch.uetlib`.
+
+- Move image helpers to `ch.uetlib.core.image.*`; standalone WebP codec packages are unchanged.
+
+### Breaking changes
+
+- Move Java packages from `ch.ubique.backend` to `ch.uetlib`, including class-name resources. The combined OpenRewrite
+  migration also renames known Spring configuration keys to `ch.uetlib.*`.
+- Remove the inherited Ubique Artifactory repository and deployment destination; private consumers must configure their
+  own registry.
+- Add Apache-2.0 licensing for original code, preserve third-party licenses, and add public project metadata and
+  contribution/security guidance.
+
+- Move Maven coordinates from `ch.ubique:uetlib-*` to `ch.uetlib:uetlib-*`.
+- Align uetlib parent, BOM and library references with the migration releases.
+
+### Migration
+
+After the migration releases and `uetlib-rewrite` are published, run this from the consuming project, then review the
+diff and run its tests:
+
+```sh
+mvn -U org.openrewrite.maven:rewrite-maven-plugin:6.46.1:run \
+  -Drewrite.recipeArtifactCoordinates=ch.uetlib:uetlib-rewrite:RELEASE \
+  -Drewrite.activeRecipes=ch.uetlib.MigrateToPublicUetlib
+```
+
+The recipe updates Maven coordinates/versions, Java references and known class-name resources. Review application-owned
+packages under the old namespace, Kotlin, reflection patterns, native-access module flags and persisted class names
+separately. Use `:dryRun` instead of `:run` to preview a patch.
+
 ## 2.7.0
 
 - Add automatic Hibernate Validator support for `@Positive`, `@PositiveOrZero`, `@Negative`,
@@ -58,8 +104,6 @@
 
 - New `ResumableDownload#copyURLToFile` that survives dropped connections by resuming via HTTP range
   requests
-
-## 2.4.0
 
 ## Improvements
 
