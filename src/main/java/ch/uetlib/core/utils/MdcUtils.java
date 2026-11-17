@@ -63,8 +63,9 @@ public final class MdcUtils {
         };
     }
 
-    public static <T, U> BiConsumer<T, @Nullable U> biConsumeWithContext(
-            final BiConsumer<T, @Nullable U> consumer, final Map<String, String> mdcContext) {
+    public static <T extends @Nullable Object, U extends @Nullable Object>
+            BiConsumer<T, U> biConsumeWithContext(
+                    final BiConsumer<T, U> consumer, final Map<String, String> mdcContext) {
         return (input1, input2) -> {
             final var previous = startMdcSection(mdcContext);
             consumer.accept(input1, input2);
@@ -72,8 +73,9 @@ public final class MdcUtils {
         };
     }
 
-    public static <T, R> Function<T, @Nullable R> applyWithContext(
-            final Function<T, @Nullable R> function, final Map<String, String> mdcContext) {
+    public static <T extends @Nullable Object, R extends @Nullable Object>
+            Function<T, R> applyWithContext(
+                    final Function<T, R> function, final Map<String, String> mdcContext) {
         return input -> {
             final var previous = startMdcSection(mdcContext);
             final var result = function.apply(input);
@@ -82,8 +84,12 @@ public final class MdcUtils {
         };
     }
 
-    public static <T, U, R> BiFunction<T, @Nullable U, R> biApplyWithContext(
-            final BiFunction<T, @Nullable U, R> function, final Map<String, String> mdcContext) {
+    public static <
+                    T extends @Nullable Object,
+                    U extends @Nullable Object,
+                    R extends @Nullable Object>
+            BiFunction<T, U, R> biApplyWithContext(
+                    final BiFunction<T, U, R> function, final Map<String, String> mdcContext) {
         return (t, u) -> {
             final var previous = startMdcSection(mdcContext);
             final var result = function.apply(t, u);
@@ -92,8 +98,9 @@ public final class MdcUtils {
         };
     }
 
-    public static <T, E extends Exception> ThrowingConsumer<T, E> consumeThrowingWithContext(
-            final ThrowingConsumer<T, E> consumer, final Map<String, String> mdcContext) {
+    public static <T extends @Nullable Object, E extends Exception>
+            ThrowingConsumer<T, E> consumeThrowingWithContext(
+                    final ThrowingConsumer<T, E> consumer, final Map<String, String> mdcContext) {
         return t -> {
             final var previous = startMdcSection(mdcContext);
             consumer.accept(t);
@@ -101,9 +108,9 @@ public final class MdcUtils {
         };
     }
 
-    public static <T, U, E extends Exception>
-            ThrowingBiConsumer<T, @Nullable U, E> biConsumeThrowingWithContext(
-                    final ThrowingBiConsumer<T, @Nullable U, E> biConsumer,
+    public static <T extends @Nullable Object, U extends @Nullable Object, E extends Exception>
+            ThrowingBiConsumer<T, U, E> biConsumeThrowingWithContext(
+                    final ThrowingBiConsumer<T, U, E> biConsumer,
                     final Map<String, String> mdcContext) {
         return (t, u) -> {
             final var previous = startMdcSection(mdcContext);
@@ -112,9 +119,9 @@ public final class MdcUtils {
         };
     }
 
-    public static <T, R, E extends Exception>
-            ThrowingFunction<T, @Nullable R, E> applyThrowingWithContext(
-                    final ThrowingFunction<T, @Nullable R, E> function,
+    public static <T extends @Nullable Object, R extends @Nullable Object, E extends Exception>
+            ThrowingFunction<T, R, E> applyThrowingWithContext(
+                    final ThrowingFunction<T, R, E> function,
                     final Map<String, String> mdcContext) {
         return input -> {
             final var previous = startMdcSection(mdcContext);
@@ -124,9 +131,13 @@ public final class MdcUtils {
         };
     }
 
-    public static <T, U, R, E extends Exception>
-            ThrowingBiFunction<T, @Nullable U, @Nullable R, E> biApplyThrowingWithContext(
-                    final ThrowingBiFunction<T, @Nullable U, @Nullable R, E> function,
+    public static <
+                    T extends @Nullable Object,
+                    U extends @Nullable Object,
+                    R extends @Nullable Object,
+                    E extends Exception>
+            ThrowingBiFunction<T, U, R, E> biApplyThrowingWithContext(
+                    final ThrowingBiFunction<T, U, R, E> function,
                     final Map<String, String> mdcContext) {
         return (t, u) -> {
             final var previous = startMdcSection(mdcContext);

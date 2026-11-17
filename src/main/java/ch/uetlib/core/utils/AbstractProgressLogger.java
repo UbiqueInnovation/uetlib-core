@@ -85,21 +85,23 @@ public abstract sealed class AbstractProgressLogger
         };
     }
 
-    public <T> Consumer<T> watch(final Consumer<T> consumer) {
+    public <T extends @Nullable Object> Consumer<T> watch(final Consumer<T> consumer) {
         return t -> {
             consumer.accept(t);
             stepInternal();
         };
     }
 
-    public <T, U> BiConsumer<T, U> watch(final BiConsumer<T, U> consumer) {
+    public <T extends @Nullable Object, U extends @Nullable Object> BiConsumer<T, U> watch(
+            final BiConsumer<T, U> consumer) {
         return (t, u) -> {
             consumer.accept(t, u);
             stepInternal();
         };
     }
 
-    public <T, R> Function<T, R> watch(final Function<T, R> function) {
+    public <T extends @Nullable Object, R extends @Nullable Object> Function<T, R> watch(
+            final Function<T, R> function) {
         return t -> {
             final var result = function.apply(t);
             stepInternal();
@@ -115,7 +117,7 @@ public abstract sealed class AbstractProgressLogger
         };
     }
 
-    public <T, E extends Exception> ThrowingConsumer<T, E> watchThrowing(
+    public <T extends @Nullable Object, E extends Exception> ThrowingConsumer<T, E> watchThrowing(
             final ThrowingConsumer<T, E> consumer) {
         return t -> {
             consumer.accept(t);
@@ -123,16 +125,16 @@ public abstract sealed class AbstractProgressLogger
         };
     }
 
-    public <T, U, E extends Exception> ThrowingBiConsumer<T, U, E> watchThrowing(
-            final ThrowingBiConsumer<T, U, E> consumer) {
+    public <T extends @Nullable Object, U extends @Nullable Object, E extends Exception>
+            ThrowingBiConsumer<T, U, E> watchThrowing(final ThrowingBiConsumer<T, U, E> consumer) {
         return (t, u) -> {
             consumer.accept(t, u);
             stepInternal();
         };
     }
 
-    public <T, R, E extends Exception> ThrowingFunction<T, R, E> watchThrowing(
-            final ThrowingFunction<T, R, E> function) {
+    public <T extends @Nullable Object, R extends @Nullable Object, E extends Exception>
+            ThrowingFunction<T, R, E> watchThrowing(final ThrowingFunction<T, R, E> function) {
         return t -> {
             final var result = function.apply(t);
             stepInternal();
