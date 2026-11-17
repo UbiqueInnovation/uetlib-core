@@ -239,21 +239,21 @@ class StringUtilsTest {
         assertEquals("", StringUtils.normalizeSpaceAndNonBreakingSpace("\t"));
         assertEquals("", StringUtils.normalizeSpaceAndNonBreakingSpace("\n"));
         assertEquals("", StringUtils.normalizeSpaceAndNonBreakingSpace("\r"));
-        assertEquals("", StringUtils.normalizeSpaceAndNonBreakingSpace(" "));
+        assertEquals("", StringUtils.normalizeSpaceAndNonBreakingSpace("\u00A0"));
 
         assertEquals("..", StringUtils.normalizeSpaceAndNonBreakingSpace(".."));
         assertEquals(". .", StringUtils.normalizeSpaceAndNonBreakingSpace(".  ."));
         assertEquals(". .", StringUtils.normalizeSpaceAndNonBreakingSpace(".\t\t."));
         assertEquals(". .", StringUtils.normalizeSpaceAndNonBreakingSpace(".\n\n."));
         assertEquals(". .", StringUtils.normalizeSpaceAndNonBreakingSpace(".\r\r."));
-        assertEquals(". .", StringUtils.normalizeSpaceAndNonBreakingSpace(".  ."));
+        assertEquals(". .", StringUtils.normalizeSpaceAndNonBreakingSpace(".\u00A0\u00A0."));
 
         assertEquals("..", StringUtils.normalizeSpaceAndNonBreakingSpace(".."));
         assertEquals(". .", StringUtils.normalizeSpaceAndNonBreakingSpace(" .  . "));
         assertEquals(". .", StringUtils.normalizeSpaceAndNonBreakingSpace("\t.\t\t.\t"));
         assertEquals(". .", StringUtils.normalizeSpaceAndNonBreakingSpace("\n.\n\n.\n"));
         assertEquals(". .", StringUtils.normalizeSpaceAndNonBreakingSpace("\r.\r\r.\r"));
-        assertEquals(". .", StringUtils.normalizeSpaceAndNonBreakingSpace(" .  . "));
+        assertEquals(". .", StringUtils.normalizeSpaceAndNonBreakingSpace("\u00A0.\u00A0\u00A0.\u00A0"));
     }
 
     @Test
@@ -265,20 +265,20 @@ class StringUtilsTest {
         assertNull(StringUtils.normalizeAndStripToNull("\t"));
         assertNull(StringUtils.normalizeAndStripToNull("\n"));
         assertNull(StringUtils.normalizeAndStripToNull("\r"));
-        assertNull(StringUtils.normalizeAndStripToNull(" "));
+        assertNull(StringUtils.normalizeAndStripToNull("\u00A0"));
 
         assertEquals("..", StringUtils.normalizeAndStripToNull(".."));
         assertEquals(". .", StringUtils.normalizeAndStripToNull(".  ."));
         assertEquals(". .", StringUtils.normalizeAndStripToNull(".\t\t."));
         assertEquals(". .", StringUtils.normalizeAndStripToNull(".\n\n."));
         assertEquals(". .", StringUtils.normalizeAndStripToNull(".\r\r."));
-        assertEquals(". .", StringUtils.normalizeAndStripToNull(".  ."));
+        assertEquals(". .", StringUtils.normalizeAndStripToNull(".\u00A0\u00A0."));
 
         assertEquals("..", StringUtils.normalizeAndStripToNull(".."));
         assertEquals(". .", StringUtils.normalizeAndStripToNull(" .  . "));
         assertEquals(". .", StringUtils.normalizeAndStripToNull("\t.\t\t.\t"));
         assertEquals(". .", StringUtils.normalizeAndStripToNull("\n.\n\n.\n"));
         assertEquals(". .", StringUtils.normalizeAndStripToNull("\r.\r\r.\r"));
-        assertEquals(". .", StringUtils.normalizeAndStripToNull(" .  . "));
+        assertEquals(". .", StringUtils.normalizeAndStripToNull("\u00A0.\u00A0\u00A0.\u00A0"));
     }
 }
