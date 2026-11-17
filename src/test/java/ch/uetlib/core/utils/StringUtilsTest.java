@@ -253,7 +253,8 @@ class StringUtilsTest {
         assertEquals(". .", StringUtils.normalizeSpaceAndNonBreakingSpace("\t.\t\t.\t"));
         assertEquals(". .", StringUtils.normalizeSpaceAndNonBreakingSpace("\n.\n\n.\n"));
         assertEquals(". .", StringUtils.normalizeSpaceAndNonBreakingSpace("\r.\r\r.\r"));
-        assertEquals(". .", StringUtils.normalizeSpaceAndNonBreakingSpace("\u00A0.\u00A0\u00A0.\u00A0"));
+        assertEquals(
+                ". .", StringUtils.normalizeSpaceAndNonBreakingSpace("\u00A0.\u00A0\u00A0.\u00A0"));
     }
 
     @Test
