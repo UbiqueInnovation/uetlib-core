@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 3.0.5
+
+- Use shared Maven workflows at `v1.1.0`: wait for the SonarCloud quality gate and analyse with the
+  uetlib-only Sonar token.
+
 ## 3.0.4
 
 - fix Nullability constraints in generic types for methods in AbstractProgressLogger and MdcUtils
