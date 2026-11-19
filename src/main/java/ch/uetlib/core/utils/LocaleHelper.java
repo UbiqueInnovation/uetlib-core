@@ -46,7 +46,7 @@ public final class LocaleHelper {
             return null;
         }
         final var lookupList = LocaleUtils.localeLookupList(locale);
-        return lookupList.<@Nullable Locale>stream()
+        return lookupList.stream()
                 .map(lookupLocale -> IterableUtils.find(candidates, lookupLocale::equals))
                 .filter(Objects::nonNull)
                 .findFirst()

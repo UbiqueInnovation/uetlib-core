@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 3.0.6
+
+- Remove an ignored type argument from `LocaleHelper.findBestMatchLocale` (Error Prone `UnnecessaryTypeArgument`).
+
 ## 3.0.5
 
 - Build pull requests, including forks, and pushes to `main` instead of every branch push; use shared Maven
