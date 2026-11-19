@@ -73,6 +73,7 @@ public final class MinMaxCollector {
 
     record EmptyAccumulator<T>() implements MinMaxAccumulator<T> {
 
+        @Override
         public Optional<MinMax<T>> minMaxMaybe() {
             return Optional.empty();
         }
@@ -86,6 +87,7 @@ public final class MinMaxCollector {
 
     record NonEmptyAccumulator<T>(T min, T max) implements MinMaxAccumulator<T> {
 
+        @Override
         public Optional<MinMax<T>> minMaxMaybe() {
             return Optional.of(new MinMax<>(min, max));
         }

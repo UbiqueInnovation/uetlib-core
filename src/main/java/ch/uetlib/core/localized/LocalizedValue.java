@@ -571,11 +571,9 @@ public class LocalizedValue<T extends Serializable> {
             return true;
         }
 
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof final LocalizedValue<?> that)) {
             return false;
         }
-
-        final var that = (LocalizedValue<?>) o;
 
         return new EqualsBuilder().append(values, that.values).isEquals();
     }

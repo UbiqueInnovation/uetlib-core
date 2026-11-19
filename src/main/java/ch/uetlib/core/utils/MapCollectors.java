@@ -74,8 +74,8 @@ public final class MapCollectors {
     }
 
     /**
-     * Given a stream of elements, group them by the {@param keyExtractor} and map each group's
-     * elements to the value resulting from the {@param valueExtractor}
+     * Given a stream of elements, group them by the {@code keyExtractor} and map each group's
+     * elements to the value resulting from the {@code valueExtractor}
      *
      * @param <T> element type of the stream to collect
      * @param <K> key type of the resulting map

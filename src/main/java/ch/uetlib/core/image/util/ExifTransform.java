@@ -134,6 +134,7 @@ public final class ExifTransform {
     // Inner class containing image information
     public record ImageInformation(int orientation, int width, int height) {
 
+        @Override
         public String toString() {
             return String.format("%dx%d,%d", width, height, orientation);
         }

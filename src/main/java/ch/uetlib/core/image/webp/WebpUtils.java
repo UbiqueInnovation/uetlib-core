@@ -1,5 +1,7 @@
 package ch.uetlib.core.image.webp;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import ch.uetlib.core.file.temp.TempFileManager;
 import ch.uetlib.core.image.util.ImageType;
 import ch.uetlib.core.image.util.ImageUtils;
@@ -80,7 +82,7 @@ public final class WebpUtils {
             return new byte[0];
         }
         try (final var out = new FileOutputStream(completeTmpPath.toFile())) {
-            out.write(xmp.trim().replace("\n", "").replace("\r", "").getBytes());
+            out.write(xmp.trim().replace("\n", "").replace("\r", "").getBytes(UTF_8));
         } catch (final IOException e) {
             logger.error("Failed to write temp XMP file. ", e);
             return new byte[0];
@@ -139,14 +141,7 @@ public final class WebpUtils {
         return result;
     }
 
-    /**
-     * Converts the given PNGs to WebP. The path to the PNGs is deleted afterwards.
-     *
-     * @param pathsToPngs
-     * @param config
-     * @param completeTmpPath
-     * @return
-     */
+    /** Converts the given PNGs to WebP. The path to the PNGs is deleted afterwards. */
     private static byte[] convertImagesToWebp(
             final Collection<Path> pathsToPngs,
             final WebpEncodingConfig config,
