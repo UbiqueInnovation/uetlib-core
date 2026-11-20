@@ -162,10 +162,8 @@ class StringUtilsTest {
 
     @Test
     void testRequireNonBlankWithMessageSupplier_NonBlankValue_ShouldNotThrow() {
-        assertDoesNotThrow(
-                () ->
-                        StringUtils.requireNonBlank(
-                                " a ", (java.util.function.Supplier<String>) null));
+        assertDoesNotThrow(() ->
+                StringUtils.requireNonBlank(" a ", (java.util.function.Supplier<String>) null));
     }
 
     @Test

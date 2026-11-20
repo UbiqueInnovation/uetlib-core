@@ -53,19 +53,13 @@ public final class ProcessUtils {
             final var process = builder.start();
 
             final var stdoutFuture =
-                    stdOutExecutor.submit(
-                            () ->
-                                    processOutputLines(
-                                            process::inputReader,
-                                            config.logLevelStdout(),
-                                            "stdout"));
+                    stdOutExecutor.submit(() ->
+                            processOutputLines(
+                                    process::inputReader, config.logLevelStdout(), "stdout"));
             final var stderrFuture =
-                    stdErrExecutor.submit(
-                            () ->
-                                    processOutputLines(
-                                            process::errorReader,
-                                            config.logLevelStderr(),
-                                            "stderr"));
+                    stdErrExecutor.submit(() ->
+                            processOutputLines(
+                                    process::errorReader, config.logLevelStderr(), "stderr"));
             final var didProcessFinish = process.waitFor(config.timeout());
 
             final var stdout = stdoutFuture.get().map(String.class::cast).toList();
@@ -92,11 +86,10 @@ public final class ProcessUtils {
         final var reader = readerSupplier.get();
         //noinspection SimplifyStreamApiCallChains
         return reader.lines()
-                .map(
-                        line -> {
-                            logger.atLevel(level).log("{}: {}", outputStreamName, line);
-                            return line;
-                        });
+                .map(line -> {
+                    logger.atLevel(level).log("{}: {}", outputStreamName, line);
+                    return line;
+                });
     }
 
     private static ThreadFactory threadFactory(final String name) {

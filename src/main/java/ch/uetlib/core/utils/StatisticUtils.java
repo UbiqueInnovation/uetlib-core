@@ -165,12 +165,11 @@ public final class StatisticUtils {
                         "percentiles",
                         stats.percentiles().entrySet().stream()
                                 .sorted(Map.Entry.comparingByKey())
-                                .map(
-                                        entry ->
-                                                String.format(
-                                                        "%d=%s",
-                                                        entry.getKey(),
-                                                        numberFormatter.apply(entry.getValue())))
+                                .map(entry ->
+                                        String.format(
+                                                "%d=%s",
+                                                entry.getKey(),
+                                                numberFormatter.apply(entry.getValue())))
                                 .collect(joining(", ", "[", "]")))
                 .build();
     }

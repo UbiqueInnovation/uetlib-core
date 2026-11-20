@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@SuppressWarnings("DataFlowIssue")
 class OptionalUtilsTest {
 
     @Test
@@ -48,20 +49,18 @@ class OptionalUtilsTest {
                                 },
                                 NullPointerException.class));
 
-        assertDoesNotThrow(
-                () ->
-                        OptionalUtils.tryGet(
-                                () -> {
-                                    throw new NullPointerException();
-                                },
-                                RuntimeException.class));
+        assertDoesNotThrow(() ->
+                OptionalUtils.tryGet(
+                        () -> {
+                            throw new NullPointerException();
+                        },
+                        RuntimeException.class));
 
         assertEquals(
                 Optional.empty(),
-                OptionalUtils.tryGet(
-                        () -> {
-                            throw new Exception();
-                        }));
+                OptionalUtils.tryGet(() -> {
+                    throw new Exception();
+                }));
 
         assertThrows(
                 Exception.class,

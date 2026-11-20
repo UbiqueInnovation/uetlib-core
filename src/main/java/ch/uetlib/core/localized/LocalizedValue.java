@@ -433,12 +433,10 @@ public class LocalizedValue<T extends Serializable> {
         final var cascadedEntries =
                 Arrays.stream(cascade)
                         .distinct()
-                        .map(
-                                locale -> {
-                                    final var value =
-                                            getOptional(locale).orElse(coalesceOrGetAny(cascade));
-                                    return entry(locale, value);
-                                })
+                        .map(locale -> {
+                            final var value = getOptional(locale).orElse(coalesceOrGetAny(cascade));
+                            return entry(locale, value);
+                        })
                         .collect(MapCollectors.entriesToMap());
 
         return LocalizedValue.<T>builder()

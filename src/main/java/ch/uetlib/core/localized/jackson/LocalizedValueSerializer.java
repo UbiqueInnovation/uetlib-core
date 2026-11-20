@@ -126,11 +126,10 @@ public class LocalizedValueSerializer
         //noinspection unchecked
         final Map<String, Object> stringKeyMap = localizedValue.toMapWithLanguageTagKeys();
         stringKeyMap.forEach(
-                ThrowingBiConsumer.sneaky(
-                        (key, value) -> {
-                            gen.writeName(effectiveTransformer.transform(key));
-                            gen.writePOJO(value);
-                        }));
+                ThrowingBiConsumer.sneaky((key, value) -> {
+                    gen.writeName(effectiveTransformer.transform(key));
+                    gen.writePOJO(value);
+                }));
     }
 
     @Override
