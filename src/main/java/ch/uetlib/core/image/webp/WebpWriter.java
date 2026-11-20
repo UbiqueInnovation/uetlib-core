@@ -3,6 +3,8 @@ package ch.uetlib.core.image.webp;
 import static ch.uetlib.core.image.webp.ImageWebpLibraryWrapper.convertListToWebP;
 import static ch.uetlib.core.image.webp.ImageWebpLibraryWrapper.convertPartialImagesToWebP;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import ch.uetlib.core.executor.VirtualThreadUtils;
 import ch.uetlib.core.image.webp.Frame.BufferedImageFrame;
 
@@ -92,7 +94,7 @@ public class WebpWriter implements AutoCloseable {
     public Path createMetadataFile(final String xmpMetadata) throws IOException {
         final var metadataFile = createTempFile("xmp");
         try (final var out = new FileOutputStream(metadataFile.toFile())) {
-            out.write(xmpMetadata.trim().replace("\n", "").replace("\r", "").getBytes());
+            out.write(xmpMetadata.trim().replace("\n", "").replace("\r", "").getBytes(UTF_8));
         }
         return metadataFile;
     }

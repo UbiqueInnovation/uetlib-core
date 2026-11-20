@@ -51,10 +51,12 @@ public final class StreamUtils {
         final var listIterator =
                 new Iterator<List<T>>() {
 
+                    @Override
                     public boolean hasNext() {
                         return iterator.hasNext();
                     }
 
+                    @Override
                     public List<T> next() {
                         return IntStream.iterate(
                                         0, i -> i < chunkSize && iterator.hasNext(), i -> i + 1)
@@ -76,8 +78,8 @@ public final class StreamUtils {
      *
      * @param keyExtractor the extract the key
      * @param <T> the type of the elements
-     * @param <K> the type of the key, non-null as {@link ConcurrentHashMap#putVal(Object, Object,
-     *     boolean)} does not allow null keys
+     * @param <K> the type of the key, non-null as {@link ConcurrentHashMap} does not allow null
+     *     keys
      * @return a predicate that returns if the key already exists
      */
     public static <T extends @Nullable Object, K> Predicate<T> distinctByKey(

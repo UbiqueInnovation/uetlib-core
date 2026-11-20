@@ -1,7 +1,9 @@
 package ch.uetlib.core.utils.duration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -48,5 +50,19 @@ class DurationBasedTemporalUnitTest {
         assertEquals(instant, instantThree.truncatedTo(DurationBasedTemporalUnit.ofMinutes(5)));
         assertEquals(instant, instantFour.truncatedTo(DurationBasedTemporalUnit.ofMinutes(5)));
         assertNotEquals(instant, instantFive.truncatedTo(DurationBasedTemporalUnit.ofMinutes(5)));
+    }
+
+    @Test
+    void testTimeBasedAndEstimated() {
+        final var fiveMinutes = DurationBasedTemporalUnit.ofMinutes(5);
+        assertTrue(fiveMinutes.isTimeBased());
+        assertFalse(fiveMinutes.isDurationEstimated());
+
+        final var sevenMinutes = DurationBasedTemporalUnit.ofMinutes(7);
+        assertFalse(sevenMinutes.isTimeBased());
+
+        final var twoDays = DurationBasedTemporalUnit.ofDays(2);
+        assertFalse(twoDays.isTimeBased());
+        assertTrue(twoDays.isDurationEstimated());
     }
 }

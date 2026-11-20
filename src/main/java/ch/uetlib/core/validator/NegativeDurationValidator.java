@@ -14,6 +14,6 @@ public class NegativeDurationValidator implements ConstraintValidator<Negative, 
     @Override
     public boolean isValid(
             final @Nullable Duration value, final ConstraintValidatorContext context) {
-        return value == null || (value.isNegative());
+        return value == null || value.isNegative();
     }
 }

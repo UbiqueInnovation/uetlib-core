@@ -60,7 +60,7 @@ public final class DurationBasedTemporalUnit implements TemporalUnit {
 
     @Override
     public boolean isDurationEstimated() {
-        return (duration.getSeconds() >= SECONDS_PER_DAY);
+        return (duration.toSeconds() >= SECONDS_PER_DAY);
     }
 
     @Override
@@ -70,7 +70,7 @@ public final class DurationBasedTemporalUnit implements TemporalUnit {
 
     @Override
     public boolean isTimeBased() {
-        return (duration.getSeconds() < SECONDS_PER_DAY && NANOS_PER_DAY % duration.toNanos() == 0);
+        return (duration.toSeconds() < SECONDS_PER_DAY && NANOS_PER_DAY % duration.toNanos() == 0);
     }
 
     @Override

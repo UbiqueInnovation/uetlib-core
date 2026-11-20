@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## UNRELEASED
+
+- Remove an ignored type argument from `LocaleHelper.findBestMatchLocale` (Error Prone `UnnecessaryTypeArgument`).
+- Fix the warnings of Error Prone's default checks: `ImageType` converts case with `Locale.ROOT`, XMP metadata
+  is written as UTF-8, `LocalizedValue.equals` uses `instanceof` instead of `getClass()`, missing `@Override`
+  annotations and broken Javadoc tags.
+
 ## 3.0.5
 
 - Build pull requests, including forks, and pushes to `main` instead of every branch push; use shared Maven

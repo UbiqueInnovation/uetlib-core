@@ -478,4 +478,15 @@ class LocalizedValueTest {
                         () -> localizedValue.mapValues(s -> "fr".equals(s) ? null : s));
         assertEquals("Value mapper cannot return null for input fr", exception3.getMessage());
     }
+
+    @Test
+    void equalsComparesValues() {
+        final var value = LocalizedValue.builder().en("a").de("b").build();
+
+        assertEquals(value, LocalizedValue.builder().en("a").de("b").build());
+        assertEquals(value.hashCode(), LocalizedValue.builder().en("a").de("b").build().hashCode());
+        assertNotEquals(value, LocalizedValue.builder().en("a").build());
+        assertNotEquals(value, "a");
+        assertNotEquals(null, value);
+    }
 }

@@ -12,16 +12,11 @@ import tools.jackson.databind.ser.std.ToStringSerializer;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.TimeZone;
 
 public final class JsonMapperUtils {
 
     private JsonMapperUtils() {}
-
-    private static final DateTimeFormatter LOCAL_DATE_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;
-    private static final DateTimeFormatter LOCAL_DATE_TIME_FORMATTER =
-            DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
     public static void configureDateTime(final JsonMapper.Builder jsonMapperBuilder) {
         jsonMapperBuilder

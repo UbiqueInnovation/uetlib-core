@@ -75,6 +75,7 @@ public final class AnnotationUtils {
                     return Optional.of(inheritedAnnotation);
                 }
             } catch (final NoSuchMethodException ignored) {
+                // This interface does not declare the method; check the next one.
             }
         }
 
@@ -86,6 +87,7 @@ public final class AnnotationUtils {
                         superclass.getMethod(method.getName(), method.getParameterTypes());
                 return findAnnotation(superMethod, annotationClass);
             } catch (final NoSuchMethodException ignored) {
+                // The superclass does not declare the method: the annotation is not inherited.
             }
         }
 
