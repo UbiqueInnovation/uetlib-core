@@ -5,15 +5,26 @@ import static ch.uetlib.core.utils.InputStreamUtils.findCompressionByContentEnco
 import static ch.uetlib.core.utils.InputStreamUtils.findCompressionByFilePath;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import com.sun.net.httpserver.HttpServer;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 
 @SuppressWarnings("resource")
 class InputStreamUtilsTest {
@@ -101,5 +112,90 @@ class InputStreamUtilsTest {
         public synchronized void reset() {
             throw new UnsupportedOperationException("reset not supported");
         }
+    }
+
+    @Test
+    void connectWithRedirectAppliesTheDurationTimeout() throws IOException {
+        final var server = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
+        server.createContext(
+                "/",
+                exchange -> {
+                    exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, -1);
+                    exchange.close();
+                });
+        server.start();
+        try {
+            final var url =
+                    URI.create("http://127.0.0.1:" + server.getAddress().getPort() + "/").toURL();
+
+            final var connection =
+                    InputStreamUtils.connectWithRedirect(url, Duration.ofMillis(1500));
+            assertEquals(HttpURLConnection.HTTP_OK, connection.getResponseCode());
+            assertEquals(1500, connection.getConnectTimeout());
+            assertEquals(1500, connection.getReadTimeout());
+            connection.disconnect();
+
+            @SuppressWarnings("deprecation")
+            final var legacy = InputStreamUtils.connectWithRedirect(url, 700);
+            assertEquals(700, legacy.getReadTimeout());
+            legacy.disconnect();
+        } finally {
+            server.stop(0);
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {HttpURLConnection.HTTP_MOVED_TEMP, HttpURLConnection.HTTP_MOVED_PERM})
+    void connectWithRedirectPreservesTimeoutOnRedirect(final int status) throws IOException {
+        final var server = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
+        server.createContext(
+                "/",
+                exchange -> {
+                    exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, -1);
+                    exchange.close();
+                });
+        server.start();
+        try {
+            // Model a redirect HttpURLConnection does not follow itself (e.g. HTTPS to HTTP).
+            final var original = mock(HttpURLConnection.class);
+            final var url = mock(URL.class);
+            when(url.openConnection()).thenReturn(original);
+            when(original.getResponseCode()).thenReturn(status);
+            when(original.getHeaderField("Location"))
+                    .thenReturn("http://127.0.0.1:" + server.getAddress().getPort() + "/");
+
+            final var redirected =
+                    InputStreamUtils.connectWithRedirect(url, Duration.ofMillis(1200));
+            try {
+                assertEquals(HttpURLConnection.HTTP_OK, redirected.getResponseCode());
+                assertEquals(1200, redirected.getConnectTimeout());
+                assertEquals(1200, redirected.getReadTimeout());
+                verify(original).setConnectTimeout(1200);
+                verify(original).setReadTimeout(1200);
+                verify(original).disconnect();
+            } finally {
+                redirected.disconnect();
+            }
+        } finally {
+            server.stop(0);
+        }
+    }
+
+    @Test
+    void connectWithRedirectReportsInvalidRedirectLocation() throws IOException {
+        final var original = mock(HttpURLConnection.class);
+        final var url = mock(URL.class);
+        when(url.openConnection()).thenReturn(original);
+        when(original.getResponseCode()).thenReturn(HttpURLConnection.HTTP_MOVED_TEMP);
+        when(original.getHeaderField("Location")).thenReturn("http://invalid host/");
+
+        final var exception =
+                assertThrows(
+                        IOException.class,
+                        () -> InputStreamUtils.connectWithRedirect(url, Duration.ofSeconds(1)));
+
+        assertEquals("Invalid redirect location header", exception.getMessage());
+        assertInstanceOf(URISyntaxException.class, exception.getCause());
+        verify(original).disconnect();
     }
 }

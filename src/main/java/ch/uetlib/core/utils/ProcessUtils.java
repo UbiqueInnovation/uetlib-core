@@ -20,7 +20,6 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -67,8 +66,7 @@ public final class ProcessUtils {
                                             process::errorReader,
                                             config.logLevelStderr(),
                                             "stderr"));
-            final var didProcessFinish =
-                    process.waitFor(config.timeout().toSeconds(), TimeUnit.SECONDS);
+            final var didProcessFinish = process.waitFor(config.timeout());
 
             final var stdout = stdoutFuture.get().map(String.class::cast).toList();
             final var stderr = stderrFuture.get().map(String.class::cast).toList();
