@@ -6,6 +6,9 @@
 - Fix the warnings of Error Prone's default checks: `ImageType` converts case with `Locale.ROOT`, XMP metadata
   is written as UTF-8, `LocalizedValue.equals` uses `instanceof` instead of `getClass()`, missing `@Override`
   annotations and broken Javadoc tags.
+- Add `InputStreamUtils.connectWithRedirect(URL, Duration)`; the `int` milliseconds variant is deprecated.
+- `ProcessUtils.executeProcess` waits for the configured timeout with millisecond precision. Previously the
+  timeout was truncated to whole seconds, so a timeout below one second did not wait at all.
 
 ## 3.0.5
 

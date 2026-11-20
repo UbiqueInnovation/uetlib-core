@@ -6,6 +6,8 @@ import static ch.uetlib.core.utils.InputStreamUtils.findCompressionByFilePath;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.sun.net.httpserver.HttpServer;
+
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
@@ -13,7 +15,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 
 @SuppressWarnings("resource")
 class InputStreamUtilsTest {
@@ -100,6 +106,36 @@ class InputStreamUtilsTest {
         @Override
         public synchronized void reset() {
             throw new UnsupportedOperationException("reset not supported");
+        }
+    }
+
+    @Test
+    void connectWithRedirectAppliesTheDurationTimeout() throws IOException {
+        final var server = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
+        server.createContext(
+                "/",
+                exchange -> {
+                    exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, -1);
+                    exchange.close();
+                });
+        server.start();
+        try {
+            final var url =
+                    URI.create("http://127.0.0.1:" + server.getAddress().getPort() + "/").toURL();
+
+            final var connection =
+                    InputStreamUtils.connectWithRedirect(url, Duration.ofMillis(1500));
+            assertEquals(HttpURLConnection.HTTP_OK, connection.getResponseCode());
+            assertEquals(1500, connection.getConnectTimeout());
+            assertEquals(1500, connection.getReadTimeout());
+            connection.disconnect();
+
+            @SuppressWarnings("deprecation")
+            final var legacy = InputStreamUtils.connectWithRedirect(url, 700);
+            assertEquals(700, legacy.getReadTimeout());
+            legacy.disconnect();
+        } finally {
+            server.stop(0);
         }
     }
 }

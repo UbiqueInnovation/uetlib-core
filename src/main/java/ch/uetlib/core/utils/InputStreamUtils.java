@@ -30,6 +30,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -270,11 +271,29 @@ public final class InputStreamUtils {
         return match;
     }
 
+    /**
+     * @deprecated use {@link #connectWithRedirect(URL, Duration)}; {@code timeout} is in
+     *     milliseconds.
+     */
+    @Deprecated(since = "3.0.6")
     public static HttpURLConnection connectWithRedirect(final URL url, final int timeout)
             throws IOException {
+        return connectWithRedirect(url, Duration.ofMillis(timeout));
+    }
+
+    /**
+     * Opens a connection to {@code url} and follows one redirect, including cross-protocol
+     * redirects that {@link HttpURLConnection} does not follow.
+     *
+     * @param timeout connect and read timeout, used with millisecond precision; zero means no
+     *     timeout
+     */
+    public static HttpURLConnection connectWithRedirect(final URL url, final Duration timeout)
+            throws IOException {
+        final var timeoutMillis = Math.toIntExact(timeout.toMillis());
         final var urlConnection = (HttpURLConnection) url.openConnection();
-        urlConnection.setConnectTimeout(timeout);
-        urlConnection.setReadTimeout(timeout);
+        urlConnection.setConnectTimeout(timeoutMillis);
+        urlConnection.setReadTimeout(timeoutMillis);
         // Typically true by default, just making sure.
         urlConnection.setInstanceFollowRedirects(true);
         urlConnection.connect();
@@ -295,8 +314,8 @@ public final class InputStreamUtils {
         }
         logger.debug("Following redirect to {}", redirectedUrl);
         final var redirectedUrlConnection = (HttpURLConnection) redirectedUrl.openConnection();
-        redirectedUrlConnection.setConnectTimeout(timeout);
-        redirectedUrlConnection.setReadTimeout(timeout);
+        redirectedUrlConnection.setConnectTimeout(timeoutMillis);
+        redirectedUrlConnection.setReadTimeout(timeoutMillis);
         redirectedUrlConnection.connect();
         return redirectedUrlConnection;
     }
